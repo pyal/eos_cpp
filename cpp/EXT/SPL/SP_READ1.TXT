@@ -1,0 +1,26 @@
+evalsp.c, and all derivatives
+ *              dj(S(i))/dxj; from j=1 to j=k-1. One line for each
+ *              x-value.
+ *
+ *      File "evlsum", containing the results of options -v, -e, -i, -h and -a.
+ *              This information is also written to stdout (the terminal).
+ *
+ *      File "evlfour", containing the values of the Fourier transform 
+ *              as follows: s, Re(Ft), Im(Ft). One line for each
+ *              s-value.
+ *
+ ****   Info:
+ *
+ *      Authors and owners of this program are:
+ *              Barend J. Thijsse and Mark A. Hollanders,
+ *              Computational Materials Science group (Com,ma,s)
+ *              Physical Materials Science Division,
+ *              Laboratory of Materials Science, 
+ *              Delft University of Technology,
+ *              Rotterdamseweg 137, 2628 AL  Delft,
+ *                      Phone: +31 15 278 2221
+ *                      Fax:   +31 15 278 6730
+ *                      E-mail: thijsse@stm.tudelft.nl
+ *                      URL: http://dutsm183.stm.tudelft.nl
+ *
+ */

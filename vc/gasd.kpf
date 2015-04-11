@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="52110a04-4d63-46db-8bb0-c60cbb90dce8" kpf_version="4" name="gasd.kpf">
+<preference-set idref="52110a04-4d63-46db-8bb0-c60cbb90dce8">
+  <string id="import_type">makeFlat</string>
+  <string id="import_exclude_matches">*.*~;*.bak;*.tmp;CVS;.#*;*.pyo;*.pyc;.svn;_svn;*%*;tmp*.html;.DS_Store</string>
+  <boolean id="import_recursive">0</boolean>
+  <string id="import_include_matches"></string>
+  <boolean id="import_live">0</boolean>
+</preference-set>
+</project>

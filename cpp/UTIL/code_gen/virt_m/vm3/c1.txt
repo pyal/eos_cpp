@@ -1,0 +1,49 @@
+
+proc fib() {
+
+   a = 0
+   b = 1
+
+   while( b < $1 ) {
+
+
+      c = b
+      b = a + b
+      a = c
+   }
+
+   return
+}
+Tup=0.00000000101
+
+func test1() {
+
+print 1
+   return $1
+
+}
+proc test(){
+print $1,"\n"
+print Int, "\n"
+print "Tup= ", Tup, "\n"
+print test_var, "\n"
+
+return
+} 
+/*
+func fac() {
+
+   if( $1 <= 0 ) {
+      return 1
+   } else {
+      return $1 * fac( $1 - 1 )
+   }
+}
+*/
+// At last - commnet
+Int=10000/*5*/ / 3
+
+Tup
+
+
+

@@ -1,0 +1,644 @@
+#Section 1	FreeEIdealH2
+$MinDenc 1e-5
+$MaxDenc 5
+$HugDenc 0.0809
+$HugP 0.0350
+$HugE 1
+$HugRecalcP 1
+$MaxP 2500
+$MinE 1
+$MaxE 1e4
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEIdeal  Material_File material.cfg Substance FreeEIdealH2
+// FreeEIdealH2  CvId 1.5 NMol 2 Zero 0 HiT 0  Tvib 6390 Trot 170.8
+
+
+#Section 2 	Steel-Tern
+$MinDenc 1
+$MaxDenc 15
+$HugDenc 7.89
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e6
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterABu   Material_File material.cfg Substance Steel-Tern
+// Steel-Tern    47  Denc   7.89   A     4.553   B    1.482  Grun  1.69
+
+
+#Section 100 	MatterGas
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterGas   Material_File material.cfg Substance GasOneAtom
+// GasOneAtom         Gamma  1.5                                           MatterGas
+
+#Section 3 	MatterMurnaganBerch - normal state, upto pres 0.5 GPa
+// Matters for geksogen, with cold curve approximtion
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterMurnaganBerch   Material_File material.cfg Substance MurnaganGeks
+// MurnaganGeks       Denc   1.72 B0  13.2 B1  6.4             Grun 2.4    MatterMurnaganBerch
+
+
+
+#Section 4 	MatterZubarev 
+// Matters for geksogen, with cold curve approximtion - from Utkin
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterZubarev   Material_File material.cfg Substance ZubarevGeks
+// ZubarevGeks        Denc   1.6 k  2 Bc 0.6887743 n 2.83 D 8.05 Grun 0.3  MatterZubarev
+
+#Section 0 	MatterStable ? ......
+#Section 0 	MatterBinodalSpinodal    InternalPointsUrs
+#Section 0 	MatterLiqSol ? ......
+#Section 0	MatterBornMaier  - no impl? - not used  Matter for geksogen, with cold curve approximtion
+#Section 0 	FreeEVirial	// VanDerValsN2    A 0.10875 B 1.0965   CvId 2.5 NMol 28 Zero 0 HiT 0  Vkp=3.2895 Pkp=33.5e-4 Tkp=126.2 Tªà=(8/27*A/B)/R  Vªà=3B Pªà=A/(27*B*B) (R = 8.3e-3) Pkr(GPa) 33.5e-4 Tkr(K) 126.2 Rkr(g/cm3) 0.304
+
+#Section 5 	MatterHisch
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterHisch   Material_File material.cfg Substance MatterHischBr4   
+// MatterHischBr4 Denc 2.89 B0c 3.584  V0c  0.322  m 0.67 n 4.03 Gi 0.5 V0 0.346 G0c 0.9  Sn 1 Sm 0.8  Ea 30
+
+#Section 6 	MatterIVL
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterIVL   Material_File material.cfg Substance MatterIVLPolysterene
+// MatterIVLPolysterene   Denc 1.05 V0 .95  DX  0.954771 CMN 5.716068  m 2   n .8  Ed 3.573227   E0 -.3346744    GC .2536666    GF   1.01371   GGI  .6666667   Gi 0.45   QS  2 Sm  .9025 Ea  28
+
+
+
+
+#Section 7 	MatterABuExpFit
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterABuExpFit   Material_File material.cfg Substance BromExpHghK5
+// BromExpHghK5        Denc   3.79  A  2.44768   B 1.39182   EDist  4     G0c 0.720703  Sm 0.738665 Sn 0.1       Tmin 0.001 Umin 0.2 Umax 16 NumPnt 100 TA  0.00      TB 1.13969    Gi 0.5 Ea 1e5  TL  3.03977   TP 1.34814   TT0  0.425789   
+
+#Section 0 	MatterABuExp -with reading of the file? 0ld, depric?test?
+//		for bromoform only!!!
+$Matter	MatterABuExp   Material_File material.cfg Substance ????
+// BromHiExp         29  Denc   2.89  NumX 100 Misfit 1e-5 AddP 1 AddE 1 AddT 0 MinT 0.290 MaxV 0.35 DencHisch 4.67  name_data urs_exbr.vah br_ex.cfg
+#Section 0 	MatterABuAdd  0ld, depric?test?
+//		for bromoform only!!!
+$Matter	MatterABuAdd   Material_File material.cfg Substance BromoformMy
+// BromoformMy     29  Denc   2.87   A     1.5     B    1.38   G0 -9.538937 G1 8.001208  G2 -1.309827   G3  0
+
+
+#Section 8 	FreeEVanDerVals
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEVanDerVals   Material_File material.cfg Substance VanDerValsN2
+// VanDerValsN2    A 0.10875 B 1.0965   CvId 2.5 NMol 28 Zero 0 HiT 0  Vkp=3.2895 Pkp=33.5e-4 Tkp=126.2 Tªà=(8/27*A/B)/R  Vªà=3B Pªà=A/(27*B*B) (R = 8.3e-3) Pkr(GPa) 33.5e-4 Tkr(K) 126.2 Rkr(g/cm3) 0.304
+
+
+
+// =================================================================
+// ================ H2Grig Liquid ==================================
+// =================================================================
+// MatterH2Liq - ? looks like depricated
+#Section 9 	FreeEH2Liquid H2_Grigoriev
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEH2Liquid   Material_File h2_param.cfg Substance H2_Grigoriev
+#Section 9 	FreeEH2Liquid  	H2_GrigorievTurn
+//			very bad hugoniot
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEH2Liquid   Material_File h2_param.cfg Substance H2_GrigorievTurn
+#Section 9 	FreeEH2Liquid	H2_GrigorievTurnFixedP
+//			bad hugoniot ???
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEH2Liquid   Material_File h2_param.cfg Substance H2_GrigorievTurnFixedP
+#Section 9 	FreeEH2Liquid	H2_GrigorievTurn1
+//			very bad hugoniot
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEH2Liquid   Material_File h2_param.cfg Substance H2_GrigorievTurn1
+
+
+
+// =================================================================
+// ================ H2Grig Solid ===================================
+// =================================================================
+// MatterH2Sol - ? looks like depricated
+#Section 10 	FreeEH2Solid H2_Grigoriev
+//			very bad hugoniot
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEH2Solid   Material_File h2_param.cfg Substance H2_Grigoriev
+#Section 10 	FreeEH2Solid  	H2_GrigorievTurn
+//			very bad hugoniot
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEH2Solid   Material_File h2_param.cfg Substance H2_GrigorievTurn
+#Section 10 	FreeEH2Solid	H2_GrigorievTurnFixedP
+//			bad hugoniot ???
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEH2Solid   Material_File h2_param.cfg Substance H2_GrigorievTurnFixedP
+#Section 10 	FreeEH2Solid	H2_GrigorievTurn1
+//			very bad hugoniot
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEH2Solid   Material_File h2_param.cfg Substance H2_GrigorievTurn1
+
+
+
+// =================================================================
+// ================ H2GrigMy FreeEEmpiLiquidPres ===================
+// =================================================================
+#Section 11 	FreeEEmpiLiquidPres Empi_My1
+//			does not work
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEEmpiLiquidPres   Material_File h2_param.cfg Substance Empi_My1
+#Section 11 	FreeEEmpiLiquidPres Empi_My2
+//			does not work
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEEmpiLiquidPres   Material_File h2_param.cfg Substance Empi_My2
+#Section 11 	FreeEEmpiLiquidPres Empi_My3
+//			need aditional files...
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEEmpiLiquidPres   Material_File h2_param.cfg Substance Empi_My3
+
+
+// =================================================================
+// ================ H2GrigMy FreeEEmpiLiquid     ===================
+// =================================================================
+#Section 12 	FreeEEmpiLiquid     Empi_My1
+//			does not work
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEEmpiLiquid       Material_File h2_param.cfg Substance Empi_My1
+#Section 12 	FreeEEmpiLiquid     Empi_My2
+//			does not work
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEEmpiLiquid       Material_File h2_param.cfg Substance Empi_My2
+#Section 12 	FreeEEmpiLiquid     Empi_My3
+//			need aditional files...
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEEmpiLiquid       Material_File h2_param.cfg Substance Empi_My3
+
+
+
+// =================================================================
+// ================ H2GrigMy FreeEEmpiSolid     ===================
+// =================================================================
+#Section 13 	FreeEEmpiSolid     Empi_My1
+//			does not work
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEEmpiSolid   Material_File h2_param.cfg Substance Empi_My1
+#Section 13 	FreeEEmpiSolid     Empi_My2
+//			does not work
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEEmpiSolid   Material_File h2_param.cfg Substance Empi_My2
+#Section 13 	FreeEEmpiSolid     Empi_My3
+//			need aditional files...
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEEmpiSolid   Material_File h2_param.cfg Substance Empi_My3
+
+
+
+
+#Section 13 	FreeEMetHCold     - only cold freeE is interesting
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEMetHCold   Material_File material.cfg Substance FreeEMetHCold
+// FreeEMetHCold   AddEG 1 AddLDA 1 AddOCP 1 AddDeb 1 DebDenc0 0.09  DebKoef 2190
+
+
+#Section 0 	FreeESumMatter     -  no single test
+
+
+
+#Section 14 	FreeEElectron    
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEElectron   Material_File material.cfg Substance FreeEH2Electron
+// FreeEH2Electron  NumEl  1 MolVeight 2 Zero 0 HiT  0
+
+
+// =================================================================
+// ================         FreeEBushman         ===================
+// =================================================================
+#Section 15 	FreeEBushman  Mo_Bushman
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEBushman   Material_File material.cfg Substance Mo_Bushman
+#Section 15 	FreeEBushman  Ni_Bushman
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeEBushman   Material_File material.cfg Substance Ni_Bushman
+
+// =================================================================
+// ================         RosBaseEOS           ===================
+// =================================================================
+
+
+// =================================================================
+// ================         FreeERossN2          ===================
+// =================================================================
+#Section 16 	FreeERossN2  FreeERossN2Vcool 
+//		             so FreeERossN2V0 - depricated
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeERossN2   Material_File material.cfg Substance FreeERossN2Vcool
+#Section 16 	FreeERossN2  FreeERossN2Xe1 
+//		             so FreeERossN2XeOld - depricated
+//			     have to depricated!!!!!!!!!!!!
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeERossN2   Material_File material.cfg Substance FreeERossN2Xe1
+#Section 16 	FreeERossN2  FreeERossN2Xe
+//		             same as FreeERossN2Xe1 - but without double state
+//			     have to depricated !!!!!!!!
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeERossN2   Material_File material.cfg Substance FreeERossN2Xe
+#Section 16 	FreeERossN2  FreeERossN2He
+// Looks like a worse version - not so good params...
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeERossN2   Material_File material.cfg Substance FreeERossN2He
+#Section 16 	FreeERossN2  FreeERossN2He1
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeERossN2   Material_File material.cfg Substance FreeERossN2He1
+
+
+
+// =================================================================
+// ================         FreeERossXe          ===================
+// =================================================================
+#Section 17 	FreeERossXe  XeStr1
+//  	      and what about XeStr ?
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeERossXe   Material_File material.cfg Substance XeStr1
+#Section 17 	FreeERossXe  XeStr
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeERossXe   Material_File material.cfg Substance XeStr
+
+
+
+// =================================================================
+// ================         FreeERossH2          ===================
+// =================================================================
+// 	FreeERossH2V1	FreeERossH2V2	- looks like depricated version
+#Section 18 	FreeERossH2  FreeERossH2new
+// 					- looks like depricated
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeERossH2   Material_File material.cfg Substance FreeERossH2new
+#Section 18 	FreeERossH2  FreeERossH2DisGood
+// 					- looks like good var
+$MinDenc 1e-3
+$MaxDenc 15
+$HugDenc 1.72
+$HugP 1e-4
+$HugE 0.
+$HugRecalcP 1
+$MaxP 1e6
+$MinE 0.1
+$MaxE 1e5
+$NumDencPnt 60
+$NumSameDencPnt 60
+$Matter	MatterFreeE FreeERossH2   Material_File material.cfg Substance FreeERossH2DisGood

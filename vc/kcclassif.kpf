@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="8881f7df-399b-4eb0-9593-c61bbb8d6fcc" kpf_version="4" name="kcclassif.kpf">
+<livefolder id="8881f7df-399b-4eb0-9593-c61bbb8d6fcc/featurelib" idref="8881f7df-399b-4eb0-9593-c61bbb8d6fcc" name="featurelib" url="featurelib">
+</livefolder>
+<livefolder id="8881f7df-399b-4eb0-9593-c61bbb8d6fcc/featureextractor" idref="8881f7df-399b-4eb0-9593-c61bbb8d6fcc" name="featureextractor" url="featureextractor">
+</livefolder>
+<livefolder id="8881f7df-399b-4eb0-9593-c61bbb8d6fcc/featuresolver" idref="8881f7df-399b-4eb0-9593-c61bbb8d6fcc" name="featuresolver" url="featuresolver">
+</livefolder>
+<livefolder id="8881f7df-399b-4eb0-9593-c61bbb8d6fcc/featurebinary" idref="8881f7df-399b-4eb0-9593-c61bbb8d6fcc" name="featurebinary" url="featurebinary">
+</livefolder>
+<livefolder id="8881f7df-399b-4eb0-9593-c61bbb8d6fcc/sif" idref="8881f7df-399b-4eb0-9593-c61bbb8d6fcc" name="sif" url="sif">
+</livefolder>
+<livefolder id="8881f7df-399b-4eb0-9593-c61bbb8d6fcc/scripts" idref="8881f7df-399b-4eb0-9593-c61bbb8d6fcc" name="scripts" url="scripts">
+</livefolder>
+<file id="41d02f12-6237-4d77-bec8-db265dbd5bad" idref="8881f7df-399b-4eb0-9593-c61bbb8d6fcc" name="a.txt" url="file:///D:/Pyal/Tmp/Paper/H2/Theory/Construction/a.txt">
+</file>
+<preference-set idref="8881f7df-399b-4eb0-9593-c61bbb8d6fcc">
+  <boolean id="import_live">1</boolean>
+</preference-set>
+</project>

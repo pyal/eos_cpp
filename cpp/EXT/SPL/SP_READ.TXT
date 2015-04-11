@@ -1,0 +1,383 @@
+And a reprint, of course.
+
+Have fun.
+
+                Barend J. Thijsse and Mark A. Hollanders
+                Computational Materials Science group (Com,ma,s)
+                Physical Materials Science Division
+                Laboratory of Materials Science 
+                Delft University of Technology
+                Rotterdamseweg 137, 2628 AL  Delft
+                Netherlands
+                        Phone: +31 15 278 2221
+                        Fax:   +31 15 278 6730
+                        E-mail: thijsse@stm.tudelft.nl
+                        URL: http://dutsm183.stm.tudelft.nl
+ 
+tion.
+ *      There are 3 possibilities:
+ *              value = 0    sigmas are used as specified in the 3rd column
+ *                           of the input file.
+ *              value > 0    sigma=value is used for all y.
+ *              value = -n   input y-values are assumed to have n significant
+ *                           digits. (data values equal to zero get the smallest 
+ *                           sigma found; this was implemented in version 4.2)
+ *      The -a option has the effect that the Chi-squared test
+ *      is used instead of the Durbin-Watson test (see section "Program
+ *      summary", below).
+ *
+ *      [-r value]
+ *      If the sigmas are exactly known as relative values, and/or you want 
+ *      them to be considered strictly true, use this "relative freeze" option. 
+ *      There are 2 possibilities:
+ *              value > 0    sigma=value*|y| is used for all y.
+ *              value < 0    sigma=|value|*sqrt(|y|) is used for all y.
+ *      In both cases the program crashes if a value y=0 is found, because
+ *      that would make the weight factor for that point infinitely large.
+ *      The -r option has the effect that the Chi-squared test
+ *      is used instead of the Durbin-Watson test (see section "Program
+ *      Summary", below).
+ *
+ *      [-n spacing]
+ *      The dws parameter is calculated for further-than-successive
+ *      weighted fit residuals, i.e. using terms like (d[i+3] - d[i])**2
+ *      (if spacing=3) rather than (d[i+1] - d[i])**2 (if spacing=1). The
+ *      default value for "spacing" is 1. The idea is to "jump over" serial
+ *      correlation that might have affected closely neighboring points.
+ *      Jan Hendrikse came up with this idea. NOTE: Normal DW statistical
+ *      tests are still applied, since there doesn't seem to be any
+ *      theory on this stuff. This is probably okay as long as "spacing"
+ *      is much smaller than the number of data points.
+ *
+ *      [-o lrev]
+ *      The -o option can be used to specify the number of intervals l at which
+ *      the "search-direction" reverses and knot-optimization starts ("lrev"
+ *      stands for l-reversal). Normally this is done automatically. This
+ *      option allows you to interfere with the search-strategy (see below).
+ *
+ *      [-q]
+ *      The -q option ("quick" or "quiet") is described in a separate 
+ *      paragraph further down.
+ *
+ *      [-l]
+ *      Sometimes a transformation of the x-values to log10(x) is convenient.
+ *      This can be achieved with the -l option.
+ *
+ *      [-s]
+ *      Older versions of spline2 needed the -s option to signal that
+ *      the input was a 2-column file. This option is not longer necessary,
+ *      but may still be used.
+ *
+ *      [-f]
+ *      This option is exactly equal to the -a option. We found -a easier to
+ *      remember, that's all.
+ *
+ *
+ ****   Program summary:
+ *
+ *      INTRODUCTION
+ *      The important point to realize when one tries to fit a spline
+ *      funtion to datapoints is that one can obtain a fit as close to
+ *      the data as one wants, simply by adding more and more breakpoints
+ *      to the spline funcion. However, what one really wants is a
+ *      smooth curve, flexible enough to capture the (unknown) functional
+ *      relationship underlying the data, yet smooth enough NOT to follow
+ *      the noise component in the data due to e.g. measurement errors.
+ *      In other words, one wants an 'adequate' fit, not a precise fit.
+ *
+ *      The problem of separating the noise from the underlying trend
+ *      boils down to two issues:
+ *            - Which statistic should be used to assess the 'adequacy'
+ *              of the fit, and which statistical test should be
+ *              performed on it?
+ *            - Which search path should be followed (in 'knot-position space')
+ *              so that the number and the distribution of the knots 
+ *              converge to their 'optimum' values?
+ *      The algorithm described below provides solutions to these questions. 
+ *      After many years of experience with widely varying types of data we
+ *      find that this algorithm works reliably and robustly. Almost always
+ *      it ends up with the 'correct' spline without any user decisions.
+ *      Only in exceptional cases 'manual' tuning of some parameters is
+ *      necessary; some tips are given below in the section "User interference
+ *      with the search strategy".
+ *      
+ *      TEST STATISTICS USED
+ *      The search strategy, to be outlined below, involves the computation
+ *      of a considerable number of spline-approximations, each
+ *      with a different set of breakpoints. The user does not see this.
+ *
+ *      For each spline-fit two test statistics, "rms" and "dws", are 
+ *      determined:
+ *               rms = sqrt(D**2/(N-m))
+ *      and 
+ *               dws = G**2/D**2,
+ *      where 
+ *              D**2 = SUM(i=1..N){ (d[i])**2 },
+ *              G**2 = SUM(i=1..N-1){ (d[i+1]-d[i])**2 },
+ *      in which
+ *              d[i] = (y[i]-S(x[i])/sigma[i]. 
+ *      N is the number of datapoints participating in the fit, and N-m is
+ *      the number of degrees of freedom. The program uses m = l + [k-1],
+ *      where l is the number of intervals between the breakpoints of the
+ *      spline and k-1 the polynomial degree of the spline. S(x) is the spline
+ *      function itself and sigma[i] is the RMS estimate of the error component
+ *      of y[i]. If the sigmas are not given to the program (in the 3rd
+ *      data column or via the -a or -r options), they all get the value 1.
+ *
+ *      If the sigmas are frozen (via the -a or -r options), the statistical
+ *      acceptance of a fit is evaluated by the well-known Chi-squared 
+ *      test on D**2. This is not a common situation. Normally one does not
+ *      know the experimental errors so precisely that the Chi-squared
+ *      test will perform well. This test is so powerful that even a 
+ *      modest under- or overestimation of the noise leads to unwanted
+ *      over- or underfitting of the data.
+ *
+ *      If the sigmas are not frozen, which is the normal situation, the 
+ *      statistical acceptance of a fit is decided upon by the so-called
+ *      Durbin-Watson test on dws, using the beta-function approximations 
+ *      for the two extreme theoretical distributions of dws. A statistically
+ *      acceptable fit has a dws-value of around 2. Smaller values indicate
+ *      the presence of systematic fit errors, larger values are just lucky
+ *      (or indicate that the data have been tampered with).
+ *      More on the Durbin-Watson statistic dws and on the associated 
+ *      theoretical distributions can be found in J. Durbin and G.S. Watson, 
+ *      Biometrika 37 (1950) 409, Biometrika 38 (1951) 159, and Biometrika 58 
+ *      (1971) 1, in Chapter IX of Mark A. Hollanders, Thesis TU-Delft
+ *      (1990), and in Ref. 2, below. 
+ *
+ *      The crucial property of dws is that any unknown common multiplicative
+ *      factor in the sigmas cancels out, because the sigmas appear in the
+ *      numerator and in the denominator. Experience shows that even if the
+ *      sigmas, or an unknown part of them, vary from datapoint to datapoint,
+ *      the value of dws is not too sensitive to this variation (if, at
+ *      least, it is not varying too wildly) to make the program find
+ *      unsatisfactory splines. This makes dws a far better statistic than
+ *      chi**2. In some ways, dws can be compared to the number of sign
+ *      changes in the sequence of fit-residuals.
+ *              
+ *      In all cases a significance level of 5% is used, but another value 
+ *      may be used by changing the line "#define REJLEV 0.05" in the code.
+ *
+ *      SERIAL CORRELATION
+ *      The dws test is crucially dependent on the assumption that the
+ *      noise values of successive datapoints are statistically independent.
+ *      This is in real situations often not the case, since many datasets
+ *      contain some sort of serial correlation, for example as a result of
+ *      smoothing, filtering, or limited experimental resolution along
+ *      the x-axis (these three are in fact the same). Jan Hendrikse has
+ *      shown that there is an elegant way around this, by letting dws
+ *      'skip over' the correlation 'length' of the data. The generalized
+ *      form of the dws parameter therefore becomes
+ *               dws = A*(G**2/D**2),
+ *      with 
+ *              D**2 = SUM(i=1..N) { (d[i])**2 },
+ *              G**2 = SUM(i=1..N-spacing) { (d[i+spacing]-d[i])**2 },
+ *                 A = (N-1)/(N-spacing),
+ *      where "spacing" can be specified using the -n option. The default
+ *      value is 1, the classical Durbin-Watson value.
+ *
+ *      Note: the sum G**2 is not cyclic over the data (as probably would be 
+ *      better), so it is scaled up by (N-1)/(N-spacing) to account for the 
+ *      loss of terms in the numerator. This is a very crude way to be able
+ *      to keep using the same statistical percentages.
+ *
+ *      SEARCH STRATEGY
+ *      The search strategy for the "best" spline-approximation consists of
+ *      the following steps (again, l denotes the number of intervals, 
+ *      i.e. the number of separate polynomial pieces of the spline):
+ *        1) First, spline fits are calculated while the number of intervals
+ *           increases from l = 1 up to the lowest number of intervals where 
+ *           the fit is statistically accepted, or (with option -o) up to 
+ *           "lrev", which stands for l-reversal.
+ *           If the Durbin-Watson test is on, there is a certain indecisive
+ *           acceptance range, because there are in fact two different 
+ *           theoretical distribtuions involved. Fits inside the indecisive 
+ *           range are accepted in this stage.
+ *           In this first stage the knot-positions are uniformly distributed,
+ *           but uniformly with respect to the datapoints, not uniformly
+ *           over the x-axis. Each spline interval is made to contain the same
+ *           number of datapoints (or as close to it as possible). 
+ *           This approach is based on experimental efficiency: one should
+ *           measure more datapoints in the ranges where the data vary strongly  
+ *           than in the ranges where the data follow a slow trend.
+ *           (On the other hand, in many practical cases the experimentalist
+ *           takes his data at constant increments of 'x'. So maybe we should
+ *           have an option in the program to switch from 'equal information
+ *           content' in the spline intervals to 'equal x-increment'.)
+ *        2) Next, the program calculates a new series of splines, while it
+ *           decreases the number of intervals and simultaneously optimizes
+ *           the knot-positions according to the "newnot"-algorithm of De Boor. 
+ *           (To prevent singularities, all intervals are made to contain
+ *           at least one datapoint at all times.)
+ *        3) The "spline wizard" then suggests one (or more) splines 
+ *           as "best" if it meets the following criteria:
+ *              a) No singularities were found in solving the fit-equations.
+ *              b) The fit has passed the acceptance test; fits within the 
+ *                 indecisive area of the Durbin-Watson test are initially
+ *                 rejected.
+ *              c) The spline with the next lower value of l does NOT meet
+ *                 the criteria a) and b). This is to make sure
+ *                 that one always gets the fit with the lowest possible
+ *                 number of intervals (to avoid "overfitting").
+ *        4) When no spline-fit lies in the indecisive Durbin-Watson region, 
+ *           "lrev" is increased, a new equidistant spline is calculated
+ *           for l = lrev, and the "newnot"-sequence is repeated. (This 
+ *           step is not invoked when the -o option is used to fix "lrev".)
+ *        5) If no acceptable fit is found, a warning appears and the fit with 
+ *           the lowest rms is suggested.
+ *        6) The number of intervals, together with the values of rms and 
+ *           dws for the suggested fits are tabulated and you may choose one of
+ *           them (or in fact any other if you like). Typing "s" at this
+ *           point selects the best "suggested" spline. You'll get as many
+ *           opportunities to try an l value as you need.
+ *           Note that when you request a spline-fit with l < lrev,
+ *           you always get "optimized" breakpoint locations. If l >= lrev,
+ *           you get regular "equispaced" breakpoint locations. Hence, by 
+ *           using the option -o 1 on the command line, you can make sure 
+ *           that every spline is "equispaced"; by using -o 200 (or so), you
+ *           can make sure that every spline is (in a way) "optimized".
+ *        7) Finally, if you think you're satisfied, you can inform the spline
+ *           wizard that you are done with her assistance, and the program
+ *           exits. See under "Using evalsp", below, what to do next.
+ *           
+ ****   User interference with the search strategy:
+ *
+ *      It sometimes happens that optimization of the knot positions starts
+ *      too early (especially when there are only a few data points) or 
+ *      too late (when there are trends in the deviations which you consider 
+ *      to be noise, for instance when a 'slow' noise component is
+ *      superimposed on a 'fast' one); the best thing to do then, is to use 
+ *      option "-o lrev" to force the start of knot-number reversal and
+ *      optimization at a desired point l=lrev, or to freeze the sigmas 
+ *      at a desired level (-a or -r options).
+ *      
+ ****   Output:
+ *
+ *      Always:
+ *         File "splrep" contains the following information about
+ *         the spline S(x) that was finally accepted (i.e., the last one):
+ *         a) the spline order, b) the number of intervals l,
+ *         c) the l+1 breakpoints and d) the l+k-1 beta-spline coefficients.
+ *         These data form a complete representation of S(x), the
+ *         so-called Beta-Spline (BS) representation. These data
+ *         are intended to be used by the program "evalsp", with which you
+ *         can use, analyze and manipulate the spline. 
+ *
+ *      Only if the -F option is used:
+ *         File "splstat" contains 6 (or 7) data columns giving statistical
+ *         information on all spline approximations in "plottable" order of
+ *         calculation (including the ones you tried yourself):
+ *              1) # of intervals, initially increasing, then, during knot 
+ *                 optimization, decreasing,
+ *              2) # of degrees of freedom,
+ *              3) value of rms,
+ *             3a) percentage point of rms (only when -a or -r option is used),
+ *              4) value of dws,
+ *              5) percentage point of lower distribution of dws,
+ *              6) percentage point of upper distribution of dws.
+ *         (Some data for the ones you tried yourself appear as "-999" in the
+ *         file, because we have forgotten where to get the proper
+ *         values from).
+ *
+ *      Only if the -F option is used:
+ *         File "splres" contains 7 columns giving data & fit information
+ *         for each data point:
+ *              1) x (or log(x), when the -l option is used),
+ *              2) y,
+ *              3) value of final spline approximation in point x,
+ *              4) weighted error,
+ *              5) weight factor 1/sigma**2,
+ *              6) first derivative of the final spline approximation,
+ *              7) second derivative of the final spline apprximation.
+ *
+ ****   Using evalsp
+ *
+ *      Type "evalsp splrep [options]" (after running "spline2") in order to:
+ *              1) Evaluate S(x) and all its derivatives in any set of
+ *                 x-values [no options, or -x xbegin xend xstep, or
+ *                 -f xfilename]; results go to file "evlres".
+ *              2) Determine the maxima, minima, and inflection points of S(x)
+ *                 [options -e and -i].
+ *              3) Determine the x-values in which S(x) has a certain value,
+ *                 e.g. for computing level crossing points [option -v value].
+ *              4) Calculate the integral of S(x)dx from the first to the
+ *                 last data point [option -a].
+ *              5) Calculate the Fourier transform of S(x) [option -F sbegin
+ *                 send sstep]; results go to file "evlfour".
+ *              6) Estimate the x-values in which a single-peaked spline
+ *                 reaches half its peak height [option -h, with or without
+ *                 option -b backgroundvalue].
+ *      For detailed information see the "evalsp" manual page.
+ *
+ ****   The -q option
+ *
+ *      The -q option is intended for those cases where one trusts
+ *      spline2's suggestion for the best approximation, and wants the
+ *      program to run silently and quickly. There is no output at all,
+ *      except for the rms-, dws-, and l-values of the best spline (to stderr),
+ *      and the BS-representation of the spline to stdout (it goes to the file
+ *      "splrep" as well). In this way "spline2" can be simply used in pipes,
+ *      for example:
+ *
+ *              generate_data | spline2 -q [options] | evalsp [options]
+ *
+ *      where "generate_data" denotes any process that writes a two-
+ *      or three-column data set to stdout.
+ *
+ ****   Bugs and version information:
+ *
+ *      If the x-values of the data are not in increasing order, everything 
+ *      goes wrong!
+ *
+ *      Program versions lower than 5.02 sometimes followed different
+ *      search paths through knot-space on different platforms.
+ *      The reason was that up- or downscaling the number of knots
+ *      to an 'exact' integer number (for instance, lnew = 0.95*40) led
+ *      on some machines to a double-to-int truncation to the correct
+ *      integer (here: 38), while on others to the next lower integer
+ *      (here: 37). This 'bug' has been 'fixed' in version 5.02: all
+ *      values are still truncated, unless they are within UPMARGIN
+ *      of the 'exact' integer.
+ *
+ *      Don't expect miracles. The program is good, but not perfect.
+ *      Be wise and check your spline by plotting it together with the data.
+ *      The spline values are most conveniently found in columns 1 and 2 of
+ *      the file "evlres" that is created by running "evalsp splrep".
+ *
+ *****  Note: 
+ *
+ *      In the functions graer and grasp, which generate plots (among
+ *      other things) the actual graphics parts have been commented
+ *      out, since they were old Tektronix-style routines that nobody
+ *      ever uses these days.
+ *
+ ****   Info: 
+ *
+ *      For information about splines and the algorithm-kernels used, see
+ *      (Ref. 1) Carl de Boor, "A Practical Guide to Splines",
+ *               (Springer, 1978).
+ *
+ *      The curve-fitting algorithms and strategies employed are described in:
+ *      (Ref. 2) Barend J. Thijsse, Mark A. Hollanders, and J. Hendrikse,
+ *               "A practical algorithm for least-squares spline approximation
+ *               of data containing noise", Computers In Physics, 
+ *               Jul/Aug (1998).
+ *
+ *      Authors and owners of this program are:
+ *              Barend J. Thijsse and Mark A. Hollanders
+ *              Computational Materials Science group (Com,ma,s)
+ *              Physical Materials Science Division
+ *              Laboratory of Materials Science 
+ *              Delft University of Technology
+ *              Rotterdamseweg 137, 2628 AL  Delft
+ *              Netherlands
+ *                      Phone: +31 15 278 2221
+ *                      Fax:   +31 15 278 6730
+ *                      E-mail: thijsse@stm.tudelft.nl
+ *                      URL: http://dutsm183.stm.tudelft.nl
+ *
+ *
+ *----------------------------------------------------------------------------
+ *                      END OF MANUAL PAGES
+ *----------------------------------------------------------------------------
+ */

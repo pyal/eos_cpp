@@ -1,0 +1,36 @@
+$Matter	MatterABu   Material_File material.cfg Substance Steel-Tern
+$HugRecalcHugP 1
+$HugStartPres  1e-4
+// Isentrope is calculated faster but without U...
+$ClcIsentU     0
+// NumDifferent Energy(Temperature) points
+$NumClc2Pnt    60
+$Log2Scale 	1
+
+// Start point
+$SDenc 1e-1
+$SPres 2.5e-3
+$STemp 1
+$SEner 0.01
+
+// Final point
+$FDenc 25
+$FPres 2e4
+$FTemp 1e6
+$FEner 1000
+
+// GetClcPoints
+$ReadFile 0
+$GetFromFile aaa.dat
+$GetFromFileColumn 2
+$GetFromFileNumColumn 7
+$NumClcPnt 60
+$LogScale 1
+
+$CurveType Hugoniot_Pres 
+$OutputPar R P E U D T S
+$OutFile  ABuSteel
+
+// Additional params for full test
+$SHugDenc 7.89
+$SHugEner 0.00

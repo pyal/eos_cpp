@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Struct Name="NPolygon::TGridData" Collapsed="true">
+    <Position X="18.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAIAAAAAAAAQAAAAAAAAAAhAAAAAAAAAAAAQAMAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\GridData.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TGridVectorVar&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\GridVectorVarImpl.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TPolyMarchRegionBase" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAGAAAEAAAAAAAAACAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\PolyMarchBase.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TPolyMarchTestZero" Collapsed="true">
+    <Position X="3.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\PolyMarchBase.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TPolyMarchBody" Collapsed="true">
+    <Position X="7.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\PolyMarchBase.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TSimpleContructor" Collapsed="true">
+    <Position X="20.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\PolyRegConstructor.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::PolyRegIO" Collapsed="true">
+    <Position X="22.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\PolyRegConstructor.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TPolyRegion" Collapsed="true">
+    <Position X="22.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABABAwAQAQgEEIEBAEAQRAGAAAAAIAAAAAAAIECAIAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\PolyRegion.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TTest" Collapsed="true">
+    <Position X="22.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAEAABAAAAAAAAAAAAAEAAAAIAAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\PolyTest.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TTestSimple" Collapsed="true">
+    <Position X="17" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAABAAEAAAAAAACAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\PolyTest.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TestCase_Gasd_Static" Collapsed="true">
+    <Position X="17" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAACAAAACAABEAAICACAAAAAAg=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\PolyTest.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TRegBoundaryBase" Collapsed="true">
+    <Position X="5.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAACAgAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\RegBoundary.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TRegBoundaryCircle" Collapsed="true">
+    <Position X="6.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAEAQAAAAAAAAAABAAAAAgAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\RegBoundary.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TRegBoundaryCircleX" Collapsed="true">
+    <Position X="9.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAEAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\RegBoundary.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TRegBoundarySame" Collapsed="true">
+    <Position X="3" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAQAAAgAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\RegBoundary.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TRegBoundaryCircle_ZeroConst" Collapsed="true">
+    <Position X="5.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAQAAIAAAAAAQAAAAAAgAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\RegBoundary.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TRegBoundaryGasd" Collapsed="true">
+    <Position X="7.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAEAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\RegBoundary.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TRegBoundaryWilkins" Collapsed="true">
+    <Position X="0.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAEAABAAAAAAACQBAAAAAgAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\RegBoundary.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TRegGrid" Collapsed="true">
+    <Position X="17" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gQAACAAAAQAAUIABAAAAAAggAAAIIAAEAACAQAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\RegGrid.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TGridMaskSimple" Collapsed="true">
+    <Position X="5.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAQAgAACFAgDEAAAAYAAAAAAgAAAABAAAgAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\GridMaskImpl.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TGridVar&lt;T&gt;" Collapsed="true">
+    <Position X="2.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\GridVarImpl.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TPolyMarchPlusE" Collapsed="true">
+    <Position X="5.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgQAgAAAAAEmAABMAgAACBAAIqAoAAAAAQAQAKAOoA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\march\PolyMarchAdd.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TPolyMarchTestU2" Collapsed="true">
+    <Position X="12.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAABAAAAHAAAEAgAAAAAAACAAAAAAAAAAACgAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\march\PolyMarchTest.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TPolyMarchDriverFluxGasdWilkins" Collapsed="true">
+    <Position X="10" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAEAAAAAAAAAIAAAAAAAAACAAICAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\march\wilkins.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TMarchWilkins" Collapsed="true">
+    <Position X="14.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAABIhAAEgGhFhHggAACAgBICIoAiASQAEkAqEAhE=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\march\wilkins.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TGridMaskBase" Collapsed="true">
+    <Position X="5.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAQAgAACAAgAEAAAQAAAAAAAgAAAABAAAgAAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\GridMask.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TGridVariablesBase" Collapsed="true">
+    <Position X="1.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAMAAAACAAAAhIAggAAAAAAAAAAAAAAAAAAAAAEAAAQ=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\GridMask.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TGridMaskedData" Collapsed="true">
+    <Position X="20.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAACAACAAAABAAAQAAQAAAABAAAACCAABAAAA=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\GridMask.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NPolygon::TRegionBounds" Collapsed="true">
+    <Position X="18.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQYAARAAAAHAgBAAGAAgICAAAAAAQCAAAAAAAAhwE=</HashCode>
+      <FileName>c:\Pyal\Work\Ficp\cpp\Gasd\Polygon\lib\GridMask.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

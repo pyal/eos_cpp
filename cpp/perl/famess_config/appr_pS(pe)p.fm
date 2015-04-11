@@ -1,0 +1,68 @@
+
+InFile_    !sum.dat
+FrCol_     2
+FrVel_     0
+ToVel_     12781
+Bnd1_      11761
+Bnd2_      12605
+Ground12_  0
+Fst1_      0.00001
+Fst2_      0.00001
+Int3_      1
+A3_	   10
+Ground4_   1.14
+Fst4_      0.01
+
+=====================  Ignore up to GeneralBegim =============
+NameFrom   NameTo                                             
+GeneralBegin   InFile_     1out.dat                           
+=====================   Ignore   up   to   SetBegim   ========
+Names      FrCol   ToCol   FrVel   ToVel   Col_Pnt_Val_0      
+SetBegin      FrCol_    5   FrVel_        ToVel_    0                  
+UncMin_appr_clc NumIt 1 NumT 6 FuncError 1.49012e-008 ResError 1.49012e-008 SumFuncMinim 0
+ minimN_LM  {  EigenVectMinim  { ErrorLQ 1e-008 MathEps05 1.49012e-008 ZeroEig 1e-010 BreakIterStp 1.555 }
+  Lambda  { CoefStart 10 DivideCoef 20 DivideVal 0.1 }  Optimized 2 }
+  {  Min1D_Coef 1.2 Min1D_MaxLinSrch 5 Min1D_MaxRetry 5 }
+set_func    3
+CorFuncConst0  3 CorFuncExpConst   1                          
+Bnd         F V F F    Bnd1_
+Bnd         F V F F    Bnd2_
+Num_Correlated_Par        5
+1    5    1 
+1    13   1 
+1    21   1                                                  
+3    11   1                                                   
+2    25   1
+polynom
+Ground              V      V      F      F   Ground12_
+Intencity           f      f      F      F   1
+Position            F      F      F      F   0
+ First              v      v      F      F   Fst1_
+ Second             F      F      F      F   0
+ Third              F      F      F      F   0
+ Fourth             F      F      F      F   0
+ Fifth              F      F      F      F   0
+sum_func    2                                                 
+polynom
+Ground              F      F      F      F   0
+Intencity           f      f      F      F   1
+Position            F      F      F      F   0
+ First              v      v      F      F   Fst2_
+ Second             F      F      F      F   0
+ Third              F      F      F      F   0
+ Fourth             F      F      F      F   0
+ Fifth              F      F      F      F   0
+exponent
+Ground              F      F      F      F   0
+Intencity           V      V      F      F   Int3_
+  Position          F      F      F      F   0
+1/alpha_in_exp      F      V      F      F   A3_
+polynom
+Ground              V      V      F      F   Ground4_
+Intencity           f      f      F      F   1
+Position            F      F      F      F   0
+ First              v      v      F      F   Fst4_
+ Second             F      F      F      F   0
+ Third              F      F      F      F   0
+ Fourth             F      F      F      F   0
+ Fifth              F      F      F      F   0

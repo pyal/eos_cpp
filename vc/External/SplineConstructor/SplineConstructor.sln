@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SplineConstructor", "SplineConstructor.vcproj", "{86386A33-7D4E-4C61-B01E-E0BAC08A2E69}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SplineExtractor", "..\SplineExtractor\SplineExtractor.vcproj", "{2C0BE47E-120E-4509-B64C-CF1FD548D607}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{86386A33-7D4E-4C61-B01E-E0BAC08A2E69}.Debug.ActiveCfg = Debug|Win32
+		{86386A33-7D4E-4C61-B01E-E0BAC08A2E69}.Debug.Build.0 = Debug|Win32
+		{86386A33-7D4E-4C61-B01E-E0BAC08A2E69}.Release.ActiveCfg = Release|Win32
+		{86386A33-7D4E-4C61-B01E-E0BAC08A2E69}.Release.Build.0 = Release|Win32
+		{2C0BE47E-120E-4509-B64C-CF1FD548D607}.Debug.ActiveCfg = Debug|Win32
+		{2C0BE47E-120E-4509-B64C-CF1FD548D607}.Debug.Build.0 = Debug|Win32
+		{2C0BE47E-120E-4509-B64C-CF1FD548D607}.Release.ActiveCfg = Release|Win32
+		{2C0BE47E-120E-4509-B64C-CF1FD548D607}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="4b392473-d622-4905-b4cd-b6a043793bef" kpf_version="4" name="wiki.kpf">
+<file id="4a553bd8-292c-4bc7-9b0b-da91b5d567fe" idref="c3c03796-7e82-4f0e-ac57-86a2f9c0db08" name="LocalSettings.php" url="file:///H:/home/www/pyalling/wiki/LocalSettings.php">
+</file>
+<file id="ad1f57f0-dde0-4e5c-8764-7fab3e4b35af" idref="c3c03796-7e82-4f0e-ac57-86a2f9c0db08" name="Calendar.php" url="file:///H:/home/www/pyalling/wiki/extensions/Calendar/Calendar.php">
+</file>
+<file id="4030b5e3-af37-441a-84e9-0376a05dbe49" idref="c3c03796-7e82-4f0e-ac57-86a2f9c0db08" name="School.php" url="file:///H:/home/www/pyalling/wiki/skins/School.php">
+</file>
+<file id="eaf83447-1e22-4b5f-af12-9d8773fec381" idref="c3c03796-7e82-4f0e-ac57-86a2f9c0db08" name="GlobalFunctions.php" url="file:///H:/home/www/pyalling/wiki/includes/GlobalFunctions.php">
+</file>
+<file id="8c359d5f-7844-4490-aec0-10a73f2f88b9" idref="c3c03796-7e82-4f0e-ac57-86a2f9c0db08" name="DefaultSettings.php" url="file:///H:/home/www/pyalling/wiki/includes/DefaultSettings.php">
+</file>
+<file id="f248fe15-ee90-48c2-83fe-abc4260c0754" idref="c3c03796-7e82-4f0e-ac57-86a2f9c0db08" name="SidebarPage.php" url="file:///H:/home/www/pyalling/wiki/extensions/SidebarPage/SidebarPage.php">
+</file>
+<file id="490800d0-421d-4810-9d5a-dcfb1b3d822c" idref="c3c03796-7e82-4f0e-ac57-86a2f9c0db08" name="BrowseDir.php" url="file:///H:/home/www/pyalling/wiki/extensions/BrowseDir/BrowseDir.php">
+</file>
+<folder id="c3c03796-7e82-4f0e-ac57-86a2f9c0db08" idref="4b392473-d622-4905-b4cd-b6a043793bef" name="open">
+</folder>
+<preference-set idref="4b392473-d622-4905-b4cd-b6a043793bef">
+  <string id="import_dirname">H:\home\www\pyalling\wiki</string>
+  <boolean id="import_recursive">0</boolean>
+  <boolean id="import_live">0</boolean>
+  <string id="import_type">makeFlat</string>
+  <string id="import_exclude_matches">*.*~;*.bak;*.tmp;CVS;.#*;*.pyo;*.pyc;.svn;_svn;*%*;tmp*.html;.DS_Store</string>
+  <string id="import_include_matches"></string>
+</preference-set>
+</project>

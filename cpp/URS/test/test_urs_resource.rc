@@ -1,0 +1,143 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "test_urs_resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TXT
+//
+
+FREEEIDEALH2_HUG_CFG 	 TXT ".\\resource\\FreeEIdealH2.Hug.cfg"
+FREEEIDEALH2_HUG_TEST 	 TXT ".\\resource\\FreeEIdealH2.Hug.test"
+FREEEIDEALH2_ISOT_CFG 	 TXT ".\\resource\\FreeEIdealH2.IsoT.cfg"
+FREEEIDEALH2_ISOT_TEST 	 TXT ".\\resource\\FreeEIdealH2.IsoT.test"
+ABUEXPFITBR5_HUG_CFG 	 TXT ".\\resource\\ABuExpFitBr5.Hug.cfg"
+ABUEXPFITBR5_HUG_TEST 	 TXT ".\\resource\\ABuExpFitBr5.Hug.test"
+ABUEXPFITBR5_ISOE_CFG 	 TXT ".\\resource\\ABuExpFitBr5.IsoE.cfg"
+ABUEXPFITBR5_ISOE_TEST 	 TXT ".\\resource\\ABuExpFitBr5.IsoE.test"
+ABUSTEEL_HUG_CFG 	 TXT ".\\resource\\ABuSteel.Hug.cfg"
+ABUSTEEL_HUG_TEST 	 TXT ".\\resource\\ABuSteel.Hug.test"
+ABUSTEEL_ISOE_CFG 	 TXT ".\\resource\\ABuSteel.IsoE.cfg"
+ABUSTEEL_ISOE_TEST 	 TXT ".\\resource\\ABuSteel.IsoE.test"
+FREEEH2ELECTRON_HUG_CFG 	 TXT ".\\resource\\FreeEH2Electron.Hug.cfg"
+FREEEH2ELECTRON_HUG_TEST 	 TXT ".\\resource\\FreeEH2Electron.Hug.test"
+FREEEH2ELECTRON_ISOT_CFG 	 TXT ".\\resource\\FreeEH2Electron.IsoT.cfg"
+FREEEH2ELECTRON_ISOT_TEST 	 TXT ".\\resource\\FreeEH2Electron.IsoT.test"
+FREEEMETHCOLD_HUG_CFG 	 TXT ".\\resource\\FreeEMetHCold.Hug.cfg"
+FREEEMETHCOLD_HUG_TEST 	 TXT ".\\resource\\FreeEMetHCold.Hug.test"
+FREEEMETHCOLD_ISOT_CFG 	 TXT ".\\resource\\FreeEMetHCold.IsoT.cfg"
+FREEEMETHCOLD_ISOT_TEST 	 TXT ".\\resource\\FreeEMetHCold.IsoT.test"
+FREEEROSSH2DISGOOD_ISOT_CFG 	 TXT ".\\resource\\FreeERossH2DisGood.IsoT.cfg"
+FREEEROSSH2DISGOOD_ISOT_TEST 	 TXT ".\\resource\\FreeERossH2DisGood.IsoT.test"
+FREEEROSSN2HE1_ISOT_CFG 	 TXT ".\\resource\\FreeERossN2He1.IsoT.cfg"
+FREEEROSSN2HE1_ISOT_TEST 	 TXT ".\\resource\\FreeERossN2He1.IsoT.test"
+FREEEROSSN2VCOOL_ISOT_CFG 	 TXT ".\\resource\\FreeERossN2Vcool.IsoT.cfg"
+FREEEROSSN2VCOOL_ISOT_TEST 	 TXT ".\\resource\\FreeERossN2Vcool.IsoT.test"
+FREEEROSSN2XE1_ISOT_CFG 	 TXT ".\\resource\\FreeERossN2Xe1.IsoT.cfg"
+FREEEROSSN2XE1_ISOT_TEST 	 TXT ".\\resource\\FreeERossN2Xe1.IsoT.test"
+GASONEATOM_HUG_CFG 	 TXT ".\\resource\\GasOneAtom.Hug.cfg"
+GASONEATOM_HUG_TEST 	 TXT ".\\resource\\GasOneAtom.Hug.test"
+GASONEATOM_ISOE_CFG 	 TXT ".\\resource\\GasOneAtom.IsoE.cfg"
+GASONEATOM_ISOE_TEST 	 TXT ".\\resource\\GasOneAtom.IsoE.test"
+HISCHBR4_HUG_CFG 	 TXT ".\\resource\\HischBr4.Hug.cfg"
+HISCHBR4_HUG_TEST 	 TXT ".\\resource\\HischBr4.Hug.test"
+HISCHBR4_ISOE_CFG 	 TXT ".\\resource\\HischBr4.IsoE.cfg"
+HISCHBR4_ISOE_TEST 	 TXT ".\\resource\\HischBr4.IsoE.test"
+IVLPOLYSTERENE_HUG_CFG 	 TXT ".\\resource\\IVLPolysterene.Hug.cfg"
+IVLPOLYSTERENE_HUG_TEST 	 TXT ".\\resource\\IVLPolysterene.Hug.test"
+IVLPOLYSTERENE_ISOE_CFG 	 TXT ".\\resource\\IVLPolysterene.IsoE.cfg"
+IVLPOLYSTERENE_ISOE_TEST 	 TXT ".\\resource\\IVLPolysterene.IsoE.test"
+MO_BUSHMAN_HUG_CFG 	 TXT ".\\resource\\Mo_Bushman.Hug.cfg"
+MO_BUSHMAN_HUG_TEST 	 TXT ".\\resource\\Mo_Bushman.Hug.test"
+MO_BUSHMAN_ISOT_CFG 	 TXT ".\\resource\\Mo_Bushman.IsoT.cfg"
+MO_BUSHMAN_ISOT_TEST 	 TXT ".\\resource\\Mo_Bushman.IsoT.test"
+MURNAGANGEKS_HUG_CFG 	 TXT ".\\resource\\MurnaganGeks.Hug.cfg"
+MURNAGANGEKS_HUG_TEST 	 TXT ".\\resource\\MurnaganGeks.Hug.test"
+MURNAGANGEKS_ISOE_CFG 	 TXT ".\\resource\\MurnaganGeks.IsoE.cfg"
+MURNAGANGEKS_ISOE_TEST 	 TXT ".\\resource\\MurnaganGeks.IsoE.test"
+NI_BUSHMAN_HUG_CFG 	 TXT ".\\resource\\Ni_Bushman.Hug.cfg"
+NI_BUSHMAN_HUG_TEST 	 TXT ".\\resource\\Ni_Bushman.Hug.test"
+NI_BUSHMAN_ISOT_CFG 	 TXT ".\\resource\\Ni_Bushman.IsoT.cfg"
+NI_BUSHMAN_ISOT_TEST 	 TXT ".\\resource\\Ni_Bushman.IsoT.test"
+VANDERVALSN2_HUG_CFG 	 TXT ".\\resource\\VanDerValsN2.Hug.cfg"
+VANDERVALSN2_HUG_TEST 	 TXT ".\\resource\\VanDerValsN2.Hug.test"
+VANDERVALSN2_ISOT_CFG 	 TXT ".\\resource\\VanDerValsN2.IsoT.cfg"
+VANDERVALSN2_ISOT_TEST 	 TXT ".\\resource\\VanDerValsN2.IsoT.test"
+XESTR1_ISOT_CFG 	 TXT ".\\resource\\XeStr1.IsoT.cfg"
+XESTR1_ISOT_TEST 	 TXT ".\\resource\\XeStr1.IsoT.test"
+ZUBAREVGEKS_HUG_CFG 	 TXT ".\\resource\\ZubarevGeks.Hug.cfg"
+ZUBAREVGEKS_HUG_TEST 	 TXT ".\\resource\\ZubarevGeks.Hug.test"
+ZUBAREVGEKS_ISOE_CFG 	 TXT ".\\resource\\ZubarevGeks.IsoE.cfg"
+ZUBAREVGEKS_ISOE_TEST 	 TXT ".\\resource\\ZubarevGeks.IsoE.test"
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "test_urs_resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

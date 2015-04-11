@@ -1,0 +1,43 @@
+
+
+InFile_
+FrCol_ 
+FrVel_
+ToVel_
+Bnd1_
+Ground12_
+Int1_
+A1_
+Int2_
+
+=====================  Ignore up to GeneralBegim =============
+NameFrom   NameTo                                             
+GeneralBegin   InFile_     1out.dat                           
+=====================   Ignore   up   to   SetBegim   ========
+Names      FrCol   ToCol   FrVel   ToVel   Col_Pnt_Val_0      
+SetBegin      FrCol_    5   FrVel_        ToVel_    0                  
+UncMin_appr_clc NumIt 1 NumT 6 FuncError 1.49012e-008 ResError 1.49012e-008 SumFuncMinim 0
+ minimN_LM  {  EigenVectMinim  { ErrorLQ 1e-008 MathEps05 1.49012e-008 ZeroEig 1e-010 BreakIterStp 1.555 }
+  Lambda  { CoefStart 10 DivideCoef 20 DivideVal 0.1 }  Optimized 2 }
+  {  Min1D_Coef 1.2 Min1D_MaxLinSrch 5 Min1D_MaxRetry 5 }
+set_func    2                                                 
+CorFuncConst0  3 CorFuncExpConst   1                          
+Bnd         F V F F    Bnd1_
+Num_Correlated_Par        3                                   
+1    4    1                                                   
+1    8    1                                                   
+2    6    1                                                   
+exponent
+Ground              V      V      F      F   Ground12_
+Intencity           V      V      F      F   Int1_
+  Position          F      F      F      F   0
+1/alpha_in_exp      F      V      F      F   A1_
+polynom
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   Int2_
+Position            F      F      F      F   0
+ First              V      V      F      F   0
+ Second             F      F      F      F   0
+ Third              F      F      F      F   0
+ Fourth             F      F      F      F   0
+ Fifth              F      F      F      F   0

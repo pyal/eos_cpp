@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Ref">
+</Property><Property Name="Solution File" Value="D:\UnSaved\work\ficp\projects\Alex\vc.net\Lib\Ref\Ref.sln">
+</Property><Property Name="Date" Value="10 мая 2009 г.">
+</Property><Property Name="Time" Value="21:49">
+</Property></Properties><Event ErrorLevel="0" Project="Ref" Source="Ref.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="Ref" Source="Ref.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="Ref.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Ref.sln" Description="Converted">
+</Event></UpgradeLog>

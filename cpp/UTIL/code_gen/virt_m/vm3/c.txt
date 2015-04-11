@@ -1,0 +1,56 @@
+
+proc fib() {
+
+   a = 0
+   b = 1
+print "fib"
+print $1
+print "fib\n"
+
+   while( b < $1 ) {
+
+      print b
+
+      c = b
+      b = a + b
+      a = c
+   }
+   print " b " 
+print b
+   print " c " 
+print c
+   print " fib \n"
+
+   return
+}
+
+
+func f() {
+
+   return $1 + PI
+
+}
+
+func fac() {
+
+   if( $1 <= 0 ) {
+      return 1
+   } else {
+      return $1 * fac( $1 - 1 )
+   }
+}
+
+
+fib( 10000 )
+
+z = f( 1 )
+
+print "z = ", z
+
+q = fac( 7 )
+
+print "PI= ",PI
+print "q = ", q
+print PI
+PI=PI+1
+print PI

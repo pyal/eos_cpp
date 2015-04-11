@@ -1,0 +1,36 @@
+$Matter	MatterFreeE FreeERossN2   Material_File material.cfg Substance FreeERossN2He1
+$HugRecalcHugP 1
+$HugStartPres  1e-4
+// Isentrope is calculated faster but without U...
+$ClcIsentU     0
+// NumDifferent Energy(Temperature) points
+$NumClc2Pnt    10
+$Log2Scale  1
+
+// Start point
+$SDenc 1e-1
+$SPres 2.5e-3
+$STemp 10
+$SEner 0.01
+
+// Final point
+$FDenc 5
+$FPres 2e3
+$FTemp 1e6
+$FEner 0
+
+// GetClcPoints
+$ReadFile 0
+$GetFromFile aaa.dat
+$GetFromFileColumn 2
+$GetFromFileNumColumn 7
+$NumClcPnt 30
+$LogScale 1
+
+$CurveType Hugoniot_Pres 
+$OutputPar R P E U D T S
+$OutFile  FreeERossN2He1
+
+// Additional params for full test
+$SHugDenc 0.1
+$SHugEner 0.001

@@ -1,0 +1,2249 @@
+=====================  Ignore up to GeneralBegim =============
+NameFrom   NameTo                                             
+GeneralBegin   1in.dat     1out.dat                           
+=====================   Ignore   up   to   SetBegim   ========
+Names      FrCol   ToCol   FrVel   ToVel   Col_Pnt_Val_0      
+SetBegin      2        4   0        100    0                  
+UncMin_appr_clc NumIt 1 NumT 6 FuncError 1.49012e-008 ResError 1.49012e-008 SumFuncMinim 0
+ minimN_LM  {  EigenVectMinim  { ErrorLQ 1e-008 MathEps05 1.49012e-008 ZeroEig 1e-010 BreakIterStp 1.555 }
+  Lambda  { CoefStart 10 DivideCoef 20 DivideVal 0.1 }  Optimized 2 }
+  {  Min1D_Coef 1.2 Min1D_MaxLinSrch 5 Min1D_MaxRetry 5 }        
+sum_func    2                                                 
+lorents                                                       
+Ground            V  F  V       0                             
+Intencity         V  V  V       1                             
+Position          F  V  V       30                            
+Width             F  F  V       10                            
+4-ord             F  F  F       0                             
+lorents                                                       
+Ground            F  F  V       0                             
+Intencity         V  V  V       0                             
+Position          F  V  V       0                             
+Width             F  F  V       5                             
+4-ord             F  F  F       0                             
+                                                              
+SetBegin   2         4    0        100      0                 
+Std_appr_clc   NumIt  3 NumT  3 MinError 1e-06                
+set_func    2                                                 
+CorFuncConst0  3 CorFuncExpConst   1                          
+Bnd         F F V V    245                                    
+Num_Correlated_Par        3                                   
+1    4    1                                                   
+1    12   1                                                   
+2    10   1                                                   
+polynom                                                       
+Ground            V  V  V  V     -764.439602                  
+Intencity         F  F  F  F     1                            
+Position          F  F  F  F     245                          
+second            F  V  F  V     1.3                          
+third             F  F  F  V     0                            
+fourth            F  F  F  F     0                            
+fifth             F  F  F  F     0                            
+sixth             F  F  F  F     0                            
+polynom                                                       
+Ground            F  F  F  F     0                            
+Intencity         F  F  F  F     1                            
+Position          F  F  F  F     245.                         
+second            F  V  F  V     20                           
+third             F  F  F  V     -0.137803                    
+fourth            F  F  F  F     0                            
+fifth             F  F  F  F     0                            
+sixth             F  F  F  F     0                            
+                                                              
+SetBegin      2    4   400   600            0                 
+Std_appr_clc   NumIt  3 NumT  3 MinError 1e-06                
+exponent                                                      
+Ground            V  V  F  F  V     2211.17386                
+Intencity         F  V  V  F  V     580.603287                
+Position          F  F  F  V  V     500.01843                 
+1/alpha_in_exp    F  F  V  F  V     31.268516                 
+
+
+ This is the standart head. Now detailed list of all functions:
+
+ Registered FAZer_Test:
+
+
+Listing all classes for category <FAZer_Test> :
+class HQ_Gamma_poly
+class QsH_poly
+class hq_aver
+ Registered FAZer :
+
+
+Listing all classes for category <FAZer> :
+class FAZerCurveMain
+class F_relax2
+class HQ_mono
+class HQ_poly
+class HQ_poly_kashuba_est
+class Int_T
+class Is_T
+class QsH_externalH
+class Qs_T
+class exp6cold
+class exponent
+class gaus
+class hq_magnon_mean_field_accus
+class hq_magnon_mean_field_optic
+class hq_magnon_mean_field_paper
+class hq_magnon_mean_field_paper9
+class hq_magnon_mean_field_paper_plus
+class hq_magnon_mean_field_std
+class lorents
+class polynom
+class qh_relax_Hn
+class qh_relax_kashuba
+class qh_relax_mean_field
+class qh_relax_rand_Jump
+class qh_relax_rand_walk
+
+
+ ============================
+List of all functions:
+===================================
+
+HQ_Gamma_poly
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Gamma             F      F      F      F   0
+  Eta               F      F      F      F   0
+  Phi               F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<HQ_Gamma_poly>>
+
+Calculation of spectra of poycristal Fe. Main axis - Fix, 
+H//Fix_z, QS - is turned (Gamma,Teta params)  
+
+  Ground     : Added Ground int  
+  Intencity  : Spectr multiplied by  
+     H       : Internal magnetic field  
+     QS      : Internal QS  
+     IS      : Isomer shift  
+     W       : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta rotation 
+               around Fix_y  
+     Gamma   : Gamma Angle - rotation around Fix_Z done first. 
+               Final QS_axis - result of three operations under 
+               its axises - turn by Gamma around Fix_Z turn by 
+               teta around Fix_y plus turn by Phi around Fix_Z. 
+               for axial Field ( H//Z ) result does not depend on 
+               Phi for any angles Teta,Gamma values of Eta.  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     Phi     : Phi Angle - rotation of turned by Gamma and Teta 
+               Qs on angle Phi around Fix_z axis  
+
+ End of Description of function :      <<HQ_Gamma_poly>>
+
+
+
+QsH_poly
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Eta               F      F      F      F   0
+  H_Teta            F      F      F      F   0
+  H_Phi             F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<QsH_poly>>
+
+Calculation of spectra of poycristal Fe. Main axis - Fix in Qs 
+basis ( Fix ), H - is turned (H_Teta H_Phi)  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+      H      : Internal magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     H_Teta  : Teta Angle between QS_Z and H Teta rotation around 
+               Fix_y  
+     H_Phi   : Phi Angle - rotation around QS_Z -so final H - 
+               result of two operations - turn by teta around 
+               Fix_y plus turn by Phi around Fix_Z.  
+
+ End of Description of function :      <<QsH_poly>>
+
+
+
+hq_aver
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+Hexternal           F      F      F      F   500
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+  I_Hx_c            F      F      F      F   0
+  I_Hy_c            F      F      F      F   0
+  I_Hz_c            F      F      F      F   0
+   Hc               F      F      F      F   0
+ TetaV_H            F      F      F      F   0
+ Add_H              F      F      F      F   0
+FineAver            F      F      F      F   0
+ Sum8               F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<hq_aver>>
+
+Calculation of spectra of Fe under external magnetic field H. In 
+the model used tensor of anisotropy of H ( internal magnetic field 
+do not follow the direction of external field directly, for 
+details look description of Add parameter ). Its main axis 
+(anisotropy tensor's) are used as the main axis of fixed system. 
+QS - is turned (Phi,Teta params) in this system. Hc - module of 
+the internal "electron" field, it is turned by the Hexternal 
+according to the formula. Teta_V - defines angle between external 
+field and viewing direction. Do not work any more. Test purpose 
+only....  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+  Hexternal  : External magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta - rotation 
+               around Fix_Y ( after Phi rotation )  
+     Phi     : Phi Angle -rotation around Fix_z is done first - 
+               final QS_axis - result of two operations under its 
+               axises - turn on phi around Fix_z plus turn by teta 
+               around Fix_Y. Not totally correct Eiler angles.  
+     Eta     : Qs Eta (xy assimetry) Vxx-Vyy  
+    I_Hx_c   : H magnetic anisotropy tenzor main Hx amplitude, 
+               direction coinced with Fixed axis system  
+    I_Hy_c   : H magnetic anisotropy tenzor main Hy amplitude, 
+               direction coinced with Fixed axis system  
+    I_Hz_c   : H magnetic anisotropy tenzor main Hz amplitude, 
+               direction coinced with Fixed axis system  
+     Hc      : Internal magnetic field amplitude  
+   TetaV_H   : Angle between Hext and viewing direction  
+   Add_H     : If Add=1 - Hmag on the nucleus is calculated 
+               according to the formula: Hext - random direction 
+               of external field, Hc - amplitude of internal 
+               field, then: Hi[i]=I_H[i]_c Hi=Hi+Hext 
+               Hmod=sqrt(Hi*Hi) Hi=Hi*(Hc/Hmod)+Hext - it means 
+               that internal magnetic field is turning to the 
+               direction of vector Hext+I_H . If Add=0 then 
+               Hi[i]=H_I[i]_c*Hext[i] Hmod=sqrt(Hi*Hi) 
+               Hi=Hi*(Hc/Hmod)+Hext (defined in FormHSum procedure 
+               ). <internal magnetic field is turned to direction 
+               H_I*Hext, where H_I - tensor, Hext - vector>  
+  FineAver   : Number of angles used in summation is FineAver^2/2 
+               ( aproximately ) (in one sector)  
+   Sum8      : Sum8=0 - make random angles only for one sphere 
+               sector. Sum8=1 - makes random angles for in all 8 
+               sphere sectors ( 8 times more calculations )  
+
+ End of Description of function :      <<hq_aver>>
+
+
+
+FAZerCurveMain
+ XVarName  XVar YVarName YVar UrsVarName UrsVar Curve 
+ReferenceClass_{
+     URS_Curve { 
+         Variables {  
+             ClcVar 	 ReferenceClass_{
+                 URS_Curve::ClcVar { 
+                     
+                 } 
+                 }
+             
+ } Output  ReferenceClass_{
+             URS_Curve::Output { 
+                 FileToStore  VectorOfNames {   }
+ 
+             } 
+             }
+          NumIter  0 
+     } 
+     }
+ 
+InternalClassName  FAZerCurveMatterSum_0_H2Minim 
+ MatterFreeE { 
+     FreeESumMatter { 
+          FileName  material.cfg Substance MatterSumH2Met 
+     } 
+     
+ } 
+ 
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   0
+  Alpha             F      F      F      F   0
+ Epsilon            F      F      F      F   0
+ Radius0            F      F      F      F   0
+ CutNiuDiam         F      F      F      F   0
+ EOS_TYPE           F      F      F      F   0
+ RadiusExp          F      F      F      F   0
+ MulExp             F      F      F      F   0
+ ArgExp             F      F      F      F   0
+ Help for Parameters
+ Envelope for minimizing InternalClassName Functions. Functions - generate SavableClass object, which is passed to Urs_Curve object(by UrsVarName) as well as X data points(by XVar name). Urs_Curve generate Y curvewhich is minimized 
+In the system currently present InternalClassName Functions:
+
+===============================================================
+Category <FAZerCurveBase_category> 
+Listing all classes for category <FAZerCurveBase_category> :
+class FAZerCurveMatterSum_0_H2Minim
+
+detailed help for each of them:
+---------------------------------------------
+ Config for FAZerCurveMatterSum_0_H2Minim:
+   FAZerCurveMatterSum_0_H2Minim { 
+     
+ } 
+ 
+
+Class provides help:
+
+ Begin Description of function :      <<FAZerCurveMatterSum_0_H2Minim>>
+
+MatterSum with FreeERossH2_Minim - minim matter - first matter  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+   Alpha     :  
+  Epsilon    :  
+  Radius0    :  
+  CutNiuDiam :  
+  EOS_TYPE   : EOS types: MET=0,ROS1=1,ROS2=2,ROSI
+               D1=3,ROSID2=4,METID2=5,LIQWEAK=6  
+  RadiusExp  : if negative= use fixed (taken by module),if zero - 
+               autogenerate , positive - autogenerate*coef  
+  MulExp     : auto generated  
+  ArgExp     : auto generated  
+
+ End of Description of function :      <<FAZerCurveMatterSum_0_H2Minim>>
+
+
+---------------------------------------------
+End of help for category <FAZerCurveBase_category>
+===============================================================
+
+
+
+F_relax2
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+AlphH_zx1           F      F      F      F   0
+AlphH_xy1           F      F      F      F   0
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+AlphH_zx2           F      F      F      F   57.4
+AlphH_xy2           F      F      F      F   0
+  T1                F      F      F      F   10
+  T2                F      F      F      F   10
+ Help for Parameters
+
+ Begin Description of function :      <<F_relax2>>
+
+Calculation of spectra of Fe under relaxation, 2- state system, 
+Blumes calculations. Treated two states - from state to state 
+changes not only H, but also QS. There is a fixed axis system 
+(Fix). According to it QS1, QS2 - is turned (Phi1,2,Teta1,2 
+params) . Magnetic field also is turned - AlphH_zx1,2 (Teta) 
+AlphH_xy1,2 - (Phi) angle, H,QS - have arbitrary value in both 
+states. T1 T2 - Blumes inverce times for state 1,2  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+      H      : Internal magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta - rotation 
+               around Fix_Y ( after Phi rotation )  
+     Phi     : Phi Angle -rotation around Fix_z is done first - 
+               final QS_axis - result of two operations under its 
+               axises - turn on phi around Fix_z plus turn by teta 
+               around Fix_Y. Not totally correct Eiler angles.  
+     Eta     : Qs Eta (xy assimetry) Vxx-Vyy  
+  AlphH_zx1  : Teta angle for magnetic field state 1  
+  AlphH_xy1  : Phi angle for magnetic field state 1  
+      H      : Internal magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta - rotation 
+               around Fix_Y ( after Phi rotation )  
+     Phi     : Phi Angle -rotation around Fix_z is done first - 
+               final QS_axis - result of two operations under its 
+               axises - turn on phi around Fix_z plus turn by teta 
+               around Fix_Y. Not totally correct Eiler angles.  
+     Eta     : Qs Eta (xy assimetry) Vxx-Vyy  
+  AlphH_zx2  : Teta angle for magnetic field state 2  
+  AlphH_xy2  : Phi angle for magnetic field state 2  
+    T1       : Blumes time for state 1 (inverce time, in units of 
+               width, after which, relaxation occur, with the same 
+               probability to any other state )  
+    T2       : Blumes time for state 2 (inverce time, in units of 
+               width, after which, relaxation occur, with the same 
+               probability to any other state )  
+
+ End of Description of function :      <<F_relax2>>
+
+
+
+HQ_mono
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Gamma             F      F      F      F   0
+  Eta               F      F      F      F   0
+  Phi               F      F      F      F   0
+TetaH_View          F      F      F      F   0
+PhiH_View           F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<HQ_mono>>
+
+Calculation of spectra of monocrystall Fe. Main axis - Fix, 
+H//Fix_z, QS - is turned (Phi,Teta Gamma params), Look along 
+Dir(TetaH_View,TetaH_View) angles of Fix system coordinats.  
+
+  Ground     : Added Ground int  
+  Intencity  : Spectr multiplied by  
+     H       : Internal magnetic field  
+     QS      : Internal QS  
+     IS      : Isomer shift  
+     W       : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta rotation 
+               around Fix_y  
+     Gamma   : Gamma Angle - rotation around Fix_Z done first. 
+               Final QS_axis - result of three operations under 
+               its axises - turn by Gamma around Fix_Z turn by 
+               teta around Fix_y plus turn by Phi around Fix_Z. 
+               for axial Field ( H//Z ) result does not depend on 
+               Phi for any angles Teta,Gamma values of Eta.  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     Phi     : Phi Angle - rotation of turned by Gamma and Teta 
+               Qs on angle Phi around Fix_z axis  
+  TetaH_View : Look along Dir(TetaH_View,TetaH_View) angles of 
+               Fix system coordinats.  
+  PhiH_View  : Look along Dir(TetaH_View,TetaH_View) angles of 
+               Fix system coordinats.  
+
+ End of Description of function :      <<HQ_mono>>
+
+
+
+HQ_poly
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<HQ_poly>>
+
+Calculation of spectra of poycristal Fe. Main axis - Fix, 
+H//Fix_z, QS - is turned (Phi,Teta params). Eiler angles.  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+      H      : Internal magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta - rotation 
+               around Fix_Y ( after Phi rotation )  
+     Phi     : Phi Angle -rotation around Fix_z is done first - 
+               final QS_axis - result of two operations under its 
+               axises - turn on phi around Fix_z plus turn by teta 
+               around Fix_Y. Not totally correct Eiler angles.  
+     Eta     : Qs Eta (xy assimetry) Vxx-Vyy  
+
+ End of Description of function :      <<HQ_poly>>
+
+
+
+HQ_poly_kashuba_est
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+   T                F      F      F      F   0
+   Tbkt             F      F      F      F   0
+    A               F      F      F      F   0
+  W_coef            F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<HQ_poly_kashuba_est>>
+
+Calculation of spectra of polycrystall Fe with rotating H 
+(Kashuba's corrections for width of lines). Main axis - Fix, 
+H//Fix_z, QS - is turned (Phi,Teta params). Calculated relaxation 
+correction by formula: ZeroPos = Sum(LinePosition[k])/8 ; 
+Sw=x-Position[k]; Mul=sign(ZerPos-Position[k]) ; Wc=Wid*0.5+W_coef
+*fabs(ZerPos-LinePosition[k])*atan(M_PI*T/(2*(8*Tbkt-T))) ; 
+Res+=Intencity[k]*(1-Sw*A*Mul/Wid)/(sqr(Wc)+sqr(Sw)); Direct 
+calculation of spectra in the relaxation model sugested by Kashuba 
+(2D magnetic relaxation model) does not give such results... 
+Unfortunately... So - not to be used for real spectra 
+estimations.Dummy... Test purpose only.  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+      H      : Internal magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta - rotation 
+               around Y ( after Phi rotation )  
+     Phi     : Phi Angle -rotation around Fix_z is done first - 
+               final QS_axis - result of two operations under its 
+               axises - turn on phi around Fix_z plus turn by teta 
+               around Y. Eiler modified angles ( second turn 
+               around Y not Y').  
+     Eta     : Qs Eta (xy assimetry) Vxx-Vyy  
+     T       : Kashuba's koef additional width formula parameters 
+               (works under atan()) - small influence  
+     Tbkt    : Kashuba's koef additional width formula parameters 
+               (works under atan()) - small influence  
+      A      : Kashuba's koef additional intencity multiplier  
+    W_coef   : Kashuba's koef additional width multiplier  
+
+ End of Description of function :      <<HQ_poly_kashuba_est>>
+
+
+
+Int_T
+   Ground           F      F      F      F   10000
+   Intencity        F      F      F      F   1000
+   T_deby           F      F      F      F   200
+ Help for Parameters
+
+ Begin Description of function :      <<Int_T>>
+
+Calculation of Int(Temperature) in Deby model, X - temperature, Y 
+- Int. Calculation done by formula: 
+Int(Xval[k])=Ground+Intencity*128/T_deby*( 0.25+sqr(Xval/T_deby)*I
+ntegral(Func=[x/(exp(x)-1)],From=[0],To=[T_deby/Xval]) );  
+
+   Ground      : Zero Int(0)  
+   Intencity   : Amplitude of Deby temperature correction  
+   T_deby      : Deby temperature  
+
+ End of Description of function :      <<Int_T>>
+
+
+
+Is_T
+   Ground           F      F      F      F   2
+   T_deby           F      F      F      F   200
+ Help for Parameters
+
+ Begin Description of function :      <<Is_T>>
+
+Calculation of IS(Temperature) in Deby model, X - temperature, Y 
+- IS. Calculation done by formula: DebyFunc(x)=3/(x*x*x)*Integral(
+Func=[x*x*x/(exp(x)-1)],From=[0],To=[x]) ; 
+IS(Xval[k])=Ground+7.23*(1e-4)*Xval*DebyFunc(T_deby/Xval) ;  
+
+   Ground      : Zero IS(0)  
+   T_deby      : Deby temperature  
+
+ End of Description of function :      <<Is_T>>
+
+
+
+QsH_externalH
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+Hexternal           F      F      F      F   500
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Gamma             F      F      F      F   0
+  Eta               F      F      F      F   0
+  Phi               F      F      F      F   0
+  I_Hx_c            F      F      F      F   0
+  I_Hy_c            F      F      F      F   0
+  I_Hz_c            F      F      F      F   0
+    Vx_c            F      F      F      F   0
+    Vy_c            F      F      F      F   0
+    Vz_c            F      F      F      F   0
+   Hc               F      F      F      F   0
+ TetaV_H            F      F      F      F   0
+ NumRotV            F      F      F      F   0
+NumRndH             F      F      F      F   0
+ NotSum8            F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<QsH_externalH>>
+
+Calculation of spectra of Fe under external magnetic field H. In 
+the model used tensor of anisotropy of H ( internal magnetic field 
+do not follow the direction of external field directly, for 
+details look html file ). Its main axis (anisotropy tensor's) are 
+used as the main axis of fixed system. QS - is turned, constructed 
+in Qs_gamma model (Phi,Teta,Gamma params) according to fix system. 
+Hc - module of the internal "electron" field, it is turned by the 
+Hexternal according to the formula ( view HTML ). Teta_V - defines 
+angle between external field and viewing direction  
+
+  Ground     : Added Ground int  
+  Intencity  : Spectr multiplied by  
+  Hexternal  : External magnetic field  
+     QS      : Internal QS  
+     IS      : Isomer shift  
+     W       : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta rotation 
+               around Fix_y  
+     Gamma   : Gamma Angle - rotation around Fix_Z done first. 
+               Final QS_axis - result of three operations under 
+               its axises - turn by Gamma around Fix_Z turn by 
+               teta around Fix_y plus turn by Phi around Fix_Z. 
+               for axial Field ( H//Z ) result does not depend on 
+               Phi for any angles Teta,Gamma values of Eta.  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     Phi     : Phi Angle - rotation of turned by Gamma and Teta 
+               Qs on angle Phi around Fix_z axis  
+    I_Hx_c   : H magnetic anisotropy tenzor main Hx amplitude, 
+               direction coinced with Fixed axis system  
+    I_Hy_c   : The same as I_Hx_c, Y direction  
+    I_Hz_c   : The same as I_Hx_c, Z direction  
+      Vx_c   : H magnetic anisotropy vector, first order 
+               correction to Ham, direction is calculated in Fixed 
+               axis system  
+      Vy_c   : The same as Vx_c - Y component  
+      Vz_c   : The same as Vx_c - Z component  
+     Hc      : Internal magnetic field amplitude  
+   TetaV_H   : Angle between Hext and viewing direction  
+   NumRotV   : Number of View angles used in summation (if 
+               TetaV=0 - use NumRotV=0, )  
+  NumRndH    : Number of Hexternal angles used in summation is 
+               NumRndH^2/2 ( aproximately ) (for one sector)  
+   NotSum8   : NotSum8=1 - make random angles only for one sphere 
+               sector. NotSum8=0 - makes random angles for in all 
+               8 sphere sectors ( 8 times more calculations )  
+
+ End of Description of function :      <<QsH_externalH>>
+
+
+
+Qs_T
+   QS_max           F      F      F      F   2
+   Fst_split        F      F      F      F   100
+Sec_split_coef      F      F      F      F   30
+ Help for Parameters
+
+ Begin Description of function :      <<Qs_T>>
+
+Calculation of Qs(Temperature), X - temperature, Y - Qs. 
+Calculation done by formula: T_to_Cm_mu1=0.69457 ; 
+T=Xval*T_to_Cm_mu1 ; d1=Fst_split ; d2=Fst_split*Sec_split_coef ; 
+QS(Xval[K]) = -0.5*QS_max*(-2+exp(-d1/T)+exp(-d2/T))/(1+exp(-d1/T)
++exp(-d2/T));  
+
+   QS_max      : Maximum possible QS(0)  
+   Fst_split   : Energy of splitting of Qs (Cubic distortion?, of 
+               cause not correct )  
+Sec_split_coef : Energy of splitting of splitted level of Qs 
+               (Trigonal distortion?, of cause not correct )  
+
+ End of Description of function :      <<Qs_T>>
+
+
+
+exp6cold
+MatterFreeE { 
+     FreeESumMatter { 
+          FileName  material.cfg Substance MatterSumH2Met 
+     } 
+     
+ } 
+ 
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+  Temp              F      F      F      F   0
+  Alpha             F      F      F      F   0
+ Epsilon            F      F      F      F   1
+ Radius0            F      F      F      F   1
+ RadiusExp          F      F      F      F   1
+ MulExp             F      F      F      F   1
+ ArgExp             F      F      F      F   1
+ CutNiuDiam         F      F      F      F   1
+ EOS_TYPE           F      F      F      F   0
+ GetPres            F      F      F      F   1
+ Help for Parameters
+
+ Begin Description of function :      <<exp6cold>>
+
+cold curve approximation  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+   Temp      :  
+   Alpha     :  
+  Epsilon    :  
+  Radius0    :  
+  RadiusExp  : auto generated  
+  MulExp     : auto generated  
+  ArgExp     : auto generated  
+  CutNiuDiam :  
+  EOS_TYPE   : EOS types: MET=0,ROS1=1,ROS2=2,ROSI
+               D1=3,ROSID2=4,METID2=5,LIQWEAK=6  
+  GetPres    : Get pressure (1) or free energy (F) (2) or F+PV 
+               (3) or Pow6 poten (0)  
+
+ End of Description of function :      <<exp6cold>>
+
+
+
+exponent
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+  Position          F      F      F      F   0
+1/alpha_in_exp      F      F      F      F   1
+ Help for Parameters
+
+ Begin Description of function :      <<exponent>>
+
+Calculated function is: Pos-x>0? F[x] = 
+Gr+Int*(1-exp[(Pos-x)/Alpha]); Pos-x<0? F[x]=0 So 
+F[x<=0]=Gr;F[x->inf]=Gr+Int Al>0  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+  Position     : Pos value  
+1/alpha_in_exp : Alpha value  
+
+ End of Description of function :      <<exponent>>
+
+
+
+gaus
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+Position            F      F      F      F   0
+  Width             F      F      F      F   1
+ Help for Parameters
+
+ Begin Description of function :      <<gaus>>
+
+Calculated function is: F[x] = Gr+Int*Exp{-[(P-x)/W]^2}  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+   Position  : Pos value -P  
+     Width   : Width value -W  
+
+ End of Description of function :      <<gaus>>
+
+
+
+hq_magnon_mean_field_accus
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Gamma             F      F      F      F   0
+  Eta               F      F      F      F   0
+  Phi               F      F      F      F   0
+    OutPhi          F      F      F      F   1
+   NumHTetaInt      F      F      F      F   30
+  JS_const          F      F      F      F   1000
+   Temp             F      F      F      F   4
+   Tpow             F      F      F      F   0.5
+ DisordCoef         F      F      F      F   1
+  Statistic         F      F      F      F   -1
+  QCoef0            F      F      F      F   0
+  QCoef1            F      F      F      F   0
+  Eanis0            F      F      F      F   0
+  Eanis1            F      F      F      F   0
+  EMax              F      F      F      F   100
+  QMax              F      F      F      F   0.5
+  QMin              F      F      F      F   0.5
+  dCosMax           F      F      F      F   1
+ Help for Parameters
+
+ Begin Description of function :      <<hq_magnon_mean_field_accus>>
+
+Calculation of spectra of Fe under H relaxation, a magnon model . 
+Spectra calulated as a mean spectra averaged over different angels 
+H_Teta. H(teta)=mean(cos(teta))*H0. H_Prob(teta)= func(teta)^(1.5*
+Epow-1)*fabs(sin(teta))/(exp(Beta/Temp*(func(teta))^Epow)+Statist
+ic) ; func(x)=1-cos(x) . This is when MinEn>0; If MeanEn<0 - 
+H_Prob(teta)= teta^5/(exp(Beta/Temp*teta^4)+Statistic). 
+Mean(cos(teta)) - is calculated under assumption that we have fast 
+oscilating, long live magnons. Supposed that we have fixed 
+Fix_axis - system coordinat, in this system QS - is turned 
+(Phi,Teta,Gamma params).  
+
+  Ground     : Added Ground int  
+  Intencity  : Spectr multiplied by  
+     H       : Internal magnetic field  
+     QS      : Internal QS  
+     IS      : Isomer shift  
+     W       : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta rotation 
+               around Fix_y  
+     Gamma   : Gamma Angle - rotation around Fix_Z done first. 
+               Final QS_axis - result of three operations under 
+               its axises - turn by Gamma around Fix_Z turn by 
+               teta around Fix_y plus turn by Phi around Fix_Z. 
+               for axial Field ( H//Z ) result does not depend on 
+               Phi for any angles Teta,Gamma values of Eta.  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     Phi     : Phi Angle - rotation of turned by Gamma and Teta 
+               Qs on angle Phi around Fix_z axis  
+    OutPhi      : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+   NumHTetaInt  : Number of H_Teta used in mean spectra calculation 
+               ( for averaging ). From the probability of Teta 
+               angle is constructed integral probability - 
+               Prob(Teta<Teta0). After that for the same Prob_step 
+               are calculated angle steps. Spectras are calculated 
+               for this angles.  
+  JS_const   : In the formulas named A. Coef in the exponent, 
+               divided on the temperature.  
+   Temp      : Temperature  
+   Tpow      :  
+ DisordCoef  : For lower angles - used estimation 0; If it is 
+               negative - used formula hw=q^2=Teta^4 else 
+               hw=q^2=(1-cos(Teta))^2  
+  Statistic  : Statistic to be used -1 - Bose, 0 - Boltsman, 1 - 
+               Fermi  
+  QCoef0     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  QCoef1     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  Eanis0     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  Eanis1     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  EMax       : In the formulas named A. Coef in the exponent, 
+               divided on the temperature.  
+  QMax       :  
+  QMin       :  
+  dCosMax    : For lower angles - used estimation 0; If it is 
+               negative - used formula hw=q^2=Teta^4 else 
+               hw=q^2=(1-cos(Teta))^2  
+
+ End of Description of function :      <<hq_magnon_mean_field_accus>>
+
+
+
+hq_magnon_mean_field_optic
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Gamma             F      F      F      F   0
+  Eta               F      F      F      F   0
+  Phi               F      F      F      F   0
+    OutPhi          F      F      F      F   1
+   NumHTetaInt      F      F      F      F   30
+  JS_const          F      F      F      F   1000
+  Temp              F      F      F      F   4
+  Tpow              F      F      F      F   0.5
+  NormCoef          F      F      F      F   1
+ Statistic          F      F      F      F   -1
+ QCoef0             F      F      F      F   0
+ QCoef1             F      F      F      F   0
+ Eanis0             F      F      F      F   0
+ Eanis1             F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<hq_magnon_mean_field_optic>>
+
+Calculation of spectra of Fe under H relaxation, a magnon model . 
+Spectra calulated as a mean spectra averaged over different angels 
+H_Teta. H(teta)=mean(cos(teta))*H0. H_Prob(teta)= func(teta)^(1.5*
+Epow-1)*fabs(sin(teta))/(exp(Beta/Temp*(func(teta))^Epow)+Statist
+ic) ; func(x)=1-cos(x) . This is when MinEn>0; If MeanEn<0 - 
+H_Prob(teta)= teta^5/(exp(Beta/Temp*teta^4)+Statistic). 
+Mean(cos(teta)) - is calculated under assumption that we have fast 
+oscilating, long live magnons. Supposed that we have fixed 
+Fix_axis - system coordinat, in this system QS - is turned 
+(Phi,Teta,Gamma params).  
+
+  Ground     : Added Ground int  
+  Intencity  : Spectr multiplied by  
+     H       : Internal magnetic field  
+     QS      : Internal QS  
+     IS      : Isomer shift  
+     W       : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta rotation 
+               around Fix_y  
+     Gamma   : Gamma Angle - rotation around Fix_Z done first. 
+               Final QS_axis - result of three operations under 
+               its axises - turn by Gamma around Fix_Z turn by 
+               teta around Fix_y plus turn by Phi around Fix_Z. 
+               for axial Field ( H//Z ) result does not depend on 
+               Phi for any angles Teta,Gamma values of Eta.  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     Phi     : Phi Angle - rotation of turned by Gamma and Teta 
+               Qs on angle Phi around Fix_z axis  
+    OutPhi      : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+   NumHTetaInt  : Number of H_Teta used in mean spectra calculation 
+               ( for averaging ). From the probability of Teta 
+               angle is constructed integral probability - 
+               Prob(Teta<Teta0). After that for the same Prob_step 
+               are calculated angle steps. Spectras are calculated 
+               for this angles.  
+   JS_const  : In the formulas named A. Coef in the exponent, 
+               divided on the temperature.  
+   Temp      : Temperature  
+   Tpow      :  
+   NormCoef  : For lower angles - used estimation 0; If it is 
+               negative - used formula hw=q^2=Teta^4 else 
+               hw=q^2=(1-cos(Teta))^2  
+  Statistic  : Statistic to be used -1 - Bose, 0 - Boltsman, 1 - 
+               Fermi  
+  QCoef0     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  QCoef1     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  Eanis0     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  Eanis1     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+
+ End of Description of function :      <<hq_magnon_mean_field_optic>>
+
+
+
+hq_magnon_mean_field_paper
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Gamma             F      F      F      F   0
+  Eta               F      F      F      F   0
+  Phi               F      F      F      F   0
+    OutPhi          F      F      F      F   1
+   NumHTetaInt      F      F      F      F   30
+  JS_const          F      F      F      F   1000
+   Temp             F      F      F      F   4
+   Tpow             F      F      F      F   0.5
+ DisordCoef         F      F      F      F   1
+  Statistic         F      F      F      F   -1
+  QCoef0            F      F      F      F   0
+  QCoef1            F      F      F      F   0
+  Eanis0            F      F      F      F   0
+  Eanis1            F      F      F      F   0
+  Rconst            F      F      F      F   100
+  QMax              F      F      F      F   0.5
+  QMin              F      F      F      F   0.5
+  dCosMax           F      F      F      F   1
+ Help for Parameters
+
+ Begin Description of function :      <<hq_magnon_mean_field_paper>>
+
+Calculation of spectra of Fe under H relaxation, a magnon model . 
+Spectra calulated as a mean spectra averaged over different angels 
+H_Teta. H(teta)=mean(cos(teta))*H0. H_Prob(teta)= func(teta)^(1.5*
+Epow-1)*fabs(sin(teta))/(exp(Beta/Temp*(func(teta))^Epow)+Statist
+ic) ; func(x)=1-cos(x) . This is when MinEn>0; If MeanEn<0 - 
+H_Prob(teta)= teta^5/(exp(Beta/Temp*teta^4)+Statistic). 
+Mean(cos(teta)) - is calculated under assumption that we have fast 
+oscilating, long live magnons. Supposed that we have fixed 
+Fix_axis - system coordinat, in this system QS - is turned 
+(Phi,Teta,Gamma params).  
+
+  Ground     : Added Ground int  
+  Intencity  : Spectr multiplied by  
+     H       : Internal magnetic field  
+     QS      : Internal QS  
+     IS      : Isomer shift  
+     W       : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta rotation 
+               around Fix_y  
+     Gamma   : Gamma Angle - rotation around Fix_Z done first. 
+               Final QS_axis - result of three operations under 
+               its axises - turn by Gamma around Fix_Z turn by 
+               teta around Fix_y plus turn by Phi around Fix_Z. 
+               for axial Field ( H//Z ) result does not depend on 
+               Phi for any angles Teta,Gamma values of Eta.  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     Phi     : Phi Angle - rotation of turned by Gamma and Teta 
+               Qs on angle Phi around Fix_z axis  
+    OutPhi      : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+   NumHTetaInt  : Number of H_Teta used in mean spectra calculation 
+               ( for averaging ). From the probability of Teta 
+               angle is constructed integral probability - 
+               Prob(Teta<Teta0). After that for the same Prob_step 
+               are calculated angle steps. Spectras are calculated 
+               for this angles.  
+  JS_const   : In the formulas named A. Coef in the exponent, 
+               divided on the temperature.  
+   Temp      : Temperature  
+   Tpow      : Not used  
+ DisordCoef  : Not used  
+  Statistic  : Statistic to be used -1 - Bose, 0 - Boltsman, 1 - 
+               Fermi  
+  QCoef0     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  QCoef1     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  Eanis0     : Not used  
+  Eanis1     : Not used  
+  Rconst     : In the formulas named R. Coef in the exponent, 
+               muled on the temperature.  
+  QMax       :  
+  QMin       :  
+  dCosMax    : Limit order - disorder spectra. 
+               Qmin<q<Qbnd=dCosMax/(Rconst*Temp)- ordered spectra 
+               Qbnd<q<Qmax - disordered spectra  
+
+ End of Description of function :      <<hq_magnon_mean_field_paper>>
+
+
+
+hq_magnon_mean_field_paper9
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Gamma             F      F      F      F   0
+  Eta               F      F      F      F   0
+  Phi               F      F      F      F   0
+    OutPhi          F      F      F      F   1
+   NumHTetaInt      F      F      F      F   30
+  JS_const          F      F      F      F   1000
+   Temp             F      F      F      F   4
+   Tpow             F      F      F      F   0.5
+  Statistic         F      F      F      F   -1
+  QCoef0            F      F      F      F   0
+  QCoef1            F      F      F      F   0
+  QCoef2            F      F      F      F   0
+ QCoef2_R2          F      F      F      F   0
+  DisorC            F      F      F      F   0
+  Rconst            F      F      F      F   100
+  QMax              F      F      F      F   0.5
+  QMin              F      F      F      F   0.5
+  dCosMax           F      F      F      F   1
+ Help for Parameters
+
+ Begin Description of function :      <<hq_magnon_mean_field_paper9>>
+
+Calculation of spectra of Fe under H relaxation, a magnon model . 
+Spectra calulated as a mean spectra averaged over different angels 
+H_Teta. H(teta)=mean(cos(teta))*H0. H_Prob(cos(teta))= func(teta)^
+(1.5*Epow-1)*fabs(sin(teta))/(exp(Beta/Temp*(func(teta))^Epow)+St
+atistic) ; func(x)=1-cos(x) . This is when MinEn>0; If MeanEn<0 - 
+H_Prob(teta)= teta^5/(exp(Beta/Temp*teta^4)+Statistic). 
+Mean(cos(teta)) - is calculated under assumption that we have fast 
+oscilating, long live magnons. Supposed that we have fixed 
+Fix_axis - system coordinat, in this system QS - is turned 
+(Phi,Teta,Gamma params).  
+
+  Ground     : Added Ground int  
+  Intencity  : Spectr multiplied by  
+     H       : Internal magnetic field  
+     QS      : Internal QS  
+     IS      : Isomer shift  
+     W       : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta rotation 
+               around Fix_y  
+     Gamma   : Gamma Angle - rotation around Fix_Z done first. 
+               Final QS_axis - result of three operations under 
+               its axises - turn by Gamma around Fix_Z turn by 
+               teta around Fix_y plus turn by Phi around Fix_Z. 
+               for axial Field ( H//Z ) result does not depend on 
+               Phi for any angles Teta,Gamma values of Eta.  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     Phi     : Phi Angle - rotation of turned by Gamma and Teta 
+               Qs on angle Phi around Fix_z axis  
+    OutPhi      : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+   NumHTetaInt  : Number of H_Teta used in mean spectra calculation 
+               ( for averaging ). From the probability of Teta 
+               angle is constructed integral probability - 
+               Prob(Teta<Teta0). After that for the same Prob_step 
+               are calculated angle steps. Spectras are calculated 
+               for this angles.  
+  JS_const   : In the formulas named A. Coef in the exponent, 
+               divided on the temperature.  
+   Temp      : Temperature  
+   Tpow      : Not used  
+  Statistic  : Statistic to be used -1 - Bose, 0 - Boltsman, 1 - 
+               Fermi  
+  QCoef0     : Shift of the magnon spectra 
+               E_magnon=QCoef2*q^2+QCoef1*fabs(q)+QCoef0  
+  QCoef1     : Shift of the magnon spectra 
+               E_magnon=QCoef2*q^2+QCoef1*fabs(q)+QCoef0  
+  QCoef2     : Shift of the magnon spectra 
+               E_magnon=QCoef2*q^2+QCoef1*fabs(q)+QCoef0  
+ QCoef2_R2   : QCoef2/R^2 coef  
+  DisorC     : Coef to mul disordered int part  
+  Rconst     : In the formulas named R. R~1/(2piTcrit)  
+  QMax       : Have to be 2Pi  
+  QMin       :  
+  dCosMax    : Limit order - disorder spectra. 
+               Qmin<q<Qbnd=dCosMax/(Rconst*Temp)- ordered spectra 
+               Qbnd<q<Qmax - disordered spectra  
+
+ End of Description of function :      <<hq_magnon_mean_field_paper9>>
+
+
+
+hq_magnon_mean_field_paper_plus
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Gamma             F      F      F      F   0
+  Eta               F      F      F      F   0
+  Phi               F      F      F      F   0
+    OutPhi          F      F      F      F   1
+   NumHTetaInt      F      F      F      F   30
+  JS_const          F      F      F      F   1000
+   Temp             F      F      F      F   4
+   Tpow             F      F      F      F   0.5
+ DisordCoef         F      F      F      F   1
+  Statistic         F      F      F      F   -1
+  QCoef0            F      F      F      F   0
+  QCoef1            F      F      F      F   0
+  Alpha             F      F      F      F   0
+  Eanis1            F      F      F      F   0
+  Rconst            F      F      F      F   100
+  QMax              F      F      F      F   0.5
+  QMin              F      F      F      F   0.5
+  dCosMax           F      F      F      F   1
+ Help for Parameters
+
+ Begin Description of function :      <<hq_magnon_mean_field_paper_plus>>
+
+Calculation of spectra of Fe under H relaxation, a magnon model . 
+Spectra calulated as a mean spectra averaged over different angels 
+H_Teta. H(teta)=mean(cos(teta))*H0. H_Prob(teta)= func(teta)^(1.5*
+Epow-1)*fabs(sin(teta))/(exp(Beta/Temp*(func(teta))^Epow)+Statist
+ic) ; func(x)=1-cos(x) . This is when MinEn>0; If MeanEn<0 - 
+H_Prob(teta)= teta^5/(exp(Beta/Temp*teta^4)+Statistic). 
+Mean(cos(teta)) - is calculated under assumption that we have fast 
+oscilating, long live magnons. Supposed that we have fixed 
+Fix_axis - system coordinat, in this system QS - is turned 
+(Phi,Teta,Gamma params).  
+
+  Ground     : Added Ground int  
+  Intencity  : Spectr multiplied by  
+     H       : Internal magnetic field  
+     QS      : Internal QS  
+     IS      : Isomer shift  
+     W       : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta rotation 
+               around Fix_y  
+     Gamma   : Gamma Angle - rotation around Fix_Z done first. 
+               Final QS_axis - result of three operations under 
+               its axises - turn by Gamma around Fix_Z turn by 
+               teta around Fix_y plus turn by Phi around Fix_Z. 
+               for axial Field ( H//Z ) result does not depend on 
+               Phi for any angles Teta,Gamma values of Eta.  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     Phi     : Phi Angle - rotation of turned by Gamma and Teta 
+               Qs on angle Phi around Fix_z axis  
+    OutPhi      : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+   NumHTetaInt  : Number of H_Teta used in mean spectra calculation 
+               ( for averaging ). From the probability of Teta 
+               angle is constructed integral probability - 
+               Prob(Teta<Teta0). After that for the same Prob_step 
+               are calculated angle steps. Spectras are calculated 
+               for this angles.  
+  JS_const   : In the formulas named A. Coef in the exponent, 
+               divided on the temperature.  
+   Temp      : Temperature  
+   Tpow      : Not used  
+ DisordCoef  : Not used  
+  Statistic  : Statistic to be used -1 - Bose, 0 - Boltsman, 1 - 
+               Fermi  
+  QCoef0     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  QCoef1     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  Alpha      : Coef when disorder occur cos(teta_max)=qRTempAlpha 
+                
+  Eanis1     : Not used  
+  Rconst     : In the formulas named R. Coef in the exponent, 
+               muled on the temperature.  
+  QMax       :  
+  QMin       :  
+  dCosMax    : Limit order - disorder spectra. 
+               Qmin<q<Qbnd=dCosMax/(Rconst*Temp)- ordered spectra 
+               Qbnd<q<Qmax - disordered spectra  
+
+ End of Description of function :      <<hq_magnon_mean_field_paper_plus>>
+
+
+
+hq_magnon_mean_field_std
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Gamma             F      F      F      F   0
+  Eta               F      F      F      F   0
+  Phi               F      F      F      F   0
+    OutPhi          F      F      F      F   1
+   NumHTetaInt      F      F      F      F   30
+  JS_const          F      F      F      F   1000
+  Temp              F      F      F      F   4
+  Epow              F      F      F      F   2
+  MinEn             F      F      F      F   1e-010
+ Statistic          F      F      F      F   -1
+ QCoef0             F      F      F      F   0
+ QCoef1             F      F      F      F   0
+  T_pow             F      F      F      F   0.5
+ Help for Parameters
+
+ Begin Description of function :      <<hq_magnon_mean_field_std>>
+
+Calculation of spectra of Fe under H relaxation, a magnon model . 
+Spectra calulated as a mean spectra averaged over different angels 
+H_Teta. H(teta)=mean(cos(teta))*H0. H_Prob(teta)= func(teta)^(1.5*
+Epow-1)*fabs(sin(teta))/(exp(Beta/Temp*(func(teta))^Epow)+Statist
+ic) ; func(x)=1-cos(x) . This is when MinEn>0; If MeanEn<0 - 
+H_Prob(teta)= teta^5/(exp(Beta/Temp*teta^4)+Statistic). 
+Mean(cos(teta)) - is calculated under assumption that we have fast 
+oscilating, long live magnons. Supposed that we have fixed 
+Fix_axis - system coordinat, in this system QS - is turned 
+(Phi,Teta,Gamma params).  
+
+  Ground     : Added Ground int  
+  Intencity  : Spectr multiplied by  
+     H       : Internal magnetic field  
+     QS      : Internal QS  
+     IS      : Isomer shift  
+     W       : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta rotation 
+               around Fix_y  
+     Gamma   : Gamma Angle - rotation around Fix_Z done first. 
+               Final QS_axis - result of three operations under 
+               its axises - turn by Gamma around Fix_Z turn by 
+               teta around Fix_y plus turn by Phi around Fix_Z. 
+               for axial Field ( H//Z ) result does not depend on 
+               Phi for any angles Teta,Gamma values of Eta.  
+     Eta     : Qs Eta (xy assimetry) (Vxx-Vyy)/Vzz  
+     Phi     : Phi Angle - rotation of turned by Gamma and Teta 
+               Qs on angle Phi around Fix_z axis  
+    OutPhi      : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+   NumHTetaInt  : Number of H_Teta used in mean spectra calculation 
+               ( for averaging ). From the probability of Teta 
+               angle is constructed integral probability - 
+               Prob(Teta<Teta0). After that for the same Prob_step 
+               are calculated angle steps. Spectras are calculated 
+               for this angles.  
+   JS_const  : In the formulas named A. Coef in the exponent, 
+               divided on the temperature.  
+   Temp      : Temperature  
+   Epow      : In the formulas named as Alpha, According to the 
+               formulas have to be fixed = 2; When MinEn is 
+               negative - parameter is not used  
+   MinEn     : For lower angles - used estimation 0; If it is 
+               negative - used formula hw=q^2=Teta^4 else 
+               hw=q^2=(1-cos(Teta))^2  
+  Statistic  : Statistic to be used -1 - Bose, 0 - Boltsman, 1 - 
+               Fermi  
+  QCoef0     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+  QCoef1     : Shift of the magnon spectra 
+               E_magnon=q^2+QCoef1*fabs(q)+QCoef0  
+   T_pow     : Fluctuating energy E(teta)~k*T^Tpow Tpow=0.5 ( 
+               from landau? for fluctuations ?) from the 
+               experiments with isotrope samples  
+
+ End of Description of function :      <<hq_magnon_mean_field_std>>
+
+
+
+lorents
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+Position            F      F      F      F   0
+  Width             F      F      F      F   1
+  4-ord             F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<lorents>>
+
+Calculated function is: F[x] = 
+Gr+Int*(W/2)^2/[(W/2)^2+(P-x)^2+A*(P-x)^4]  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+   Position  : Pos value -P  
+     Width   : Width value -W  
+     4-ord   : Alpha value -A  
+
+ End of Description of function :      <<lorents>>
+
+
+
+polynom
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+Position            F      F      F      F   0
+ First              F      F      F      F   0
+ Second             F      F      F      F   0
+ Third              F      F      F      F   0
+ Fourth             F      F      F      F   0
+ Fifth              F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<polynom>>
+
+Calculated function is: dX=Pos - x F[x] = 
+Gr+Int*(a1*dX+a2*dX^2+a3*dX^3+a4*dX^4+a5*dX^5)  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+   Position  : Pos value  
+    First    : a1 value  
+    Second   : a2 value  
+    Third    : a3 value  
+    Fourth   : a4 value  
+    Fifth    : a5 value  
+
+ End of Description of function :      <<polynom>>
+
+
+
+qh_relax_Hn
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+  numH              F      F      F      F   2
+  T1                F      F      F      F   1
+  H1                F      F      F      F   500
+ Alph1_zx           F      F      F      F   0
+ Alph1_xy           F      F      F      F   0
+  T2                F      F      F      F   10
+  H2                F      F      F      F   500
+ Alph2_zx           F      F      F      F   57.4
+ Alph2_xy           F      F      F      F   0
+  T3                F      F      F      F   0
+  H3                F      F      F      F   0
+ Alph3_zx           F      F      F      F   0
+ Alph3_xy           F      F      F      F   0
+  T4                F      F      F      F   0
+  H4                F      F      F      F   0
+ Alph4_zx           F      F      F      F   0
+ Alph4_xy           F      F      F      F   0
+  T5                F      F      F      F   0
+  H5                F      F      F      F   0
+ Alph5_zx           F      F      F      F   0
+ Alph5_xy           F      F      F      F   0
+  T6                F      F      F      F   0
+  H6                F      F      F      F   0
+ Alph6_zx           F      F      F      F   0
+ Alph6_xy           F      F      F      F   0
+  T7                F      F      F      F   0
+  H7                F      F      F      F   0
+ Alph7_zx           F      F      F      F   0
+ Alph7_xy           F      F      F      F   0
+  T8                F      F      F      F   0
+  H8                F      F      F      F   0
+ Alph8_zx           F      F      F      F   0
+ Alph8_xy           F      F      F      F   0
+ Help for Parameters
+
+ Begin Description of function :      <<qh_relax_Hn>>
+
+Calculation of spectra of Fe under H relaxation - Blumes 
+treatment. H(t) makes random motion from ona axis to another ( up 
+to 8). Supposed that we have fixed Fix_axis - system coordinat, in 
+this system QS - is turned (Phi,Teta params). For each axis is 
+given H=H(H[i],A_zx,A_xy) A_zx - Teta angle, A_xy - Phi angle ( 
+see description of Teta,Phi params for QS). Also is given T[i] - 
+mean !!!inverse time (calculated in width) after which H will try 
+to jump to some other axis  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+      H      : Internal magnetic field is not used here, ups  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta - rotation 
+               around Fix_Y ( after Phi rotation )  
+     Phi     : Phi Angle -rotation around Fix_z is done first - 
+               final QS_axis - result of two operations under its 
+               axises - turn on phi around Fix_z plus turn by teta 
+               around Fix_Y. Not totally correct Eiler angles.  
+     Eta     : Qs Eta (xy assimetry) Vxx-Vyy  
+    numH     : Number of axis to jump in between  
+    T1       : Blumes time ( inverse ) for axis 1  
+    H1       : Amplitude of magnetic field for axis 1  
+   Alph1_zx  : Teta angle of magnetic field for axis 1 (Measured 
+               in Fixed axis system)  
+   Alph1_xy  : Phi angle of magnetic field for axis 1 (Measured 
+               in Fixed axis system)  
+    T2       : The same for axis 2  
+    H2       :  
+   Alph2_zx  :  
+   Alph2_xy  :  
+    T3       :  
+    H3       :  
+   Alph3_zx  :  
+   Alph3_xy  :  
+    T4       :  
+    H4       :  
+   Alph4_zx  :  
+   Alph4_xy  :  
+    T5       :  
+    H5       :  
+   Alph5_zx  :  
+   Alph5_xy  :  
+    T6       :  
+    H6       :  
+   Alph6_zx  :  
+   Alph6_xy  :  
+    T7       :  
+    H7       :  
+   Alph7_zx  :  
+   Alph7_xy  :  
+    T8       :  
+    H8       :  
+   Alph8_zx  :  
+   Alph8_xy  :  
+
+ End of Description of function :      <<qh_relax_Hn>>
+
+
+
+qh_relax_kashuba
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+  OutPhi            F      F      F      F   1
+  Time              F      F      F      F   30
+NumToAver           F      F      F      F   1
+NTimeAver           F      F      F      F   1
+EndTAver            F      F      F      F   1
+NumTimes            F      F      F      F   100
+ RotTime            F      F      F      F   50
+FurieDisc           F      F      F      F   10
+StrongSho           F      F      F      F   10
+  Phi0              F      F      F      F   0
+  Teta0             F      F      F      F   90
+EigenAcc            F      F      F      F   0
+OutMeanAmp          F      F      F      F   0
+DiscrNum            F      F      F      F   10000
+ Help for Parameters
+
+ Begin Description of function :      <<qh_relax_kashuba>>
+
+Calculation of spectra of Fe under H relaxation with H(t) given 
+by formulas of Kashuba. Supposed that we have fixed Fix_axis - 
+system coordinat, in this system QS - is turned (Phi,Teta params), 
+H(t)=H(H0,Teta0,Phi(t)+Teta0)  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+      H      : Internal magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z  
+     Phi     : Phi Angle between Fix_X and QS_Z - proection in 
+               (Fix_X,Fix_Y) plane -so final QS_axis - result of 
+               two operations under its axises - turn by teta 
+               around Fix_x plus turn on phi around Fix_z  
+     Eta     : Qs Eta (xy assimetry)  
+     OutPhi  : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+     Time    : Time to make calcultaion of relaxation process. 
+               Line intencity is calculated by formula 
+               Int=exp(-CurTime*Width) so final line intencity 
+               Int_fin=exp(-Time*Width) - all other process is not 
+               treated  
+   NumToAver : Number of times to recalculte relaxating H angles 
+               ( to calculate mean line intencity value by 
+               averaging of all of them )  
+   NTimeAver : Number of times to calculate intencity spectra for 
+               one given H angle serie ( modify start integration 
+               time Ts for serie from 0 to EndTAver (given by next 
+               parameter) I=Sum(Int(Ts[i],Tfinal)) )  
+   EndTAver  : Final Average intgration time (look NTimeAver 
+               parameter for explanation)  
+   NumTimes  : Num different H angles to generate in one serie ( 
+               Full Clc time will be devided in this number parts, 
+               taken that for each part - field is static )  
+    RotTime  : Амплитуда гармоник - чем больше тем больше 
+               флуктуации поля для заданного шага по времени  
+   FurieDisc : Число случайных гармоник расчитываемых в спектре.  
+   StrongSho : Коэффициент при квадратичном члене, предложенным 
+               Сашей для нормализации спектра при высоких частотах 
+               определяет на сколько сильно подавляются высокие 
+               гармоники.  
+     Phi0    : Start serie from H - Phi0 (not used now?)  
+     Teta0   : In serie will be used given fixed H - Teta0 angle  
+   EigenAcc  : What method will be used for integration: 1 - will 
+               be used eigen acclerated method, 0 - will be used 
+               direct integration. For method 1 - parameters used: 
+               NumToAver - num of different series of ham will be 
+               generated; NTimeAver - number of times each 
+               generated serie will be shifted by initial time; 
+               EndTAver - maximum time shift for serie;; For 
+               method 0 : parameters are used - : NumToAver - num 
+               of different series of ham will be generated; 
+               OutMeanAmp - to output mean amplitude generated 
+               (spectr - is fourie transform of this amplitude); 
+               DiscrNum - number of discretization time of Ham 
+               calculation - have to be of the order - 10000 - the 
+               higher value, the more precies result ( to some 
+               extent )  
+  OutMeanAmp : 1 - to output the result mean amplitude, before 
+               fourie transformation  
+   DiscrNum  : Number of time steps to make for Amplitude 
+               construction, have to be of the order 10000 - the 
+               higher - the better ( but in some moment 
+               calculation can become unstable  
+
+ End of Description of function :      <<qh_relax_kashuba>>
+
+
+
+qh_relax_mean_field
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+    OutPhi          F      F      F      F   1
+   NumHTetaInt      F      F      F      F   30
+  Coef2D_3D         F      F      F      F   1
+   Frequency        F      F      F      F   1
+   AnisTeta         F      F      F      F   5
+   AnisPower        F      F      F      F   -1
+   AnisTeta2        F      F      F      F   -1
+ Help for Parameters
+
+ Begin Description of function :      <<qh_relax_mean_field>>
+
+For 2-D very fast relaxation oscillators over Z axis. Calculation 
+of spectra of Fe under H relaxation . Spectra calulated as a mean 
+spectra averaged over different angels H_Teta. 
+H(teta)=mean(cos(teta))*H0. H_Prob(teta)= 
+exp(-AnisCoef*(func(teta))^AnisPower) ; func1(x)=sin(x) if 
+AnisPower>0 func1(x)=cos(x) if AnisPower<0. If 
+AnisPower==(int)AnisPower then func(x)=func1(x) else 
+func(x)=fabs(func(x)). mean(cos(teta)) - is calculated under 
+assumption that we have 2-D relaxation from teta to -teta angle by 
+harmonic oscillator ( rough estimation works for small angles only 
+). Supposed that we have fixed Fix_axis - system coordinat, in 
+this system QS - is turned (Phi,Teta params).  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+      H      : Internal magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta - rotation 
+               around Fix_Y ( after Phi rotation )  
+     Phi     : Phi Angle -rotation around Fix_z is done first - 
+               final QS_axis - result of two operations under its 
+               axises - turn on phi around Fix_z plus turn by teta 
+               around Fix_Y. Not totally correct Eiler angles.  
+     Eta     : Qs Eta (xy assimetry) Vxx-Vyy  
+    OutPhi      : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+   NumHTetaInt  : Number of H_Teta used in mean spectra calculation 
+               ( for averaging ). From the probability of Teta 
+               angle is constructed integral probability - 
+               Prob(Teta<Teta0). After that for the same Prob_step 
+               are calculated angle steps. Spectras are calculated 
+               for this angles.  
+  Coef2D_3D     : Coef determines if 2D Mean_Oscill_Cos(teta) to use 
+               or simple 3D cos(teta); X=(1-Coef2D_
+               3D)*2D_Cos(teta)+Coef2D_3D*3D_Cos(teta). 0 - 2D 
+               model, 1 - 3D model  
+   Frequency      : Now determines frequency of oscillations - does 
+               not have any effect, still leave it at 1.  
+   AnisTeta     : Anisotropy coef for teta angle prob calculations 
+               (look param description for AnisPower)  
+   AnisPower    : AnisPower used for Teta-Phi relaxation 
+               calculation. H_Prob(teta)= 
+               exp(-AnisCoef*(func(teta+AnisTeta2))^AnisPower) ; 
+               func1(x)=sin(x) if AnisPower>0 func1(x)=cos(x) if 
+               AnisPower<0. If AnisPower==(int)AnisPower then 
+               func(x)=func1(x) else func(x)=fabs(func(x)). For 
+               2-d magnetic have to use [-1].  
+   AnisTeta2    : Anisotropy coef for teta angle prob calculations  
+
+ End of Description of function :      <<qh_relax_mean_field>>
+
+
+
+qh_relax_rand_Jump
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+  OutPhi            F      F      F      F   1
+  Time              F      F      F      F   30
+NumToAver           F      F      F      F   1
+NTimeAver           F      F      F      F   1
+EndTAver            F      F      F      F   1
+ TimeTeta           F      F      F      F   1
+SigTimeTeta         F      F      F      F   0.1
+  AnisTeta          F      F      F      F   5
+ TimePhi            F      F      F      F   1
+ SigTimePhi         F      F      F      F   0.1
+  AnisPhi           F      F      F      F   5
+  NoPhi             F      F      F      F   0
+  HmulCos           F      F      F      F   0
+ AnisPower          F      F      F      F   1
+ NumAx              F      F      F      F   5
+ TimeDisp           F      F      F      F   5
+ Teta1              F      F      F      F   5
+ Phi1               F      F      F      F   0
+ Prob1              F      F      F      F   0
+ Teta2              F      F      F      F   5
+ Phi2               F      F      F      F   0
+ Prob2              F      F      F      F   0
+ Teta3              F      F      F      F   5
+ Phi3               F      F      F      F   0
+ Prob3              F      F      F      F   0
+ Teta4              F      F      F      F   5
+ Phi4               F      F      F      F   0
+ Prob4              F      F      F      F   0
+ Teta5              F      F      F      F   5
+ Phi5               F      F      F      F   0
+ Prob5              F      F      F      F   0
+ Teta6              F      F      F      F   5
+ Phi6               F      F      F      F   0
+ Prob6              F      F      F      F   0
+ Teta7              F      F      F      F   5
+ Phi7               F      F      F      F   0
+ Prob7              F      F      F      F   0
+ Teta8              F      F      F      F   5
+ Phi8               F      F      F      F   0
+ Prob8              F      F      F      F   0
+EigenAcc            F      F      F      F   0
+OutMeanAmp          F      F      F      F   0
+DiscrNum            F      F      F      F   10000
+ Help for Parameters
+
+ Begin Description of function :      <<qh_relax_rand_Jump>>
+
+Calculation of spectra of Fe under H relaxation. H(t) - random ( 
+boltsman distrib 
+Prob(alpha)=exp(-Anis_alpha*sqr(sin(alpha*M_PI/180))) for angles 
+(Teta,Phi)),with random (gaus distrib) time step(params 
+TimeTeta(Phi) SigTimeTeta(Phi)). Plus Added several (axes) between 
+which H jumps(AnisJump+AxesJump is treated) Prob[i] for i-th axes 
+have the same meaning like Blumes coefficients (look description 
+for TimeDisp parameter)(can be checked with Blume relaxation ( set 
+anis_alpha>1e4 - no boltzman random turns)- have to give the same 
+result.) Added parameter TimeDisp - Prob[i] gives only times, 
+TimeDisp - relative dispertion of this times(Blume says that 
+result have to be the same for any dispertion?). Supposed that we 
+have fixed Fix_axis - coordinat system , in this system QS_Z//Z - 
+is fixed and not turned (Phi,Teta params are not used), H- 
+relaxing. Problems: Teta Phi - does not work.  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+      H      : Internal magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta - rotation 
+               around Fix_Y ( after Phi rotation )  
+     Phi     : Phi Angle -rotation around Fix_z is done first - 
+               final QS_axis - result of two operations under its 
+               axises - turn on phi around Fix_z plus turn by teta 
+               around Fix_Y. Not totally correct Eiler angles.  
+     Eta     : Qs Eta (xy assimetry) Vxx-Vyy  
+     OutPhi  : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+     Time    : Time to make calcultaion of relaxation process. 
+               Line intencity is calculated by formula 
+               Int=exp(-CurTime*Width) so final line intencity 
+               Int_fin=exp(-Time*Width) - all other process is not 
+               treated  
+   NumToAver : Number of times to recalculte relaxating H angles 
+               ( to calculate mean line intencity value by 
+               averaging of all of them )  
+   NTimeAver : Number of times to calculate intencity spectra for 
+               one given H angle serie ( modify start integration 
+               time Ts for serie from 0 to EndTAver (given by next 
+               parameter) I=Sum(Int(Ts[i],Tfinal)) )  
+   EndTAver  : Final Average intgration time (look NTimeAver 
+               parameter for explanation)  
+  TimeTeta   : Average time between Teta angle jumps  
+ SigTimeTeta : Dispertion of average time between Teta angle 
+               jumps  
+   AnisTeta  : Anisotropy coef for teta angle prob calculations 
+               (look param description for AnisPower)  
+  TimePhi    : Average time between Phi angle jumps  
+  SigTimePhi :  
+   AnisPhi   :  
+   NoPhi     : Only teta angle works, phi is fixed; Phi=0; 
+               (relaxation only in one plane)  
+   HmulCos   : If NoPhi && HmulCos - mod[H(Teta)]=H*cos(Teta) 
+               (model of fast relaxation Phi angles - so that 
+               nucleus fills only mean value  
+  AnisPower  : AnisPower used for Teta-Phi relaxation calculation 
+               If AnisPower>0 
+               P(teta)=AnisTeta*exp(-(sin(teta))^AnisPower) else 
+               P(teta)=AnisTeta*exp(-(cos(teta))^-AnisPower). If 
+               AnisPower is not integer - is done fabs(sin) or 
+               fabs(cos) before power  
+  NumAx      : Number of axes to jump between (max 8)  
+  TimeDisp   : TimeDispertion multiplier of RelaxTime. Treated a 
+               model: calculated gaus distrib function: 
+               GausDistrib(1 : zero pos, TimeDisp : dispertion). 
+               For arbitrary axis after time 
+               T=GausDistib()*0.5/Prob[i] - will occur jump. New 
+               direction - any one in the serie, with the same 
+               probability. Tested with Blume model (qh_relax_Hn) 
+               - gives the same results when TimeDisp=1  
+  Teta1      : Teta Angle of 1 axes  
+  Phi1       : Phi Angle of 1 axes  
+  Prob1      : Probability of axis in Blume treatment  
+  Teta2      :  
+  Phi2       :  
+  Prob2      :  
+  Teta3      :  
+  Phi3       :  
+  Prob3      :  
+  Teta4      :  
+  Phi4       :  
+  Prob4      :  
+  Teta5      :  
+  Phi5       :  
+  Prob5      :  
+  Teta6      :  
+  Phi6       :  
+  Prob6      :  
+  Teta7      :  
+  Phi7       :  
+  Prob7      :  
+  Teta8      :  
+  Phi8       :  
+  Prob8      :  
+   EigenAcc  : What method will be used for integration: 1 - will 
+               be used eigen acclerated method, 0 - will be used 
+               direct integration. For method 1 - parameters used: 
+               NumToAver - num of different series of ham will be 
+               generated; NTimeAver - number of times each 
+               generated serie will be shifted by initial time; 
+               EndTAver - maximum time shift for serie;; For 
+               method 0 : parameters are used - : NumToAver - num 
+               of different series of ham will be generated; 
+               OutMeanAmp - to output mean amplitude generated 
+               (spectr - is fourie transform of this amplitude); 
+               DiscrNum - number of discretization time of Ham 
+               calculation - have to be of the order - 10000 - the 
+               higher value, the more precies result ( to some 
+               extent )  
+  OutMeanAmp : 1 - to output the result mean amplitude, before 
+               fourie transformation  
+   DiscrNum  : Number of time steps to make for Amplitude 
+               construction, have to be of the order 10000 - the 
+               higher - the better ( but in some moment 
+               calculation can become unstable  
+
+ End of Description of function :      <<qh_relax_rand_Jump>>
+
+
+
+qh_relax_rand_walk
+Ground              F      F      F      F   0
+Intencity           F      F      F      F   10
+   H                F      F      F      F   200
+   QS               F      F      F      F   2
+   IS               F      F      F      F   0
+   W                F      F      F      F   0.4
+  Teta              F      F      F      F   0
+  Phi               F      F      F      F   0
+  Eta               F      F      F      F   0
+  OutPhi            F      F      F      F   1
+  Time              F      F      F      F   30
+NumToAver           F      F      F      F   1
+NTimeAver           F      F      F      F   1
+EndTAver            F      F      F      F   1
+ TimeTeta           F      F      F      F   1
+SigTimeTeta         F      F      F      F   0.1
+ AngTeta            F      F      F      F   10
+ SigAngTeta         F      F      F      F   5
+  AnisTeta          F      F      F      F   5
+ TimePhi            F      F      F      F   1
+ SigTimePhi         F      F      F      F   0.1
+ AngPhi             F      F      F      F   10
+ SigAngPhi          F      F      F      F   5
+  AnisPhi           F      F      F      F   5
+  NoPhi             F      F      F      F   0
+  HmulCos           F      F      F      F   0
+ AnisPower          F      F      F      F   1
+EigenAcc            F      F      F      F   0
+OutMeanAmp          F      F      F      F   0
+DiscrNum            F      F      F      F   10000
+ Help for Parameters
+
+ Begin Description of function :      <<qh_relax_rand_walk>>
+
+Calculation of spectra of Fe under H relaxation . H(t) - supposed 
+to make in gaus distributed time (TimeTeta(Phi),SigTimeTeta(Phi)) 
+random steps by gaus distributed angles 
+(AngTeta(Phi),SigAngTeta(Phi)). Probability to make +- step is 
+calculated according anisotropy model 
+Pplus/Pminus=exp(-sin^2(plus))/exp(-sin^2(minus) Supposed that we 
+have fixed Fix_axis - system coordinat, in this system QS - is 
+turned (Phi,Teta params). Model gives very good results for field 
+- collapsing process (unlike multiaxis relaxation models) put 
+Angle=5 and decrease Time(Teta,Phi) to 1e-3 - 1e-5./n Remarks: 
+Teta Phi params do not work  
+
+   Ground    : Added Ground int  
+   Intencity : Spectr multiplied by  
+      H      : Internal magnetic field  
+      QS     : Internal QS  
+      IS     : Isomer shift  
+      W      : Width of line  
+     Teta    : Teta Angle between Fix_Z and QS_Z Teta - rotation 
+               around Fix_Y ( after Phi rotation )  
+     Phi     : Phi Angle -rotation around Fix_z is done first - 
+               final QS_axis - result of two operations under its 
+               axises - turn on phi around Fix_z plus turn by teta 
+               around Fix_Y. Not totally correct Eiler angles.  
+     Eta     : Qs Eta (xy assimetry) Vxx-Vyy  
+     OutPhi  : Program will make output for all generated Hmag 
+               angles (calculated in Fix - axis system) to stdout. 
+               Check - how H is relaxing in model  
+     Time    : Time to make calcultaion of relaxation process. 
+               Line intencity is calculated by formula 
+               Int=exp(-CurTime*Width) so final line intencity 
+               Int_fin=exp(-Time*Width) - all other process is not 
+               treated  
+   NumToAver : Number of times to recalculte relaxating H angles 
+               ( to calculate mean line intencity value by 
+               averaging of all of them )  
+   NTimeAver : Number of times to calculate intencity spectra for 
+               one given H angle serie ( modify start integration 
+               time Ts for serie from 0 to EndTAver (given by next 
+               parameter) I=Sum(Int(Ts[i],Tfinal)) )  
+   EndTAver  : Final Average intgration time (look NTimeAver 
+               parameter for explanation)  
+  TimeTeta   : Average time between Teta angle jumps  
+ SigTimeTeta : Dispertion of average time between Teta angle 
+               jumps  
+  AngTeta    : Average jump Teta angle value  
+  SigAngTeta : Dispertion of average jump Teta angle value  
+   AnisTeta  : Anisotropy coef for teta angle prob calculations 
+               (look param description for AnisPower)  
+  TimePhi    : Average time between Phi angle jumps  
+  SigTimePhi :  
+  AngPhi     :  
+  SigAngPhi  :  
+   AnisPhi   :  
+   NoPhi     : Only teta angle works, phi is fixed; Phi=0;  
+   HmulCos   : If NoPhi && HmulCos - mod[H(Teta)]=H*cos(Teta) - 
+               model of very fast Phi relaxation.Nucleu sees only 
+               mean field value  
+  AnisPower  : AnisPower used for Teta-Phi relaxation 
+               calculation. If AnisPower>0 
+               P(teta)=AnisTeta*exp(-(sin(teta))^AnisPower) else 
+               P(teta)=AnisTeta*exp(-(cos(teta))^-AnisPower). If 
+               AnisPower is not integer - is done fabs(sin) or 
+               fabs(cos) before power.  
+   EigenAcc  : What method will be used for integration: 1 - will 
+               be used eigen acclerated method, 0 - will be used 
+               direct integration. For method 1 - parameters used: 
+               NumToAver - num of different series of ham will be 
+               generated; NTimeAver - number of times each 
+               generated serie will be shifted by initial time; 
+               EndTAver - maximum time shift for serie;; For 
+               method 0 : parameters are used - : NumToAver - num 
+               of different series of ham will be generated; 
+               OutMeanAmp - to output mean amplitude generated 
+               (spectr - is fourie transform of this amplitude); 
+               DiscrNum - number of discretization time of Ham 
+               calculation - have to be of the order - 10000 - the 
+               higher value, the more precies result ( to some 
+               extent )  
+  OutMeanAmp : 1 - to output the result mean amplitude, before 
+               fourie transformation  
+   DiscrNum  : Number of time steps to make for Amplitude 
+               construction, have to be of the order 10000 - the 
+               higher - the better ( but in some moment 
+               calculation can become unstable  
+
+ End of Description of function :      <<qh_relax_rand_walk>>
+
+
+
+
+
+ No help for function Roll_func yet
+
+
+<<set_func>> is IO envelope for FAZer = Clc functions
+ Usage example 
+set_func    3
+CorFuncConst0  1  CorFuncExpConst    3
+Bnd1           F      F   128
+Bnd2           F      F   128
+Num_Correlated_Par        2
+Bnd1    Bnd2    1
+Bnd1    set1::Ground    1
+FAZerCurveMain
+ XVarName  XVar YVarName YVar UrsVarName UrsVar Curve 
+ReferenceClass_{
+     URS_Curve { 
+         Variables {  
+             ClcVar 	 ReferenceClass_{
+                 URS_Curve::ClcVar { 
+                     
+                 } 
+                 }
+             
+ } Output  ReferenceClass_{
+             URS_Curve::Output { 
+                 FileToStore  VectorOfNames {   }
+ 
+             } 
+             }
+          NumIter  0 
+     } 
+     }
+ 
+InternalClassName  FAZerCurveMatterSum_0_H2Minim 
+ MatterFreeE { 
+     FreeESumMatter { 
+          FileName  material.cfg Substance MatterSumH2Met 
+     } 
+     
+ } 
+ 
+Ground              F      F   0
+Intencity           F      F   0
+  Alpha             F      F   0
+ Epsilon            F      F   0
+ Radius0            F      F   0
+ CutNiuDiam         F      F   0
+ EOS_TYPE           F      F   0
+ RadiusExp          F      F   0
+ MulExp             F      F   0
+ ArgExp             F      F   0
+F_relax2
+Ground              F      F   0
+Intencity           F      F   10
+   H                F      F   200
+   QS               F      F   2
+   IS               F      F   0
+   W                F      F   0.4
+  Teta              F      F   0
+  Phi               F      F   0
+  Eta               F      F   0
+AlphH_zx1           F      F   0
+AlphH_xy1           F      F   0
+   H                F      F   200
+   QS               F      F   2
+   IS               F      F   0
+   W                F      F   0.4
+  Teta              F      F   0
+  Phi               F      F   0
+  Eta               F      F   0
+AlphH_zx2           F      F   57.4
+AlphH_xy2           F      F   0
+  T1                F      F   10
+  T2                F      F   10
+HQ_mono
+Ground              F      F   0
+Intencity           F      F   10
+   H                F      F   200
+   QS               F      F   2
+   IS               F      F   0
+   W                F      F   0.4
+  Teta              F      F   0
+  Gamma             F      F   0
+  Eta               F      F   0
+  Phi               F      F   0
+TetaH_View          F      F   0
+PhiH_View           F      F   0
+
+ set_func is a function working over functions
+ It is using <NumFunc> functions to construct a result function
+ It devides all region in a [NumFunc-1] subregion, in each of this
+ subregions is used its own function (any used function may be composite,
+ like sum_func or set_func ). Boundaries of subregions are given by
+ <Bnd> parameters ( Num of <Bnd> parameters is NumFunc-1 ). For example
+ given: NumFunc=3 ; Bnd=100 Bnd=200 - so points with X from .. to 100 
+ will be calculated by function 1, X - from 100 to 200 - function 2
+ all the rest - for X from 200 to .. - by function 3
+ Boundaries can be varied, to find the moment one function changes the
+ other ( for example, experimental spectra with begining zero line and 
+ in some moment with exponental increase - we  find where it occurs)
+ To find this point, for better convergence, function in subregion [i] is
+ calculated by the formulas: 
+ coef1=exp(-fabs(Xval-Bnd[i-1])*CorFuncExpConst-CorFuncConst0)
+ coef2=exp(-fabs(Xval-Bnd[i+1])*CorFuncExpConst-CorFuncConst0)
+ sh[i]=sh[i-1]+Func[i-1,Bnd[i-1]]-Func[i,Bnd[i-1]]
+ ResFunc[i,Xval]=coef1*(Func[i-1,Xval]+sh[i-1])+
+                 (1-coef1-coef2)*(Func[i,Xval]+sh[i])+
+				   coef2*(Func[i+1,Xval]+sh[i+1])
+
+ To all functions is added a constant, so that there values do
+ coincide on the boundaries (sh[i] array), neibhour functions
+ exponentially penetrate into the current region function
+ Also calculated a number of correlated parameters <Num_Correlated_Par>-
+ this number deifines number of dependent parameters
+ Dependent parameters are defined by strings like :
+ Num_Correlated_Par 1 
+ 10 20 3
+ it means that parameter 20 will be: Par[20]=Par[10]*3 
+ ( 3 - is correlated coef )
+ So variing parameter 10 - we will automatically variate parameter 20
+ The parameter's Number - is the number of parameter which can be varied 
+ All variing parameters (parameter which are set F or V )are virtually 
+ enumerated by 1,2,3...
+ Count begins from the first variing parameter of <set_func>
+
+
+
+
+<<sum_func>> is IO envelope for FAZer = Clc functions
+ Usage example 
+sum_func    3
+FAZerCurveMain
+ XVarName  XVar YVarName YVar UrsVarName UrsVar Curve 
+ReferenceClass_{
+     URS_Curve { 
+         Variables {  
+             ClcVar 	 ReferenceClass_{
+                 URS_Curve::ClcVar { 
+                     
+                 } 
+                 }
+             
+ } Output  ReferenceClass_{
+             URS_Curve::Output { 
+                 FileToStore  VectorOfNames {   }
+ 
+             } 
+             }
+          NumIter  0 
+     } 
+     }
+ 
+InternalClassName  FAZerCurveMatterSum_0_H2Minim 
+ MatterFreeE { 
+     FreeESumMatter { 
+          FileName  material.cfg Substance MatterSumH2Met 
+     } 
+     
+ } 
+ 
+Ground              F      F   0
+Intencity           F      F   0
+  Alpha             F      F   0
+ Epsilon            F      F   0
+ Radius0            F      F   0
+ CutNiuDiam         F      F   0
+ EOS_TYPE           F      F   0
+ RadiusExp          F      F   0
+ MulExp             F      F   0
+ ArgExp             F      F   0
+F_relax2
+Ground              F      F   0
+Intencity           F      F   10
+   H                F      F   200
+   QS               F      F   2
+   IS               F      F   0
+   W                F      F   0.4
+  Teta              F      F   0
+  Phi               F      F   0
+  Eta               F      F   0
+AlphH_zx1           F      F   0
+AlphH_xy1           F      F   0
+   H                F      F   200
+   QS               F      F   2
+   IS               F      F   0
+   W                F      F   0.4
+  Teta              F      F   0
+  Phi               F      F   0
+  Eta               F      F   0
+AlphH_zx2           F      F   57.4
+AlphH_xy2           F      F   0
+  T1                F      F   10
+  T2                F      F   10
+HQ_mono
+Ground              F      F   0
+Intencity           F      F   10
+   H                F      F   200
+   QS               F      F   2
+   IS               F      F   0
+   W                F      F   0.4
+  Teta              F      F   0
+  Gamma             F      F   0
+  Eta               F      F   0
+  Phi               F      F   0
+TetaH_View          F      F   0
+PhiH_View           F      F   0
+ 
+sum_func is a simple function working over functions
+ It sums <NumFunc> functions in one
+ The result function is: Res[Xval]=Sum[i](Func[i,Xval])
+
+
+
+
+
+ ============================
+List of all aproscimation methods:
+===================================
+
+ Function is created by string
+Optim_appr_clc NumIt 1 NumT 6 FuncError 1.49012e-008 ResError 1.49012e-008 SumFuncMinim 0
+   A new algorithm,
+ NumT  - times is generating 2-order   matrics of deriv 
+( N function calculations are used for this )
+ NumIt - have to be 1
+ FuncError - Function evaluation error have to be at least 1.49012e-008
+             if it is less - will be used a standart machine error
+ ResError  - Stoping iterations after step is less then have to be at least 1.49012e-008
+             if it is less - will be used a standart machine error
+
+
+ Function is created by string
+Std_appr_clc NumIt 3 NumT 3 MinError 1e-006
+   This is an old algorithm,
+ NumT  - times is generating 2-order
+   matrics of deriv ( N function calculations are used fof this )
+ NumIt - times for each 2D deriv calulates parameters estimations
+ MinError - of the order 1e-6
+
+
+ Function is created by string
+UncMin_appr_clc NumIt 1 NumT 6 FuncError 1.49012e-008 ResError 1.49012e-008 SumFuncMinim 0
+minimN_LM { 
+      ErrorLQ  1e-008  MathEps05  1.49012e-008  ZeroEig  1e-010  BreakIterStp  1.555    Lambda   { CoefStart 10 DivideCoef 20 DivideVal 0.1 }  Optimized 2 
+ } 
+  {  Min1D_Coef 1.2 Min1D_MaxLinSrch 5 Min1D_MaxRetry 5 }
+   A new algorithm,
+ NumT  - times is generating 2-order   matrics of deriv 
+( N function calculations are used for this )
+ NumIt - have to be 1
+ FuncError - Function evaluation error have to be at least 1.49012e-008
+             if it is less - will be used a standart machine error
+ ResError  - Stoping iterations after step is less then have to be at least 1.49012e-008
+             if it is less - will be used a standart machine error
+ This is UncMin algorithm base
+ For Minimizer you can use one of the algorithms
+
+===============================================================
+Category <MDMin> 
+Listing all classes for category <MDMin> :
+class minimN_LM
+class minimN_eigen
+
+detailed help for each of them:
+---------------------------------------------
+ Config for minimN_LM:
+   minimN_LM { 
+      ErrorLQ  1e-008  MathEps05  1.49012e-008  ZeroEig  1e-010  BreakIterStp  1.555    Lambda   { CoefStart 10 DivideCoef 20 DivideVal 0.1 }  Optimized 2 
+ } 
+ 
+---------------------------------------------
+---------------------------------------------
+ Config for minimN_eigen:
+   minimN_eigen { 
+      ErrorLQ  1e-008  MathEps05  1.49012e-008  ZeroEig  1e-010  BreakIterStp  1.555   
+ } 
+ 
+---------------------------------------------
+End of help for category <MDMin>
+===============================================================
+
+
+
+

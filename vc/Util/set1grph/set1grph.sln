@@ -1,0 +1,40 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "set1grph", "set1grph.vcproj", "{72BC6D4F-F8B6-476B-B236-A57B39C23049}"
+	ProjectSection(ProjectDependencies) = postProject
+		{21780565-FA1B-444F-8E24-CF87CBBC842C} = {21780565-FA1B-444F-8E24-CF87CBBC842C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Std", "..\..\Lib\Std\Std.vcproj", "{21780565-FA1B-444F-8E24-CF87CBBC842C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+		Release_Diss = Release_Diss
+		Release_Internal = Release_Internal
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{72BC6D4F-F8B6-476B-B236-A57B39C23049}.Debug.ActiveCfg = Debug|Win32
+		{72BC6D4F-F8B6-476B-B236-A57B39C23049}.Debug.Build.0 = Debug|Win32
+		{72BC6D4F-F8B6-476B-B236-A57B39C23049}.Release.ActiveCfg = Release|Win32
+		{72BC6D4F-F8B6-476B-B236-A57B39C23049}.Release.Build.0 = Release|Win32
+		{72BC6D4F-F8B6-476B-B236-A57B39C23049}.Release_Diss.ActiveCfg = Release|Win32
+		{72BC6D4F-F8B6-476B-B236-A57B39C23049}.Release_Diss.Build.0 = Release|Win32
+		{72BC6D4F-F8B6-476B-B236-A57B39C23049}.Release_Internal.ActiveCfg = Release|Win32
+		{72BC6D4F-F8B6-476B-B236-A57B39C23049}.Release_Internal.Build.0 = Release|Win32
+		{21780565-FA1B-444F-8E24-CF87CBBC842C}.Debug.ActiveCfg = Debug|Win32
+		{21780565-FA1B-444F-8E24-CF87CBBC842C}.Debug.Build.0 = Debug|Win32
+		{21780565-FA1B-444F-8E24-CF87CBBC842C}.Release.ActiveCfg = Release|Win32
+		{21780565-FA1B-444F-8E24-CF87CBBC842C}.Release.Build.0 = Release|Win32
+		{21780565-FA1B-444F-8E24-CF87CBBC842C}.Release_Diss.ActiveCfg = Release_Diss|Win32
+		{21780565-FA1B-444F-8E24-CF87CBBC842C}.Release_Diss.Build.0 = Release_Diss|Win32
+		{21780565-FA1B-444F-8E24-CF87CBBC842C}.Release_Internal.ActiveCfg = Release_Internal|Win32
+		{21780565-FA1B-444F-8E24-CF87CBBC842C}.Release_Internal.Build.0 = Release_Internal|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
