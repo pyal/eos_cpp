@@ -18,7 +18,7 @@ struct StdClcTypes:DescribedClass{
 struct StdClcUndefined:StdClcTypes{
     StdClcUndefined();//{Init();};
     void Init(){
-        type = new TypeDef(Stroka("undef"),NULL);
+        type = new TypeDef(Stroka("undef"), 0);
     }
 };
 
@@ -157,7 +157,8 @@ struct StdClcDouble:StdClcTypes{
         type->AddFunc(f_arg,Stroka("rnd"));
         type->AddFunc(f_arg,Stroka("teta"));
         type->AddFunc(f_arg,Stroka("abs"));
-        f_arg = new TypeDef::FuncDef( new TypeDef::ArgDef(&DataConstr(NULL,NULL,0,NULL) ,lst), func );
+        DataConstr tmp(NULL,NULL,0,NULL);
+        f_arg = new TypeDef::FuncDef( new TypeDef::ArgDef(&tmp ,lst), func );
         type->AddFunc(f_arg,Stroka("print"));
    }
 };
@@ -196,7 +197,8 @@ struct StdClcString:StdClcTypes{
         type->AddFunc(f_arg,Stroka("="));
 
         lst.pop_front();
-        f_arg = new TypeDef::FuncDef( new TypeDef::ArgDef(&DataConstr(NULL,NULL,0,NULL) ,lst), func );
+        DataConstr tmp(NULL,NULL,0,NULL);
+        f_arg = new TypeDef::FuncDef( new TypeDef::ArgDef(&tmp ,lst), func );
         type->AddFunc(f_arg,Stroka("print"));
     }
 };

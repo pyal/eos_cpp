@@ -5,7 +5,7 @@
 //#include <stdio.h>
 //#include <string.h>
 //#include <stdarg.h>
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 
 class stdexception: public exception {
 #define LOCSLASH_C '\\'
@@ -43,19 +43,18 @@ protected:
         }
 
     }
-
-    int vsnprintf(char *str, size_t size, const char *format, va_list argptr)
-    {
-    int i = _vsnprintf(str, size-1, format, argptr);
-    if (i < 0) {
-        str[size - 1] = '\x00';
-        i = (int)size;
-    } else if (i < (int)size) {
-        str[i] = '\x00'; //Bug in MS library - sometimes it happens. Never trust MS :(
+#ifndef MAC
+    int vsnprintf(char *str, size_t size, const char *format, va_list argptr) {
+        int i = _vsnprintf(str, size-1, format, argptr);
+        if (i < 0) {
+            str[size - 1] = '\x00';
+            i = (int)size;
+        } else if (i < (int)size) {
+            str[i] = '\x00'; //Bug in MS library - sometimes it happens. Never trust MS :(
+        }
+        return i;
     }
-    return i;
-    }
-
+#endif
     void insert(size_t off, size_t rep, size_t len, const char *text) {
 //        MemoryMove(message + off + rep, message + off + len, max(size_t(0), min(
         MemoryMove(message + off + rep, message + off + len, max(size_t(0), min(
@@ -87,7 +86,7 @@ public:
         char linfo[194];
         const char *f = strrchr(file, LOCSLASH_C);
         f = f ? f + 1 : file;
-        sprintf(linfo, "%.30s:%d:%.130s: ", f, line, func);
+        sprintf(linfo, "%.60s:%d:%.130s: ", f, line, func);
         insert(0, 0, strlen(linfo), linfo);
         return *this;
     }

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "lib\ref\data_manip.h"
-#include "lib\ref\stroka.h"
+#include "lib/ref/data_manip.h"
+#include "lib/ref/stroka.h"
 #include <vector>
 #include "specfunc.h"
 
@@ -26,7 +26,7 @@ struct CurveAnalyzer{
         }
 
         double ClcModelB(double x){
-           double x0 = iBeg + (iEnd - iBeg - 1)*0.5;
+//           double x0 = iBeg + (iEnd - iBeg - 1)*0.5;
            return B0 + B1 * x + B2 * x*x;
         }
 
@@ -43,7 +43,8 @@ struct CurveAnalyzer{
         }
 
         static bool SameModel(AtomCurve &fst, AtomCurve &sec, double Coef){
-            double a1 = fst.A0, a2= sec.A0, s1 = fst.Sigma, s2 = sec.Sigma, n1 = (fst.iEnd - fst.iBeg), n2 = (sec.iEnd - sec.iBeg);
+            double a1 = fst.A0, a2= sec.A0, s1 = fst.Sigma, s2 = sec.Sigma;
+//                    n1 = (fst.iEnd - fst.iBeg), n2 = (sec.iEnd - sec.iBeg);
             double d2 = fabs(a1-a2);
             if (d2<Coef*s1 && d2<Coef*s2)
                 return 1;

@@ -2,14 +2,15 @@
 // reftestx.h
 //
 
-#include "ref.h"
-
+#include "lib/Ref/ref.h"
+#include "unit_test.h"
 class X : public RefCount {
   private:
     int x;
   public:
     static int nx;
     X();
+    int get(){return x;}
     ~X();
 };
 
@@ -18,7 +19,7 @@ class Y: public X {
     int y;
   public:
     Y();
+    int get(){return y;}
     ~Y();
 };
-
 

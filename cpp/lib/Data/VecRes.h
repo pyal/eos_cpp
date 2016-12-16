@@ -3,8 +3,8 @@
 #define __VecRes_H 1
 
 
-#include "lib\ref\class_sav.h"
-#include "lib\std\util.h"
+#include "lib/ref/class_sav.h"
+#include "lib/std/util.h"
 #include "datavec.h"
 
 
@@ -41,8 +41,10 @@ struct ResizeVector : public SavableClass
       void ReleaseUnused(){Resize(SetNumEl(),1);}
       void SetArr(T* arr,int NumToPut,int Len)
        {Resize(NumToPut+Len);CpM__::CopyArray(arr,&data[NumToPut],Len);}
-      void GetArr(T* arr,int NumToGet,int Len)
-	  {int n=min(Len,SetNumEl()-NumToGet);CpM__::CopyArray(&data[NumToGet],arr,Len);}
+      void GetArr(T* arr,int NumToGet,int Len) {
+//          int n=min(Len,SetNumEl()-NumToGet);
+          CpM__::CopyArray(&data[NumToGet],arr,Len);
+      }
 
 // AddBy - positive - add by num, negative - max(multiply in percents,AddBy)
 // Release - 0 - Release to StartNum, positive - release in percents
@@ -129,7 +131,7 @@ void ResizeVector<T,CpM__>::Resize(int NewElLen,int Force)// internal use only
  {
     if (Force) {
             if (NewElLen==ArrayLen) return;
-            int OldLen=ElementNum;
+//            int OldLen=ElementNum;
             T* tmp=new T[NewElLen];
             if (data!=NULL) {CpM__::CopyArray(data,tmp,NewElLen);Delete();}
             data=tmp;

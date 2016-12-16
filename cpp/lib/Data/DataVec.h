@@ -3,8 +3,8 @@
 #define __DATAVEC_H 1
 
 
-#include "lib\ref\class_sav.h"
-#include "lib\std\util.h"
+#include "lib/ref/class_sav.h"
+#include "lib/std/util.h"
 
 template <class T>
 struct CopyStructFast
@@ -215,7 +215,7 @@ template <class T,class CopyStructMethod>
 void DataVector<T,CopyStructMethod>::SetData (T* dat,int From,int To)
 {
 	if (From==-1) From=0;if (To==-1) To=Dim;
- if (To>Dim) {fcout<<"Very bad in DataVector::SetData().\n";fcout.flush();abort();}
+ if (To>Dim) {cout<<"Very bad in DataVector::SetData().\n";cout.flush();abort();}
 	CopyStructMethod::CopyArray(dat,data,To-From);//MemoryMove(dat,data,sizeof(T)*(To-From));
 }
 

@@ -3,8 +3,8 @@
 
 //#include "urs\matt_fac.h"
 //#include "mat\mtrung.h"
-#include "urs\test\urs_curve.h"
-#include "lib\ref\file_manip.h"
+#include "urs/test/urs_curve.h"
+#include "lib/ref/file_manip.h"
 
 
 //==============================================================================================
@@ -98,7 +98,7 @@ protected:
     int ReadSplineXY(const char *file, CurveSpline &spl, double temp, const char *mes){
 		FilterTextIn in(file);
 		char tmp[256];in>>tmp;
-		while (stricmp(tmp,"GeneratedSpline")!=0 && in)
+		while (Stricmp(tmp,"GeneratedSpline")!=0 && in)
 			in>>tmp;
 		if (mes && !in )
             throw info_except("In file %s could not read spline\nMes:%s\n",file, mes);

@@ -7,14 +7,13 @@
 #ifndef _util_class_class_h
 #define _util_class_class_h
 
-#pragma warning( disable : 4786 )
 
 //#include <stdio.h>
 //#include <string.h>
 //#include <stdarg.h>
 //#include <iostream.h>
 //#include <iomanip.h>
-#include <typeinfo.h>
+//#include <typeinfo.h>
 #include "ref.h"
 #include "exenv.h"
 #include <map>
@@ -158,7 +157,7 @@ class ClassDesc {
 // with the ability to query its name and its version. Furthermore, the class's static 
 // ClassDesc can be obtained which permits several other operations.  See \ref class for
 // more information. 
-#include <typeinfo.h>
+//#include <typeinfo.h>
 class DescribedClass : public RefCount {
   public:
 	DescribedClass(){};
@@ -179,11 +178,18 @@ class DescribedClass : public RefCount {
     /// Return the version of the class.
     int class_version() const     
      { ClassDesc* cur=class_desc();return cur==NULL ? 
-      cout<<"No class descr, in DescribedClass.name\n"<<flush,NULL:cur->version();};
+      cout<<"No class descr, in DescribedClass.name\n"<<flush,0:cur->version();};
 
-    const char* class_category() const
-    { ClassDesc* cur=class_desc();return cur==NULL ?  
-      cout<<"No class descr, in DescribedClass.name\n"<<flush,NULL:cur->category();};
+    const char* class_category() const {
+        ClassDesc *cur = class_desc();
+        if (cur == NULL) {
+            cout << "No class descr, in DescribedClass.name\n";
+            return NULL;
+        }
+        return cur->category();
+    }
+//        return cur==NULL ?
+//      cout<<"No class descr, in DescribedClass.name\n"<<flush,NULL:cur->category();};
     /// Print the object.
     //virtual void print(ostream& = ExEnv::out()) const;
     /// Print help.

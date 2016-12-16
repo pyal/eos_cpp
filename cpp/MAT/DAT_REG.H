@@ -26,11 +26,11 @@ template <class T> int DataRegister(char *name,TData<T> *&Func);
 template <class T> int DataRegister(char *name,TData<T> *&Func)
   {
 //#ifdef Data_Register
-   if (stricmp(name,"TTable")==0) Func=(TData<T>*)(new TTable<T>);
+   if (Stricmp(name,"TTable")==0) Func=(TData<T>*)(new TTable<T>);
    else
-     if (stricmp(name,"TColumn")==0) Func=(TData<T>*)(new TColumn<T>);
+     if (Stricmp(name,"TColumn")==0) Func=(TData<T>*)(new TColumn<T>);
    else
-     if (stricmp(name,"TDataF")==0) Func=(TData<T>*)(new TDataF<T>);
+     if (Stricmp(name,"TDataF")==0) Func=(TData<T>*)(new TDataF<T>);
 //   else
 //#endif
    else

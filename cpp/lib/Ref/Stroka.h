@@ -516,10 +516,10 @@ public:
     Stroka substr(size_t pos, size_t n = npos) const;
 
 // ~~~ Reversion ~~~~
-    void reverse()
-      { cow();
-        strrev(p);
-      }
+//    void reverse()
+//      { cow();
+//        strrev(p);
+//      }
 };
 
 
@@ -606,17 +606,17 @@ public:
 };
 
 inline int stroka::compare(const stroka &s1, const stroka &s2)
-  { return stricmp(s1.p, s2.p);
+  { return Stricmp(s1.p, s2.p);
   }
 inline int stroka::compare(const char* p, const stroka &s2)
-  { return stricmp(p, s2.p);
+  { return Stricmp(p, s2.p);
   }
 inline int stroka::compare(const stroka &s1, const char* p)
-  { return stricmp(s1.p, p);
+  { return Stricmp(s1.p, p);
   }
 inline bool stroka::is_prefix(const stroka &s) const
   { size_t len = length();
-    return len <= s.length() && strnicmp(p, s.p, len) == 0;
+    return len <= s.length() && Strnicmp(p, s.p, len) == 0;
   }
 
 

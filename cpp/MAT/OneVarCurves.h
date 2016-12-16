@@ -2,9 +2,9 @@
 
 #include "fun_fac.h"
 #include "specfunc.h"
-#include "lib\ref\str_manip.h"
-#include "lib\ref\file_manip.h"
-#include "lib\ref\data_manip.h"
+#include "lib/ref/str_manip.h"
+#include "lib/ref/file_manip.h"
+#include "lib/ref/data_manip.h"
 #include "curveanalyzer.h"
 
 struct Cold_Vinet:NamedOneVarFunction{
@@ -32,7 +32,7 @@ struct Cold_Vinet:NamedOneVarFunction{
         double V = MolVeight/Denc;
         double x = pow(V/V0,1./3);
         double niu = 1.5*(B0prime-1);
-        double Mul = exp(-x*niu);
+//        double Mul = exp(-x*niu);
         //double Ec = -9*B0*Mul*V0*(-1/Mul+exp(niu)*(1+niu*(x-1)))/sqr(niu);
         double Arg = niu*(1-x);
         double Ec = 9*B0*V0/sqr(niu)*(1-(1-Arg)*exp(Arg));
@@ -81,7 +81,7 @@ struct Cold_TF_Kalitkin_P:NamedOneVarFunction{
         return Pc*M_Pau_GPa;
     }
     double FermiP(double Denc){
-        double LgZ = log10(Z);
+//        double LgZ = log10(Z);
         double r = pow(MolVeight/(Denc*M_PartDist1Bor_is_VolIn_cm3_mol),1./3);
         double V = 4./3*M_PI*pow(r,3);
         double ro_r = Z/V;
@@ -148,7 +148,7 @@ struct Spl2DGenerator:ManyVarFunction{
         if (GenerateSpline==0){
 		    FilterTextIn in_(SplFileName.c_str());
 		    in_>>tmp;
-		    while (stricmp(tmp,"GeneratedSpline")!=0 && in_)
+		    while (Stricmp(tmp,"GeneratedSpline")!=0 && in_)
 			    in_>>tmp;
 		    if (!in_)
 			    throw info_except("Wrong spline format. Spline file: %s\n",SplFileName.c_str());
@@ -169,7 +169,7 @@ struct Spl2DGenerator:ManyVarFunction{
 
        return 1;
    }
-   Spl2DGenerator():GenerateSpline(0), SplFileName("splFile.spl"), Spl(new CurveSpline), SplineDescr("Spline"), SplName("CurveSpline"){
+   Spl2DGenerator():SplFileName("splFile.spl"), SplineDescr("Spline"), SplName("CurveSpline"), GenerateSpline(0), Spl(new CurveSpline){
        //ErrorDescr = Str::MakeErrDescr(Stroka("0:OK mis is in range;-1:OK interpolation;-2:OK;1:Error. The required storage space exceeds the available storage space, as specified by the parameter nest probably causes nest too small. if nest is already large (say nest > m/2), it may also indicate that s is too small;2:error. a theoretically impossible result was found during the iteration proces for finding a smoothing spline with fp = s. probably causes s too small.;3:error. the maximal number of iterations maxit (set to 20  by the program) allowed for finding a smoothing spline with fp=s has been reached. probably causes  s too small;10:error. on entry, the input data are controlled on validity the following restrictions must be satisfied.  -1<=iopt<=1, 1<=k<=5, m>k, nest>2*k+2, w(i)>0,i=1,2,...,m  xb<=x(1)<x(2)<...<x(m)<=xe, lwrk>=(k+1)*m+nest*(7+3*k)  if iopt=-1 2*k+2<=n<=min(nest,m+k+1)  xb<t(k+2)<t(k+3)<...<t(n-k-1)<xe  the schoenberg-whitney conditions, i.e. there  must be a subset of data points xx(j) such that  t(j) < xx(j) < t(j+k+1), j=1,2,...,n-k-1  if iopt>=0 s>=0  if s=0  nest >= m+k+1  if one of these conditions is found to be violated,control  is immediately repassed to the calling program. in that case there is no approximation returned."));
        Spl << SavableClass::name2object(SplName.c_str());
    }
@@ -253,7 +253,7 @@ struct NoiseRemoval:ManyVarFunction{
 
        return 1;
    }
-   NoiseRemoval():ResultFileName("exp.dat"), StartNumDiv(20), MaxMisfitVal(1), MaxNumPnt(5000), SameCoef(3), WriteDescr(1) { }
+   NoiseRemoval():ResultFileName("exp.dat"), StartNumDiv(20), MaxNumPnt(5000), WriteDescr(1), MaxMisfitVal(1), SameCoef(3) { }
 
     
    ~NoiseRemoval(){
@@ -294,7 +294,7 @@ struct PolynomFunc:OneVarFunction{
         char tmp[256];
         input>>tmp>>X0>>tmp>>tmp>>tmp;
         Coef.clear();
-        while (stricmp(tmp,"}")!=0 && !(!input) ){
+        while (Stricmp(tmp,"}")!=0 && !(!input) ){
             vector<Stroka> par = Str::SplitLine(tmp, 1, ':');
             Coef.push_back(atof(par[0].c_str()));
             Power.push_back(atof(par[1].c_str()));

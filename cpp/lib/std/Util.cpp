@@ -1,4 +1,4 @@
-#include <lib\precompiled\Std.h>
+#include <lib/precompiled/Std.h>
 
 
 #define FALSE 0
@@ -9,7 +9,7 @@
 #include <fcntl.h>
 
 #ifndef LINUX
-#include <sys\stat.h>
+#include <sys/stat.h>
 #endif
 
 double sqr(double a){return a*a;};// a*=a - was very wrong !!!!!!!!!!!!!!!!111
@@ -139,11 +139,15 @@ int ChRead()
    int u;
 #ifdef MSDOS
    u=bioskey(0);
-#else
+#endif
 #ifdef WINDOWS_HEAD
    while (!_kbhit());u=_getch();
 #endif
+#ifdef MAC
+    cout << "Not implemented ChRead under mac\n";
+    exit(0);
 #endif
+
    return u;
   };
 
@@ -169,30 +173,58 @@ int seek_eoln(istream &i)
 
 int Stricmp(const char *str1,const char *str2)
   {
-#ifndef LINUX
-   return stricmp(str1,str2);
+#ifdef MAC
+    return strcasecmp(str1,str2);
 #else
-   return strcasecmp(str1,str2);
+    #ifndef LINUX
+       return stricmp(str1,str2);
+    #else
+       return strcasecmp(str1,str2);
+    #endif
 #endif
   };
+
 int Strnicmp(const char *str1,const char *str2,int len)
   {
-#ifndef LINUX
-   return strnicmp(str1,str2,len);
+#ifdef MAC
+    cout<<" mac Strnicmp. Abort.\n";exit(0);
+    return strcasecmp(str1,str2);
 #else
-   cout<<" linux Strnicmp. Abort.\n";abort(0);
-   return strcasecmp(str1,str2);
+    #ifndef LINUX
+       return strnicmp(str1,str2,len);
+    #else
+       cout<<" linux Strnicmp. Abort.\n";abort(0);
+       return strcasecmp(str1,str2);
+    #endif
 #endif
   };
 char *Strupr(char *src)
   {
-#ifndef LINUX
-   return strupr(src);
+#ifdef MAC
+    cout<<" mac Strnicmp. Abort.\n";exit(0);
+    return src;
 #else
-   cout<<" linux Strupr. Abort.\n";abort(0);
-   return src;
+    #ifndef LINUX
+       return strupr(src);
+    #else
+       cout<<" linux Strupr. Abort.\n";abort(0);
+       return src;
+    #endif
 #endif
   };
+
+
+char* Itoa(int i, char *buf, int base) {
+#ifdef MAC
+    if(!buf) return buf;
+    static int len = sizeof(int) * 8;
+    if (snprintf(buf, len, "%d", i) == -1)
+        buf[0] = 0;
+        return buf;
+#else
+    return itoa(i, buf, base);
+#endif
+}
 
 void line_feed(istream &i)
   { char ch=' ';while ((i) && (ch!='\n')) i.get(ch); };
@@ -234,7 +266,7 @@ void InputArr(istream &f,double *Ar,
 
 void ExchVar(void *v1,void *v2,int size)
   {
-   void *a=new char[size];
+   char *a=new char[size];
 #ifdef MSDOS
    movmem(v1,a,size);movmem(v2,v1,size);
    movmem(a,v2,size);
@@ -242,7 +274,7 @@ void ExchVar(void *v1,void *v2,int size)
    memmove(a,v1,size);memmove(v1,v2,size);
    memmove(v2,a,size);
 #endif
-   delete a;
+   delete[] a;
   };
 size_t MemoryMove(const void *src,void *dest,size_t size)
   {
@@ -433,7 +465,7 @@ void SetPath(char *src,char *dst,char *setpath)
 #endif
   };
 
-char *GetCmd(char *key,int argc, char *argv[])
+char *GetCmd(const char *key,int argc, char *argv[])
    {
     size_t len = strlen(key);
     char *s;
@@ -556,10 +588,14 @@ void WriteStr(ostream &out,double *ar,int NumCol)
 int OpenOutFileControl(char *file_name,fstream &out,int control_existence)
   {
    int ret=1;
-#ifdef WCPP_NET
-   int OpenMethod=ios::out;
+#ifdef MAC
+    int OpenMethod=ios::out;
 #else
-   int OpenMethod=ios::out|ios::noreplace;
+    #ifdef WCPP_NET
+       int OpenMethod=ios::out;
+    #else
+       int OpenMethod=ios::out|ios::noreplace;
+    #endif
 #endif
    if (!control_existence) OpenMethod=ios::out;
    out.open(file_name,OpenMethod);
@@ -579,11 +615,16 @@ int OpenOutFileControl(char *file_name,fstream &out,int control_existence)
 int CopyFile(const char *src,const char *dst)
   {
    int Read,Write;
-#define BINMODE O_BINARY |
-#define S_IMODE ,S_IREAD  | S_IWRITE
-#ifdef LINUX
+#ifdef MAC
 #define BINMODE
 #define S_IMODE
+#else
+    #define BINMODE O_BINARY |
+    #define S_IMODE ,S_IREAD  | S_IWRITE
+    #ifdef LINUX
+        #define BINMODE
+        #define S_IMODE
+    #endif
 #endif
    if ((Read = open(src, BINMODE O_RDONLY)) == -1)
      { cout<<"Error opening file "<<src<<" in CopyFile\n";return 0;}
@@ -594,7 +635,7 @@ int CopyFile(const char *src,const char *dst)
    do
      {Get=read(Read,ptr,Size);write(Write,ptr,Get);}
    while (Get==Size);
-   delete ptr;
+   delete[] ptr;
    close(Write);close(Read);
    return 1;
   };
@@ -647,11 +688,13 @@ int _matherr( struct _exception *except ){
 void TestNextWord(istream &in, const char *wrd, const char* errMes){
     char tmp[102400];
     in>>tmp;
-    if (stricmp(tmp, wrd) != 0)
+    if (Stricmp(tmp, wrd) != 0) {
         if (errMes)
-            throw info_except("Expected <%s> and got <%s> - descr %s\n",wrd,tmp, errMes);
+            throw info_except("Expected <%s> and got <%s> - descr %s\n", wrd,
+                              tmp, errMes);
         else
-            throw info_except("Expected <%s> and got <%s>\n",wrd,tmp);
+            throw info_except("Expected <%s> and got <%s>\n", wrd, tmp);
+    }
 }
 // Defined in savableClass - better
 //int GuessNextChar(istream &in, char ch){

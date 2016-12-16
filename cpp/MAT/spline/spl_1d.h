@@ -39,8 +39,8 @@ private:
 struct TSpline1DGenerator : ISplineGeneratorStd {
     TSpline1DGenerator(int splineOrder = 3) 
         : ISplineGeneratorStd()
-        , SplineOrder(splineOrder)
-        , NumX(100) 
+            , NumX(100)
+            , SplineOrder(splineOrder)
         , MinXStep(1e-3) {
     }
 

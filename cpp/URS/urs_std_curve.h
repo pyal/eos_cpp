@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "urs\matt_fac.h"
-#include "mat\mtrung.h"
-#include "mat\quad.h"
+#include "urs/matt_fac.h"
+#include "mat/mtrung.h"
+#include "mat/quad.h"
 
 struct IsentropeClass  {
 public:
@@ -60,9 +60,9 @@ struct HugoniotClass{
 private:
     void SetHugPresClcVar(const HugoniotData &beg_pnt, double res_pres,
                           double &dv, double &v1, double &MinV, double &MaxV);
+    MatterIO *Mat;
     double Pcritical;
     int NumHugIteration;
-    MatterIO *Mat;
     HugoniotData Start;
     double Start_de_coef, Start_r2, Start_p2;
     static HugoniotClass *CurPtr;

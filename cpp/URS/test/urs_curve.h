@@ -125,7 +125,7 @@ struct URS_Curve:SavableClass{
 		virtual int read_data_state(FilterIn&si){ 
             char tmp[256];
             si>>tmp>>OutFile>>tmp>>tmp>>tmp;
-            while (stricmp(tmp,"}")!=0) {
+            while (Stricmp(tmp,"}")!=0) {
                 OutNames.push_back(tmp);
                 si>>tmp;
             }
@@ -296,7 +296,7 @@ protected:
         int Cur = NumSame==1?CurStp%NumDivStp:CurStp/NumSame;
         double nDiv = Centered?NumDivStp:NumDivStp-1;
         double mi = LogScale?log(MinVal):MinVal, 
-               ma = LogScale?log(MaxVal):MaxVal, stp = (ma-mi)/max(nDiv,1);
+               ma = LogScale?log(MaxVal):MaxVal, stp = (ma-mi)/max<int>(nDiv,1);
         if (Centered)
             mi+=0.5*stp;
         Res = mi+stp*Cur;
@@ -312,8 +312,8 @@ protected:
 //====================================    EOS_Savable  =========================================
 //==============================================================================================
 
-#include "urs\matt_fac.h"
-#include "urs\fre_fac.h"
+#include "urs/matt_fac.h"
+#include "urs/fre_fac.h"
 struct EOS_Savable:SavableClass{
     Ref<MatterIO> Mat;
 	EOS_Savable():Mat(NULL){};
@@ -478,7 +478,7 @@ struct UrsCurve_Caloric:UrsCurve_EOS_RoE{
 	virtual Stroka MakeHelp(){
         char tmp[256];
         Stroka res = UrsCurve_EOS_RoE::MakeHelp();
-        res += Stroka("Have ") + itoa(NumClcNames,tmp,10) + " internal vars for output:";
+        res += Stroka("Have ") + Itoa(NumClcNames,tmp,10) + " internal vars for output:";
 		for (int k=0;k<NumClcNames;k++)
 			res += ClcNames[k] + " ";
 		res += ".\n";
@@ -557,7 +557,7 @@ struct UrsCurve_FreeE:UrsCurve_EOS_RoT{
 	virtual Stroka MakeHelp(){
         char tmp[256];
         Stroka res = UrsCurve_EOS_RoT::MakeHelp();
-        res += Stroka("Have ") + itoa(NumClcNames,tmp,10) + " internal vars for output:";
+        res += Stroka("Have ") + Itoa(NumClcNames,tmp,10) + " internal vars for output:";
 		for (int k=0;k<NumClcNames;k++)
 			res += ClcNames[k] + " ";
 		res += ".\n";
@@ -863,9 +863,9 @@ protected:
 private:
     ResizeVector<Stroka> DataNames;
     ResizeVector<double> CurLine;
-    Stroka FileName;
-    FILE *in;
     double DefaultValue;
+	FILE *in;
+	Stroka FileName;
 };
 
 
@@ -1026,7 +1026,7 @@ struct UrsCurve_SplConstr:URS_Curve::ClcVar{
 	    virtual int read_data_state(FilterIn&si){ return 1;};
     };
 	UrsCurve_SplConstr():URS_Curve::ClcVar(),NameX("X_Temperature2FreeESpl"),NameY("Y_Dencity2FreeESpl"),NameZ("Z_FreeE2FreeESpl"),
-		ResSplineName("XY_Z_spline.spl"),SplineDescription("Zero_Spline"),spl(new ExtendedRegridSpline()){};
+		spl(new ExtendedRegridSpline()),ResSplineName("XY_Z_spline.spl"),SplineDescription("Zero_Spline"){};
 	virtual void ClcStart(URS_Curve* Data){
 		URS_Curve::ClcVar::ClcStart(Data);
     	Ref<URS_Curve::ClcVar> x,y,z;
@@ -1126,7 +1126,7 @@ struct UrsCurve_VarStorage:URS_Curve::ClcVar{
         char tmp[256];
         si>>tmp>>tmp>>tmp;
 		Vars.clear();
-        while (stricmp(tmp,"}")!=0){
+        while (Stricmp(tmp,"}")!=0){
             Vars[Stroka(tmp)] = new ResizeVector<double>();
             si>>tmp;
         }
@@ -1150,6 +1150,7 @@ struct UrsCurve_VarStorage:URS_Curve::ClcVar{
 	}
 	int DelVar(const char *name){
 		Vars.erase(Vars.find(Stroka(name)));
+		return 1;
 	}
 	void EmptyVars(){
 		for(map<Stroka, Ref<ResizeVector<double> > >::iterator it = Vars.begin();it!=Vars.end();it++)
@@ -1226,7 +1227,7 @@ struct UrsCurve_Output2Store:URS_Curve::Output{
 	virtual int read_data_state(FilterIn&si){ 
         char tmp[256],tmp1[256];
         si>>tmp>>tmp>>tmp;
-        while (stricmp(tmp,"}")!=0) {
+        while (Stricmp(tmp,"}")!=0) {
 			si>>tmp1;
             OutNames.push_back(Out(tmp,tmp1));
             si>>tmp;
@@ -1348,7 +1349,7 @@ protected:
 
 
 
-#include "mat\OneVarCurves.h"
+#include "mat/OneVarCurves.h"
 struct UrsCurve_OneVarFunction:URS_Curve::ClcVar{
 	UrsCurve_OneVarFunction():URS_Curve::ClcVar(),NameX("X"), Func(new Cold_Vinet), StartIntPnt(1) {};
 	virtual void ClcStart(URS_Curve* Data){
@@ -1490,7 +1491,7 @@ struct UrsCurve_ManyVarFunction:URS_Curve::ClcVar{
         NameXvar.clear();
         NameXval.clear();
         si>>tmp>>tmp>>tmp;
-        while (stricmp(tmp,"}")!=0 && !(!si) ){
+        while (Stricmp(tmp,"}")!=0 && !(!si) ){
             vector<Stroka> vec = Str::SplitLine(tmp,0,':');
             if (vec.size()!=2)
                 throw info_except("Wrong input have to be of type <a:b> and is <%s>\n", tmp);

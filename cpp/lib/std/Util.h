@@ -14,17 +14,34 @@
   #pragma warning( disable : 4244 ) // conversion double to int
   #pragma warning( disable : 4996 ) // aaa was depricated
   #pragma warning( disable : 4800 ) // 'int' : forcing value to bool 'true' or 'false' 
-  
+  #pragma warning( disable : 4786 )
+
   #include <io.h>
   #include <conio.h>
   #include <crtdbg.h>
+  #include <typeinfo.h>
 #else
-  #include <strstrea.h>
-  #include <iostream.h>
-  #include <fstream.h>
-  #include <iomanip.h>
+	#ifndef MAC
+	  #include <strstrea.h>
+	  #include <iostream.h>
+	  #include <fstream.h>
+	  #include <iomanip.h>
+	#endif
 #endif
-
+#ifdef MAC
+	#include <istream>
+	#include <ostream>
+	#include <iostream>
+	#include <fstream>
+	#include <iomanip>
+	#include <strstream>
+	#include <typeinfo>
+#include <zconf.h>
+	using namespace std;
+//	#include <io.h>
+//	#include <conio.h>
+//	#include <crtdbg.h>
+#endif
 #ifdef WCPP
   #include <string>
   #pragma warning( disable : 4244 )
@@ -108,18 +125,16 @@ void line_feed(istream &i);
 int seek_str(istream &in,char *Str);
 
 double sqr(double a);
-#ifndef max
-	#define min(a,b) ((a) <= (b) ? (a) : (b))
-	#define max(a,b) ((a) >= (b) ? (a) : (b))
-//double max(double a,double b);
-//double min(double a,double b);
-#endif
+//#ifndef max
+//	#define min(a,b) ((a) <= (b) ? (a) : (b))
+//	#define max(a,b) ((a) >= (b) ? (a) : (b))
+//#endif
 void SetExt(char *src,char *dst,char *setext);
 void SetPathExt(char *src,char *dst,char *setpath,char *setext);
 void SetPath(char *src,char *dst,char *setpath);
 void SetLength(char *name,int length);
 
-char *GetCmd(char *key,int argc, char *argv[]);
+char *GetCmd(const char *key,int argc, char *argv[]);
 void TrimSpaces(char *&input);
 //int IsDouble(char *(&input),double &ans,int MayBeNeg);
 int IsDouble(const char *input,double &ans,int MayBeNeg);
@@ -137,6 +152,7 @@ char *Strupr(char *src);
 char *Strlor(char *src);
 void MergePath(char *FullName,const char *drive,const char *dir,const char *name,const char *ext);
 void SplitPath(const char *FullName,char *drive,char *dir,char *name,char *ext);
+char* Itoa(int i, char *buf, int base);
 
 void SetLeakTest();
 void LeakTest();

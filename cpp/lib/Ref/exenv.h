@@ -5,7 +5,7 @@
 #ifndef _util_misc_exenv_h
 #define _util_misc_exenv_h
 
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 //#include <iostream.h>
 
 //#define BinaryOutput
@@ -18,11 +18,11 @@ struct FilterTextOut;
 struct FilterTextIn;
 
 struct FilterBinOut;
-#ifdef BinaryOutput
-extern FilterBinOut fcout;//("Test",DataSource::Console);
-#else
-extern FilterTextOut fcout;//("Test",DataSource::Console);
-#endif
+//#ifdef BinaryOutput
+//extern FilterBinOut fcout;//("Test",DataSource::Console);
+//#else
+//extern FilterTextOut fcout;//("Test",DataSource::Console);
+//#endif
 //extern FilterTextIn fcin;//("Test",DataSource::Console);
 
 class ExEnv {
@@ -58,8 +58,8 @@ class ExEnv {
     static ostream &err() { return out(); }
 
     static void set_fout(FilterOut *o) { fout_=o; }
-    static FilterOut &fout();// { if (!out_) set_out(&cout_);return *out_; }
-    static FilterOut &ferr() { return fout(); }
+//    static FilterOut &fout();// { if (!out_) set_out(&cout_);return *out_; }
+//    static FilterOut &ferr() { return fout(); }
 
     /// The amount of memory on this node.
     static unsigned long memory() { if (!initialized_) err(); return mem_; }

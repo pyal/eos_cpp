@@ -1,4 +1,4 @@
-#include <lib\precompiled\Ref.h>
+#include <lib/precompiled/Ref.h>
 
 //
 // exenv.cc
@@ -28,14 +28,14 @@ FilterOut *ExEnv::fout_ = 0;
 
 #include "class_sav.h"
 
-#ifdef BinaryOutput
-FilterBinOut fcout("Console_Output",DataSource::Console);
-#else
-FilterTextOut fcout("Console_Output",DataSource::Console);
-#endif
+//#ifdef BinaryOutput
+//FilterBinOut fcout("Console_Output",DataSource::Console);
+//#else
+//FilterTextOut fcout("Console_Output",DataSource::Console);
+//#endif
 //FilterTextIn fcin("Console_Input",DataSource::Console);
 
-FilterOut &ExEnv::fout() { if (!fout_) set_fout(&fcout);return *fout_; }
+//FilterOut &ExEnv::fout() { if (!fout_) set_fout(&fcout);return *fout_; }
 
 const char *
 ExEnv::program_name()

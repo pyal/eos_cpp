@@ -9,13 +9,13 @@
 #include <stdlib.h>
 #include <mem.h>
 */
-#include "lib\std\util.h"
-#include "lib\std\stdexception.h"
+#include "lib/std/util.h"
+#include "lib/std/stdexception.h"
 #include <vector>
 #include <list>
 #include <float.h>
 
-#include "lib\ref\stroka.h"
+#include "lib/ref/stroka.h"
 
 
 struct MatrCl;
@@ -188,7 +188,8 @@ struct VecCl
    int CheckInfinity(double ReplaceMaxVal){
        int ret = 0;
 	   for(int k=1;k<=this->Dim();k++)
-           if (!_finite(Ptr[k])){
+//           if (!_finite(Ptr[k])){
+           if (!finite(Ptr[k])){
                Ptr[k]=Ptr[k]>0?ReplaceMaxVal:-ReplaceMaxVal;
                ret = 1;
            }

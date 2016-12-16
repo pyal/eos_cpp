@@ -1,4 +1,4 @@
-#include <lib\precompiled\Ref.h>
+#include <lib/precompiled/Ref.h>
 
 //#include <stdlib.h>
 //#include <sys/time.h>
@@ -154,7 +154,7 @@ SavableClass *SavableClass::Duplicate(int Method) {
           in.clear();
       char tmp[512], tmp1[512];
       in.read(tmp1,512);tmp1[511]=0;
-      ret += Stroka("\nError position: ") + itoa(in.tellg(),tmp,10) + "\nChars after error\n"+ tmp1 + "\n";
+      ret += Stroka("\nError position: ") + Itoa(in.tellg(),tmp,10) + "\nChars after error\n"+ tmp1 + "\n";
       return ret;
   };
  SavableClass *SavableClass::Read(istream &in, int Method){
@@ -209,7 +209,7 @@ void SavableClass::Read(istream &in, SavableClass &Clas, int Method){
 }
 
 char SavableClass::SingleIdent[10] = "   ";
-int SavableClass::CurLevel = 0, SavableClass::OutMethod = SimpleEdit;
+int SavableClass::CurLevel = 0, SavableClass::OutMethod = SavableClass::SimpleEdit;
 Stroka SavableClass::IdentStr="";
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +260,7 @@ int DataSource::DuplicatePresent(const char *name,Ref<DataSource> &ref)
 
 streambuf* DataSource::OpenSource(const char *name,OpenMode op_mode,DataType dat_type,char *category,const char *file_name)
   {
-   if (!data_list) data_list=new MAPCLASS;
+   if (!data_list) data_list=new MAPCLASS();
    Ref<DataSource> dref=new DataSource;
    dref->openmode=op_mode;dref->datatype=dat_type;
    dref->Category[0]=0;
@@ -268,12 +268,12 @@ streambuf* DataSource::OpenSource(const char *name,OpenMode op_mode,DataType dat
    strcpy(dref->dataname,name);dref->databuf=NULL;
 
    Ref<DataSource> wasref;
-   if (DuplicatePresent(name,wasref)) 
+   if (DuplicatePresent(name,wasref))
      if (dat_type != Memory || op_mode != In) {
          cout<<" DataSource::OpenSource - duplicate_name. Will close previous:\n";
          wasref->print();
      } else;
-   else if (dat_type==Memory && op_mode==In) 
+   else if (dat_type==Memory && op_mode==In)
       {cout<<" DataSource::OpenSource - trying to open not existing Memory Buf:\n";dref->print();exit(0);}
 
    switch ( dat_type )
@@ -300,9 +300,14 @@ streambuf* DataSource::OpenSource(const char *name,OpenMode op_mode,DataType dat
                   else dref->databuf=fbuf->open(open_name,ios::out);
                   if (dref->databuf==NULL) delete fbuf;}
                   break;
-     case Console:if (op_mode==In) dref->databuf=new filebuf(stdin);//stdiobuf(stdin);
-                  else dref->databuf=new filebuf(stdout);//stdiobuf(stdout);
-                  break;
+     case Console:
+         // TODO(MAC/WIDOWS)
+//         if (op_mode==In) dref->databuf = new filebuf(stdin);//stdiobuf(stdin);
+//         else dref->databuf = new filebuf(stdout);//stdiobuf(stdout);
+//         break;
+        if (op_mode==In) dref->databuf = (new filebuf)->open("/dev/stdin", ios_base::in | ios_base::app);
+        else dref->databuf = (new filebuf)->open("/dev/stdout", ios_base::out | ios_base::app);
+        break;
      default:cout<<"Error in DataSource OpenSource switch : dat_type - is not known/n";
              exit(0);
     }
@@ -326,7 +331,7 @@ void DataSource::CloseCategories(char *category)
   Ref<DataSource> refd;
   for (MAPCLASS::iterator ind=data_list->begin();ind!=data_list->end(); ) 
      {
-      if ((category==NULL) || (stricmp(category,ind->second->Category)==0)) 
+      if ((category==NULL) || (Stricmp(category,ind->second->Category)==0))
          ind=data_list->erase(ind);
       else ind++;
      }

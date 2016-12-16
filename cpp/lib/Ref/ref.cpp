@@ -1,4 +1,4 @@
-#include <lib\precompiled\Ref.h>
+#include <lib/precompiled/Ref.h>
 
 //
 // ref.cc --- implementation of the reference counting classes
@@ -181,6 +181,29 @@ RefBase::managed(RefCount *p)
 void 
 RefBase::unmanage(RefCount *p){ if (p) p->unmanage();}
 
+SavableClass* RefBase::GetSavableBase(RefCount *set) {
+    return dynamic_cast<SavableClass*>(set);
+}
+
+//#include "class_sav.h"
+//#include "lib/std/stdexception.h"
+//template<class t>
+//virtual SavableClass* GetSavableBase(RefCount *set=NULL){
+//    T* cr = NULL;
+//    if (set!=NULL) {
+//        cr = dynamic_cast<T*>(set);
+//        if (!cr)
+//            //throw exception("In SavableClass* GetSavableBase(void *set=NULL) :  dynamic_cast<T*>(a)==NULL\n");
+//            throw info_except("In SavableClass* GetSavableBase(void *set=NULL) :  dynamic_cast<%s>(%s)==NULL\n", typeid(T).name(), typeid(*set).name());
+//        assign_pointer(cr);
+//    }
+//    return dynamic_cast<SavableClass*>(p);
+////#ifdef _util_class_sav_h
+////        return dynamic_cast<SavableClass*>(p);
+////#else
+////        return NULL;
+////#endif
+//};
 
 //#include "lib\std\stdexception.h"
 //SavableClass* Ref::GetSavableBase(RefCount *set=NULL) {

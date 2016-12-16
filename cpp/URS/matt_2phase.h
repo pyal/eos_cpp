@@ -2,7 +2,7 @@
 
 
 #include "matt_fac.h"
-#include "mat\fun_fac.h"
+#include "mat/fun_fac.h"
 #include "fre_fac.h"
 
 // =============================================================================

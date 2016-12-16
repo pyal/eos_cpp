@@ -1,4 +1,4 @@
-#include "lib\precompiled\urs_curve_lib.h"
+#include "lib/precompiled/urs_curve_lib.h"
 
 #include "urs_curve.h"
 
@@ -64,7 +64,7 @@ int URS_Curve::save_data_state( FilterOut&so){
 int URS_Curve::read_data_state(FilterIn&si){ 
 	char tmp[256];
 	si>>tmp>>tmp>>tmp;
-	while (stricmp(tmp,"}")!=0){
+	while (Stricmp(tmp,"}")!=0){
 		si>>Vars[Stroka(tmp)]>>tmp;
 	}
 	si>>tmp>>out>>tmp>>NumIter;

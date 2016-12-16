@@ -2,12 +2,12 @@
 #define QUAD_H
 
 
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 //#include <stdlib.h>
 //#include <ostream.h>
 #include <float.h>
 #include <math.h>
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 
 #ifdef __cplusplus

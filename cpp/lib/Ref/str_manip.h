@@ -58,19 +58,25 @@ namespace Str {
                 sOpt[iOpt[i]] = (int)i;
         }
         int Check(int i, const char *mes ){
-            if (i < 0 || i >= (int)iOpt.size())
+            if (i < 0 || i >= (int)iOpt.size()) {
                 if (mes)
-                    throw info_except("Option <%i> is not defined. Defined options: [%s].\n%s\n", i, Str::JoinLine(iOpt).c_str(), mes);
+                    throw info_except(
+                            "Option <%i> is not defined. Defined options: [%s].\n%s\n",
+                            i, Str::JoinLine(iOpt).c_str(), mes);
                 else
                     return 0;
+            }
             return 1;
         }
         int Check(const Stroka &str, const char *mes){
-            if (sOpt.find(str) == sOpt.end())
+            if (sOpt.find(str) == sOpt.end()) {
                 if (mes)
-                    throw info_except("Option <%s> is not defined. Defined options: [%s].\n%s\n", str.c_str(), Str::JoinLine(iOpt).c_str(), mes);
+                    throw info_except(
+                            "Option <%s> is not defined. Defined options: [%s].\n%s\n",
+                            str.c_str(), Str::JoinLine(iOpt).c_str(), mes);
                 else
                     return 0;
+            }
             return 1;
         }
         Stroka Str(int i, const char *mes ){

@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "lib\ref\class_sav.h"
-#include "lib\ref\stroka.h"
+#include "lib/ref/class_sav.h"
+#include "lib/ref/stroka.h"
 
 
 

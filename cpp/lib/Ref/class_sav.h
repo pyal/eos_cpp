@@ -11,7 +11,7 @@
 #include <map>
 #include <vector>
 
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 #include "allocator_intellect.h"
 #include "Stroka.h"
 
@@ -162,7 +162,7 @@ struct SavableClass : virtual DescribedClass {
     static void ExeptionCheck(std::istream &in, const char *test, const char *mes=0){
         char tmp[256];
         in>>tmp;
-        if (stricmp(tmp, test)!=0){
+        if (Stricmp(tmp, test)!=0){
             Stroka Mes = Stroka(" Looks like an error, have to read ") + test + " and read " + tmp + "\n";
             Mes += ShowStreamPosition(&in);
             if (mes)
@@ -193,11 +193,12 @@ struct SavableClass : virtual DescribedClass {
     }
     template<class T>
     static T* TestType(RefCount *var, const char *breakNull = NULL) {
-        if (!var)
+        if (!var) {
             if (breakNull)
                 throw info_except("variable is NULL:\n%s\n", breakNull);
-            else 
+            else
                 return NULL;
+        }
         T* ret = dynamic_cast<T*>(var);
         if (!ret)
             throw info_except("variable's type is %s cannot convert to %s\n", typeid(*var).name(), typeid(T).name());
@@ -284,13 +285,15 @@ struct DataSource: virtual DescribedClass
     enum OpenMode {In,Out};
     OpenMode openmode;
     DataType datatype;
-    char dataname[256];
+    char dataname[1256];
     streambuf *databuf;
-    char Category[256];
-    struct CharLess //: public binary_function<T, T, bool> {
-    {bool operator()(const char *x, const char *y) const {return (strcmp(x,y)<0);}};    
+    char Category[1256];
+//    struct CharLess //: public binary_function<T, T, bool> {
+//    {bool operator()(const char *x, const char *y) const {return (strcmp(x,y)<0);}};
+//    {bool operator()(const string &x, const string &y) const {return x<y;}};
     typedef Ref<DataSource> DataSourceRef ;
-    typedef std::map<const char* , DataSourceRef,CharLess> MAPCLASS ;
+//    typedef std::map<const char* , DataSourceRef,CharLess> MAPCLASS ;
+    typedef std::map<string , DataSourceRef> MAPCLASS ;
     static MAPCLASS *data_list;
     
 
@@ -340,7 +343,7 @@ struct DataSource: virtual DescribedClass
 //   virtual streambuf* Data(char *name){return databuf;};
 //   void CloseSource() { if (data_list) data_list->erase(dataname); };
     virtual void print(ostream& out= ExEnv::out()) {
-        char *type[]={"Memory","Disk","Console"},*mode[]={"In","Out"};
+        const char *type[]={"Memory","Disk","Console"},*mode[]={"In","Out"};
         out<<" DataSource_data name: \""<<dataname<<"\" type: \""<<type[datatype]
         <<"\" Openmode: \""<<mode[openmode]<<"\" Category: \""<<Category<<"\"\n";
     }
@@ -360,7 +363,7 @@ struct FilterIn:virtual istream{
     inline void ClearRef(){numrefsaved=0;refsaved.Empty();};
 
     FilterIn(streambuf*s,int autoclosebuf=1)
-                        :refmask(SavableClass::GetRefOutMethod()),numrefsaved(0),istream(NULL){
+                        :istream(NULL), refmask(SavableClass::GetRefOutMethod()),numrefsaved(0){
         init(s);AutoCloseBuf(autoclosebuf);
     };
     FilterIn(int autoclosebuf=1)
@@ -381,7 +384,7 @@ struct FilterIn:virtual istream{
     };
     void CloseBuf(){ClearRef();DataSource::CloseSource(rdbuf());init(NULL);}
     void SetNewBuf(streambuf *sb, int CloseBufBefore=0)
-        {if (CloseBufBefore) DataSource::CloseSource(rdbuf());init(sb);refmask=SavableClass::StorePtr;};
+        {if (CloseBufBefore) DataSource::CloseSource(rdbuf());init(sb);refmask=SavableClass::GetRefOutMethod();};
 
     streambuf *GetBuf(){return rdbuf();}
 
@@ -401,8 +404,9 @@ struct FilterIn:virtual istream{
     virtual int get_arr(double *buf){int Num;get(Num);for (int k=0;k<Num;k++) get(buf[k]);return Num;};
 
     virtual int GetSCStored(int &numobj){
-        //get(StdKey); get(numobj);
-        get(numobj);
+        get(StdKey); get(numobj);
+// Last was, did not work switched to get StdKey+
+//        get(numobj);
         if (!(*this))
             throw info_except("Bad stream - could not read numobj!!!\n");
 
@@ -505,7 +509,9 @@ public:
                 str = getword();
             }
             //ConstructObject(sc, NULL);
+            cout << " Build object str " << str << "\n";
             ConstructObject(sc, ~str);
+            cout << " Build object " << sc << "\n";
             if (refmask==SavableClass::SingleFileStorage)  
                 refsaved[numrefsaved-1]=(void*)sc;
             GetObjectBody(sc);
@@ -666,7 +672,9 @@ struct FilterTextIn:FilterIn{
   FilterTextIn(const char *name, DataSource::DataType dat_type=DataSource::Disk,char *category=NULL,int autoclosebuf=1,const char *file_name=NULL)
     :istream(NULL),FilterIn(NULL,autoclosebuf)  {OpenBuf(name, 0,dat_type,category,file_name);}
 
-  void get(int &buf)   {istream::operator>>((int &)buf);}
+  void get(int &buf)   {
+      istream::operator>>((int &)buf);
+  }
   void get(double &buf){istream::operator>>((double &)buf);};
 //  void get(char &buf)  {istream::operator>>((char &)buf);};
   void get(char &buf)  {istream::get(buf);};
@@ -696,7 +704,11 @@ struct FilterTextIn:FilterIn{
   };
 //  void getword(char *buf,const char *delims=" \t\n"){istream::get((char *)buf,-1);};//,delims);};
 //  void getword(char *buf,const char *delims=" \t\n"){istream::get((char *)buf,WORDLENGTH);};//,delims);};
-  void get(void *&buf)   {char tmp[256];istream::get(tmp,-255);buf=NULL;};
+  void get(void *&buf)   {
+        char tmp[256];
+        istream::get(tmp, 255);
+        buf=NULL;
+    };
 //  void get(void *&buf)   {char tmp[256];istream::operator>>((char *)&tmp[0]);buf=NULL;};
 //  void get(void *&buf)   {char tmp[256];istream::operator>>((char *)&tmp[0]);buf=0x1;};
 
@@ -757,7 +769,7 @@ public:
       refsaved.Empty(); 
   };
   FilterOut(streambuf*s,int autoclosebuf=1):ostream(NULL),refmask(SavableClass::GetRefOutMethod()),numrefsaved(0){init(s);AutoCloseBuf(autoclosebuf);}//:istream(s){};
-  FilterOut(int autoclosebuf=1):refmask(SavableClass::GetRefOutMethod()),ostream(NULL),numrefsaved(0){AutoCloseBuf(autoclosebuf);};
+  FilterOut(int autoclosebuf=1):ostream(NULL),refmask(SavableClass::GetRefOutMethod()),numrefsaved(0){AutoCloseBuf(autoclosebuf);};
   //FilterOut(char *name, DataSource::DataType dat_type=DataSource::Disk,char *category=NULL,int autoclosebuf = 1)
   //  :ostream(NULL),refmask(SavableClass::StorePtr),numrefsaved(0)  {AutoCloseBuf(autoclosebuf);OpenBuf(name, 0,dat_type,category);}
   virtual ~FilterOut(){if (AutomaticallyCloseBuf) CloseBuf();}
@@ -779,7 +791,9 @@ public:
    };
   void SetNewBuf(streambuf *sb, int CloseBufBefore=0)
     {if (CloseBufBefore) CloseBuf(0);//DataSource::CloseSource(rdbuf());
-     refmask=SavableClass::StorePtr;numrefsaved=0;
+//     refmask=SavableClass::StorePtr;
+     refmask=SavableClass::GetRefOutMethod();
+     numrefsaved=0;
      init(sb);};
   streambuf *GetBuf(){return rdbuf();}
 
@@ -843,7 +857,7 @@ public:
 //          Obj 
 // if SimpleEdit       - store  head, not store ref_number, store object :
 //          Obj 
-        if (&sc==NULL) 
+        if ((void*)&sc==NULL)
             throw info_except(" trying to save NULL object?? is it possible?\n");
 //        {ExEnv::err()<<" Error setobject, trying to save NULL object\n";ExEnv::err().flush();abort();}
         if (refmask==SavableClass::SingleFileStorage)  

@@ -1,4 +1,4 @@
-#include "lib\precompiled\urs_curve_lib.h"
+#include "lib/precompiled/urs_curve_lib.h"
 
 #include "urs_opac_curve.h"
 

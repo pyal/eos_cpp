@@ -189,7 +189,9 @@ namespace DataManip {
     };
     template<class T1, class T2>
     int MapsSame(const std::map<T1, T2> &m1, const std::map<T1, T2> &m2){
-        map<T1, T2>::const_iterator it1 = m1.begin(), it2 = m2.begin();
+//        map<T1, T2>::const_iterator it1 = m1.begin(), it2 = m2.begin();
+        typename std::map<T1, T2>::const_iterator it1, it2;
+        it1 = m1.begin(); it2 = m2.begin();
         while(it1 != m1.end() && it2 != m2.end()){
             if (it1->first != it2->first || it1->second != it2->second)
                 return 0;
@@ -205,7 +207,7 @@ namespace DataManip {
     vector<T1> Map2Vector(const std::map<T1, T2> &m){
 		vector<T1> ret(m.size());
 		int i = 0;
-		for(map<T1, T2>::const_iterator it = m.begin(); it != m.end(); it++, i++)
+		for(typename map<T1, T2>::const_iterator it = m.begin(); it != m.end(); it++, i++)
 			ret[i] = it->first;
         return ret;
     };
@@ -237,7 +239,9 @@ namespace DataManip {
             assert(planar[i].size() == planar[0].size());
         table.clear();
         table.resize(2);
-        double lastVal = planar[0][0], f = planar[0][0] * (1 - 10 * M_Eps), t = planar[0][0] * (1 + 10 * M_Eps);
+        double lastVal = planar[0][0];
+//        double t = planar[0][0] * (1 + 10 * M_Eps);
+//        double f = planar[0][0] * (1 - 10 * M_Eps);
         for(size_t i = 0; i < planar[0].size(); i++) {
             if (planar[0][i] != lastVal)
             //if (!In_Lim(planar[0][i], f, t, 1))

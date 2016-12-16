@@ -2,8 +2,8 @@
 #ifndef __MTRUNG_H
 #define __MTRUNG_H
 
-#include "lib\std\const.h"
-#include "lib\std\deffunc.h"
+#include "lib/std/const.h"
+#include "lib/std/deffunc.h"
 //#include "util.h"
 //#include <math.h>
 

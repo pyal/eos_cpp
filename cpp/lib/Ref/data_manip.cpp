@@ -1,6 +1,6 @@
-#pragma once
+//#pragma once
 
-#include "lib\precompiled\ref.h"
+#include "lib/precompiled/ref.h"
 #include "data_manip.h"
 
 

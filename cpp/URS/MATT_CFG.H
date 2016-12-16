@@ -1,7 +1,7 @@
 #ifndef __MATT_CFG_H
 #define __MATT_CFG_H
 
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 #define Matter_Register
 
 

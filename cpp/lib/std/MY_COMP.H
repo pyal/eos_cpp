@@ -42,7 +42,7 @@ public:
     friend double     arg(my_comp   &);    // the angle in the plane
 
     // Create a complex object given polar coordinates
-    friend my_comp   polar(double __mag, double __angle=0);
+    friend my_comp   polar(double __mag, double __angle);
 
     // Overloaded ANSI C math functions
     friend my_comp     cos(my_comp   &);
@@ -98,7 +98,7 @@ private:
         double re, im;
 };
 
-void errorFP(char *FuncName,char *Err) ;
+void errorFP(const char *FuncName, const char *Err) ;
 // Inline complex functions
 
 inline my_comp::my_comp(double __re_val, double __im_val)
@@ -276,88 +276,3 @@ istream   &     operator>>(istream   &in , my_comp   &c);
 
 #endif  // __MY_COMP_H
 
-/*
-
-
- inline Complex sqr     (Complex a)         { return a*a; }
- inline Complex pow2    (Complex a)         { return a*a; }
- inline Complex pow3    (Complex a)         { return a*a*a; }
- inline Complex pow4    (Complex a)         { Complex b = a*a; return b*b; }
- 
- extern Complex pow_int  (Complex a, int i);  // a to power i
- extern BooLean eq (Complex a, Complex b, real tol = comparison_tolerance);
- extern BooLean lt (Complex a, Complex b, real tol = comparison_tolerance);
- extern BooLean le (Complex a, Complex b, real tol = comparison_tolerance);
- 
- inline Complex min(Complex arg1, Complex arg2)
- { return  arg1 < arg2 ? arg1 : arg2; }
- 
- inline Complex max(Complex arg1, Complex arg2)
- { return  arg1 > arg2 ? arg1 : arg2; }
- 
-
- 
- // non-inline functions
- 
- char*  oform2 (char* s, Complex c);
- real   getReal (const Complex& c);
- 
- Complex   operator /  (const Complex& x, const Complex& y);
- Complex   operator /  (const Complex& x, real   y);
- Complex   operator /  (real     x, const Complex& y);
- 
- Complex   cos(const Complex& x);
- Complex   sin(const Complex& x);
- 
- Complex   cosh(const Complex& x);
- Complex   sinh(const Complex& x);
- Complex   exp(const Complex& x);
- //int   exp(const int& i);
- Complex   log(const Complex& x);
- 
- Complex   pow(const Complex& x, int p);
- Complex   pow(const Complex& x, const Complex& p);
- Complex   pow(const Complex& x, real   y);
- Complex   sqrt(const Complex& x);
- 
- 
-// /* use Is/Os instead (automatic type conversion from iostream is available!)
- istream&  operator >> (istream& s, Complex& x);
- ostream&  operator << (ostream& s, const Complex& x);
-//* / 
- 
- Is&  operator >> (Is& s, Complex& x);
- Os&  operator << (Os& s, const Complex& x);
- 
-
-
-
- inline int  operator == (const Complex& x, const Complex& y);
- inline int  operator == (const Complex& x, real   y);
- inline int  operator != (const Complex& x, const Complex& y);
- inline int  operator != (const Complex& x, real   y);
- inline int  operator >  (const Complex& x, const Complex& y);
- inline int  operator >= (const Complex& x, const Complex& y);
- inline int  operator <  (const Complex& x, const Complex& y);
- inline int  operator <= (const Complex& x, const Complex& y);
- 
- inline Complex  operator - (const Complex& x);
- inline Complex  conj(const Complex& x);
- inline Complex  operator + (const Complex& x, const Complex& y);
- inline Complex  operator + (const Complex& x, real   y);
- inline Complex  operator + (real   x, const Complex& y);
- inline Complex  operator - (const Complex& x, const Complex& y);
- inline Complex  operator - (const Complex& x, real   y);
- inline Complex  operator - (real   x, const Complex& y);
-        Complex  operator * (const Complex& x, const Complex& y);
- inline Complex  operator * (const Complex& x, real   y);
- inline Complex  operator * (real   x, const Complex& y);
- 
- inline real    Re(const Complex& x);
- inline real    Im(const Complex& x);
- inline real    abs(const Complex& x);
- inline real    norm(const Complex& x);
- inline real    arg(const Complex& x);
- 
- inline Complex  polar(real   r, real   t = 0.0);
-*/

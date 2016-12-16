@@ -3,7 +3,7 @@
 //
 
 
-#include "ref.h"
+#include "lib/Ref/ref.h"
 #include "reftestx.h"
 
 
@@ -139,9 +139,8 @@ test3()
 
 void test4() {}
 
-int
-main()
-{
+void RefCountTest() {
+
   cout << "X::nx before test1: " << X::nx << "(0)" << endl;
   test1();
   cout << "X::nx before test2: " << X::nx << "(0)" << endl;
@@ -153,9 +152,13 @@ main()
 
   cout << "X::nx before exit: " << X::nx << "(0)" << endl;
 
-  return 0;
 }
 
+//namespace RefCountTest {
+//    void RefCountTest();
+//
+UnitTest unit_RefCountTest("ref_count_test", RefCountTest);
+//}
 /////////////////////////////////////////////////////////////////////////////
 
 // Local Variables:

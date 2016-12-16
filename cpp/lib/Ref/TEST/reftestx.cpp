@@ -2,10 +2,10 @@
 // reftestx.cc
 //
 
-#ifdef __GNUG__
-#pragma implementation "reftmpl.h"
-#pragma implementation "reftestx.h"
-#endif
+//#ifdef __GNUG__
+//#pragma implementation "reftmpl.h"
+//#pragma implementation "reftestx.h"
+//#endif
 
 #include "reftestx.h"
 

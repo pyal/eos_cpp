@@ -62,11 +62,15 @@
         }
 		int PrintNow(Stroka &str) {
 			str = "";
-            if (CurNum % IterCircle == 0)
+            if (CurNum % IterCircle == 0) {
                 if (time.ElapsedTime() > 1) {
-					str = Descr + " Iters " + Stroka::Int2Str(CurNum) + "\t" + Stroka::Int2Str(IterCircle) + "\t done in " + time.Print() + "\n";
-                } else
+                    str = Descr + " Iters " + Stroka::Int2Str(CurNum) + "\t" +
+                          Stroka::Int2Str(IterCircle) + "\t done in " +
+                          time.Print() + "\n";
+                } else {
                     IterCircle += IncByNum;
+                }
+            }
             CurNum++;
 			return str.size() > 0;
 		}

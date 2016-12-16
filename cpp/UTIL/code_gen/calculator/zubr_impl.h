@@ -6,9 +6,9 @@
 #include "zubr_calculator_tab.h"
 //} //extern "C" 
 
-#include "util\code_gen\analyse_base\lex_anal.h"
-#include "lib\ref\stroka.h"
-#include "lib\data\VecRes.h"
+#include "util/code_gen/analyse_base/lex_anal.h"
+#include "lib/ref/stroka.h"
+#include "lib/data/VecRes.h"
 #include "calc_prg.h"
 #include "calc_prg_types.h"
 

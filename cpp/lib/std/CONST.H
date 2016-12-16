@@ -11,33 +11,28 @@ extern double StndErr;
 #define FM  "  "<<setw(13)<<setprecision(6)
 #define FMT "  "<<setw(13)<<setprecision(6)
 
-#define WCPP_NET
+//#define WCPP_NET
 //#define WCPP
-#define WINDOWS_HEAD
+//#define WINDOWS_HEAD
 //#define MSDOS
-// #define LINUX
+//#define LINUX
 //#define DEBUG_MODE
+#define MAC
 
-//#ifdef WCPP
+#include "F2C/libf2c/math.h"
+#ifndef MAC
 #define M_PI        3.14159265358979323846
-//M_PI/2
 #define M_PI_2      1.57079632679489661923
-//M_PI/4
 #define M_PI_4      0.785398163397448309616
-//#define M_SQRT2PI   1.772453850905516027297
 #define M_SQRTPI   1.772453850905515881919
 #define M_SQRT2     1.414213562373095145474
 #define M_SQRT1_2     0.707106781186547524401
-
+#define M_E         2.71828182845904523536
+#endif
 
 #define M_SQRT2PI   2.506628274631000241612
 #define M_1_SQRTPI  0.56418958354775627928
-//#endif
-//#ifndef LINUX
-#define M_E         2.71828182845904523536
-//#else
 #define MAXPATHLEN  1024
-//#endif
 
 #define M_Eps  2.2204460492503131e-016
 #define M_Eps2 1.49011611938477e-08

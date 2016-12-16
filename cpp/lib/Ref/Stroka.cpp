@@ -1,4 +1,4 @@
-#include <lib\precompiled\ref.h>
+#include <lib/precompiled/ref.h>
 
 
 #include "Stroka.h"

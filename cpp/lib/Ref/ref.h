@@ -49,7 +49,7 @@
 #ifndef _util_ref_ref_h
 #define _util_ref_ref_h
 
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 //#include <iostream.h>
 //#include <stdlib.h>
 //#include <limits.h>
@@ -168,7 +168,7 @@ class RefBase {
         the program will abort. */
     void require_nonnull() const;
 // Added to be able to store refernces in the stream.
-    virtual SavableClass* GetSavableBase(RefCount *set=NULL) = 0;
+    virtual SavableClass* GetSavableBase(RefCount *set=NULL);
 };
 
 /** A template class that maintains references counts.
@@ -205,7 +205,7 @@ inline int cmp(const void*i, const void*j)
 
 //struct SavableClass;
 //struct FilterIn;
-#include "lib\std\stdexception.h"
+#include "lib/std/stdexception.h"
 template <class T>
 class  Ref  : public RefBase {
   private:
@@ -285,7 +285,7 @@ class  Ref  : public RefBase {
     {
       if (p) {
           int ref = dereference(p);
-          if ((ref == NULL) && (managed(p))) {
+          if ((ref == 0) && (managed(p))) {
 //SavableClass* cr = dynamic_cast<SavableClass*>(parentpointer());
 //if (cr) {cout<<"Deleting obj "<<cr->class_name()<<"\n";cout.flush();}
 
@@ -372,11 +372,13 @@ class  Ref  : public RefBase {
                 throw info_except("In SavableClass* GetSavableBase(void *set=NULL) :  dynamic_cast<%s>(%s)==NULL\n", typeid(T).name(), typeid(*set).name());
             assign_pointer(cr);
 		}
-#ifdef _util_class_sav_h
-        return dynamic_cast<SavableClass*>(p);
-#else
-        return NULL;
-#endif
+        return RefBase::GetSavableBase(p);
+
+//#ifdef _util_class_sav_h
+//        return dynamic_cast<SavableClass*>(p);
+//#else
+//        return NULL;
+//#endif
     };
 
 };

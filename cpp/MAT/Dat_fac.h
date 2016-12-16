@@ -1,8 +1,8 @@
 #ifndef __DAT_FAC_H
 #define __DAT_FAC_H
 
-#include "lib\std\deffunc.h"
-#include "lib\std\stdexception.h"
+#include "lib/std/deffunc.h"
+#include "lib/std/stdexception.h"
 //#include "f2c.h"
 
 //#include "alloc.h"
@@ -85,17 +85,17 @@ struct TTable:TData<T>
 //     dat.InterfaceIOName()<<"\n";
       return *this;
      }
-   T& operator()(int i,int j){return D[2][I[0]*i+j];}
+   T& operator()(int i,int j){return this->D[2][this->I[0]*i+j];}
    T* RowGet(int i,int RowNum)
-   {if ((RowNum>1)||(RowNum<0)) return NULL;T* ret=new T[I[RowNum]];
-    if (RowNum==1) {int strt=i*I[1];for (int k=0;k<I[0];k++) ret[k]=D[2][strt+k];}
-    else {for (int k=0;k<I[0];k++)  ret[k]=D[2][k*I[1]+i];}
+   {if ((RowNum>1)||(RowNum<0)) return NULL;T* ret=new T[this->I[RowNum]];
+    if (RowNum==1) {int strt=i*this->I[1];for (int k=0;k<this->I[0];k++) ret[k]=this->D[2][strt+k];}
+    else {for (int k=0;k<this->I[0];k++)  ret[k]=this->D[2][k*this->I[1]+i];}
     return ret;
    }
    int RowSet(int i,int RowNum,T* val)
    {if ((RowNum>1)||(RowNum<0)) return 0;
-    if (RowNum==1) {int strt=i*I[1];for (int k=0;k<I[0];k++) D[2][strt+k]=val[k];}
-    else {for (int k=0;k<I[0];k++)  D[2][k*I[1]+i]=val[k];}
+    if (RowNum==1) {int strt=i*this->I[1];for (int k=0;k<this->I[0];k++) this->D[2][strt+k]=val[k];}
+    else {for (int k=0;k<this->I[0];k++)  this->D[2][k*this->I[1]+i]=val[k];}
     return 1;
    }
    void SaveIni(ostream &out);
@@ -149,7 +149,7 @@ template <class T> TData<T>::TData(TData<T> &dat)
 template <class T> TData<T>& TData<T>::operator=(TData<T>& dat)
   {
 //cout<<" TData= \n";
-   if (stricmp(dat.InterfaceIOName(),InterfaceIOName())!=0)
+   if (Stricmp(dat.InterfaceIOName(),InterfaceIOName())!=0)
        throw info_except(" Different types from %s to %s . Exiting\n", dat.InterfaceIOName(),InterfaceIOName());
    SetDim(dat.N,dat.I);
    int l=sizeof(T);
@@ -157,7 +157,7 @@ template <class T> TData<T>& TData<T>::operator=(TData<T>& dat)
    return *this;
   };   
 #ifndef WCPP
-template <class T> void TData<T>::SetDim(int n,int *i0=NULL)
+template <class T> void TData<T>::SetDim(int n,int *i0)
 #else
 template <class T> void TData<T>::SetDim(int n,int *i0)//=NULL)
 #endif
@@ -188,7 +188,7 @@ template <class T> int  TData<T>::ReadIni(istream &in )
    char tmp[256];in>>tmp>>N;
    int *i=new int[N];
    for (int k=0;k<N;k++) in>>tmp>>i[k];
-   SetDim(N,i);delete i;
+   SetDim(N,i);delete[] i;
    for (int k=0;k<N;k++)
       {for (int p=0;p<I[k];p++) in>>D[k][p];}
    return 1;
@@ -196,11 +196,11 @@ template <class T> int  TData<T>::ReadIni(istream &in )
 template <class T> void TTable<T>::SaveIni(ostream &out)
   {
    int k;
-   out<<"NumberX "<<I[0]<<" NumberY "<<I[1]<<"\n";
-   for ( k=0;k<I[0];k++) out<<D[0][k]<<"  ";out<<"\n";
-   for ( k=0;k<I[1];k++) out<<D[1][k]<<"  ";out<<"\n";
-   for ( k=0;k<I[2];k++) 
-     {out<<FMT<<D[2][k];if ((double)(k+1)/I[1]==(k+1)/I[1]) out<<"\n";}  
+   out<<"NumberX "<<this->I[0]<<" NumberY "<<this->I[1]<<"\n";
+   for ( k=0;k<this->I[0];k++) out<<this->D[0][k]<<"  ";out<<"\n";
+   for ( k=0;k<this->I[1];k++) out<<this->D[1][k]<<"  ";out<<"\n";
+   for ( k=0;k<this->I[2];k++)
+     {out<<FMT<<this->D[2][k];if ((double)(k+1)/this->I[1]==(k+1)/this->I[1]) out<<"\n";}
    out<<"\n";  
   };    
 template <class T> int  TTable<T>::ReadIni(istream &in )
@@ -209,26 +209,26 @@ template <class T> int  TTable<T>::ReadIni(istream &in )
    int x,y,k;
    in>>tmp>>x>>tmp>>y;
    int i[3]={x,y,x*y};
-   SetDim(3,i);
-   for (k=0;k<x;k++)   in>>D[0][k];
-   for (k=0;k<y;k++)   in>>D[1][k];
-   for (k=0;k<x*y;k++) in>>D[2][k];
+      this->SetDim(3,i);
+   for (k=0;k<x;k++)   in>>this->D[0][k];
+   for (k=0;k<y;k++)   in>>this->D[1][k];
+   for (k=0;k<x*y;k++) in>>this->D[2][k];
    return 1;
   };
 template <class T> void TColumn<T>::SaveIni(ostream &out)
   {
    int i,k;
-   out<<"NumberCol "<<N<<" NumberRow  "<<I[0]<<"\n";
-   for (k=0;k<I[0];k++)
-     { for (i=0;i<N;i++) out<<FMT<<D[i][k]; out<<"\n"; }
+   out<<"NumberCol "<<this->N<<" NumberRow  "<<this->I[0]<<"\n";
+   for (k=0;k<this->I[0];k++)
+     { for (i=0;i<this->N;i++) out<<FMT<<this->D[i][k]; out<<"\n"; }
   };    
 template <class T> int  TColumn<T>::ReadIni(istream &in )
   {
    int row,i,k,*a;
-   char tmp[256];in>>tmp>>N>>tmp>>row;
-   a=new int[N];for (k=0;k<N;k++) a[k]=row;SetDim(N,a);delete a;
-   for (k=0;k<I[0];k++)
-     {for (i=0;i<N;i++) in>>D[i][k]; }
+   char tmp[256];in>>tmp>>this->N>>tmp>>row;
+   a=new int[this->N];for (k=0;k<this->N;k++) a[k]=row;this->SetDim(this->N,a);delete a;
+   for (k=0;k<this->I[0];k++)
+     {for (i=0;i<this->N;i++) in>>this->D[i][k]; }
    return 1;
   };
 
@@ -360,7 +360,7 @@ template <class T>  void TData<T>::SortData(int SortCol)
    for (k=0;k<Num;k++) if (i[k]!=k) { for (int k1=0;k1<N;k1++) D[k1][k]=tmp.D[k1][i[k]];}
 //DataStore(cout,&tmp);cout"\n\n\n\n\n";DataStore(cout,this);
 
-   delete i; return;
+   delete []i; return;
   }
 
 

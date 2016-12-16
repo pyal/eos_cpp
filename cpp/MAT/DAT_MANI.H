@@ -14,7 +14,7 @@ void ConstructSpl(TData<double> &XY,int X,int Y,TData<double> *&S);
 double EvalSpl(TData<double> &XY,int X,int Y,TData<double> &S,double x_v);
           
 template <class T> void SetTDataColumn(TData<T> &dat,int Col,double  Val)
-  {Col;if ((Col<=dat.N) && (Col>0)) 
+  {if ((Col<=dat.N) && (Col>0))
     {for (int k=0;k<dat.I[Col];k++) dat.D[Col][k]=Val;}
    else cout<<" Wrong Col in SetTDataColumn\n";};
    
@@ -26,7 +26,7 @@ template <class T> void InputTDataF(const char *name,TData<T> *&dat)
    fstream in(name,ios::in);if (seek_eof(in)) {cout<<" Cannot read file: "<<name;exit(1);}
    
    while (!seek_eof(in)) 
-     { if (NumC=EnterStr(in,&pnt[0],MaxNumCol))  NumR++;}
+     { if ((NumC=EnterStr(in,&pnt[0],MaxNumCol)))  NumR++;}
    if (NumR>MaxNumRow) {cout<<"File is too long";NumR=MaxNumRow;}
    int *i=new int[NumC];for (int k=0;k<NumC;k++) i[k]=NumR;
    dat->SetDim(NumC,i);
@@ -36,7 +36,7 @@ template <class T> void InputTDataF(const char *name,TData<T> *&dat)
    in.open(name,ios::in);
    while ( (!seek_eof(in)) && (NumR>CurRow) )
      {
-      if (CurCol=EnterStr(in,&pnt[0],MaxNumCol))
+      if ((CurCol=EnterStr(in,&pnt[0],MaxNumCol)))
         {
          CurRow++;
          for (int k=0;k<min(CurCol,NumC);k++) dat->D[k][CurRow-1]=pnt[k+1];
@@ -44,7 +44,7 @@ template <class T> void InputTDataF(const char *name,TData<T> *&dat)
         }
      }
     
-   delete i;delete pnt;
+   delete []i;delete []pnt;
    in.close();
   } 
 template <class T> int OutputTDataF(ostream &out,TData<T> &dat)

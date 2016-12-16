@@ -1,10 +1,12 @@
 #ifndef _STREAM_BUF_H_
 #define _STREAM_BUF_H_
 
-#include "lib\std\util.h"
-#include "lib\std\stdexception.h"
-#include "lib\ref\ref.h"
+#include "lib/std/util.h"
+#include "lib/std/stdexception.h"
+#include "lib/ref/ref.h"
 //#include <string>
+#undef min
+#undef max
 #include <list>
 #include <stack>
 //#pragma warning( disable : 4267 )
@@ -151,8 +153,12 @@ struct StreamManip:StreamManip_Base
 
 // Try to find a given char in the stream
 // return 0 - if EOF is found first, 1 - char is found and read
-	int SearchChar(const char ch)
-	{	int c;while ( ( (c=get())!=ch ) && (c!=EOF) ) ;	return (c==ch);	}
+	int SearchChar(const char ch) {
+		int c;
+		while ( ( (c=get())!=ch ) && (c!=EOF) )
+			;
+		return (c==ch);
+	}
 // Try to find one of given chars in the stream
 // return 0 - if EOF is found first, 1 - char is found and read
 	int SearchForChars(const char* str,int len);

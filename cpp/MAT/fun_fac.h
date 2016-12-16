@@ -2,8 +2,8 @@
 #define __FUN_FAC_H
 
 //#include "lib\std\interfac.h"
-#include "lib\ref\class_sav.h"
-#include "lib\ref\str_manip.h"
+#include "lib/ref/class_sav.h"
+#include "lib/ref/str_manip.h"
 #include "util/code_gen/calculator/calculator_std.h"
 #include "mat/matrics.h"
 
@@ -34,6 +34,7 @@ struct NamedOneVarFunction : OneVarFunction {
     NamedOneVarFunction(const Stroka &names):OneVarFunction(){
         SetClcList(names);
     };
+    using OneVarFunction::Calculate;
     virtual double Calculate(double x, const Stroka &name) = 0;
 
     virtual double Calculate(double x){
@@ -50,6 +51,7 @@ struct NamedOneVarFunction : OneVarFunction {
             KnownClcName(name, 1);
             DefaultName = name;
         }
+        return DefaultName;
     }
     void SetClcList(const Stroka &names){
         int k = 0;
@@ -198,7 +200,7 @@ struct ManyVarFunc2OneVar:OneVarFunction{
         si>>tmp>>Func>>tmp>>InVarName>>tmp>>OutVarName;
         FixedParameters.clear();
         si>>tmp>>tmp>>tmp;
-        while (stricmp(tmp,"}")!=0){
+        while (Stricmp(tmp,"}")!=0){
             vector<Stroka> vec = Str::SplitLine(tmp,0,':');
             if (vec.size()!=2)
                 throw info_except("Wrong input have to be of type <a:b> and is <%s>\n", tmp);

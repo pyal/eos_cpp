@@ -1,8 +1,8 @@
 #ifndef __MTZERO_H
 #define __MTZERO_H
 
-#include "lib\std\deffunc.h"
-#include "lib\std\const.h"
+#include "lib/std/deffunc.h"
+#include "lib/std/const.h"
 
 
 int FindZeroAB(X_func f,double A,double B,double &X_res,double &F_res,

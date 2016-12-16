@@ -1,5 +1,5 @@
 
-#include <lib\precompiled\Ref.h>
+#include <lib/precompiled/Ref.h>
 
 
 #include "str_manip.h"
@@ -121,10 +121,10 @@ namespace Str {
     }
 
         int IsGlasn(char ch){
-            return (strchr("éóåûàîıÿèş¸",ch)!=NULL);
+            return (strchr("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",ch)!=NULL);
         }
         int IsSoGlasn(char ch){
-            return (strchr("öêíøùõúôâïğëäæ÷ñìòü",ch)!=NULL);
+            return (strchr("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",ch)!=NULL);
         }
         int IsRussianLanguageFast(const char *str1){
             for (size_t k = 0;k<strlen(str1);k++)
@@ -171,8 +171,8 @@ namespace Str {
         }
         bool IsRussianChar(char ch, int CountSpec){
             if (!CountSpec)
-                return (strchr("¸éöóêåíãøùçõúôûâàïğîëäæıÿ÷ñìèòüáş¨ÉÖÓÊÅÍÃØÙÇÕÚÔÛÂÀÏĞÎËÄÆİß×ÑÌÈÒÜÁŞ", (unsigned char)ch)!=NULL );
-            return (strchr("¸éöóêåíãøùçõúôûâàïğîëäæıÿ÷ñìèòüáş¨ÉÖÓÊÅÍÃØÙÇÕÚÔÛÂÀÏĞÎËÄÆİß×ÑÌÈÒÜÁŞ.-", (unsigned char)ch)!=NULL );
+                return (strchr("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", (unsigned char)ch)!=NULL );
+            return (strchr("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.-", (unsigned char)ch)!=NULL );
         }
         bool IsEnglishChar(char ch){
             return (strchr("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM", (unsigned char)ch)!=NULL );

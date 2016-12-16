@@ -1,17 +1,17 @@
 #ifndef __SPL_FAC_H
 #define __SPL_FAC_H
 
-#include "lib\std\deffunc.h"
-//#include "lib\std\interfac.h"
-#include "mat\dat_fac.h"
-#include "mat\dat_reg.h"
-#include "lib\std\f2c.h"
-#include "lib\ref\class_sav.h"
-#include "lib\data\DataVec.h"
-#include "lib\ref\file_manip.h"
+#include "lib/std/deffunc.h"
+//#include "lib/std/interfac.h"
+#include "mat/dat_fac.h"
+#include "mat/dat_reg.h"
+#include "lib/std/f2c.h"
+#include "lib/ref/class_sav.h"
+#include "lib/data/DataVec.h"
+#include "lib/ref/file_manip.h"
 
-#include "mat\matrics.h"
-#include "mat\quad.h"
+#include "mat/matrics.h"
+#include "mat/quad.h"
 
 struct ISpline:SavableClass{
     ISpline():SavableClass(){}
@@ -112,8 +112,9 @@ struct SplineXYIO:ISpline {
    SplineXYIO(){};
    virtual void SetLimits(double xu,double xl,double yu,double yl) {Xup=xu;Xlow=xl;Yup=yu;Ylow=yl;};
    virtual void SetLimits(TData<real> &dat) 
-     {if (stricmp(dat.InterfaceIOName(),"TTable")!=0) {cout<<"SetLimits wrong data.\n";exit(0);}
+     {if (Stricmp(dat.InterfaceIOName(),"TTable")!=0) {cout<<"SetLimits wrong data.\n";exit(0);}
       SetLimits(dat.D[0][dat.I[0]-1],dat.D[0][0],dat.D[1][dat.I[1]-1],dat.D[1][0]);};
+    using ISpline::Generate;
    virtual int  Generate(int &NumX,int &NumY,double &Misf,int Cont,TData<real> &dat)=0;
    virtual int  Generate(int Cont,TData<real> &dat)=0;
    virtual int  Evaluate (double *x,double *y,double *z,int nx)=0;
@@ -205,10 +206,11 @@ struct SplineXIO:ISpline {
    SplineXIO():ISpline(), Xup(0), Xlow(0), GenNumX(0), GenMisf(0){};
    virtual void SetLimits(double xu,double xl) {Xup=xu;Xlow=xl;};
    virtual void SetLimits(TData<real> &dat) 
-     {if ( (stricmp(dat.InterfaceIOName(),"TDataF")!=0) || 
+     {if ( (Stricmp(dat.InterfaceIOName(),"TDataF")!=0) ||
            ( (dat.N!=2) && (dat.N!=3) ) || (dat.I[0]!=dat.I[1]) )
      {cout<<"SetLimits SplineXIO wrong data.\n";exit(0);}
       SetLimits(dat.D[0][dat.I[0]-1],dat.D[0][0]);};
+    using ISpline::Generate;
    virtual int  Generate(int &NumX,double &Misf,int Cont,TData<real> &dat,
                          int Xcol=-1,int Ycol=-1,int Wcol=-1)=0;
    virtual int  Generate(int Cont, TData<real> &dat){
@@ -345,6 +347,7 @@ struct ExtendedRegridSpline:RegridSpline {
         SetBoundary();
         return ret;
 	}
+    using ISpline::Generate;
 	int  Generate(int Cont,TData<real> &dat, const char *mes){
 		int x = GenNumX, y = GenNumY;
 		double m = GenMisfit;
@@ -458,6 +461,7 @@ struct ExtendedRegridSpline:RegridSpline {
 		out<<"MulX"<<MulX<<"MulY"<<MulY<<"MulZ"<<MulZ<<SavableClass::EOLN();
 		return RegridSpline::save_generation_par(out);
 	}
+    using ISpline::SetBoundary;
     void SetBoundary() {
         GetBoundary(BndXlow, BndXup, BndYlow, BndYup);
         Xstp = (BndXup - BndXlow) / 100;
@@ -524,10 +528,12 @@ struct CurveSpline : SplineXIO {
 //   real *Weight;
    virtual int  Generate(int &NumX,double &Misf,int Cont,TData<real> &dat,
                          int Xcol=-1,int Ycol=-1,int Wcol=-1);
+    using SplineXIO::Generate;
    virtual int  Generate(int &NumX,double &Misf,int Cont,double *x,double *y,int n,
                          double *weight=NULL);
    virtual int  Evaluate (TData<real> &dat,int Xcol=-1,int Ycol=-1);
    virtual int  Evaluate (double *x,double *y,int nx);
+    using SplineXIO::Evaluate;
    virtual double Evaluate (double x);
    void ReadIni(istream &in){
 		FilterTextIn input(in.rdbuf(),0);

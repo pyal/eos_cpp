@@ -1,5 +1,5 @@
 
-#include <lib\precompiled\Ref.h>
+#include <lib/precompiled/Ref.h>
 
 
 #include "file_manip.h"
@@ -7,13 +7,13 @@
 
 namespace File {
     FILE *open(const char *file, const char *mod, const char *mes){
-        if (stricmp(mod,"r")==0){
+        if (Stricmp(mod,"r")==0){
             if (strcmp(file,"STDIN")==0)
                 return stdin;
             if (strcmp(file, "NULL")==0)
                 return NULL;
         } else {
-            if (stricmp(mod,"w")!=0)
+            if (Stricmp(mod,"w")!=0)
                 throw info_except("Files mode is \"r\" or \"w\", trying to use mode \"%s\"\n",mod);
             if (file==NULL || strlen(file)==0 || strcmp(file, "NULL")==0 )
                 return NULL;
@@ -81,11 +81,12 @@ namespace File {
             throw info_except("File name is null?\n%s\n", mes);
         FILE *in = open(file, "r", mes);
         vec.clear();
-        if (!in)
+        if (!in) {
             if (mes != NULL)
                 throw info_except("Cannot open file %s.\n%s\n", file, mes);
             else
                 return 0;
+        }
         std::vector<Stroka> line;
         vector<double> cur;
         Stroka err = "";
@@ -156,13 +157,20 @@ namespace File {
             throw info_except("Wanted %i objects and got only %i\n", NumObject, ret.size());
         return ret;
     }
+    // TODO(MAC/WIDOWS)
+//    long GetFileSize(const char *file) {
+//        FILE *in = open(file, "r", NULL);
+//        if (!in)
+//            return -1;
+//        long ret = _filelength(_fileno(in));
+//        close(in);
+//        return ret;
+//    }
+#include <sys/stat.h>
     long GetFileSize(const char *file) {
-        FILE *in = open(file, "r", NULL);
-        if (!in) 
-            return -1;
-        long ret = _filelength(_fileno(in));
-        close(in);
-        return ret;
+        struct stat stat_buf;
+        int rc = stat(file, &stat_buf);
+        return rc == 0 ? stat_buf.st_size : -1;
     }
 
 

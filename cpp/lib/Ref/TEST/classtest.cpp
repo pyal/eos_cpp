@@ -1,99 +1,97 @@
-//
-// classtest.cc
-//
-// a simple program to test the class stuff
 
-#include <iostream.h>
+#include "lib/std/Util.h"
+#include "lib/Ref/class.h"
+#include "lib/Ref/class_sav.h"
+#include "unit_test.h"
 
-#include "exenv.h"
-#include "class.h"
-#include "class_sav.h"
-#include <iomanip.h>
-//using namespace std;
+namespace classtest {
+    class A : virtual public DescribedClass {
+    private:
+        int i;
+    public:
+        A() : i(1) { };
 
-#include <stdiostr.h>
+        int g() { return i; }
 
-#include <malloc.h>
-long int Coreleft()
- {
-   long int Used=0;
-   _HEAPINFO hinfo;
-   int heapstatus;   hinfo._pentry = NULL;
-   while( ( heapstatus = _heapwalk( &hinfo ) ) == _HEAPOK )
-     if (hinfo._useflag == _USEDENTRY) Used+=hinfo._size;
-   if ( (heapstatus!=_HEAPEND) && (heapstatus!=_HEAPEMPTY) ) return -1;
-//   cout<<" stack "<<_stackavail()<<"\n";
-   return Used;
- };
+        ~A() { cout << "A dtor\n"; };
 
+        virtual void Test() { cout << " Test A\n"; };
 
+    };
 
-class A: virtual public DescribedClass {
-  private:
-    int i;
-  public:
-    A():i(1) {};
-    ~A() { cout << "A dtor\n"; };
-	virtual void Test() { cout<<" Test A\n";};
-
-};
-
-static ClassDesc A_cd(typeid(A),"A");
+    static ClassDesc A_cd(typeid(A), "A");
 
 #ifndef SIMPLE_TEST
 
-class B: public A {
-  private:
-    int ib;
-  public:
-    B():ib(2) {};
-    ~B() { cout << "B dtor\n"; };
-	virtual void Test() { cout<<" Test B\n";};
-};
+    class B : public A {
+    private:
+        int ib;
+    public:
+        B() : ib(2) { };
 
-static ClassDesc B_cd(typeid(B),"B",1);
+        int g() { return ib; }
 
-class C: virtual public DescribedClass {
-  private:
-    int i;
-  public:
-    C():i(3) {};
-    ~C() { cout << "C dtor\n"; };
-	virtual void Test() { cout<<" Test C\n";};
-};
+        ~B() { cout << "B dtor\n"; };
 
-static ClassDesc C_cd(typeid(C),"C");
+        virtual void Test() { cout << " Test B\n"; };
+    };
 
-class D: public B, public C {
-  private:
-    int id;
-    A* atst;
-	double *d;
-  public:
-    D():id(4),atst(new A) {d=new double [5000];};
-    ~D() { delete atst; cout << "D dtor\n";delete d; };
-	virtual void Test() { cout<<" Test D\n";};
-};
-void TempTemp(){create<D>();}
+    static ClassDesc B_cd(typeid(B), "B", 1);
+
+    class C : virtual public DescribedClass {
+    private:
+        int i;
+    public:
+        C() : i(3) { };
+
+        int g() { return i; }
+
+        ~C() { cout << "C dtor\n"; };
+
+        virtual void Test() { cout << " Test C\n"; };
+    };
+
+    static ClassDesc C_cd(typeid(C), "C");
+
+    class D : public B, public C {
+    private:
+        int id;
+        A *atst;
+        double *d;
+    public:
+        D() : id(4), atst(new A) { d = new double[5000]; };
+
+        ~D() {
+          delete atst;
+          cout << "D dtor\n";
+          delete d;
+        };
+
+        virtual void Test() { cout << " Test D\n"; };
+
+        int g() { return id; }
+    };
+
+    void TempTemp() { create<D>(); }
 //template DescribedClass* create<D>();
 
-static ClassDesc D_cd(typeid(D),"D",1,"",(create<D>));
+    static ClassDesc D_cd(typeid(D), "D", 1, "", (create<D>));
 
 #endif /* ! SIMPLE_TEST */
 
-void MemTest()
-{
-  cout<<"Before  dynamic_cast"<<Coreleft()<<endl;
+    void MemTest() {
+      cout << "Before  dynamic_cast" << Coreleft() << endl;
 
-  C* dtst = dynamic_cast<C*>(ClassDesc::name_to_class_desc("D")->create());
-  cout<<"dynamic_cast D ";dtst->Test();
-  delete dtst;
-  cout<<"After dynamic_cast "<<Coreleft()<<endl;
+      C *dtst = dynamic_cast<C *>(ClassDesc::name_to_class_desc("D")->create());
+      cout << "dynamic_cast D ";
+      dtst->Test();
+      delete dtst;
+      cout << "After dynamic_cast " << Coreleft() << endl;
 
-  cout<<"Before new D "<<Coreleft()<<endl;
-  D* dt = new D;
-  C* ct = dt;
-  B* bt = dt;
+      cout << "Before new D " << Coreleft() << endl;
+      D *dt = new D;
+//  C* ct = dt;
+//  B* bt = dt;
 /*
   cout << "virtual inheritance test:" << endl;
   dt->reference();
@@ -121,94 +119,108 @@ void MemTest()
 //  if (ct->nreference() == 0) delete ct;
 //  bt->dereference();
 //  if (bt->nreference() == 0) delete bt;
-  delete dt;
-  cout<<"After new D "<<Coreleft()<<endl;
-  FilterTextOut fo(DataSource::OpenSource("Test",DataSource::Out,DataSource::Memory));
+      delete dt;
+      cout << "After new D " << Coreleft() << endl;
+      FilterTextOut fo(DataSource::OpenSource("Test", DataSource::Out,
+                                              DataSource::Memory));
 //  char tmp[256];
-  cout<<"entering ...";
-  char *t;
-  for (int o=1;o<10;o++) 
-   {
+      cout << "entering ...";
+      string t;
+      for (int o = 1; o < 10; o++) {
 //    t=dat.GetBuf("Test");
-    cout<<" O "<<o<<"\n"<<flush;
+        cout << " O " << o << "\n" << flush;
 //     fo.fill('*');
-     fo.precision(o);
-    for ( int k=1;k<=10;k++) 
-    {
-      fo<<22<<"HaHa"<<2.333333333333333333333333333333333333333333333333<<"\n"<<'|';
-       fo<<22<<"HaHa"<<2.355555555555555555555555555555555555555555555555555555<<"\n"<<'|';
-    }
-   }
-  cout<<"entered\n"<<flush;
-  t=DataSource::GetStr("Test");
-  int i1;double d1;char s1[256];
-  FilterTextIn fi(DataSource::OpenSource("Test",DataSource::In,DataSource::Memory));
-  fi>>i1>>s1>>d1;
-  cout<<i1<<" "<<s1<<" "<<d1<<"\n";
-  cout<<t<<"\n";
-  fo.SetNewBuf(DataSource::OpenSource("Test",DataSource::Out,DataSource::Disk));
-  fo<<t;
-  delete t;
+        fo.precision(o);
+        for (int k = 1; k <= 10; k++) {
+          fo << 22 << "HaHa" <<
+          2.333333333333333333333333333333333333333333333333 << "\n" << '|';
+          fo << 22 << "HaHa" <<
+          2.355555555555555555555555555555555555555555555555555555 << "\n" <<
+          '|';
+        }
+      }
+      cout << "entered\n" << flush;
+      t = DataSource::GetStr("Test");
+      int i1;
+      double d1;
+      char s1[256];
+      FilterTextIn fi(DataSource::OpenSource("Test", DataSource::In,
+                                             DataSource::Memory));
+      fi >> i1 >> s1 >> d1;
+      cout << i1 << " " << s1 << " " << d1 << "\n";
+      cout << t << "\n";
+      fo.SetNewBuf(DataSource::OpenSource("Test", DataSource::Out,
+                                          DataSource::Disk));
+      fo << t;
+//  delete t;
 //  cout<<" Deleted !!!\n"<<flush;
-  DataSource::CloseCategories();
-};
+      DataSource::CloseCategories();
+    };
 
-void main()
-{
-  ClassDesc::list_all_classes();
+    void classtest() {
+      SavableClass::list_all_classes(0);
 
-  cout << node0 << indent << "using 0" << endl;
-  const Ref<DescribedClass> descl2(0);
-  Ref<A> aaa;
-  cout << "getting aaaa" << endl;
-  A* aaaa = 0; //aaa.pointer();
-  cout << "using aaaa" << endl;
-  const Ref<DescribedClass> descl((aaaa==(A*)0)?(DescribedClass*)0:aaaa);
-  cout << "using aaa.pointer()" << endl;
-  const Ref<DescribedClass> descl3((aaa.pointer()==(A*)0)?(DescribedClass*)0:aaa.pointer());
+      cout << node0 << indent << "using 0" << endl;
+      const Ref<DescribedClass> descl2(0);
+      Ref<A> aaa;
+      cout << "getting aaaa" << endl;
+      A *aaaa = 0; //aaa.pointer();
+      cout << "using aaaa" << endl;
+      const Ref<DescribedClass> descl(
+              (aaaa == (A *) 0) ? (DescribedClass *) 0 : aaaa);
+      cout << "using aaa.pointer()" << endl;
+      const Ref<DescribedClass> descl3(
+              (aaa.pointer() == (A *) 0) ? (DescribedClass *) 0
+                                         : aaa.pointer());
 
-  A a;
-  cout << "A name:" << a.class_name() << '\n';
+      A a;
+      cout << "A name:" << a.class_name() << '\n';
 
-  
-  // check the compiler's handling of virtual inheritance
 
-  cout<<"Before MemTest "<<Coreleft()<<endl;
+      // check the compiler's handling of virtual inheritance
+
+      cout << "Before MemTest " << Coreleft() << endl;
 //while (1)  
-    MemTest();
-  cout<<"After MemTest "<<Coreleft()<<endl;
-  D d;
-  cout << "D name:" << d.class_name() << '\n';
+      MemTest();
+      cout << "After MemTest " << Coreleft() << endl;
+      D d;
+      cout << "D name:" << d.class_name() << '\n';
 
-  cout << "&d = " << (void*) &d << '\n';
-  cout << "dynamic_cast<D*>(&d) = " << (void*) dynamic_cast<D*>(&d) << '\n';
-  cout << "dynamic_cast<B*>(&d) = " << (void*) dynamic_cast<B*>(&d) << '\n';
-  cout << "dynamic_cast<A*>(&d) = " << (void*) dynamic_cast<A*>(&d) << '\n';
-  cout << "dynamic_cast<C*>(&d) = " << (void*) dynamic_cast<C*>(&d) << '\n';
-  cout << "dynamic_cast<DescribedClass*>(&d) = "
-       << (void*) dynamic_cast<DescribedClass*>(&d) << '\n';
-  dynamic_cast<C*>(&d)->Test();
+      cout << "&d = " << (void *) &d << '\n';
+      cout << "dynamic_cast<D*>(&d) = " << (void *) dynamic_cast<D *>(&d) <<
+      '\n';
+      cout << "dynamic_cast<B*>(&d) = " << (void *) dynamic_cast<B *>(&d) <<
+      '\n';
+      cout << "dynamic_cast<A*>(&d) = " << (void *) dynamic_cast<A *>(&d) <<
+      '\n';
+      cout << "dynamic_cast<C*>(&d) = " << (void *) dynamic_cast<C *>(&d) <<
+      '\n';
+      cout << "dynamic_cast<DescribedClass*>(&d) = "
+      << (void *) dynamic_cast<DescribedClass *>(&d) << '\n';
+      dynamic_cast<C *>(&d)->Test();
 //  Ref<D> dref(new D);
 //  Ref<A> aref(dref);
 //  Ref<D> dref;
 //  Ref<A> aref(new D);
-  Ref<D> dref;
-  Ref<A> aref(new A);
+      Ref<D> dref;
+      Ref<A> aref(new A);
 
 
-  cout << "aref.pointer() is " << aref.pointer() << '\n';
-  cout << "dref.pointer() is " << dref.pointer() << '\n';
-  cout << "aref == dref gives " << (aref == dref) << '\n';
+      cout << "aref.pointer() is " << aref.pointer() << '\n';
+      cout << "dref.pointer() is " << dref.pointer() << '\n';
+      cout << "aref == dref gives " << (aref == dref) << '\n';
 
-  dref << aref;
+      dref << aref;
 
-  cout << "aref.pointer() is " << aref.pointer() << '\n';
-  cout << "dref.pointer() is " << dref.pointer() << '\n';
-  cout << "aref == dref gives " << (aref == dref) << '\n';
+      cout << "aref.pointer() is " << aref.pointer() << '\n';
+      cout << "dref.pointer() is " << dref.pointer() << '\n';
+      cout << "aref == dref gives " << (aref == dref) << '\n';
 //  dref->Test();
 
-}
+    }
 
+    UnitTest unit_classtest("classtest", classtest);
+}
 /////////////////////////////////////////////////////////////////////////////
 
 // Local Variables:

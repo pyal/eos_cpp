@@ -3,7 +3,7 @@
 #pragma once
 
 #include "spl_interface.h"
-#include <mat\spl_fac.h>
+#include <mat/spl_fac.h>
 
 
 struct TSpline2DCalculator : ISplineCalculatorStd {

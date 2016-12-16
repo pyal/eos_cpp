@@ -6,9 +6,9 @@
 //#include "zubr_calculator_tab.h"
 //extern "C" 
 
-#include "util\code_gen\analyse_base\lex_anal.h"
-#include "lib\ref\stroka.h"
-#include "lib\data\VecRes.h"
+#include "util/code_gen/analyse_base/lex_anal.h"
+#include "lib/ref/stroka.h"
+#include "lib/data/VecRes.h"
 
 
 
@@ -98,7 +98,7 @@ struct TypeDef:RefCount{
             if (r)
                 res = new DataConstr(NULL,r->Type,r->Spec,NULL);
             else
-                res = new DataConstr(NULL,NULL,NULL,NULL);
+                res = new DataConstr(NULL,NULL,0,NULL);
             for (list<DataConstr* >::const_iterator it = d.begin();it!=d.end();it++){
                 dat.push_back(new DataConstr(NULL,(*it)->Type,(*it)->Spec,NULL));
             }
@@ -124,7 +124,7 @@ struct TypeDef:RefCount{
 		
         return 0;
     }
-    void AddFunc(Ref<FuncDef> func, Stroka &Oper){
+    void AddFunc(Ref<FuncDef> func, const Stroka &Oper){
         Funcs[Oper].push_back(func);
     }
     Stroka OperationsDefined(){
@@ -223,7 +223,7 @@ struct DataConstrStorage:RefCount{
 		if (!dat)
 			throw info_except("Something strange... no data... ups\n");
         const char *name = dat->Name.c_str();
-        int size = dat->Type!=NULL?dat->Type->DataSize:NULL;
+        int size = dat->Type!=NULL?dat->Type->DataSize:0;
 //        int size = dat->Type->DataSize;
         DataSimpleStorage::Pos pos = data->GenerateVar(size);
         Ref<DataConstr> ret = new DataConstr(pos,dat->Type,dat->Spec,name);
@@ -284,7 +284,7 @@ private:
 struct FuncArgs:RefCount{
 	list<DataSimpleStorage::Pos> dat;
 	DataSimpleStorage::Pos res;
-    FuncArgs(DataSimpleStorage::Pos r, const list<DataSimpleStorage::Pos> &d):res(r),dat(d){};
+    FuncArgs(DataSimpleStorage::Pos r, const list<DataSimpleStorage::Pos> &d):dat(d), res(r){};
 };
 struct InstrSimple:RefCount{
 	void Execute(list<Ref<InstrSimple> >::iterator &it){
@@ -297,7 +297,7 @@ struct InstrSimple:RefCount{
     //    dat = new FuncArgs(DefF->Arg);
     //}
     InstrSimple(Ref<FuncArgs> dat_, FuncStruct* Func_, const Stroka &oper)
-        :dat(dat_),Func(Func_),Oper(oper){};
+        :Func(Func_),Oper(oper), dat(dat_){};
 private:
 	FuncStruct* Func;
 	Stroka Oper;
@@ -349,7 +349,7 @@ struct ConstructProgram:RefCount{
             int k=0;
             char tmp[256];
             for(list<DataConstr* >::const_iterator it = dat.begin();it!=dat.end();it++,k++)
-                Error+=Stroka("\tdat")+Stroka(itoa(k,&tmp[0],10))+": " + data->GetTypeName(*it) + " \n" ;
+                Error+=Stroka("\tdat")+Stroka(Itoa(k,&tmp[0],10))+": " + data->GetTypeName(*it) + " \n" ;
             Error+="Is not defined\n";
             Error+="Operations defined:\n";
             Error+=data->GetTypeDef()->OperationsDefined();
