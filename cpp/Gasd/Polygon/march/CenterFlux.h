@@ -567,7 +567,7 @@ cout<<"Calculated CFL "<<courantNumber<<"\n";
                 maxTIStp = max<double>(maxTIStp, fabs(*(double*)itC05.GetElementPtr() / *(double*)itC05.GetElementPtr(dX.Data)));
             }
             MinPossibleTimeStp = 1 / maxTIStp ;
-            return max(MathZer, MinPossibleTimeStp * MarchCourant);
+            return max<double>(MathZer, MinPossibleTimeStp * MarchCourant);
         }
 
         void MakeTimeStep(TPolyRegion *reg, double curTime, double tStp) {
@@ -856,7 +856,7 @@ cout<<"Calculated CFL "<<courantNumber<<"\n";
         //    //    double &invDenc = *(double*)dencIt.GetElementPtr(), deltaF = *(double*)dencIt.GetElementPtr((*vecStep)[0]);
         //    //    double x = deltaF / invDenc;
         //    //    if (fabs(x) > 0.1) 
-        //    //        clcCoef = max(clcCoef, 40 * fabs(x));
+        //    //        clcCoef = max<double>(clcCoef, 40 * fabs(x));
         //    //    //invDenc = exp(log(invDenc) + x);
         //    //    //invDenc = exp(log(invDenc) + x - x * x / 2);
         //    //}

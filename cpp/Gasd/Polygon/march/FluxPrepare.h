@@ -34,7 +34,7 @@ namespace NPolygon {
         //    mat->Sound(--sPtr, --dencPtr, --enerPtr, size);
         //    sPtr++;
         //    for(size_t i = 0; i < (size_t)size; i++)
-        //        sPtr[i] = max(0.3, sPtr[i]);
+        //        sPtr[i] = max<double>(0.3, sPtr[i]);
         //}
         static void SetVectorVar(TPolyRegion *reg, const Stroka &varNames, const Stroka &vecName) {
             TGridVectorVar<double> *vec = new TGridVectorVar<double>;
@@ -80,7 +80,7 @@ namespace NPolygon {
             else {
                 mat->Sound(&resPtr[begPos - 1], &dencPtr[begPos - 1], &enerPtr[begPos - 1], size);
                 for(int i = begPos; i < lastPos; i++)
-                    resPtr[i] = max(0.03, resPtr[i]);
+                    resPtr[i] = max<double>(0.03, resPtr[i]);
             }
             return lastPos;
         }

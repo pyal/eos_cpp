@@ -867,7 +867,7 @@ FieldInterface* Grid<T,CpM>::GetVar(char *name)
   int k,N=VarList.SetNumEl();
   FieldInterface *cur;
   for (k=0;k<N;k++)  
-   if ( ((cur=VarList[k])!=NULL) && (stricmp(cur->SetDataName(),name)==0) ) 
+   if ( ((cur=VarList[k])!=NULL) && (Stricmp(cur->SetDataName(),name)==0) )
      return cur;
   return NULL;
  }

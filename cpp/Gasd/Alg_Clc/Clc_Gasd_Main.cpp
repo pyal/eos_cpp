@@ -81,7 +81,7 @@ int Config_Gasd_ReadPar::ReadData(FilterIn &in,FilterOut &out)
   grid->SetGridMaskedPnt(coord,mask);
   for (k=0;k<Nvar;k++) ((GridField<double, CopyStructFast<double> >*)(grid->GetVar(data_names[k].name)))->
                           SetMaskedPnt(arr.SetColumn<CopyStructFast<double> >(k),mask);
-  in>>tmp;if (stricmp(tmp,"EndIter")==0) ReadIsGood=1;
+  in>>tmp;if (Stricmp(tmp,"EndIter")==0) ReadIsGood=1;
   calc->StartCalculation();
   return 1;
  };

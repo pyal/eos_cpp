@@ -43,7 +43,7 @@ struct GridVectorField : public FieldInterface //public GridVar<T,CpM>
     {int OldDim=data.SetDim();if ((NewDim==-1) || (NewDim==OldDim)) return OldDim;
      data.SetDim(NewDim);GridManipulator *tmp=GetGridManip();
      char namp[256],buf[256];const char *nam=get_obj_name();
-     for (int k=0;k<NewDim;k++) {strcpy(namp,nam);strcat(namp,"_");strcat(namp,itoa(k,buf,10));data[k]=new GridField<T,CpMeth>(tmp,namp);}
+     for (int k=0;k<NewDim;k++) {strcpy(namp,nam);strcat(namp,"_");strcat(namp,Itoa(k,buf,10));data[k]=new GridField<T,CpMeth>(tmp,namp);}
 
 //     for (int k=0;k<NewDim;k++) data[k]=new GridField<T,CpMeth>(tmp,namp);
      SetLocal(SetLocal());

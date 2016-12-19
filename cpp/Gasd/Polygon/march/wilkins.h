@@ -137,8 +137,8 @@ namespace NPolygon {
                 double rCent = 0.5 * (denc[i] + dencPlus[i]);
                 if (dencPlus[i] - MathZer <= denc[i])
                     continue;
-                double pCent = max(pres[i] - visc[i], minPres);
-                double a = sqrt(pCent / max(rCent, MathZer));
+                double pCent = max<double>(pres[i] - visc[i], minPres);
+                double a = sqrt(pCent / max<double>(rCent, MathZer));
                 double viscNew = rCent * (sqr(c0 * dU) + cL * a * fabs(dU));
                 viscP[i] = viscNew;
             }
@@ -162,7 +162,7 @@ namespace NPolygon {
 			double dV = vel[size - 1] - vel[0], dX = pos[size - 1] - pos[0];
 			if (dX < MathZer)
 				return 1 / MathZer;
-			dV = max(MathZer, dV);
+			dV = max<double>(MathZer, dV);
 			return dX / dV;
         }
         void MakeTimeStep2Vacuum(TPolyRegion *reg, double tStp) {
@@ -311,9 +311,9 @@ namespace NPolygon {
                 tStpPlus3_2 = min(tStpPlus3_2, cStp);
             }
             tStpPlus3_2 = min(1.1 * TStp0_5 / MarchCourant, tStpPlus3_2);
-			double tmp = max(min(TStp0_5 / MarchCourant, 10 * tStpPlus3_2),0.1 * tStpPlus3_2);
+			double tmp = max<double>(min(TStp0_5 / MarchCourant, 10 * tStpPlus3_2),0.1 * tStpPlus3_2);
             double ret = 0.5 * (tStpPlus3_2 + tmp);
-            return max(MathZer, ret * MarchCourant);
+            return max<double>(MathZer, ret * MarchCourant);
         }
 		virtual void SetNewTimeStp(double curTime, double tStp) {
             TStp0_5 = tStp;

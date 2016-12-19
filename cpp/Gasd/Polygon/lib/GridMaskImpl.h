@@ -38,8 +38,8 @@ namespace NPolygon {
         }
         virtual void Cut(TGridMaskBase* largerMask) {
             TGridMaskSimple *mask = SavableClass::TestType<TGridMaskSimple>(largerMask, "mask have to be simple");
-            Beg = max(mask->Beg, Beg);
-            End = min(mask->End, End);
+            Beg = max<int>(mask->Beg, Beg);
+            End = min<int>(mask->End, End);
         }
         virtual void Normalize() {
             End = End - Beg;
