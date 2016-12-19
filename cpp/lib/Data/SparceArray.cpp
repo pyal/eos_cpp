@@ -1,4 +1,4 @@
-#include <lib\precompiled\data.h>
+#include <lib/precompiled/data.h>
 #include "SparceArray.h"
 
 
@@ -35,8 +35,9 @@ int SparceArrayInd::Next (int i)
 
 int SparceArrayInd::Prev (int i)
  {
-  int k,N=sparce_ind.SetNumEl();
-  if (i<0) return max(-1,MaxNum()-1);
+  int k;
+//  ,N=sparce_ind.SetNumEl();
+  if (i<0) return max<int>(-1,MaxNum()-1);
   for (k=i-1;k>=0;k--) 
    if (sparce_ind[k]) return k;
   return -1;

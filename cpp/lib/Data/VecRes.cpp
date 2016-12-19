@@ -1,4 +1,4 @@
-#include <lib\precompiled\data.h>
+#include <lib/precompiled/data.h>
 #include "VecRes.h"
 
 //static ClassDesc DataVector_double_cd(typeid(DataVector<double>),"DataVector_double");

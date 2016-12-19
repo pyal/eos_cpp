@@ -54,7 +54,7 @@ struct SparceArray : public SavableClass  //## Inherits: <unnamed>%3EED8F8D01AB
    const T* GetEmpty ()const                {return data.GetFill();}
 
    int Shrink (int movedata=0);
-   int SetSize (int FullSizeNew)            {data.SetNumEl(FullSizeNew);return index.SetNumEl(FullSizeNew);}
+   int SetSize (int FullSizeNew)            {data.SetNumEl(FullSizeNew);return index.SetSize(FullSizeNew);}
    inline const int IsEmpty (int i)const    {return index.IsEmpty(i);}
    inline T& operator [] (int i)            {if (IsEmpty(i)) i=Add(i);return data[i];}
    virtual inline int Add (int pos = -1)    {pos=index.Add(pos);return pos;}

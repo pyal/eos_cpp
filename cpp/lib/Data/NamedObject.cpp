@@ -1,4 +1,4 @@
-#include <lib\precompiled\data.h>
+#include <lib/precompiled/data.h>
 
 // NamedObject
 #include "NamedObject.h"
@@ -30,7 +30,7 @@ int NamedStore::Name2Pos(char *name)
   while ((cur=ind_p->Next(cur))>=0) 
    {
     NamedObject *ptr=GetPtr(cur);
-    if ((ptr) && (ptr->obj_name)) if (stricmp(ptr->obj_name,name)==0) 
+    if ((ptr) && (ptr->obj_name)) if (Stricmp(ptr->obj_name,name)==0)
     {ret=cur;break;}
    }
   return ret;

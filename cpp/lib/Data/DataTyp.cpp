@@ -1,4 +1,4 @@
-#include <lib\precompiled\data.h>
+#include <lib/precompiled/data.h>
 
 
 #include "DataTyp.h"

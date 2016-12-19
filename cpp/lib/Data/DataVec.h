@@ -33,7 +33,7 @@ template <class T,class CopyStructMethod=CopyStructSlow<T> >
 struct DataVector : public SavableClass  
 {
   public:
-      DataVector ():Dim(0),data(NULL){};
+      DataVector ():data(NULL), Dim(0){};
       DataVector (int Num, T* Val = NULL);
       DataVector (const DataVector<T,CopyStructMethod> &vec);
       virtual ~DataVector(){ Delete();};
@@ -140,7 +140,7 @@ DataVector<T,CopyStructMethod>::DataVector(int Num, T* Val)
 }
 
 template <class T,class CopyStructMethod >
-DataVector<T,CopyStructMethod>::DataVector (const DataVector<T,CopyStructMethod> &vec):Dim(0),data(NULL)
+DataVector<T,CopyStructMethod>::DataVector (const DataVector<T,CopyStructMethod> &vec):data(NULL), Dim(0)
 	{//operator=(vec);
   SetDim(vec.Dim);
   CopyStructMethod::CopyArray(vec.data,data,vec.Dim);//MemoryMove(vec.data,this->data,sizeof(T)*vec.Dim);
@@ -391,7 +391,7 @@ DataVector<T,CopyStructMethod> DataVector<T,CopyStructMethod>::MakeStepVector
 	int N=Num ;
 	T stp=up-low,start=low;
 	if (centered) { stp/=N;start+=0.5*stp; }
-	else stp/=max(N-1,1);
+	else stp/=max<int>(N-1,1);
 	DataVector<T,CopyStructMethod> vec(N);
 	for (int k=0;k<N;k++) {vec[k]=start;start+=stp;}
 	return vec;

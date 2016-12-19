@@ -45,7 +45,7 @@ typedef T (*D_TMul_Func)   (double Fst,T &Sec);
    void GetIndex(int &MinI,int &MaxI) {MinI=MinIndex;MaxI=MaxIndex;}
    void SetIndex(int MinI,int MaxI) 
      {
-      int MinI_=min(MinI,MaxI), MaxI_=max(MinI,MaxI);
+      int MinI_=min<int>(MinI,MaxI), MaxI_=max<int>(MinI,MaxI);
       if ((Ptr==NULL) || (MaxI_-MinI_!=MaxIndex-MinIndex))
        {
         if (Ptr!=NULL) delete Ptr;
