@@ -1,13 +1,13 @@
 #ifndef _TEST_CASE_H_
 #define _TEST_CASE_H_
 
-#include "lib\ref\class.h"
-#include "lib\ref\class_sav.h"
-#include "lib\std\stdexception.h"
+#include "lib/ref/class.h"
+#include "lib/ref/class_sav.h"
+#include "lib/std/stdexception.h"
 //#include "described.h"
 #include <list>
 
-#pragma warning( disable : 4267 )
+//#pragma warning( disable : 4267 )
 //#define STDCATCHTEST(NAME) catch(TestExeption &e)\
 //{\
 //cout<<NAME<<e.ToString().c_str()<<"\n";\
@@ -189,12 +189,12 @@ struct TestCase_TestTest:TestCase_Std
 	}
 	static void Test1(TestCase *ptr)
 	{ 
-		TestCase_TestTest *cur=Restore(ptr);
+//		TestCase_TestTest *cur=Restore(ptr);
 		throw(info_except("OK"));
 	}
 	static void Test2(TestCase *ptr)
 	{ 
-		TestCase_TestTest *cur=Restore(ptr);
+//		TestCase_TestTest *cur=Restore(ptr);
 		throw(info_except("OK"));
 	}
 
@@ -238,15 +238,15 @@ struct TestCase_Buffered:TestCase_Std
 	{ 
 		TestCase_Buffered *cur=Restore(ptr);
 		char tmp[256];
-		char *a=new char[24];
-		for (int k=0;k<=33;k++) if (cur->in->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+//		char *a=new char[24];
+		for (int k=0;k<=33;k++) if (cur->in->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 //		throw(t_except("OK"));
 	}
 	static void Test2(TestCase *ptr)
 	{ 
 		TestCase_Buffered *cur=Restore(ptr);
 		char tmp[256];
-		for (int k=0;k<=33;k++) if (cur->in->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=0;k<=33;k++) if (cur->in->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 //		throw(t_except("OK"));
 	}
 

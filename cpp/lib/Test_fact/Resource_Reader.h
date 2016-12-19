@@ -4,7 +4,7 @@
 
 #include <windows.h>
 #include <vector>
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 
 struct ResourceReader
 {
@@ -47,7 +47,7 @@ struct ResourceReader
   static HGLOBAL Load(int name,const char *type,long &size,HMODULE Mod=NULL)
   {
     char tmp[256];
-    return Load(string("#").append(itoa(name,&tmp[0],10)).c_str(),type,size,Mod);
+    return Load(string("#").append(Itoa(name,&tmp[0],10)).c_str(),type,size,Mod);
   }
 
 
@@ -79,7 +79,7 @@ struct ResourceReader
     if ((ULONG)lpName & 0xFFFF0000) 
       ResNames.push_back(string(lpName));
     else 
-      ResNames.push_back(string("#").append(itoa((int)lpName,&tmp[0],10)));
+      ResNames.push_back(string("#").append(Itoa((int)lpName,&tmp[0],10)));
     return 1;
   }
  

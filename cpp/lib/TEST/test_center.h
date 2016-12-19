@@ -67,7 +67,7 @@ struct TestCase_TestLibs:TestCase_Std//TestCase_Buffered
 		double d;
 		char ch_str[256],str[256];
 		inf>>i>>str>>d>>ch_str;
-		if (i!=234 || d!=34.6 || stricmp(str,"AAA")!=0 || stricmp(ch_str,"r")!=0 )
+		if (i!=234 || d!=34.6 || Stricmp(str,"AAA")!=0 || Stricmp(ch_str,"r")!=0 )
 			throw info_except("Error int(234)==%i double(34.6)==%f char('r')==%s string(\"AAA\")==%s",
 								i,d,ch_str,str);
 	}
@@ -90,7 +90,7 @@ struct TestCase_TestLibs:TestCase_Std//TestCase_Buffered
 		test[0] = 0.5;
 		FilterTextOut out("aa",DataSource::Memory);
 		out<<"bad"<<5<<"good";
-		if (stricmp(DataSource::GetStr("aa").c_str(),"bad 5 good ")!=NULL)
+		if (Stricmp(DataSource::GetStr("aa").c_str(),"bad 5 good ")!=NULL)
 			throw info_except("Got :%s: and have to get :%s:\n",DataSource::GetStr("aa").c_str(),"bad 5 good ");
 	}
 	static void TestCopyVector(TestCase *ptr)
