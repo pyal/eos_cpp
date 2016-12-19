@@ -1,7 +1,7 @@
 #ifndef _LEX_ANAL_TEST_H_
 #define _LEX_ANAL_TEST_H_
 
-#include "lib\test_fact\test_case.h"
+#include "lib/test_fact/test_case.h"
 #include "lex_anal.h"
 
 struct TestCase_Manip:TestCase_Buffered
@@ -58,7 +58,7 @@ struct TestCase_Manip:TestCase_Buffered
 		TestCase_Manip *cur=Restore(ptr);
 		//cout<<"\n\nTest_Get\n\n"<<" Last char "<<cur->manip->LastGetChar<<"\n";
 		//char tmp[256];
-		//for (int k=0;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		//for (int k=0;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 		for (int k=0;k<=33;k++) 
 			if ( cur->manip->get()!=cur->buf[k] )
 				throw(info_except("Trying to get for ind <%i> found error /n",k));
@@ -70,9 +70,9 @@ struct TestCase_Manip:TestCase_Buffered
 		TestCase_Manip *cur=Restore(ptr);
 		char tmp[256];
 		//cout<<"Test_GetUnget\n\n";
-		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 		cur->manip->unget();
-		for (int k=10;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=10;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 //		throw(info_except("OK"));
 	}
 	static void Test_Freeze_Unfreeze(TestCase *ptr)
@@ -80,11 +80,11 @@ struct TestCase_Manip:TestCase_Buffered
 		TestCase_Manip *cur=Restore(ptr);
 		char tmp[256];
 		//cout<<"\n\nTest_Freeze_Unfreeze\n\n";
-		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 		cur->manip->FreezePos();
-		for (int k=11;k<=20;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=11;k<=20;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 		cur->manip->UnfreezePos();
-		for (int k=21;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=21;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -93,12 +93,12 @@ struct TestCase_Manip:TestCase_Buffered
 		TestCase_Manip *cur=Restore(ptr);
 		char tmp[256];
 		//cout<<"\n\nTest_Freeze_Unfreeze_Unget\n\n";
-		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
         cur->manip->unget();
 		cur->manip->FreezePos();
-		for (int k=10;k<=20;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=10;k<=20;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 		cur->manip->UnfreezePos();
-		for (int k=21;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=21;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -108,12 +108,12 @@ struct TestCase_Manip:TestCase_Buffered
 		TestCase_Manip *cur=Restore(ptr);
 		char tmp[256];
 		//cout<<"\n\nTest_Freeze_Restore\n\n";
-		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 //        cur->manip->unget();
 		cur->manip->FreezePos();
-		for (int k=11;k<=20;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=11;k<=20;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 		cur->manip->RestorePos();
-		for (int k=11;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=11;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -122,12 +122,12 @@ struct TestCase_Manip:TestCase_Buffered
 		TestCase_Manip *cur=Restore(ptr);
 		char tmp[256];
 		//cout<<"\n\n Test_Undo_Freeze_Restore\n\n";
-		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=0;k<=10;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
         cur->manip->unget();
 		cur->manip->FreezePos();
-		for (int k=10;k<=20;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=10;k<=20;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 		cur->manip->RestorePos();
-		for (int k=10;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));
+		for (int k=10;k<=33;k++) if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -136,18 +136,18 @@ struct TestCase_Manip:TestCase_Buffered
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
 		//cout<<"\n\n Test_Freeze_Restore_Freeze_Unfreeze\n\n";
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 //        cur->manip->unget();
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=15;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=15;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=16;k<=20;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=16;k<=20;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 
 		cur->manip->UnfreezePos();
 
-		for (int k=21;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=21;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -156,17 +156,17 @@ struct TestCase_Manip:TestCase_Buffered
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
 		//cout<<"\n\n Test_Freeze_Restore_Freeze_Unfreeze\n\n";
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=15;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=15;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=16;k<=20;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=16;k<=20;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 
 		cur->manip->RestorePos();
 
-		for (int k=16;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=16;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -175,18 +175,18 @@ struct TestCase_Manip:TestCase_Buffered
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
 		//cout<<"\n\n Test_Freeze_Restore_Freeze_Unfreeze\n\n";
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=15;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=15;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->unget();
 		cur->manip->FreezePos();  
-		for (int k=15;k<=20;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=15;k<=20;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 
 		cur->manip->RestorePos();
 
-		for (int k=15;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=15;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -194,18 +194,18 @@ struct TestCase_Manip:TestCase_Buffered
 	{ 
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=15;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=15;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->unget();
 		cur->manip->FreezePos();  
-		for (int k=15;k<=20;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=15;k<=20;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 
 		cur->manip->UnfreezePos();
 
-		for (int k=21;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=21;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -213,18 +213,18 @@ struct TestCase_Manip:TestCase_Buffered
 	{ 
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 //		cur->manip->unget();
 		cur->manip->FreezePos();  
-		for (int k=25;k<=30;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=25;k<=30;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 
 		cur->manip->UnfreezePos();
 
-		for (int k=31;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=31;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -232,18 +232,18 @@ struct TestCase_Manip:TestCase_Buffered
 	{ 
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 //		cur->manip->unget();
 		cur->manip->FreezePos();  
-		for (int k=25;k<=30;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=25;k<=30;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 
 		cur->manip->RestorePos();
 
-		for (int k=25;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=25;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -251,18 +251,18 @@ struct TestCase_Manip:TestCase_Buffered
 	{ 
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->unget();
 		cur->manip->FreezePos();  
-		for (int k=24;k<=30;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=24;k<=30;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 
 		cur->manip->RestorePos();
 
-		for (int k=24;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=24;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -270,20 +270,20 @@ struct TestCase_Manip:TestCase_Buffered
 	{ 
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->unget();
 		cur->manip->FreezePos();  
-		for (int k=24;k<=30;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=24;k<=30;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 
 		cur->manip->unget();
 		cur->manip->RestorePos();
-		for (int k=24;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=24;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 //		cur->manip->UnfreezePos();
-//		for (int k=30;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+//		for (int k=30;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -291,11 +291,11 @@ struct TestCase_Manip:TestCase_Buffered
 	{ 
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=24;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->unget();
 		cur->manip->get();
 		cur->manip->unget();
@@ -303,9 +303,9 @@ struct TestCase_Manip:TestCase_Buffered
 //		cur->manip->unget();
 //		cur->manip->RestorePos();
 //		cur->manip->UnfreezePos();
-		for (int k=24;k<=30;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=24;k<=30;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 		cur->manip->UnfreezePos();
-		for (int k=31;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=31;k<=33;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 
 //		throw(info_except("OK"));
 	}
@@ -314,19 +314,19 @@ struct TestCase_Manip:TestCase_Buffered
 	{ 
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=14;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=14;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=15;k<=22;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=15;k<=22;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 		string str=cur->manip->UnfreezeToStr();
 		string str1(&cur->buf[15],8);
 		if (str!=str1) throw(info_except(string("Unfrozen String differs src:<").append(str1).append("> result one is:<").append(str).append(">\n").c_str()));
 
 		cur->manip->FreezePos();  
-		for (int k=23;k<=30;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=23;k<=30;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 		 str=cur->manip->UnfreezeToStr();
 		 str1=string(&cur->buf[23],8);
 		if (str!=str1) throw(info_except(string("Unfrozen String differs (this is the and of buffer test getstring src:<").append(str1).append("> result one is:<").append(str).append(">\n").c_str()));
@@ -337,14 +337,14 @@ struct TestCase_Manip:TestCase_Buffered
 	{ 
 		TestCase_Manip *cur=Restore(ptr);
 		char ch,tmp[256];
-		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=0;k<=10;k++)   {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->FreezePos();  
-		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=25;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->RestorePos(); 
-		for (int k=11;k<=14;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error ").c_str()));}
+		for (int k=11;k<=14;k++) {if (cur->manip->get()!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error ").c_str()));}
 		cur->manip->unget();
 		cur->manip->FreezePos();  
-		for (int k=14;k<=22;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
+		for (int k=14;k<=22;k++) if ((ch=cur->manip->get())!=cur->buf[k]) throw(info_except(string("Trying to get for ind ").append(Itoa(k,tmp,10)).append(" found error; char in buf <").append(1,cur->buf[k]).append("> and read char <").append(1,ch).append(">\n").c_str()));
 		string str=cur->manip->UnfreezeToStr();
 		string str1(&cur->buf[14],9);
 		if (str!=str1) throw(info_except(string("Unfrozen String differs src:<").append(str1).append("> result one is:<").append(str).append(">\n").c_str()));
@@ -426,7 +426,7 @@ struct TestCase_Manip:TestCase_Buffered
 };
 struct TestCase_Lex_Analyser:TestCase_Buffered
 {
-	TestCase_Lex_Analyser():lex_an(NULL),in(NULL),buf(NULL){};
+	TestCase_Lex_Analyser():in(NULL),buf(NULL), lex_an(NULL){};
 	~TestCase_Lex_Analyser(){Finish();}
 	TestSuite* CreateTest()
 	{ 

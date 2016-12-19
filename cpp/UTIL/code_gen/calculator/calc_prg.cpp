@@ -1,4 +1,4 @@
-#include <lib\precompiled\calc_lib.h>
+#include <lib/precompiled/calc_lib.h>
 
 #include "calc_prg.h"
 

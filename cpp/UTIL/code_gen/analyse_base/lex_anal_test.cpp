@@ -1,4 +1,4 @@
-#include <lib\precompiled\lex_anal_lib.h>
+#include <lib/precompiled/lex_anal_lib.h>
 
 #include "lex_anal_test.h"
 
@@ -8,4 +8,4 @@ static ClassDesc TestCase_Lex_Analyser_ClassDesc(typeid(TestCase_Lex_Analyser),"
 
 
 
-TestCase_Manip::TestCase_Manip():manip(NULL),in(NULL),buf(NULL){};
+TestCase_Manip::TestCase_Manip():in(NULL),buf(NULL), manip(NULL){};

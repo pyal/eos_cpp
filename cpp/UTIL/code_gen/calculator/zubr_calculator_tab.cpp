@@ -1,4 +1,4 @@
-#include <lib\precompiled\calc_lib.h>
+#include <lib/precompiled/calc_lib.h>
 
 #include <stdio.h>  /* printf() used by parser   if set ZUBR_DEBUG */
 #include <stdlib.h> /* getenv() used by parser for test ZUBR_DEBUG */
@@ -279,7 +279,7 @@ int zubr_calculator_zubr_parse()
   *zubr_calculator_zubr_ssp     = zubr_calculator_zubr_state = 0;
 
 zubr_calculator_zubr_loop:
-   if( zubr_calculator_zubr_n = zubr_calculator_zubr_defred[zubr_calculator_zubr_state] ) goto zubr_calculator_zubr_reduce;
+   if( (zubr_calculator_zubr_n = zubr_calculator_zubr_defred[zubr_calculator_zubr_state]) ) goto zubr_calculator_zubr_reduce;
    if( zubr_calculator_zubr_char < 0 )
    {
       if( (zubr_calculator_zubr_char = zubr_calculator_zubr_lex()) < 0 ) zubr_calculator_zubr_char = 0;

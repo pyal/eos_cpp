@@ -1,4 +1,4 @@
-#include <lib\precompiled\lex_anal_lib.h>
+#include <lib/precompiled/lex_anal_lib.h>
 #include "lex_anal.h"
 
 const char *Lex_Result::type_names[]={"NumberInt","NumberDouble","String","Char","Token","Identifier","Error","End"};
@@ -7,17 +7,17 @@ string Lex_Result::ToString()
 {
 	char tmp[256];
 	string res;
-	res.append(" res_type ").append(max(13-strlen(type_names[res_type]),0),' ').append(type_names[res_type]);
-	res.append(" res_int ").append(itoa(res_int,tmp,10));
-	res.append(" res_val ").append(_gcvt(res_val,12,tmp));
+	res.append(" res_type ").append(max<double>(13-strlen(type_names[res_type]),0),' ').append(type_names[res_type]);
+	res.append(" res_int ").append(Itoa(res_int,tmp,10));
+	res.append(" res_val ").append(Gcvt(res_val,12,tmp));
 	res.append(" res_str ").append(res_str).append("\n");
 	return res;
 }
 int Lex_Result::Equals(Lex_Result *fst,Lex_Result *sec)
 {
-	if (fst==NULL) if (sec!=NULL) return 0;else return 1;
+	if (fst==NULL) {if (sec!=NULL) return 0;else return 1;}
 	if (sec==NULL) return 0;
-	if (fst->res_type==Lex_Result::Error) if (sec->res_type==Lex_Result::Error) return 1;else return 0;
+	if (fst->res_type==Lex_Result::Error) {if (sec->res_type==Lex_Result::Error) return 1;else return 0;}
 	if (sec->res_type==Lex_Result::Error) return 0;
 	if (fst->ToString()!=sec->ToString()) return 0;
 	return 1;
@@ -26,9 +26,9 @@ ErrInf::ErrInf(const char *str,StreamManip &manip)
 {
 	char tmp[256];
 	reason=string(str).append("\nIt occured in line ");
-	reason.append(itoa(manip.GetLine(),&tmp[0],10));
+	reason.append(Itoa(manip.GetLine(),&tmp[0],10));
 	reason.append(" position ");
-	reason.append(itoa(manip.GetPos(),&tmp[0],10));
+	reason.append(Itoa(manip.GetPos(),&tmp[0],10));
 	reason.append("\n");
 };
 
@@ -39,7 +39,7 @@ ErrInf::ErrInf(const char *str,StreamManip &manip)
 
 
 
-StateSkipSpace::StateResults StateSkipSpace::CheckState(LexStateData &dat)
+StateResults StateSkipSpace::CheckState(LexStateData &dat)
 {
 	while(1)
 	{
@@ -51,20 +51,21 @@ StateSkipSpace::StateResults StateSkipSpace::CheckState(LexStateData &dat)
 	}
 }
 
-StateComment::StateResults StateComment::CheckState(LexStateData &dat)
+StateResults StateComment::CheckState(LexStateData &dat)
 {
 	try
 	{
 		if (dat.manip.Guess("//",2)) {dat.manip.SearchChar('\n');return Start;}
-		else if (dat.manip.Guess("/*",2) )
-			if (!dat.manip.SearchString("*/",2)) throw ErrInf("End of file found before closing comment",dat.manip);
+		else if (dat.manip.Guess("/*",2) ) {
+			if (!dat.manip.SearchString("*/", 2)) throw ErrInf("End of file found before closing comment", dat.manip);
 			else return Start;
+		}
 		return Continue;
 	}
 	catch (ErrInf err)	{dat.res.ErrRes(err.ToStr().c_str());return Break;}
 }
 
-StateNumber::StateResults StateNumber::CheckState(LexStateData &dat)
+StateResults StateNumber::CheckState(LexStateData &dat)
 {
 
 	if (!dat.manip.GuessInChars(".0123456789",11)) return Continue;
@@ -80,7 +81,11 @@ StateNumber::StateResults StateNumber::CheckState(LexStateData &dat)
 		if (dat.manip.GuessInChars("uU",2)) return ConstructUnsigned(dat,base);
 		if (!dat.manip.GuessInChars(".eE",3)) return ConstructSigned(dat,base);
 			else dat.manip.unget();
-		if (dat.manip.GuessInChars(".",1)) {while (dat.manip.GuessInChars("0123456789",10)) ;ForceDouble=1;}
+		if (dat.manip.GuessInChars(".",1)) {
+			while (dat.manip.GuessInChars("0123456789",10))
+				;
+			ForceDouble=1;
+		}
 	string str=dat.manip.UnfreezeToStr();
 	dat.manip.FreezePos();
 		if (dat.manip.GuessInChars("eE",2))
@@ -97,13 +102,13 @@ StateNumber::StateResults StateNumber::CheckState(LexStateData &dat)
 	str=str+dat.manip.UnfreezeToStr();
 	return ConstructDouble(dat,str);
 }
-StateNumber::StateResults StateNumber::ReadBase16(LexStateData &dat)
+StateResults StateNumber::ReadBase16(LexStateData &dat)
 {
 	dat.manip.FreezePos();
 	while (dat.manip.GuessInChars("0123456789abcdefABCDEF",22));
 	return ConstructSigned(dat,16);
 }
-StateNumber::StateResults StateNumber::ConstructUnsigned(LexStateData &dat,int base)
+StateResults StateNumber::ConstructUnsigned(LexStateData &dat,int base)
 {
 	char *tmp_end;
 	string str=dat.manip.UnfreezeToStr();
@@ -112,26 +117,26 @@ StateNumber::StateResults StateNumber::ConstructUnsigned(LexStateData &dat,int b
 			                    "",Lex_Result::NumberInt);
 	return End;
 }
-StateNumber::StateResults StateNumber::ConstructSigned(LexStateData &dat,int base)
+StateResults StateNumber::ConstructSigned(LexStateData &dat,int base)
 {
 	dat.res.GenerateResult(dat.manip.UnfreezeToL(base),0,
 			                    "",Lex_Result::NumberInt);
 	return End;
 }
-StateNumber::StateResults StateNumber::ConstructDouble(LexStateData &dat)
+StateResults StateNumber::ConstructDouble(LexStateData &dat)
 {
 	dat.res.GenerateResult(0,dat.manip.UnfreezeToD(),
 			                    "",Lex_Result::NumberDouble);
 	return End;
 }
-StateNumber::StateResults StateNumber::ConstructSigned(LexStateData &dat,string &str,int base)
+StateResults StateNumber::ConstructSigned(LexStateData &dat,string &str,int base)
 {
 	char *tmp_end;
 	dat.res.GenerateResult(strtol(str.c_str(),&tmp_end,base),0,
 			                    "",Lex_Result::NumberInt);
 	return End;
 }
-StateNumber::StateResults StateNumber::ConstructDouble(LexStateData &dat,string &str)
+StateResults StateNumber::ConstructDouble(LexStateData &dat,string &str)
 {
 	char *tmp_end;
 	dat.res.GenerateResult(0,strtod(str.c_str(),&tmp_end),
@@ -139,7 +144,7 @@ StateNumber::StateResults StateNumber::ConstructDouble(LexStateData &dat,string 
 	return End;
 }
 
-StateString::StateResults StateString::CheckState(LexStateData &dat)
+StateResults StateString::CheckState(LexStateData &dat)
 {
 	string str;
 	try
@@ -222,7 +227,7 @@ string StateString::CheckChar(StreamManip &manip,int val)
 
 
 
-StateIdentifier::StateResults StateIdentifier::CheckState(LexStateData &dat)
+StateResults StateIdentifier::CheckState(LexStateData &dat)
 {
 	if (!dat.manip.GuessInChars(alpha.c_str(),(int)alpha.length())) return Continue;
 	dat.manip.unget();dat.manip.FreezePos();
@@ -231,20 +236,20 @@ StateIdentifier::StateResults StateIdentifier::CheckState(LexStateData &dat)
 		Lex_Result::Identifier);
 	return End;
 }
-StateDefIsError::StateResults StateDefIsError::CheckState(LexStateData &dat)
+StateResults StateDefIsError::CheckState(LexStateData &dat)
 {
 	ErrInf err("Cannot assign lexema. Error",dat.manip);
 	dat.res.ErrRes(err.ToStr().c_str());
 	dat.manip.SearchChar('\n');
 	return End;
 }
-StateTest::StateResults StateTest::CheckState(LexStateData &dat)
+StateResults StateTest::CheckState(LexStateData &dat)
 {
 //	if (WriteResults) cout<<dat.res;
 	if (WriteResults) cout<<dat.res.res_str.c_str()<<"\n";
 	return Continue;
 }
-StateTokenSingle::StateResults StateTokenSingle::CheckState(LexStateData &dat)
+StateResults StateTokenSingle::CheckState(LexStateData &dat)
 {
 	for (list<TokenData>::iterator it=tokens.begin();it!=tokens.end();it++)
 		if (dat.manip.Guess(it->str.c_str(),it->len)) 
@@ -264,7 +269,7 @@ void StateTokenSingle::Add(const char *tok,int val)
 	tokens.insert(it,cur);
 }
 
-StateToken::StateResults StateToken::CheckState(LexStateData &data)
+StateResults StateToken::CheckState(LexStateData &data)
 {
 	StateResults res=StateBrowser<LexStateData>::CheckState(data);
 	if (res==Break) res=End;

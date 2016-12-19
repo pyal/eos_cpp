@@ -1,4 +1,4 @@
-#include <lib\precompiled\calc_lib.h>
+#include <lib/precompiled/calc_lib.h>
 
 #include "calc_prg_types.h"
 
@@ -9,4 +9,10 @@ static ClassDesc StdClcDouble_ClassDesc(typeid(StdClcDouble),"StdClcDouble",1,"S
 static ClassDesc StdClcUndefined_ClassDesc(typeid(StdClcUndefined),"StdClcUndefined",1,"StdClcTypes_category",create<StdClcUndefined>);
 
 //TypeDefStorage *StdClcTypes::Ptr=NULL;
+
 StdClcUndefined::StdClcUndefined(){Init();};
+void StdClcUndefined::Init(){
+    type = new TypeDef(Stroka("undef"), 0);
+}
+
+StdClcDouble::StdClcDouble(){Init();};

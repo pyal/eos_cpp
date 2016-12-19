@@ -127,7 +127,7 @@ private:
 	private:
 	int CurPos,CurLine,LastPos;
 	istream *in_ptr;
-	int LastGetChar,ReadBuf,Reading;
+	int LastGetChar; //ReadBuf,,Reading
 
 	StreamUngetStorage undo;
 	StreamMemStorage mem;
@@ -313,7 +313,7 @@ struct StreamManip_Base
 		string ret="";
 		while ((upper!=mem.GetCurrentPos()) ) {ret+=(char)get();}
 		if ((was_undo.active()) && (ret!=""))
-		{undo.get(LastGetChar);unget();ret.resize(max(ret.length(),1)-1);}
+		{undo.get(LastGetChar);unget();ret.resize(max<double>(ret.length(),1)-1);}
 
 //		string ret=mem.ReadLabel(undo);	mem.PopMark();
 		return ret;

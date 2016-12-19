@@ -1,4 +1,4 @@
-#include <lib\precompiled\calc_lib.h>
+#include <lib/precompiled/calc_lib.h>
 
 #include "zubr_impl.h"
 
@@ -45,7 +45,7 @@ int zubr_calculator_zubr_lex(){
     }
     if (res->res_type==Lex_Result::String){
         zubr_calculator_zubr_lval.sym=CalculatorProgam::GenerateString(Stroka(res->res_str.c_str()));
-        DataConstr *d = (DataConstr *)zubr_calculator_zubr_lval.sym;
+//        DataConstr *d = (DataConstr *)zubr_calculator_zubr_lval.sym;
         //Ref<Stroka>* s = (Ref<Stroka>*)DataSimpleStorage::GetData( d->dat );
         return STRING;
     }
@@ -127,7 +127,7 @@ void print( Ref<DataConstr> dat ){
 }
 
 SYMBOL EndStmt( SYMBOL fst ){
-	DataConstr* f = (DataConstr*)(fst);
+//	DataConstr* f = (DataConstr*)(fst);
 //	cout<<*f<<"\n";
 //	return fst;
 	return NULL;
@@ -593,34 +593,34 @@ SYMBOL DefineVar( SYMBOL fst){
 //   Datum d;
 //   INST *savepc = pc;
 //
-//   execute( savepc + 2 );               /* условие */
+//   execute( savepc + 2 );               /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 //   d = pop();
 //   while( d.val )
 //   {
-//      execute( *((INST **)(savepc)) );  /* тело */
+//      execute( *((INST **)(savepc)) );  /* пїЅпїЅпїЅпїЅ */
 //      if( returning ) break;
-//      execute( savepc + 2 );            /* условие */
+//      execute( savepc + 2 );            /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 //      d = pop();
 //   }
 //
 //   if( !returning )
-//      pc = *((INST **)(savepc + 1));    /* следующий оператор */
+//      pc = *((INST **)(savepc + 1));    /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 //}
 //
 //void ifcode( void )
 //{
 //   Datum d;
-//   INST *savepc = pc;                   /* часть "then" */
+//   INST *savepc = pc;                   /* пїЅпїЅпїЅпїЅпїЅ "then" */
 //
-//   execute( savepc + 3 );               /* условие */
+//   execute( savepc + 3 );               /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 //   d = pop();
 //
 //   if( d.val ) execute( *((INST **)(savepc)) );
-//   else if( *((INST **)(savepc + 1)) )  /* часть "else" ? */
+//   else if( *((INST **)(savepc + 1)) )  /* пїЅпїЅпїЅпїЅпїЅ "else" ? */
 //           execute( *((INST **)(savepc + 1)) );
 //
 //   if( !returning )
-//      pc = *((INST **)(savepc + 2));    /* следующий оператор */
+//      pc = *((INST **)(savepc + 2));    /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 //}
 //
 //void defin( SYMBOL *sp )

@@ -158,7 +158,7 @@ struct StateTest:StateInterface<LexStateData>
 
 struct TokenData {
 	string str;int val,len;
-	TokenData(string &s,int v):str(s),val(v){len=(int)str.length();};
+	TokenData(const string &s,int v):str(s),val(v){len=(int)str.length();};
 	TokenData(const TokenData &t):str(t.str),val(t.val),len(t.len){};
 	string ToString(){
 		char tmp[256];string res("Token is <");

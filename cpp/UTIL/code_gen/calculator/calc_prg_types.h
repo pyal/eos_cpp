@@ -17,14 +17,12 @@ struct StdClcTypes:DescribedClass{
 
 struct StdClcUndefined:StdClcTypes{
     StdClcUndefined();//{Init();};
-    void Init(){
-        type = new TypeDef(Stroka("undef"), 0);
-    }
+    void Init();
 };
 
 
 struct StdClcDouble:StdClcTypes{
-    StdClcDouble(){Init();};
+    StdClcDouble();
     ~StdClcDouble(){
         type = NULL;
     }
@@ -112,11 +110,11 @@ struct StdClcDouble:StdClcTypes{
                 return;
             }
             if (Oper==Stroka("min")){
-                *res = min(*d1,*d2);
+                *res = min<double>(*d1,*d2);
                 return;
             }
             if (Oper==Stroka("max")){
-                *res = max(*d1,*d2);
+                *res = max<double>(*d1,*d2);
                 return;
             }
 

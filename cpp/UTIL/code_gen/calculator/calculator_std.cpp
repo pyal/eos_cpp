@@ -1,12 +1,12 @@
-#include <lib\precompiled\calc_simple.h>
+#include <lib/precompiled/calc_simple.h>
 
 #include "calculator_std.h"
 
 
 
-ForceLinkVoid<StdClcDouble> Dummy_StdClcDouble;
-ForceLinkVoid<StdClcUndefined> Dummy_StdClcUndefined;
-ForceLinkVoid<StdClcString> Dummy_StdClcString;
+//ForceLinkVoid<StdClcDouble> Dummy_StdClcDouble;
+//ForceLinkVoid<StdClcUndefined> Dummy_StdClcUndefined;
+//ForceLinkVoid<StdClcString> Dummy_StdClcString;
 
 
 

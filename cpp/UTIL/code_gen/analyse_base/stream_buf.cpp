@@ -1,4 +1,4 @@
-#include <lib\precompiled\lex_anal_lib.h>
+#include <lib/precompiled/lex_anal_lib.h>
 #include "stream_buf.h"
 
 
@@ -89,10 +89,10 @@ string StreamManip_Base::UnfreezeToStr()
 	mem.ReturnToMark(CurLine,CurPos,LastGetChar,undo);
 	string ret="";
 	while ((upper!=mem.GetCurrentPos()) ) {ret+=(char)get();}
-	if (LastGetChar==EOF) ret.resize(max(ret.length(),1)-1);
+	if (LastGetChar==EOF) ret.resize(max<int>(ret.length(),1)-1);
 //	if ((was_undo.active()) && (ret!=""))
 	if ((was_undo.active()) && (ret.length()!=0))
-	{undo.get(LastGetChar);unget();ret.resize(max(ret.length(),1)-1);}
+	{undo.get(LastGetChar);unget();ret.resize(max<int>(ret.length(),1)-1);}
 
 	return ret;
 };

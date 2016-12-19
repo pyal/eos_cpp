@@ -181,7 +181,7 @@ struct CalculatorProgam: RefCount{
 		*( (double*)DataSimpleStorage::GetData(d->dat) ) = val;
 		return d;
 	}
-	static inline Ref<DataConstr> GenerateString(Stroka &str,const char *name=NULL){
+	static inline Ref<DataConstr> GenerateString(const Stroka &str,const char *name=NULL){
         Ref<DataConstr> d = GetCurPtr()->Progr.data->GenerateVar(new DataConstr(NULL,GetCurPtr()->Progr.data->GetTypeDef(Stroka("string"))->Type,0,name));
         char *ptr = (char*)DataSimpleStorage::GetData( d->dat );
         Ref<Stroka> *sss = (Ref<Stroka> *)(ptr);
