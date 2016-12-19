@@ -1,6 +1,6 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "spl_1d.h"
-#include <mat\spl_fac.h>
+#include <mat/spl_fac.h>
 
 
 static ClassDesc TSpline1DCalculator_ClassDesc(typeid(TSpline1DCalculator),"TSpline1DCalculator",1,"SplineCalculator_category",create<TSpline1DCalculator>);
@@ -75,12 +75,12 @@ int  TSpline1DGenerator::Generate(vector<vector<double> > &dat1, int Cont) {
             &MisfR, &NumXs, &NumXs_r, &splineCoefs[0][0], &splineCoefs[1][0], &Mis_ret, &rWork[0], &NRWork, &iWork[0], &Result);
 
 
-    if (Mis_ret == 0 || GenerationMisfit < Mis_ret * 0.1 || _isnan(Mis_ret)) {
-cout<<"X " <<dat[0] << "\nY " << dat[1] <<"\nZ "<< weight<<"\n";
+    if (Mis_ret == 0 || GenerationMisfit < Mis_ret * 0.1 || IsNan(Mis_ret)) {
+cout<<"X " << Str::Vec2Str(dat[0]) << "\nY " << Str::Vec2Str(dat[1]) <<"\nZ "<< Str::Vec2Str(weight) <<"\n";
         throw info_except("Could not make spline. Error %g have to be %g\n", Mis_ret, GenerationMisfit);
     }
     if (Result == 10 || Result == 1000) {
-cout<<"X " <<dat[0] << "\nY " << dat[1] <<"\nZ "<< weight<<"\n";
+cout<<"X " << Str::Vec2Str(dat[0]) << "\nY " << Str::Vec2Str(dat[1]) <<"\nZ "<< Str::Vec2Str(weight) <<"\n";
         throw info_except("problems in CurveSpline::Generate; Result %i\n", Result);
     }
         //cout<<" problems in CurveSpline::Generate; Result: "<<Result<<"\n";

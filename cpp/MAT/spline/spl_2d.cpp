@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "spl_2d.h"
 
 
@@ -87,7 +87,7 @@ int  TSpline2DGenerator::Generate(vector<vector<double> > &dat, int Cont) {
             &minV[0], &maxV[0], &minV[1], &maxV[1], &px, &py,
             &MisfR, &NumXi, &NumYi, &SX, &splineCoefs[0][0], &SY, &splineCoefs[1][0], &splineCoefs[2][0],
             &SumSquareResiduals, &RWork[0], &NRWork, &IWork[0], &NIWork, &Result);
-    if (SumSquareResiduals == 0 || GenerationMisfit < SumSquareResiduals * 0.5 || _isnan(SumSquareResiduals))
+    if (SumSquareResiduals == 0 || GenerationMisfit < SumSquareResiduals * 0.5 || IsNan(SumSquareResiduals))
         throw info_except("Could not make spline. Error %g have to be %g\n", SumSquareResiduals, GenerationMisfit);
     splineCoefs[0].resize(SX);
     splineCoefs[1].resize(SY);

@@ -96,8 +96,8 @@ struct TEncodedSplineCalculator : ISplineCalculator {
         return ret;
     }
 private:
-    vector<Ref<IFunctionConverter> > CvtVec;
     Ref<ISplineCalculator> SplineClc;
+    vector<Ref<IFunctionConverter> > CvtVec;
     vector<double> DeriveVector;
     
     void SetPntInBound(double &addPnt, vector<double> &inPnt, const vector<double> &pnt) {

@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include <mat\fun_fac.h>
-#include <mat\quad.h>
+#include <mat/fun_fac.h>
+#include <mat/quad.h>
 //#include <mat\spl_fac.h>
 #include <lib/ref/data_manip.h>
 
@@ -26,11 +26,12 @@ struct TExpConverter : IFunctionConverter {
         double arg = x * MulX + AddX;
         if (!LogX)
             return arg;
-        if (arg < MathZer)
+        if (arg < MathZer) {
             if (errMes)
                 throw info_except("Encoding x %f with MulX %f AddX %f Log arg is %f\n", x, MulX, AddX, arg);
             else
                 return 0;
+        }
         return log(arg);
     }
     virtual double Decode(double x, const char *errMes = NULL) {
@@ -76,17 +77,16 @@ struct TExpConverter : IFunctionConverter {
        return "LogX == 1 -> y = log(MulX *x + AddX) \nelse -> y = MulX * x + AddX ";
    }
 protected:
-    double MulX, AddX;
     int LogX;
+    double MulX, AddX;
  };
 
 struct TAutoExpConverter : TExpConverter {
     TAutoExpConverter()
         : TExpConverter()
         , AutoMin(1)
-        , AutoVal(1e-3) 
-        , AutoSearchMin(0)
-        , AutoSearchMax(0) {
+        , AutoVal(1e-3) {
+//        , AutoSearchMin(0) , AutoSearchMax(0)
     }
    virtual int save_data_state(FilterOut&so) {
        TExpConverter::save_data_state(so);
@@ -140,13 +140,14 @@ struct TAutoExpConverter : TExpConverter {
         double sum = 0, step = CurPtr->MinimXvector[CurPtr->MinimXvector.size() -1] - CurPtr->MinimXvector[0] / (CurPtr->MinimXvector.size() - 1);
         step = fabs(step);
         for(size_t i = 0; i < xEnc.size() - 1; i++)
-            sum += sqr(log(max(fabs(xEnc[i+1] - xEnc[i]), MathZer) / step));
+            sum += sqr(log(max<double>(fabs(xEnc[i+1] - xEnc[i]), MathZer) / step));
 //cout << " x " << x << " res " << sum << "\n";
         return sum;
     }
 
 private:
     int AutoMin;
-    double AutoVal, AutoSearchMin, AutoSearchMax;
+    double AutoVal;
+//            AutoSearchMin, ,  AutoSearchMax
     vector<double> MinimXvector;
 };
