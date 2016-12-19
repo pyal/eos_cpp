@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* *********************************************************************** */
 /* EASY TO USE, BOUNDS ON VARIABLES */
@@ -14,7 +14,7 @@ extern "C" {
 /* MAIN PROGRAM TO MINIMIZE A FUNCTION (REPRESENTED BY THE ROUTINE SFUN) */
 /* SUBJECT TO BOUNDS ON THE VARIABLES X */
 
-/* Main program */ MAIN__()
+int/* Main program */ MAIN__()
 {
     /* System generated locals */
     integer i__1;
@@ -26,7 +26,7 @@ extern "C" {
     extern /* Subroutine */ int tnbc_(integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, integer *, U_fp, 
 	    doublereal *, doublereal *, integer *);
-    extern /* Subroutine */ int sfun_(...);
+    extern /* Subroutine */ int sfun_(integer *, doublereal *, doublereal *, doublereal *);
     doublereal f, g[50];
     integer i__, n;
     doublereal w[700], x[50];
@@ -61,7 +61,7 @@ extern "C" {
 
 
 
-/* Subroutine */ int sfun_(integer *n, doublereal *x, doublereal *f, 
+/* Subroutine */ int sfun_(integer *n, doublereal *x, doublereal *f,
 	doublereal *g)
 {
     /* System generated locals */

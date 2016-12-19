@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Common Block Declarations */
 
@@ -32,7 +32,7 @@ static integer c__1 = 1;
 /* MAIN PROGRAM TO MINIMIZE A FUNCTION (REPRESENTED BY THE ROUTINE SFUN) */
 /* OF N VARIABLES X - CUSTOMIZED VERSION, WITH FINITE DIFFERENCING */
 
-/* Main program */ MAIN__()
+int/* Main program */ MAIN__()
 {
     /* Format strings */
     static char fmt_800[] = "(//,\002 ERROR CODE =\002,i3,/)";
@@ -53,7 +53,7 @@ static integer c__1 = 1;
 	    doublereal *, doublereal *, doublereal *, integer *, U_fp, 
 	    integer *, integer *, integer *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    extern /* Subroutine */ int sfun_(...);
+    extern /* Subroutine */ int sfun_(integer *, doublereal *, doublereal *, doublereal *);
     doublereal xtol, f, g[50];
     integer i__, n;
     doublereal faccy, w[700], x[50];

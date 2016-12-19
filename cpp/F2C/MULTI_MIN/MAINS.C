@@ -19,7 +19,7 @@ printf("Decimal %f",epsil);
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* *********************************************************************** */
 /* EASY TO USE, NO BOUNDS */
@@ -28,7 +28,7 @@ extern "C" {
 /* OF N VARIABLES X */
 
 // Main program  MAIN__()
-void main()
+int main()
 {
     /* System generated locals */
     integer i__1;
