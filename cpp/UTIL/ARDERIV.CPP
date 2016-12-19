@@ -36,7 +36,7 @@ void FormatWriteStr(ostream &out,double *ar,int NumCol,char *format)
            {
             int l=atoi(format),n,o;l=min(100,l);
             char val[256],val1[256];
-            itoa((int)ar[k],val,10);n=strlen(val);
+            Itoa((int)ar[k],val,10);n=strlen(val);
             if (l<=0) out<<val<<" ";
             else
              {

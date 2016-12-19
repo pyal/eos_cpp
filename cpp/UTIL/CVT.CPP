@@ -133,7 +133,7 @@ void code_ch(char *buf,code_struct &code,code_struct &code_prev,
       out.write(page,page_len);
       cur_pos=new_pos+code_len;
      }
-    Sub=max(cur_pos-buf_len,0);
+    Sub=max<int>(cur_pos-buf_len,0);
     if (Sub==0) 
      out.write(&buf[cur_pos],buf_len-cur_pos);
 //cout<<" code_ch ; stack  "<<stackavail()<<" mem  "<<coreleft()<<"\n";
@@ -248,10 +248,10 @@ void form_code(fstream &in,code_struct &code_page,code_struct &page,
 //   seek_str(in,"begin");
    do
      {in>>tmp1;}
-   while ( (stricmp(tmp1,"begin")!=0) && (!in.eof()) );
+   while ( (Stricmp(tmp1,"begin")!=0) && (!in.eof()) );
    if (in.eof()) { cout<<"Could not find begin, halted.\n";exit(1);}
    in>>tmp1;
-   while ( (stricmp(tmp1,"change")!=0) && (!seek_eof(in)) )
+   while ( (Stricmp(tmp1,"change")!=0) && (!seek_eof(in)) )
      {
       code_page.AddCode(tmp1,strlen(tmp1),1);
       in.getline(tmp1,511);
@@ -276,7 +276,7 @@ cout<<tmp1<<"\n";
 //	  }
         len1=strlen(tmp1);len2=strlen(tmp2);
         in>>tmp1;
-        if (stricmp(tmp1,"num")==0) get_num(in,tmp1,tmp2,len1,len2);
+        if (Stricmp(tmp1,"num")==0) get_num(in,tmp1,tmp2,len1,len2);
       else 
        {
         if (seek_eoln(in)) tmp2[0]=0;
@@ -310,7 +310,7 @@ void main( int argc, char *argv[] )
 SetLeakTest();//cout<<Coreleft()<<" Mem avail Begin  \n";
 //#endif
    int UseComma=0;
-   if ((argc==4) && (stricmp(argv[4],"/c")==0)) UseComma=1;
+   if ((argc==4) && (Stricmp(argv[4],"/c")==0)) UseComma=1;
    code_struct *code_page=  new code_struct,
                *page=       new code_struct,
                *code_change=new code_struct,

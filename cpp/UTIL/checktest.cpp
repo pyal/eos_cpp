@@ -896,7 +896,7 @@ int main( int argc,   char *argv[] ) {
 //			if (sum[i][j]) {
 //				s += sum[i][j];
 //				sum2[i][j] = s;
-//				maxPossible = max(maxPossible, s);
+//				maxPossible = max<double>(maxPossible, s);
 //			} else
 //				s = 0;
 //		}
@@ -1182,8 +1182,8 @@ int main( int argc,   char *argv[] ) {
 //    BigNum &Add(BigNum &num) {
 //        int add = 0, s1 = Number.size(), s2 = num.Number.size();
 //		vector<char> sum;
-//		sum.reserve(max(s1, s2) + 1);
-//		for(int i = 0; i < max(s1, s2); i++) {
+//		sum.reserve(max<double>(s1, s2) + 1);
+//		for(int i = 0; i < max<double>(s1, s2); i++) {
 //			int n1 = 0, n2 = 0;
 //			if (i < s1)
 //				n1 = Number[i];
@@ -1207,7 +1207,7 @@ int main( int argc,   char *argv[] ) {
 //        int credit = 0, s1 = Number.size(), s2 = num.Number.size(), willBeNeg = 0;
 //		vector<char> *fst = &Number, *sec = &num.Number;
 //		vector<char> sum;
-//		sum.reserve(max(s1, s2) + 1);
+//		sum.reserve(max<double>(s1, s2) + 1);
 //		if (AbsLess(num)) {
 //			swap(s1, s2);
 //			swap(fst, sec);

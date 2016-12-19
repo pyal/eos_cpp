@@ -22,7 +22,7 @@ int UserFuncEnter(istream &in,UserFuncPar &Par,int NumOperator=0)
      {
       do {if (seek_eof(in)) goto exit_proc;in.getline(s,511);}
       while (strncmp(s,"//",2)==0) ;
-      if (stricmp(s,"EndFunc",7)==0) goto exit_proc;
+      if (Stricmp(s,"EndFunc",7)==0) goto exit_proc;
       Par.act[k]=new Action[MaxOperation];
       parsestr(s,Par.act[k],c);
       PackAct(Par.act[k]);
