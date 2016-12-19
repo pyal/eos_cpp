@@ -28,9 +28,9 @@ Stroka GenerateDetailedHelp() {
     res += Stroka(" Registered EOS FreeE:\n\n\n") + SavableClass::HelpForCategory("MatterFreeE_category");
     res += Stroka(" Registered EOS caloric:\n\n\n") + SavableClass::HelpForCategory("Matter_category");
 
-    StdClcUndefined udef;
-    StdClcDouble dou;
-    StdClcString ss;
+//    StdClcUndefined udef;
+//    StdClcDouble dou;
+//    StdClcString ss;
 //    res += Stroka("\n") + udef.class_name()  + " " + dou.class_name() + " " + ss.class_name() + "\n";
 //    res += Stroka(" Registered VARS:\n\n\n") + SavableClass::HelpForCategory("StdClcTypes_category");
 //    Stroka str = DataSource::GenerateUnicName("tmp");

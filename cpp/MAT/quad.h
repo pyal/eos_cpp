@@ -85,7 +85,7 @@ double UncMin(int &Error,int N,double *x_start,double *x_res,double est_sol,
 //*/
 //extern  doublereal NashMin_Mach_Epsilon=2e-16;
 
-#endif
+//#endif
 
 
 

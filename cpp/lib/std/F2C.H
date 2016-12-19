@@ -12,7 +12,7 @@
 //#define MSDOS
 //#define NON_UNIX_STDIO
 //#include <iostream.h>
-#define MAC
+//#define MAC
 #ifdef MAC
 	#pragma GCC diagnostic ignored "-Wlogical-op-parentheses"
 	#pragma GCC diagnostic ignored "-Wincompatible-library-redeclaration"

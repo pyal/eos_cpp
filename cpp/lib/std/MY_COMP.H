@@ -233,9 +233,21 @@ inline my_comp   operator*(double __re_val1, const my_comp   & __z2)
     return my_comp(__z2.re*__re_val1, __z2.im*__re_val1);
 }
 
+inline my_comp   operator*(const my_comp &val1, const my_comp &val2)
+{
+    return my_comp(val1.re * val2.re - val1.im * val2.im,
+                   val1.re * val2.im - val1.im * val2.re);
+}
+
+
 inline my_comp   operator/(const my_comp   & __z1, double __re_val2)
 {
     return my_comp(__z1.re/__re_val2, __z1.im/__re_val2);
+}
+
+inline my_comp     operator/(const my_comp   &val1, const my_comp   &val2)
+{
+    return (val1 * conj(val2)) / norm(val2);
 }
 
 inline int   operator==(const my_comp   & __z1, const my_comp   & __z2)

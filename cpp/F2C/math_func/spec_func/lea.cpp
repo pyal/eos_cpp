@@ -10,6 +10,7 @@
  * the uniform rv's being 0.0 since this will result in infinte
  * values, and double count the 0 == 2pi.
  */
+#include <cpp/lib/std/Util.h>
 #include "stdlib.h"
 #include "lib/std/const.h"
 #include "float.h"
@@ -27,8 +28,8 @@ double random_normal() {
  double r[2];
 
  if (i == 1) {
-  r[0] = sqrt(-2*log((double)(rand()+1)/(double)(RAND_MAX+1)));
-  r[1] = 2*M_PI*(double)(rand()+1)/(double)(RAND_MAX+1);
+  r[0] = sqrt(-2*log((double)(rand()+1)/(double(RAND_MAX)+1)));
+  r[1] = 2*M_PI*(double)(rand()+1)/(double(RAND_MAX)+1);
   u[0] = r[0]*sin(r[1]);
   u[1] = r[0]*cos(r[1]);
   i = 0;
@@ -125,10 +126,10 @@ double stdnormal_cdf(double u)
  };
  register double y, z;
 
- if (_isnan(u))
+ if (IsNan(u))
   //return _Nan._D;
   return u;
- if (!_finite(u))
+ if (!Finite(u))
   return (u < 0 ? 0.0 : 1.0);
  y = fabs(u);
     if (y <= 0.46875*M_SQRT2) {
@@ -194,7 +195,7 @@ double stdnormal_inv(double p)
 
  register double q, t, u;
 
- if (_isnan(p) || p > 1.0 || p < 0.0)
+ if (IsNan(p) || p > 1.0 || p < 0.0)
   return MIN_NUMBER ;
  if (p == 0.0)
   return MIN_NUMBER ;

@@ -234,6 +234,14 @@ bool IsNan(double x) {
 #endif
 }
 
+bool Finite(double x) {
+#ifdef MAC
+    return finite(x);
+#else
+    return _finite(x);
+#endif
+}
+
 char* Gcvt(double x, int ndigit, char *tmp) {
 #ifdef MAC
     return gcvt(x, ndigit, tmp);

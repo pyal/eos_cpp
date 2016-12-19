@@ -100,7 +100,7 @@ void MatrCl::DeleteMatr()
 
 double& MatrCl::operator()(int i,int j) {return Addr[i-1][j-1];};
 double MatrCl::operator()(int i,int j) const {return Addr[i-1][j-1];};
-MatrCl  operator*(MatrCl &mat1,MatrCl &mat2)
+MatrCl  operator*(const MatrCl &mat1,const MatrCl &mat2)
   {
    int X=mat1.DimX,Y=mat1.DimY,X1=mat2.DimX,Y1=mat2.DimY;
    MatrCl Tmp(X,Y1); 

@@ -17,7 +17,7 @@ extern double StndErr;
 //#define MSDOS
 //#define LINUX
 //#define DEBUG_MODE
-#define MAC
+//#define MAC
 
 #include "F2C/libf2c/math.h"
 #ifndef MAC
