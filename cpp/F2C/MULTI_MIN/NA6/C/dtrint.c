@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int dtrint_(integer *dvflag, integer *sbrgns, doublereal *
 	greate, integer *list, integer *new__)
