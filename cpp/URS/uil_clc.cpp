@@ -77,8 +77,8 @@ void CalcTStpVisc(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeSt
 //  Next TimeStep Clc
    for (k=1;k<Num-1;k++) if (!F_[k]) 
     {
-     tmp[k]=max(fabs(Sound[k]),fabs(U_[k]-U_[k+1]));
-     tmp[k]=max(tmp[k],fabs(U_[k-1]-U_[k]));
+     tmp[k]=max<double>(fabs(Sound[k]),fabs(U_[k]-U_[k+1]));
+     tmp[k]=max<double>(tmp[k],fabs(U_[k-1]-U_[k]));
      if (k>1)
          L[k]=min(R_[k]-R_[k-1],R_[k+1]-R_[k]);
      else
@@ -112,8 +112,8 @@ void CalcTStpVisc(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeSt
 //if (du<0) du=0;
 double r0=R_[Num-1]-R_[Num-2],rc=R_[k]-R_[k-1];
 if ((k<2) || (k>Num-1)) rc=r0;
-//tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*log(max(1,fabs(du))));
-tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*max(1,fabs(du)));
+//tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*log(max<double>(1,fabs(du))));
+tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*max<double>(1,fabs(du)));
          P_[k]-=Ro_[k]*du*tmp[k]*1e5;
         } 
    delete Sound;delete L;delete tmp;

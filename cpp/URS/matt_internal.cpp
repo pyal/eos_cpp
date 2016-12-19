@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 
 #include "matt_internal.h"
 
@@ -55,7 +55,7 @@ static ClassDesc Matter2StateProb_ClassDesc(typeid(Matter2StateProb),"Matter2Sta
 //			delete S1;delete S2;
 //		};	
 Matter2State::Matter2State()
-    :MatterIO(),M1(new MatterABu),M2(new MatterABu),TimeToWait(0.1),Pres_ElseDenc(0){
+    :MatterIO(),M1(new MatterABu),M2(new MatterABu),Pres_ElseDenc(0),TimeToWait(0.1){
         SetInternalNames();
     };
 		
@@ -169,7 +169,7 @@ void Matter2State::ChangeInputVal(double *Dencity,double *Energy,
 //if (a!=b)
     //cout<<k<<"   "<<a<<" "<<b<<"\n";
     }
-	delete P;
+	delete []P;
 //cout<<a0<<" "<<InputVectorStorage["TransTime"][1]<<"\n";
 };
 
@@ -178,7 +178,7 @@ void Matter2State::ChangeInputVal(double *Dencity,double *Energy,
 // ============================================================
 
 MatterSum::MatterSum()
-    :MatterIO(), M1(new MatterABu), M2(new MatterABu), VolProp12(1), MinP(0.5), Pres_Denc(1){
+    :MatterIO(), M1(new MatterABu), M2(new MatterABu), MinP(0.5), VolProp12(1), Pres_Denc(1){
         SetInternalNames();
 };
 //    MatterSum():MatterIO(){VolProp12=1;SetInternalNames();}
@@ -191,7 +191,7 @@ void MatterSum::ChangeInputVal(double *Dencity,double *Energy,
 	for (int k=1;k<=Num;k++)
 		if (InputVectorStorage["State"][k]==0) 
 		    if (P[k]>MinP) InputVectorStorage["State"][k]=1;
-	delete P;
+	delete []P;
 			//double *P=new double[Num+1];
    //if (Pres_Denc) Pressure(P,Dencity,Energy,Num);
    //else MemoryMove(Dencity,P,sizeof(double)*(Num+1));
@@ -216,7 +216,7 @@ void MatterSum::Pressure(double *P,double *Dencity,double *Energy,int Num){
 										P[n]=(P1[n]+alpha*P2[n])/(1+alpha);}
 		n++;
 	}
-	delete P1;delete P2;
+	delete []P1;delete []P2;
 };			
 void MatterSum::Sound(double *S,double *Dencity,double *Energy,int Num){
 	double *S1=new double[Num+2];
@@ -235,7 +235,7 @@ void MatterSum::Sound(double *S,double *Dencity,double *Energy,int Num){
 										S[n]=(1-alpha)*S1[n]+alpha*S2[n];}
 		n++;
 	}
-	delete S1;delete S2;
+	delete []S1;delete []S2;
 };			
 double MatterSum::Pressure(double Dencity,double Energy){
 	double alpha=InputValStorage["State"];
@@ -369,7 +369,7 @@ void Matter2StateProb::ChangeInputVal(double *Dencity,double *Energy,
                 InputVectorStorage["TransTime"][k]=MTSign(InputVectorStorage["TransTime"][k])*(-M_MinDouble);
        }
     }
-	delete P;
+	delete []P;
 };
 
 

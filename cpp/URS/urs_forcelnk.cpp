@@ -1,10 +1,10 @@
-#include <lib\precompiled\urs_curve.h>
-#include <lib\precompiled\madiex.h>
-#include <lib\precompiled\cell_kru.h>
-#include <lib\precompiled\cell_dat.h>
-#include <lib\precompiled\adi_dou.h>
-#include <lib\precompiled\Madi_construction.h>
-#include "lib\precompiled\poly_test.h"
+#include <lib/precompiled/urs_curve.h>
+#include <lib/precompiled/madiex.h>
+#include <lib/precompiled/cell_kru.h>
+#include <lib/precompiled/cell_dat.h>
+#include <lib/precompiled/adi_dou.h>
+#include <lib/precompiled/Madi_construction.h>
+#include "lib/precompiled/poly_test.h"
 
 
 
@@ -64,7 +64,7 @@ ForceLinkVoid<TSpline1DGenerator> Dummy_TSpline1DGenerator;
 // MatterFreeE_category
 ForceLinkVoid<FreeEBushman> Dummy_FreeEBushman;
 
-#include "urs\fre_ros.h"
+#include "urs/fre_ros.h"
 ForceLinkVoid<FreeEPureRoss> Dummy_FreeEPureRoss;
 ForceLinkVoid<FreeERossN2> Dummy_FreeERossN2;
 ForceLinkVoid<FreeERossH2> Dummy_FreeERossH2;
@@ -91,10 +91,10 @@ ForceLinkVoid<FreeEEmpiLiquid> Dummy_FreeEEmpiLiquid;
 ForceLinkVoid<FreeEEmpiSolid> Dummy_FreeEEmpiSolid;
 ForceLinkVoid<FreeEMetHCold> Dummy_FreeEMetHCold;
 
-ForceLinkVoid<StdClcDouble> Dummy_StdClcDouble;
-ForceLinkVoid<StdClcUndefined> Dummy_StdClcUndefined;
-ForceLinkVoid<StdClcString> Dummy_StdClcString;
-
+//ForceLinkVoid<StdClcDouble> Dummy_StdClcDouble;
+//ForceLinkVoid<StdClcUndefined> Dummy_StdClcUndefined;
+//ForceLinkVoid<StdClcString> Dummy_StdClcString;
+//
 
 ForceLinkVoid<FreeESumMatter> Dummy_FreeESumMatter;
 //ForceLinkVoid<FreeEChemMatter> Dummy_FreeEChemMatter;

@@ -191,7 +191,7 @@ cout<<" Coreleft "<<Coreleft()<<"\n";
 			               CurTime,TimeStp,TimeWrite,PresDerivCoef,EndTime); 
 //	my_file->close();};/*
 
-   if (argc>2) CoefUp=max(1,atoi(argv[3]));else CoefUp=1;
+   if (argc>2) CoefUp=max<double>(1,atoi(argv[3]));else CoefUp=1;
 //cout<<" Coreleft "<<coreleft()<<"\n";
 //			OutHead(*my_file,*Reg,CurTime,TimeStp,TimeWrite,PresDerivCoef,EndTime);
    PreClc(*Reg);

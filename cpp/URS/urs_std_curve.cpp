@@ -1,4 +1,4 @@
-#include "lib\precompiled\urs_curve_lib.h"
+#include "lib/precompiled/urs_curve_lib.h"
 #include "urs_std_curve.h"
 
 
@@ -24,7 +24,7 @@ int IsentropeClass::IsentropePres(double FromDenc,double FromEnergy,double ToPre
     if (Num>=MaxNum) return 0;
     Denc=FromDenc;Energy=FromEnergy;Pressure=ToPres;
 	CurPtr = this;
-    int ret=Fzero(PresMisf,FromDenc,NextDenc,ResDenc,Err,Err,MaxNum);
+    Fzero(PresMisf,FromDenc,NextDenc,ResDenc,Err,Err,MaxNum);
     ResEnergy=IsentropeEnergy(ResDenc);
     return 1;
 }
@@ -40,7 +40,7 @@ int IsentropeClass::NextPressure(double &NextDenc,double &NextEnergy,double &Nex
     return (!In_Lim(ToPres,StartPres,NextPres,1));
 }
 double IsentropeClass::IsentropeEnergy(double denc){
-    double ResDenc,ResEnergy,Stp=max(1e-2*fabs(Denc-denc),1e-4);
+    double ResDenc,ResEnergy,Stp=max<double>(1e-2*fabs(Denc-denc),1e-4);
     int res;
 	CurPtr = this;
     if ((res=NotRungCurt(IsoentropeDeriv,Denc,Energy,denc,ResDenc,ResEnergy,Stp))!=0)
@@ -52,13 +52,13 @@ double IsentropeClass::IsentropeEnergy(double denc){
 //double IsentropeClass::IntegUFunc_Old(double x){
 //    double E=CurPtr->IsentropeEnergy(x);
 //    CurPtr->Denc=x;CurPtr->Energy=E;
-//    double ret=max(CurPtr->Mat->Sound(x,E), 1e-3)/x;
+//    double ret=max<double>(CurPtr->Mat->Sound(x,E), 1e-3)/x;
 //    return ret;
 //}
 double IsentropeClass::IntegUFunc(double x){
     double E=CurPtr->IsentropeEnergy(x);
     CurPtr->Denc=x;CurPtr->Energy=E;
-    double ret=max(CurPtr->Mat->Pressure(x,E), 1e-6)/sqr(x);
+    double ret=max<double>(CurPtr->Mat->Pressure(x,E), 1e-6)/sqr(x);
     return ret;
 }
 
@@ -94,7 +94,7 @@ HugoniotClass::HugoniotData HugoniotClass::HugDencClc(
     HugoniotData ret(0, -(Start.Pres+Start_de_coef*de), res_denc, Start.Ener+de, 0); 
     //cout<<" Hugonio!!!! ";p2=PressurePorous(r2,e2);
     //cout<<" Hugonio Discrep "<<p2+(Stat_p0+Stat_coef*de)<<"\n";
-    double tmp=sqrt(max(0,-(ret.Pres-Start.Pres)/(1/ret.Denc-1/Start.Denc)));
+    double tmp=sqrt(max<double>(0,-(ret.Pres-Start.Pres)/(1/ret.Denc-1/Start.Denc)));
     ret.ShockVel = Start.Vel-tmp/Start.Denc;
     ret.Vel = tmp/ret.Denc+ret.ShockVel;
 	ret.Vel *= -1;
@@ -129,7 +129,7 @@ void HugoniotClass::SetHugPresClcVar(const HugoniotClass::HugoniotData &beg_pnt,
         }
     }
     MinV = min(0,dv_est);
-    MaxV = max(0,dv_est);
+    MaxV = max<double>(0,dv_est);
     dv = dv_est*0.9;
 
 
@@ -165,7 +165,7 @@ HugoniotClass::HugoniotData HugoniotClass::HugPresClc_v(
                     cout<<"Found dv "<<dv<<"\n";
     }
     HugoniotData ret(0, res_pres, 1/(v1+dv), Start.Ener+Start_de_coef*dv, 0);
-    double tmp=sqrt(max(0,-(res_pres-Start.Pres)/(1/ret.Denc-v1)));
+    double tmp=sqrt(max<double>(0,-(res_pres-Start.Pres)/(1/ret.Denc-v1)));
     ret.ShockVel = Start.Vel-tmp/Start.Denc;
     ret.Vel = tmp/ret.Denc+ret.ShockVel;
 	ret.Vel *= -1;

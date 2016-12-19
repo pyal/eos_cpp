@@ -1,8 +1,8 @@
 #pragma once
 
 #include "fre_fac.h"
-#include "mat\NdimMin.h"
-#include "mat\fun_fac.h"
+#include "mat/NdimMin.h"
+#include "mat/fun_fac.h"
 
 
 namespace ClcDissociation {
@@ -51,7 +51,7 @@ namespace ClcDissociation {
 	    int  Read(istream &in) {
 		    char tmp[256];
 		    in>>tmp;
-            if (stricmp(tmp,"}")==0) return 0;
+            if (Stricmp(tmp,"}")==0) return 0;
 		    in>>Name>>tmp>>MolWeight>>tmp>>StartProportion>>tmp>>StartVolumeCoef>>tmp>>SubstMixtures>>tmp;
             in>>DeriveConst>>tmp;
             if (!(FreeMat<<SavableClass::Read(in)))
@@ -84,7 +84,7 @@ namespace ClcDissociation {
                 return ;
             Dencity = denc;
             Temperature = temp;
-            double d = max(Dencity, MathZer), t = max(Temperature, MathZer);
+            double d = max<double>(Dencity, MathZer), t = max<double>(Temperature, MathZer);
             FreeE = FreeMat->FreeE(d, t);
             double FreeEder = (FreeMat->FreeE(d * (1 + 0.5 * DeriveConst), t) - FreeMat->FreeE(d * (1 - 0.5 * DeriveConst), t)) / (d * DeriveConst);
             Pressure = FreeEder * sqr(d);
@@ -102,11 +102,11 @@ namespace ClcDissociation {
 		    SubstNames.clear();SubstCoefs.clear();
 		    char tmp[256];
 		    in>>tmp;
-            if (stricmp(tmp,"}")==0) return 0;
-		    if (stricmp(tmp,"{")!=0) 
+            if (Stricmp(tmp,"}")==0) return 0;
+		    if (Stricmp(tmp,"{")!=0)
 			    throw info_except("Expected { and got %s\n",tmp);
 		    in>>tmp;
-		    while (stricmp(tmp,"}")!=0){
+		    while (Stricmp(tmp,"}")!=0){
 			    Stroka Name = tmp;
 			    SubstNames.push_back(tmp);
 			    double d;in>>d;
@@ -151,11 +151,10 @@ namespace ClcDissociation {
             return SubstCoefs[NumExt2NumInt[num]];
         }
     private:
+        vector<Stroka> SubstNames;
 	    vector<double> SubstCoefs;
         vector<int> NumExt2NumInt;
-	    vector<Stroka> SubstNames;
     };
-
 
     struct MatterCalculator : RefCount {
         MatterCalculator() : Substs(2), ChemEqs(1) {
@@ -166,10 +165,10 @@ namespace ClcDissociation {
         void ClcFreeE() {
             vector<double> dencV = ClcDencV().Copy2Vector();
             for (size_t i = 0; i < Substs.size(); i++) 
-                Substs[i].ClcFreeE(max(dencV[i], MathZer), Temp);
+                Substs[i].ClcFreeE(max<double>(dencV[i], MathZer), Temp);
         }
         void SetClc(double denc, double temp) {
-            Denc = max(denc, MathZer);
+            Denc = max<double>(denc, MathZer);
             Temp = temp;
             if (NumCoefs.size() != MolWeights.size())
                 NumCoefs = (VecCl(MolWeights) * 0 + 1).Copy2Vector();
@@ -378,8 +377,8 @@ namespace ClcDissociation {
                 LastPosMisfit == 1./ MathZer || LastNegMisfit == 1./ MathZer )
                 return ;
             double maxAddP = AddPressure;
-            alphaMin = min(LastPosAlpha, LastNegAlpha);
-            alphaMax = max(LastPosAlpha, LastNegAlpha);
+            alphaMin = min<double>(LastPosAlpha, LastNegAlpha);
+            alphaMax = max<double>(LastPosAlpha, LastNegAlpha);
             InitAddPressure(alphaMin, alphaMax, PolicyEnum.Int("Std"));
             FindEquilibFixed(mats, alphaGuess, alphaMin, alphaMax);
             AddPressure = maxAddP;
@@ -472,8 +471,8 @@ namespace ClcDissociation {
             double Ro = Matters->Denc;
             vector<double> alphas;
             
-            //alphas.push_back(max(MathZer, (- Ro * mass[i0] + x[0] * M0) / (Ro * nums[i1] * mius[i0])));
-            //alphas.push_back(max(MathZer, (Ro * nums[i0] * mius[i1]) / (- Ro * mass[i1] + x[1] * M0)));
+            //alphas.push_back(max<double>(MathZer, (- Ro * mass[i0] + x[0] * M0) / (Ro * nums[i1] * mius[i0])));
+            //alphas.push_back(max<double>(MathZer, (Ro * nums[i0] * mius[i1]) / (- Ro * mass[i1] + x[1] * M0)));
             alphas.push_back((- Ro * mass[i0] + x[0] * M0) / (Ro * nums[i1] * mius[i0]));
             alphas.push_back((Ro * nums[i0] * mius[i1]) / (- Ro * mass[i1] + x[1] * M0));
 
@@ -490,10 +489,10 @@ namespace ClcDissociation {
 
             int i0 = NumInt2NumExt[NumSrt2NumInt[0]], i1 = NumInt2NumExt[NumSrt2NumInt[1]];
             //int i0 = NumInt2NumExt[0], i1 = NumInt2NumExt[1];
-            aMax = min(maxD[i0], minD[i1]);
+            aMax = min<double>(maxD[i0], minD[i1]);
             if (minD[i1]<MathZer)
                 aMax = maxD[i0];
-            aMin = max(maxD[i1], minD[i0]);
+            aMin = max<double>(maxD[i1], minD[i0]);
 //vector<double> lims = ClcN1N2Cage(Matters);
 //cout<<" LimN1N2 "<<VecCl(lims);
 //cout<<"Setting lims "<<aMin<<" "<<aMax<<"\n";
@@ -566,7 +565,7 @@ namespace ClcDissociation {
         double EncodeRes(const vector<double> &pres) {
             double minP = min(pres[0], pres[1]);
             if (minP + AddPressure < M_Eps2) {
-                AddPressure = max(0, -minP) * 2 + 1;
+                AddPressure = max<double>(0, -minP) * 2 + 1;
 cout<<"Shifting AddPressure...\n";
             }
             return log((pres[0] + AddPressure)/(pres[1] + AddPressure));
@@ -811,7 +810,7 @@ cout<<"Shifting AddPressure...\n";
             double logXguess = SetStartParams(mats);
             double ErrorAbs = MaxNumMisfit, resFreeE;
             vector<double> clcCage = MakeLogXCage();
-            int MaxIter = 100;
+//            int MaxIter = 100;
             //int err;
             Equilibrium2NumberMin *OldPtr = StaticPtr;
 		    StaticPtr = this;
@@ -1154,7 +1153,7 @@ cout<<" Min lgX "<<NumMinimMin.GetLastLogX()<<" val "<<NumMinimMin.ClcFreeE(Matt
 //                return ;
 //            double maxAddP = AddPressure;
 //            alphaMin = min(LastPosAlpha, LastNegAlpha);
-//            alphaMax = max(LastPosAlpha, LastNegAlpha);
+//            alphaMax = max<double>(LastPosAlpha, LastNegAlpha);
 //            InitAddPressure(alphaMin, alphaMax, PolicyEnum.Int("Std"));
 //            FindEquilibFixed(mats, alphaGuess, alphaMin, alphaMax);
 //            AddPressure = maxAddP;
@@ -1235,15 +1234,15 @@ cout<<" Min lgX "<<NumMinimMin.GetLastLogX()<<" val "<<NumMinimMin.ClcFreeE(Matt
 //            int iExt0 = NumInt2NumExt[0], iExt1 = NumInt2NumExt[1];
 //            vector<double> masNorm = (VecCl(masRaw) / constC).Copy2Vector();
 //            double aMax0 = min(masNorm[0] / MinDenc[iExt0], 1 - masNorm[1] / MinDenc[iExt1]);
-//            double aMax1 = max(1 - masNorm[0] / MinDenc[iExt0], masNorm[1] / MinDenc[iExt1]);
-//            double aMin0 = max(masNorm[0] / MaxDenc[iExt0], 1 - masNorm[1] / MaxDenc[iExt1]);
+//            double aMax1 = max<double>(1 - masNorm[0] / MinDenc[iExt0], masNorm[1] / MinDenc[iExt1]);
+//            double aMin0 = max<double>(masNorm[0] / MaxDenc[iExt0], 1 - masNorm[1] / MaxDenc[iExt1]);
 //            double aMin1 = min(1 - masNorm[0] / MaxDenc[iExt0], masNorm[1] / MaxDenc[iExt1]);
-//            aMax = max(aMax0, MathZer) / min(aMax1, 1);
-//            aMin = min(aMin0, 1) / max(aMin1, MathZer);
-//            //aMax = log(max(aMax0, MathZer) / max(1 - aMax0, MathZer));
-//            //aMin = log(max(aMin0, MathZer) / max(1 - aMin0, MathZer));
-//            //aMax = log(max(aMax0, MathZer) / min(aMax1, 1));
-//            //aMin = log(min(aMin0, 1) / max(aMin1, MathZer));
+//            aMax = max<double>(aMax0, MathZer) / min(aMax1, 1);
+//            aMin = min(aMin0, 1) / max<double>(aMin1, MathZer);
+//            //aMax = log(max<double>(aMax0, MathZer) / max<double>(1 - aMax0, MathZer));
+//            //aMin = log(max<double>(aMin0, MathZer) / max<double>(1 - aMin0, MathZer));
+//            //aMax = log(max<double>(aMax0, MathZer) / min(aMax1, 1));
+//            //aMin = log(min(aMin0, 1) / max<double>(aMin1, MathZer));
 //            if (!In_Lim(LastAlphaVal, aMin, aMax, 0))
 //                LastAlphaVal = 0.5 * (aMin + aMax);
 ////            if (aMin >= aMax) {
@@ -1251,14 +1250,14 @@ cout<<" Min lgX "<<NumMinimMin.GetLastLogX()<<" val "<<NumMinimMin.ClcFreeE(Matt
 ////double aMax10 = 1 - masNorm[0] / MinDenc[iExt0], aMax11 = masNorm[1] / MinDenc[iExt1];
 ////double aMin00 = masNorm[0] / MaxDenc[iExt0], aMin01 = 1 - masNorm[1] / MaxDenc[iExt1];
 ////double aMin10 = 1 - masNorm[0] / MaxDenc[iExt0], aMin11 = masNorm[1] / MaxDenc[iExt1];
-////    SetResult(log(max(aMax00, MathZer) / max(aMax10, MathZer)));
-////    cout<<" aMax0 "<<log(max(aMax00, MathZer) / max(aMax10, MathZer))<<" Denc[aMax0] "<<Matters->ClcDencV();
-////    SetResult(log(max(aMax01, MathZer) / max(aMax11, MathZer)));
-////    cout<<" aMax1 "<<log(max(aMax01, MathZer) / min(aMax11, 1))<<" Denc[aMax1] "<<Matters->ClcDencV();
-////    SetResult(log(max(aMin00, MathZer) / max(aMin10, MathZer)));
-////    cout<<" aMin0 "<<log(min(aMin00, 1) / max(aMin10, MathZer))<<" Denc[aMin0] "<<Matters->ClcDencV();
-////    SetResult(log(max(aMin01, MathZer) / max(aMin11, MathZer)));
-////    cout<<" aMin1 "<<log(min(aMin01, 1) / max(aMin11, MathZer))<<" Denc[aMin1] "<<Matters->ClcDencV();
+////    SetResult(log(max<double>(aMax00, MathZer) / max<double>(aMax10, MathZer)));
+////    cout<<" aMax0 "<<log(max<double>(aMax00, MathZer) / max<double>(aMax10, MathZer))<<" Denc[aMax0] "<<Matters->ClcDencV();
+////    SetResult(log(max<double>(aMax01, MathZer) / max<double>(aMax11, MathZer)));
+////    cout<<" aMax1 "<<log(max<double>(aMax01, MathZer) / min(aMax11, 1))<<" Denc[aMax1] "<<Matters->ClcDencV();
+////    SetResult(log(max<double>(aMin00, MathZer) / max<double>(aMin10, MathZer)));
+////    cout<<" aMin0 "<<log(min(aMin00, 1) / max<double>(aMin10, MathZer))<<" Denc[aMin0] "<<Matters->ClcDencV();
+////    SetResult(log(max<double>(aMin01, MathZer) / max<double>(aMin11, MathZer)));
+////    cout<<" aMin1 "<<log(min(aMin01, 1) / max<double>(aMin11, MathZer))<<" Denc[aMin1] "<<Matters->ClcDencV();
 ////cout<<"Incompatible dencities - cannot satisfy them...\n";
 ////return 1;
 ////            }
@@ -1326,17 +1325,17 @@ cout<<" Min lgX "<<NumMinimMin.GetLastLogX()<<" val "<<NumMinimMin.ClcFreeE(Matt
 //double aMax10 = 1 - masNorm[0] / MinDenc[iExt0], aMax11 = masNorm[1] / MinDenc[iExt1];
 //double aMin00 = masNorm[0] / MaxDenc[iExt0], aMin01 = 1 - masNorm[1] / MaxDenc[iExt1];
 //double aMin10 = 1 - masNorm[0] / MaxDenc[iExt0], aMin11 = masNorm[1] / MaxDenc[iExt1];
-//    SetResult(log(max(aMax00, MathZer) / min(aMax10, 1)));
-//    cout<<" aMax0 "<<log(max(aMax00, MathZer) / min(aMax10, 1))<<" Denc[aMax0] "<<Matters->ClcDencV();
-//    SetResult(log(max(aMax01, MathZer) / min(aMax11, 1)));
-//    cout<<" aMax1 "<<log(max(aMax01, MathZer) / min(aMax11, 1))<<" Denc[aMax1] "<<Matters->ClcDencV();
-//    SetResult(log(min(aMin00, 1) / max(aMin10, MathZer)));
-//    cout<<" aMin0 "<<log(min(aMin00, 1) / max(aMin10, MathZer))<<" Denc[aMin0] "<<Matters->ClcDencV();
-//    SetResult(log(min(aMin01, 1) / max(aMin11, MathZer)));
-//    cout<<" aMin1 "<<log(min(aMin01, 1) / max(aMin11, MathZer))<<" Denc[aMin1] "<<Matters->ClcDencV();
+//    SetResult(log(max<double>(aMax00, MathZer) / min(aMax10, 1)));
+//    cout<<" aMax0 "<<log(max<double>(aMax00, MathZer) / min(aMax10, 1))<<" Denc[aMax0] "<<Matters->ClcDencV();
+//    SetResult(log(max<double>(aMax01, MathZer) / min(aMax11, 1)));
+//    cout<<" aMax1 "<<log(max<double>(aMax01, MathZer) / min(aMax11, 1))<<" Denc[aMax1] "<<Matters->ClcDencV();
+//    SetResult(log(min(aMin00, 1) / max<double>(aMin10, MathZer)));
+//    cout<<" aMin0 "<<log(min(aMin00, 1) / max<double>(aMin10, MathZer))<<" Denc[aMin0] "<<Matters->ClcDencV();
+//    SetResult(log(min(aMin01, 1) / max<double>(aMin11, MathZer)));
+//    cout<<" aMin1 "<<log(min(aMin01, 1) / max<double>(aMin11, MathZer))<<" Denc[aMin1] "<<Matters->ClcDencV();
 //
-//            //aMax = log(max(aMax0, MathZer) / min(aMax1, 1));
-//            //aMin = log(min(aMin0, 1) / max(aMin1, MathZer));
+//            //aMax = log(max<double>(aMax0, MathZer) / min(aMax1, 1));
+//            //aMin = log(min(aMin0, 1) / max<double>(aMin1, MathZer));
 //
 //}
 //            return Matters->GetResultPressures();
@@ -1344,7 +1343,7 @@ cout<<" Min lgX "<<NumMinimMin.GetLastLogX()<<" val "<<NumMinimMin.ClcFreeE(Matt
 //        double EncodeRes(const vector<double> &pres) {
 //            double minP = min(pres[0], pres[1]);
 //            if (minP + AddPressure < M_Eps2) {
-//                AddPressure = max(0, -minP) * 2 + 1;
+//                AddPressure = max<double>(0, -minP) * 2 + 1;
 //cout<<"Shifting AddPressure...\n";
 //            }
 //            return log((pres[0] + AddPressure)/(pres[1] + AddPressure));
@@ -1512,7 +1511,7 @@ cout<<" Min lgX "<<NumMinimMin.GetLastLogX()<<" val "<<NumMinimMin.ClcFreeE(Matt
 //                return ;
 //            double maxAddP = AddPressure;
 //            alphaMin = min(LastPosAlpha, LastNegAlpha);
-//            alphaMax = max(LastPosAlpha, LastNegAlpha);
+//            alphaMax = max<double>(LastPosAlpha, LastNegAlpha);
 //            InitAddPressure(alphaMin, alphaMax, PolicyEnum.Int("Std"));
 //            FindEquilibFixed(mats, alphaGuess, alphaMin, alphaMax);
 //            AddPressure = maxAddP;
@@ -1557,21 +1556,21 @@ cout<<" Min lgX "<<NumMinimMin.GetLastLogX()<<" val "<<NumMinimMin.ClcFreeE(Matt
 //        void ClcAlphaLim(double &aMin, double &aMax) {
 //            NormalMasses.clear();
 //            vector<double> masRaw = Matters->ClcMasV().Copy2Vector();
-//            NormalMasses.push_back(max(MathZer, masRaw[MatterInd[0]]));
-//            NormalMasses.push_back(max(MathZer, masRaw[MatterInd[1]]));
+//            NormalMasses.push_back(max<double>(MathZer, masRaw[MatterInd[0]]));
+//            NormalMasses.push_back(max<double>(MathZer, masRaw[MatterInd[1]]));
 //            double constC = VecCl(NormalMasses).SumElements() / Matters->Denc;
 //            Matters->MulCoef = constC;
 //            NormalMasses = (VecCl(NormalMasses) / constC).Copy2Vector();
 //            double aMax0 = min(NormalMasses[0] / MinDenc[0], 1 - NormalMasses[1] / MinDenc[1]);
-//            double aMax1 = max(1 - NormalMasses[0] / MinDenc[0], NormalMasses[1] / MinDenc[1]);
-//            double aMin0 = max(NormalMasses[0] / MaxDenc[0], 1 - NormalMasses[1] / MaxDenc[1]);
+//            double aMax1 = max<double>(1 - NormalMasses[0] / MinDenc[0], NormalMasses[1] / MinDenc[1]);
+//            double aMin0 = max<double>(NormalMasses[0] / MaxDenc[0], 1 - NormalMasses[1] / MaxDenc[1]);
 //            double aMin1 = min(1 - NormalMasses[0] / MaxDenc[0], NormalMasses[1] / MaxDenc[1]);
-//            //aMax = log(max(aMax0, MathZer) / min(aMax1, 1));
-//            //aMin = log(min(aMin0, 1) / max(aMin1, MathZer));
+//            //aMax = log(max<double>(aMax0, MathZer) / min(aMax1, 1));
+//            //aMin = log(min(aMin0, 1) / max<double>(aMin1, MathZer));
 //            //aMin *= AlphaMullCoef;
 //            //aMax *= AlphaMullCoef;
-//            aMax = max(aMax0, MathZer) / min(aMax1, 1);
-//            aMin = min(aMin0, 1) / max(aMin1, MathZer);
+//            aMax = max<double>(aMax0, MathZer) / min(aMax1, 1);
+//            aMin = min(aMin0, 1) / max<double>(aMin1, MathZer);
 //            if (!In_Lim(LastAlphaVal, aMin, aMax, 0))
 //                LastAlphaVal = 0.5 * (aMin + aMax);
 //        }

@@ -939,11 +939,11 @@ protected:
             return;
         CurPnt++;
         //CurError += sqr((GetVar(NameY1) - GetVar(NameY2))/
-        //    max(max(fabs(GetVar(NameY1)),fabs(GetVar(NameY2))),M_MinDouble2));
+        //    max<double>(max<double>(fabs(GetVar(NameY1)),fabs(GetVar(NameY2))),M_MinDouble2));
         double CurMis = fabs(GetVar(NameY1) - GetVar(NameY2))/
-            max(max(fabs(GetVar(NameY1)),fabs(GetVar(NameY2))),M_MinDouble2);
+            max<double>(max<double>(fabs(GetVar(NameY1)),fabs(GetVar(NameY2))),M_MinDouble2);
         CurError += CurMis;
-        MaxError = max(MaxError, CurMis);
+        MaxError = max<double>(MaxError, CurMis);
 //cout<<GetVar(NameY1)<<" "<<GetVar(NameY2)<<" "<<CurError<<"\n";
     }
 protected:

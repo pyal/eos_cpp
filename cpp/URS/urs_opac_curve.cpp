@@ -3,7 +3,7 @@
 #include "urs_opac_curve.h"
 
 
-static ClassDesc URS_Curve_ClassDesc(typeid(UrsCurve_BrightTempClc),"UrsCurve_BrightTempClc",1,"URS_Curve_ClcVar_category",create<UrsCurve_BrightTempClc>);
+static ClassDesc UrsCurve_BrightTempClc_ClassDesc(typeid(UrsCurve_BrightTempClc),"UrsCurve_BrightTempClc",1,"URS_Curve_ClcVar_category",create<UrsCurve_BrightTempClc>);
 
 
 

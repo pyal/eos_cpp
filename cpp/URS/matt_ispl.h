@@ -88,7 +88,7 @@ public:
         double Pp = Pressure(r+dr,Energy+P*dr/(r*r));Pp-=P;
         if (Pp<0)
             Pp=0.1;
-        double S=sqrt( max(0,Pp)/dr );
+        double S=sqrt( max<double>(0,Pp)/dr );
         return S;
     };
       

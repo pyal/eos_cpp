@@ -1,8 +1,8 @@
 #pragma once
 
 #include "fre_fac.h"
-#include "mat\NdimMin.h"
-#include "mat\fun_fac.h"
+#include "mat/NdimMin.h"
+#include "mat/fun_fac.h"
 
 struct FreeESumMatter:FreeEIOFind{
     FreeESumMatter();//:FreeEIOFind("material.cfg","MatterSumH2Met"){FreeCoef.push_back(1);FreeVect.push_back(new FreeEIdeal);}
@@ -33,10 +33,10 @@ struct FreeESumMatter:FreeEIOFind{
                 else {
                     double minT_, maxT_, stpTcoef_, stpTmin_;
                     FreeVect[k]->SetTLimits(minT_, maxT_, stpTcoef_, stpTmin_);
-                    minT = max(minT, minT_);
+                    minT = max<double>(minT, minT_);
                     maxT = min(maxT, maxT_);
-                    stpTcoef = max(stpTcoef, stpTcoef_);
-                    stpTmin = max(stpTmin, stpTmin_);
+                    stpTcoef = max<double>(stpTcoef, stpTcoef_);
+                    stpTmin = max<double>(stpTmin, stpTmin_);
                 }
     }
     void ReadSubstancePar(istream &in) {
@@ -46,12 +46,12 @@ struct FreeESumMatter:FreeEIOFind{
     //      Name<H2Met> {  coef1 1 mat1 mat... }
         EraseMat();
         in>>tmp;
-        if (stricmp(tmp,"{")!=0) 
+        if (Stricmp(tmp,"{")!=0)
             throw info_except("Reading FreeESumMatter expected { and got %s\n",tmp);
 //cout<<" FreeESumMatter::ReadSubstancePar start read matter \n";
         do{
             in>>tmp;//Coef1
-            if (stricmp(tmp,"}")==0) break;
+            if (Stricmp(tmp,"}")==0) break;
             in>>coef;
             FreeCoef.push_back(coef);
             in>>tmp;//Matter1
@@ -227,9 +227,9 @@ struct ChemMultiMinimBase{
 };
 // minimazing volumes.
 struct RelatVolumeMinimFunc:RefCount{
+    ChemMultiMinimBase *FreeClc;
     double Denc,Temp;
     static VecCl RelatVolumesCoefs;
-    ChemMultiMinimBase *FreeClc;
     VecCl RelatNumbers;//, RelatVolumesCoefs;
     static RelatVolumeMinimFunc *FunPtr;
     RelatVolumeMinimFunc *OldPtr;
@@ -244,15 +244,15 @@ struct RelatVolumeMinimFunc:RefCount{
             for(int i=1;i<=RelatNumbers.Dim();i++){
                 //if (RelatNumbers[i]>1e-15)
                     VolMinimCvt.push_back(i);
-                RelatNumbers[i] = max(pow(MathZer,0.25), RelatNumbers[i]);
+                RelatNumbers[i] = max<double>(pow(MathZer,0.25), RelatNumbers[i]);
             }
             OldPtr = FunPtr;FunPtr = this;
         };
     ~RelatVolumeMinimFunc(){FunPtr = OldPtr;RelatVolumesCoefs.SetDim(0);};
-    static void ExecuteStatic(VecCl &par, VecCl &res){
+    static void ExecuteStatic(const VecCl &par, VecCl &res){
         FunPtr->Execute(par,res);
     }
-    void Execute(VecCl &par, VecCl &res){
+    void Execute(const VecCl &par, VecCl &res){
         VecCl par_(par);
         for(int k=1;k<=par.Dim();k++)
             par_[k] = fabs(par[k])>50?(par[k]>0?50:-50):par[k];
@@ -772,8 +772,8 @@ struct FreeEChemMatterMultiV:FreeEIOFind{
 		while (sbst.Read(in)){
 			SubstMap[sbst.Name] = sbst;
 			in>>tmp;
-			if (stricmp(tmp,"}")==0) break;
-			if (stricmp(tmp,";")!=0) 
+			if (Stricmp(tmp,"}")==0) break;
+			if (Stricmp(tmp,";")!=0)
 				throw info_except("Read substance %s - expected '; } ' after it but got %s\n",sbst.Name.c_str(),tmp);
 		}
 
@@ -808,7 +808,7 @@ private:
 		int  Read(istream &in) {
 			char tmp[256];
 			in>>tmp;
-            if (stricmp(tmp,"}")==0) return 0;
+            if (Stricmp(tmp,"}")==0) return 0;
 			in>>Name>>tmp>>MolVeight>>tmp>>StartProportion>>tmp>>RelatVolumeCoef>>tmp>>SubstMixtures>>tmp;
             if (!(Subst<<SavableClass::Read(in)))
 				throw info_except("Could not convert matter with Name %s to InterfaceFreeEIO\n",Name.c_str());
@@ -832,11 +832,11 @@ private:
 			SubstName.clear();SubstCoef.clear();
 			char tmp[256];
 			in>>tmp;
-            if (stricmp(tmp,"}")==0) return 0;
-			if (stricmp(tmp,"{")!=0) 
+            if (Stricmp(tmp,"}")==0) return 0;
+			if (Stricmp(tmp,"{")!=0)
 				throw info_except("Expected { and got %s\n",tmp);
 			in>>tmp;
-			while (stricmp(tmp,"}")!=0){
+			while (Stricmp(tmp,"}")!=0){
 				Stroka Name = tmp;
 				SubstName.push_back(tmp);
 				double d;in>>d;
@@ -908,8 +908,8 @@ struct FreeEChemMatterDiss:FreeEIOFind{
         return Stroka("Not tested yet. Caution. Errors possible...\n") + FreeEIOFind::MakeHelp();
     }
 private:
-    Ref<OneVarFunction> FinalCoef;
     Ref<InterfaceFreeEIO> FinalState,StartState;
+    Ref<OneVarFunction> FinalCoef;
 
 };
 
@@ -1428,8 +1428,8 @@ private:
 //		while (sbst.Read(in)){
 //			SubstMap[sbst.Name] = sbst;
 //			in>>tmp;
-//			if (stricmp(tmp,"}")==0) break;
-//			if (stricmp(tmp,";")!=0) 
+//			if (Stricmp(tmp,"}")==0) break;
+//			if (Stricmp(tmp,";")!=0)
 //				throw info_except("Read substance %s - expected '; } ' after it but got %s\n",sbst.Name.c_str(),tmp);
 //		}
 //
@@ -1462,7 +1462,7 @@ private:
 //		int  Read(istream &in) {
 //			char tmp[256];
 //			in>>tmp;
-//            if (stricmp(tmp,"}")==0) return 0;
+//            if (Stricmp(tmp,"}")==0) return 0;
 //			in>>Name>>tmp>>MolVeight>>tmp>>StartProportion>>tmp;
 //            if (!(Subst=dynamic_cast<InterfaceFreeEIO*>(SavableClass::SavableClassRegister(in))))
 //				throw info_except("Could not convert matter with Name %s to InterfaceFreeEIO\n",Name.c_str());
@@ -1486,11 +1486,11 @@ private:
 //			SubstName.clear();SubstCoef.clear();
 //			char tmp[256];
 //			in>>tmp;
-//            if (stricmp(tmp,"}")==0) return 0;
-//			if (stricmp(tmp,"{")!=0) 
+//            if (Stricmp(tmp,"}")==0) return 0;
+//			if (Stricmp(tmp,"{")!=0)
 //				throw info_except("Expected { and got %s\n",tmp);
 //			in>>tmp;
-//			while (stricmp(tmp,"}")!=0){
+//			while (Stricmp(tmp,"}")!=0){
 //				Stroka Name = tmp;
 //				SubstName.push_back(tmp);
 //				double d;in>>d;
@@ -1669,8 +1669,8 @@ private:
 //		while (sbst.Read(in)){
 //			SubstMap[sbst.Name] = sbst;
 //			in>>tmp;
-//			if (stricmp(tmp,"}")==0) break;
-//			if (stricmp(tmp,";")!=0) 
+//			if (Stricmp(tmp,"}")==0) break;
+//			if (Stricmp(tmp,";")!=0)
 //				throw info_except("Read substance %s - expected '; } ' after it but got %s\n",sbst.Name.c_str(),tmp);
 //		}
 //
@@ -1704,7 +1704,7 @@ private:
 //		int  Read(istream &in) {
 //			char tmp[256];
 //			in>>tmp;
-//            if (stricmp(tmp,"}")==0) return 0;
+//            if (Stricmp(tmp,"}")==0) return 0;
 //			in>>Name>>tmp>>MolVeight>>tmp>>StartProportion>>tmp>>RelatVolumeCoef>>tmp>>SubstMixtures>>tmp;
 //            if (!(Subst=dynamic_cast<InterfaceFreeEIO*>(SavableClass::SavableClassRegister(in))))
 //				throw info_except("Could not convert matter with Name %s to InterfaceFreeEIO\n",Name.c_str());
@@ -1728,11 +1728,11 @@ private:
 //			SubstName.clear();SubstCoef.clear();
 //			char tmp[256];
 //			in>>tmp;
-//            if (stricmp(tmp,"}")==0) return 0;
-//			if (stricmp(tmp,"{")!=0) 
+//            if (Stricmp(tmp,"}")==0) return 0;
+//			if (Stricmp(tmp,"{")!=0)
 //				throw info_except("Expected { and got %s\n",tmp);
 //			in>>tmp;
-//			while (stricmp(tmp,"}")!=0){
+//			while (Stricmp(tmp,"}")!=0){
 //				Stroka Name = tmp;
 //				SubstName.push_back(tmp);
 //				double d;in>>d;
@@ -2048,8 +2048,8 @@ private:
 //		while (sbst.Read(in)){
 //			SubstMap[sbst.Name] = sbst;
 //			in>>tmp;
-//			if (stricmp(tmp,"}")==0) break;
-//			if (stricmp(tmp,";")!=0) 
+//			if (Stricmp(tmp,"}")==0) break;
+//			if (Stricmp(tmp,";")!=0)
 //				throw info_except("Read substance %s - expected '; } ' after it but got %s\n",sbst.Name.c_str(),tmp);
 //		}
 //
@@ -2082,7 +2082,7 @@ private:
 //		int  Read(istream &in) {
 //			char tmp[256];
 //			in>>tmp;
-//            if (stricmp(tmp,"}")==0) return 0;
+//            if (Stricmp(tmp,"}")==0) return 0;
 //			in>>Name>>tmp>>MolVeight>>tmp>>StartProportion>>tmp;
 //            if (!(Subst=dynamic_cast<InterfaceFreeEIO*>(SavableClass::SavableClassRegister(in))))
 //				throw info_except("Could not convert matter with Name %s to InterfaceFreeEIO\n",Name.c_str());
@@ -2106,11 +2106,11 @@ private:
 //			SubstName.clear();SubstCoef.clear();
 //			char tmp[256];
 //			in>>tmp;
-//            if (stricmp(tmp,"}")==0) return 0;
-//			if (stricmp(tmp,"{")!=0) 
+//            if (Stricmp(tmp,"}")==0) return 0;
+//			if (Stricmp(tmp,"{")!=0)
 //				throw info_except("Expected { and got %s\n",tmp);
 //			in>>tmp;
-//			while (stricmp(tmp,"}")!=0){
+//			while (Stricmp(tmp,"}")!=0){
 //				Stroka Name = tmp;
 //				SubstName.push_back(tmp);
 //				double d;in>>d;

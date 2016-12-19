@@ -1,8 +1,8 @@
 #pragma once
 
 #include "fre_fac.h"
-#include "mat\NdimMin.h"
-#include "mat\fun_fac.h"
+#include "mat/NdimMin.h"
+#include "mat/fun_fac.h"
 
 
 //struct PureDis_StrictClc:RefCount{
@@ -12,8 +12,8 @@
 //Calculates FreeE of mixture, derivative of the freeE
 struct PureDis_StrictClc:RefCount{
     struct Param:RefCount{
-        VecCl RelatNumbers, RelatVolumesCoefs, FreeEPure;
         double Denc, Temp, Pressure;
+        VecCl RelatNumbers, RelatVolumesCoefs, FreeEPure;
         Param(double denc, double temp, double pressure, const VecCl &relatnumbers, const VecCl &relatvolumescoefs,
             const VecCl &freeepure){
             RelatNumbers = relatnumbers; RelatVolumesCoefs = relatvolumescoefs;FreeEPure = freeepure;
@@ -112,7 +112,7 @@ struct PureDis_StrictClc:RefCount{
         double V0 = par.RelatNumbers*par.RelatVolumesCoefs;
         VecCl Cor(SubstVeights.Dim());
 		for(int k=1;k<=SubstVeights.Dim();k++)
-            Cor[k] = LogNum[k] + log(max(par.RelatVolumesCoefs[k]/V0,MathZer));
+            Cor[k] = LogNum[k] + log(max<double>(par.RelatVolumesCoefs[k]/V0,MathZer));
 		double kt_Mole=M_Rconst*par.Temp;
         Cor = Cor*kt_Mole;
         VecCl FreeECor = pure + Cor;
@@ -148,7 +148,7 @@ struct PureDis_StrictClc:RefCount{
         Param p1=par,p2=par, p=par; 
         if (FreeEDerive)
             p.FreeEPure = FreeEVectorPure(p);
-        double Ex = FreeEMixt(p);
+//        double Ex = FreeEMixt(p);
         VecCl d(SubstVeights.Dim());
         for(int k=1;k<=d.Dim();k++) {
             p2.RelatNumbers=p1.RelatNumbers = par.RelatNumbers;
@@ -171,8 +171,8 @@ struct PureDis_StrictClc:RefCount{
         double M0 = par.RelatNumbers*SubstVeights;
         VecCl Cor(SubstVeights.Dim());
 		for(int k=1;k<=SubstVeights.Dim();k++){
-            //Cor[k] = par.RelatNumbers[i]*log(max(par.RelatNumbers[i]*par.RelatVolumesCoefs[i]/V0,MathZer))/SubstVeights[k];
-            Cor[k] = par.RelatNumbers[k]*log(max(par.RelatNumbers[k]*par.RelatVolumesCoefs[k]/V0,MathZer));
+            //Cor[k] = par.RelatNumbers[i]*log(max<double>(par.RelatNumbers[i]*par.RelatVolumesCoefs[i]/V0,MathZer))/SubstVeights[k];
+            Cor[k] = par.RelatNumbers[k]*log(max<double>(par.RelatNumbers[k]*par.RelatVolumesCoefs[k]/V0,MathZer));
         }
         Cor = Cor*kt_Mole/M0;
 		return Cor;
@@ -184,8 +184,8 @@ struct PureDis_StrictClc:RefCount{
         return ChemSubst;
     };
 private:
-    VecCl SubstVeights;
 	DataVector< Ref< InterfaceFreeEIO >, CopyStructRef<Ref<InterfaceFreeEIO> > > ChemSubst;
+    VecCl SubstVeights;
 
 };
 
@@ -202,7 +202,7 @@ struct PureDis_MinimNum:PureDis_Minim_Base{
     };
 
     int CheckLarge(PureDis_StrictClc::Param *par, double &Guess){
-		double kt_Mole=M_Rconst*par->Temp;
+//		double kt_Mole=M_Rconst*par->Temp;
         VecCl veight = PureDisClc->Veights();
         double M0 = veight*(veight*0+1);
         double Coef = (par->FreeEPure[1]*veight[1]-par->FreeEPure[2]*veight[2])/(M_Rconst*par->Temp*M0);
@@ -234,7 +234,7 @@ struct PureDis_MinimNum:PureDis_Minim_Base{
         if (4<(err=Fzero(ExecuteStatic, MinVal, MaxVal, Guess, ErrorAbs, ErrorRel, MaxIter)))
 			{cout<<" Bad FZero PureDis_MinimNum in PureDis_MinimNum::PureDis_MinimNum \nfound X "
 				<<Decode(Guess)<<" Mis "<<ExecuteStatic(Guess)<<" err "<<err<<"\n";}
-double Mis = ExecuteStatic(Guess);
+//double Mis = ExecuteStatic(Guess);
         StaticPtr = OldPtr;
         double LogN;
         int ShiftFromUnit;
@@ -249,17 +249,16 @@ double Mis = ExecuteStatic(Guess);
     }
 private:
     static PureDis_MinimNum*StaticPtr;
+    double StartGuess, MaxVal, MinVal, ErrorAbs, ErrorRel, MaxIter;
     Ref<PureDis_StrictClc::Param> curPar;
     VecCl ChemCoefs;
     Ref<PureDis_StrictClc> PureDisClc;
-    double StartGuess, ErrorAbs, ErrorRel, MaxIter, MinVal, MaxVal;
-
 
     static double ExecuteStatic(double x){
         return StaticPtr->Execute(x);
     }
     double Encode(double x){
-        double MaxD = fabs(log(M_MinDouble2));
+//        double MaxD = fabs(log(M_MinDouble2));
         x = ( (x<=M_MinDouble2)?M_MinDouble2:((x>=1-M_Eps)?1-M_Eps:x) );
         x = log(x/(1-x));
         return x;
@@ -426,7 +425,7 @@ private:
 
 
 struct PureDis_Minim1Pres:PureDis_Minim_Base{
-    PureDis_Minim1Pres():PureDis_Minim_Base(),StartGuess(1), MaxVal(2), MinVal(0.5), ErrorAbs(M_Eps2), ErrorRel(M_Eps2), MaxIter(100), FixedVolumeCoefs(0), MaxDenc(1e5){
+    PureDis_Minim1Pres():PureDis_Minim_Base(),StartGuess(1), MinVal(0.5), MaxVal(2), ErrorAbs(M_Eps2), ErrorRel(M_Eps2), MaxIter(100), FixedVolumeCoefs(0), MaxDenc(1e5){
         MinimNum.SetDim(2);
         MinimNum[1] = 1;
         MinimNum[2] = 2;
@@ -479,7 +478,7 @@ struct PureDis_Minim1Pres:PureDis_Minim_Base{
 //VecCl VolCoef = ClcResult(ret);
 //VecCl pres = PureDisClc->PressureVector(*curPar);
 //VecCl denc = PureDisClc->ClcSubstDenc(*curPar);
-//if ((pres[1]-pres[2])/max(pres[1],M_Eps2)>1e-3)
+//if ((pres[1]-pres[2])/max<double>(pres[1],M_Eps2)>1e-3)
 //cout<<" temp "<<curPar->Temp<<" meanRo "<<curPar->Denc<<"\nDencVec "<<denc<<" pres "<<pres<<" volC "<<VolCoef; 
         return ClcResult(ret);
     }
@@ -488,7 +487,7 @@ private:
     Ref<PureDis_StrictClc::Param> curPar;
     VecCl ChemCoefs;
     Ref<PureDis_StrictClc> PureDisClc;
-    double StartGuess, ErrorAbs, ErrorRel, MaxIter, MinVal, MaxVal, MaxDenc, FixedVolumeCoefs;
+    double StartGuess, MinVal, MaxVal, ErrorAbs, ErrorRel, MaxIter, FixedVolumeCoefs, MaxDenc;
 
 
     static double ExecuteStatic(double x){
@@ -549,8 +548,8 @@ private:
         return curPar->RelatVolumesCoefs;
     }
     double SetStartGuess(const VecCl &startval){
-        double SGuess = startval[MinimNum[2]]/max(startval[MinimNum[1]],M_Eps);
-        SGuess = max(min(StartGuess, MaxVal),MinVal);
+        double SGuess = startval[MinimNum[2]]/max<double>(startval[MinimNum[1]],M_Eps);
+        SGuess = max<double>(min(StartGuess, MaxVal),MinVal);
         return SGuess ;
     }
 
@@ -573,7 +572,7 @@ private:
 // ===============================================================================
 struct DisMixture_Energy:RefCount{
     DisMixture_Energy(const DataVector< Ref< InterfaceFreeEIO >, CopyStructRef<Ref<InterfaceFreeEIO> > > &chemsubst, const VecCl &substveights)
-        :ChemSubst(chemsubst), SubstVeights(substveights){};
+        :SubstVeights(substveights), ChemSubst(chemsubst) {};
 //do not work
     double ClcFreeE(double Temp, VecCl &Denc, VecCl &AtomCoefs){
         return 0;
@@ -586,7 +585,7 @@ struct DisMixture_Energy:RefCount{
 		return SubstDenc;
 	}
 	VecCl ClcMassCoef(const VecCl &RelatNumbers){
-		double Coef = RelatNumbers*SubstVeights;
+//		double Coef = RelatNumbers*SubstVeights;
 		//VecCl MassCoef = VecCl::ComponentMul(RelatNumbers, SubstVeights) / Coef;
 		VecCl MassCoef = VecCl::ComponentMul(RelatNumbers, SubstVeights);
 		MassCoef = MassCoef/(MassCoef*(MassCoef*0+1));
@@ -635,7 +634,7 @@ struct DisMixture_Energy:RefCount{
 
 	static double GetMixtureCorrection(double RelatNumber, double Temp, double SubstVeight){
 		double kt=M_Rconst/SubstVeight*Temp;
-        double F=kt*log(max(RelatNumber,MathZer));
+        double F=kt*log(max<double>(RelatNumber,MathZer));
 		return F;
 	}
     VecCl Veights(){
@@ -733,7 +732,7 @@ struct Dis_RelatNum_MinimFunc_SingleH2:Dis_RelatNum_MinimFunc_Base{
     }
 private:
     VecCl Veights;
-    double Find_ChemCoef;
+//    double Find_ChemCoef;
 
     void SetVeights(const VecCl &veights){
         Veights = veights;
@@ -816,7 +815,7 @@ struct DisSamePresFinder:RefCount{
             VolMinimCvt.clear();
             for(int i=1;i<=RelatNumbers.Dim();i++){
                 VolMinimCvt.push_back(i);
-                RelatNumbers[i] = max(pow(MathZer,0.25), RelatNumbers[i]);
+                RelatNumbers[i] = max<double>(pow(MathZer,0.25), RelatNumbers[i]);
             }
         };
     ~DisSamePresFinder(){CurPtr = OldPtr;};
@@ -873,12 +872,12 @@ private:
     static DisSamePresFinder *CurPtr;
     DisSamePresFinder *OldPtr;
 
+    DisSamePresFunc *FreeClc;
     double Denc,Temp;
     VecCl RelatNumbers, RelatVolumesCoefs;
     vector<int> VolMinimCvt;
-    DisSamePresFunc *FreeClc;
     double ToAddPressure;
-    static void ExecuteStatic(VecCl &par, VecCl &res){
+    static void ExecuteStatic(const VecCl &par, VecCl &res){
         CurPtr->Execute(par,res);
     }
     void Execute(const VecCl &par, VecCl &res){
@@ -1459,8 +1458,8 @@ struct FreeEDis:FreeEIOFind{
 		while (sbst.Read(in)){
 			SubstMap[sbst.Name] = sbst;
 			in>>tmp;
-			if (stricmp(tmp,"}")==0) break;
-			if (stricmp(tmp,";")!=0) 
+			if (Stricmp(tmp,"}")==0) break;
+			if (Stricmp(tmp,";")!=0)
 				throw info_except("Read substance %s - expected '; } ' after it but got %s\n",sbst.Name.c_str(),tmp);
 		}
 
@@ -1504,7 +1503,7 @@ private:
 		int  Read(istream &in) {
 			char tmp[256];
 			in>>tmp;
-            if (stricmp(tmp,"}")==0) return 0;
+            if (Stricmp(tmp,"}")==0) return 0;
 			in>>Name>>tmp>>MolVeight>>tmp>>StartProportion>>tmp>>RelatVolumeCoef>>tmp>>SubstMixtures>>tmp;
             if (!(Subst<<SavableClass::Read(in)))
 				throw info_except("Could not convert matter with Name %s to InterfaceFreeEIO\n",Name.c_str());
@@ -1528,11 +1527,11 @@ private:
 			SubstName.clear();SubstCoef.clear();
 			char tmp[256];
 			in>>tmp;
-            if (stricmp(tmp,"}")==0) return 0;
-			if (stricmp(tmp,"{")!=0) 
+            if (Stricmp(tmp,"}")==0) return 0;
+			if (Stricmp(tmp,"{")!=0)
 				throw info_except("Expected { and got %s\n",tmp);
 			in>>tmp;
-			while (stricmp(tmp,"}")!=0){
+			while (Stricmp(tmp,"}")!=0){
 				Stroka Name = tmp;
 				SubstName.push_back(tmp);
 				double d;in>>d;

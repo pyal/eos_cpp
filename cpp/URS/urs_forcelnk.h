@@ -4,6 +4,7 @@
 #include "fre_bus.h"
 #include "mat/spl_fac.h"
 
+
 // VarFunction_category - category
 // Used in Fre_Bus only
 extern ForceLinkVoid<FreeCold_V> Dummy_FreeCold_V;
@@ -92,11 +93,6 @@ extern ForceLinkVoid<FreeEEmpiLiquid> Dummy_FreeEEmpiLiquid;
 extern ForceLinkVoid<FreeEEmpiSolid> Dummy_FreeEEmpiSolid;
 extern ForceLinkVoid<FreeEMetHCold> Dummy_FreeEMetHCold;
 extern ForceLinkVoid<FreeEElectron> Dummy_FreeEElectron;
-
-#include "util/code_gen/calculator/calc_prg_types.h" // for FreeEFormula
-extern ForceLinkVoid<StdClcDouble> Dummy_StdClcDouble;
-extern ForceLinkVoid<StdClcUndefined> Dummy_StdClcUndefined;
-extern ForceLinkVoid<StdClcString> Dummy_StdClcString;
 
 #include "fre_multi.h"
 extern ForceLinkVoid<FreeESumMatter> Dummy_FreeESumMatter;

@@ -224,7 +224,7 @@ void RegionIO::Pres()
    if (LftFree) { Pressure[0]=0;Energy[0]=0;}
    if (RgtFree) { Pressure[NumPnt]=0;Energy[NumPnt]=0;}
    MemoryMove(Pressure,PresL,sizeof(double)*(NumPnt+2));FstCalcP=0;
-   for ( k=1;k<NumPnt;k++) Pressure[k]=max(Pressure[k]*1e5,10);
+   for ( k=1;k<NumPnt;k++) Pressure[k]=max<double>(Pressure[k]*1e5,10);
   };
 
 

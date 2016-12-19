@@ -75,7 +75,7 @@ void Body::Pres()
         }
 #endif
    MemoryMove(Pressure,PresL,sizeof(double)*(NumPnt+2));FstCalcP=0;
-   for ( k=1;k<NumPnt;k++) Pressure[k]=max(Pressure[k]*1e5,10);
+   for ( k=1;k<NumPnt;k++) Pressure[k]=max<double>(Pressure[k]*1e5,10);
 
   };
 

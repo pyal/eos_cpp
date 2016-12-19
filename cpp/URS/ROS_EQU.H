@@ -2,14 +2,14 @@
 #define __ROS_EQU_H 
 
 
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 //#include "mtquad.h"
 //#include "Quad.h"
 //#include "mtmin.h"
 //#include "zero.h"
-#include "mat\mtfunc.h"
-#include "lib\std\stdexception.h"
-#include "lib\ref\ref.h"
+#include "mat/mtfunc.h"
+#include "lib/std/stdexception.h"
+#include "lib/ref/ref.h"
 //#include "spl_reg.h"
 struct Exp6Param:RefCount
   {

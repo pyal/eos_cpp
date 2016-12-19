@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "url_equ.h"
 
 UrlParamStruct *UrlPar;
@@ -28,7 +28,7 @@ double UrlTeta(double x)
 //    return UP.Teta0*pow(x,-1./6.)*sqrt(s1/s2);
    double pc=UrlPcold(x);
    double c2=(UrlPcold(x+StndErr)-pc)/(StndErr*UP.Denc);
-   return UP.Teta0*pow(x,1./3)*sqrt(max(c2-UP.GrunN*2*pc/(3*UP.Denc*x),StndErr));
+   return UP.Teta0*pow(x,1./3)*sqrt(max<double>(c2-UP.GrunN*2*pc/(3*UP.Denc*x),StndErr));
   };
 
 double UrlZparam(double x,double T)
@@ -87,7 +87,7 @@ double FUrlLiquid(double Denc,double T,UrlParamStruct *Url)
    if (UP.IncludeTurnE==0) AddT=0;
    else AddT=log(T*0.5/TetaTurn);
    double F=Ec*UP.IncludeZeroE+UP.Rstat*
-        (UP.IncludeNullE*9/8*Te+3*T*(log(Te/T*sqrt(max(1+z,StndErr)))-b)+
+        (UP.IncludeNullE*9/8*Te+3*T*(log(Te/T*sqrt(max<double>(1+z,StndErr)))-b)+
                                 3*T0*f-T*AddT)+UrlFel(Denc,T);
    return F;
   };
@@ -176,7 +176,7 @@ double Psolid(double x,double T)
 
 double CCCa,CCCteta;
 double MisT(double T)
-  {return CCCa-T*UP.Rconst*(3*DebyFunc(CCCteta/max(T,StndErr))+UP.IncludeTurnE);}
+  {return CCCa-T*UP.Rconst*(3*DebyFunc(CCCteta/max<double>(T,StndErr))+UP.IncludeTurnE);}
 double TemperatureS(double r,double e)
   {
    double x=r/ColdParam.Denc;
@@ -234,7 +234,7 @@ double FindTemp(double x,double DeltaE)
        cout<<"Could not Find Temp\n" ;
 //cout<<" FindTemp  x "<<x<<" Tf  "<<T1<<" Tw "<<T2<<"\n";
 //   return T1;
-   return max(T1,T2);
+   return max<double>(T1,T2);
 
   };
 double PressureL(double r,double e)

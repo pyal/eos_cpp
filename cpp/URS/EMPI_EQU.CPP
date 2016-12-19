@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "empi_equ.h"
 
 EmpiParamStruct *EmpiColdParam;
@@ -77,7 +77,9 @@ double EmpiFreeEMet(double Denc,double T)
 if ((T<MathZer) || (Denc<MathZer)) { cout<<"FreeE Bad. Denc "<<Denc<<" T "<<T<<"\n";return 0;}
      double Rs=pow(2.696/Denc,1./3.);
      double K_Ryd=6.3344e-6;
-     double kT=T*K_Ryd,Ze=1,G14,F=0,e=-2.59,sige=-2.6;
+     double kT=T*K_Ryd,Ze=1,G14,F=0,
+//             e=-2.59,
+             sige=-2.6;
      G14=pow(sqr(Ze)/(Rs*kT/2),1./4.);  // Ry= 2* 1 a.e.e
 //     if (AddEG) 
        F+=2.21/sqr(Rs)-0.916/Rs-0.88/(Rs+7.8)-1.792/Rs;
@@ -120,7 +122,7 @@ double EmpiFDisDegree(double Denc,double T,EmpiParamStruct *Par)
    if (T<MathZer) T=StndErr;                                           
    double DeltaE;//Dis,
    double Fliq=EmpiFLiquid(Denc,T,Par),dr=StndErr*Denc;
-   double Pressure=max(sqr(Denc)/dr*(EmpiFLiquid(Denc+dr,T,Par)-Fliq),0);
+   double Pressure=max<double>(sqr(Denc)/dr*(EmpiFLiquid(Denc+dr,T,Par)-Fliq),0);
    double Dd=CP.DencityMet*exp(-Pressure/CP.PressureMet)*Denc;
    DeltaE=EmpiFreeEMet(Denc,1)-EmpiFLiq0(Denc+Dd)+CP.DisEnergy;
    double Z=CP.Rconst*T;                                               
@@ -135,7 +137,7 @@ double EmpiFDis(double Denc,double T,EmpiParamStruct *Par)
    if (T<MathZer) T=StndErr;                                           
    double DeltaE;//Dis,
    double Fliq=EmpiFLiquid(Denc,T,Par),dr=StndErr*Denc;
-   double Pressure=max(sqr(Denc)/dr*(EmpiFLiquid(Denc+dr,T,Par)-Fliq),0);
+   double Pressure=max<double>(sqr(Denc)/dr*(EmpiFLiquid(Denc+dr,T,Par)-Fliq),0);
 //   DeltaE=EmpiFreeEMet(Denc,1)-EmpiFLiq0(Denc)+CP.DisEnergy;
    double Dd=CP.DencityMet*exp(-Pressure/CP.PressureMet)*Denc;
    DeltaE=EmpiFreeEMet(Denc,1)-EmpiFLiq0(Denc+Dd)+CP.DisEnergy;
@@ -184,7 +186,9 @@ double EmpiDeltaE(double DisX)
 double EmpiDisXExpr(double DisX)
   {
    DisX=sqrt(DisX);
-   double Denc=EmpiDenc,T=EmpiT,x=Denc/CP.Denc,AddT,Vib,Te1,Deby;
+   double Denc=EmpiDenc,T=EmpiT,
+//           x=Denc/CP.Denc,
+           AddT,Vib,Te1,Deby;
    double Ec=EmpiEc,Te=EmpiTe*DisX,z=EmpiZ,b=CP.Bconst,
           T0=CP.T0const,TetaTurn=CP.T_Turn,r=CP.RLconst;
    double xl=Denc/CP.Denc0const,f=CP.Cconst+CP.Aconst/r*(pow(xl,r)-1);

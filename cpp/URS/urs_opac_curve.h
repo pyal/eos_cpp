@@ -72,7 +72,7 @@ protected:
 	}
     double OpacityDifCalib2Measure, WaveLength, CalibTemp, CalibSignal, ExtraSignalNorm, ExtraFiberNorm; //nm<<"DetectorEmissivityName"<<DetectorEmissivityName<<
     double UseFixedCalibEmissivity;
-    Stroka DetectorEmissivityName, VarSignalName, CalibEmissivityName, InterFilterFormName ;
+    Stroka InterFilterFormName , DetectorEmissivityName, CalibEmissivityName, VarSignalName;
     CurveSpline DetectorEmissivitySpl, CalibEmissSpl, InterFilterSpl;
 
     double CalibConst, IntegTemp, IntegMinL, IntegMaxL, IntegConst, OriginalAddCalibConst;

@@ -1,11 +1,11 @@
-//  Григорьев, Кормер ЖЭТФ Т 65, Вып. 2 (8)  1975, стр 743
+//  я┐╜ригя┐╜я┐╜ьев, я┐╜я┐╜рмея┐╜ я┐╜я┐╜я┐╜я┐╜ я┐╜ 65, я┐╜я┐╜. 2 (8)  1975, я┐╜я┐╜я┐╜ 743
 
 #ifndef __URL_EQU_H
 #define __URL_EQU_H 
 
-#include "mat\mtquad.h"
-#include "mat\zero.h"
-#include "mat\mtfunc.h"
+#include "mat/mtquad.h"
+#include "mat/zero.h"
+#include "mat/mtfunc.h"
 
 //   x = r/r0
 //

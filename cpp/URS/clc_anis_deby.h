@@ -4,7 +4,7 @@
 //#include "mat\NdimMin.h"
 //#include "mat\fun_fac.h"
 #include "fre_ion.h"
-#include "lib\ref\str_manip.h"
+#include "lib/ref/str_manip.h"
 
 
 
@@ -91,7 +91,7 @@ cout<<" mis "<<VecCl::ModMax(ionnum-newnum)<<" ionnum "<<ionnum;
         vector<int> N_num, L_num;
         Ref<ElectronStub> Electron;
 
-        double Denc, Temp;
+//        double Denc;//, Temp;
         map<Stroka, double> InternalParams;
 
         double clcCoef, clcCoef1, clcCoef2, clcDenc, clcTemp;

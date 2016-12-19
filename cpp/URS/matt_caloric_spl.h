@@ -1,16 +1,15 @@
 #pragma once
 
 
-#include "lib\std\deffunc.h"
-#include "lib\std\const.h"
+#include "lib/std/deffunc.h"
+#include "lib/std/const.h"
 #include "matt_fac.h"
 //#include "fre_fac.h"
 
-#include "mat\dat_fac.h"
-#include "mat\dat_reg.h"
-#include "mat\spl_fac.h"
+#include "mat/dat_fac.h"
+#include "mat/dat_reg.h"
+#include "mat/spl_fac.h"
 //#include "fre_bus.h"
-
 
 
 struct MatterCaloricSpl : MatterIO {
@@ -20,20 +19,22 @@ struct MatterCaloricSpl : MatterIO {
 
     MatterCaloricSpl()
         : MatterIO()
-        , LastE(50)
         , CaloricSplineName("h2e_ros1.spl")
         , DencCold(1e-10)
-        , DencMax(100) {
+        , DencMax(100)
+        , LastE(50)
+    {
         SoundDencityCoef = 50;
     }
     MatterCaloricSpl(const Stroka &name, double dencCold, double dencMax, SplineXYIO *presSpl, SplineXYIO *tempSpl) 
         : MatterIO()
-        , LastE(50)
         , CaloricSplineName(name)
         , PresSpl(presSpl)
         , TempSpl(tempSpl)
         , DencCold(dencCold)
-        , DencMax(dencMax) {
+        , DencMax(dencMax)
+        , LastE(50)
+    {
         SoundDencityCoef = 50;
     }
 

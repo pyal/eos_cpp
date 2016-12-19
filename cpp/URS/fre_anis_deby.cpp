@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 
 #include "fre_anis_deby.h"
 #include "fre_multi.h"
@@ -27,7 +27,7 @@ static ClassDesc FreeEIonAnisimov_ClassDesc(typeid(FreeEIonAnisimov),"FreeEIonAn
 
 
 FreeEIonAnisimov::FreeEIonAnisimov():ClcIonisation::FreeEIonStdIO(), CalcMethod(2), 
-    MatFreeE(new FreeESumMatter), ElFreeE(new FreeESumMatter){
+    ElFreeE(new FreeESumMatter), MatFreeE(new FreeESumMatter){
     N_num.push_back(1);
     L_num.push_back(0);
 };

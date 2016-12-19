@@ -60,7 +60,7 @@ exit(1);
 
    PresL =new double[NumPnt+2];
    SounL =new double[NumPnt+2];
-   int NumL=0;for (k=1;k<=NumMatter;k++) NumL=max(NumL,BndMatter[k]-BndMatter[k-1]);
+   int NumL=0;for (k=1;k<=NumMatter;k++) NumL=max<double>(NumL,BndMatter[k]-BndMatter[k-1]);
 //cout<<" NumL "<<NumL<<"\n";ChRead();
    TmpE  =new double[NumL+2];
    TmpP  =new double[NumL+2];
@@ -238,7 +238,7 @@ void RegionIO::Pres()
      if (LftFree) { Pressure[0]=0;Energy[0]=0;}
      if (RgtFree) { Pressure[NumPnt]=0;Energy[NumPnt]=0;}
    MemoryMove(Pressure,PresL,sizeof(double)*(NumPnt+2));FstCalcP=0;
-   for ( k=1;k<NumPnt;k++) Pressure[k]=max(Pressure[k]*1e5,10);
+   for ( k=1;k<NumPnt;k++) Pressure[k]=max<double>(Pressure[k]*1e5,10);
 //   for ( k=1;k<NumPnt;k++) cout<<" P "<<Pressure[k]<<" k "<<k<<"\n";
 //   for ( k=1;k<NumPnt;k++) cout<<" PL "<<PresL[k]<<" k "<<k<<"\n";
 //   ChRead();

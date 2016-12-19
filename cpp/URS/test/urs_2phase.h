@@ -90,7 +90,7 @@ struct UrsCurve_PT_Bnd_Constructor:UrsCurve_EOS_PT_Equilib{
 	virtual Stroka MakeHelp(){
         Stroka res = UrsCurve_EOS_PT_Equilib::MakeHelp();
         char tmp[256];
-		res += Stroka("Class for FreeE Bnd calculation. Have ") + itoa(NumClcNames,tmp,10) + " internal vars for output:";
+		res += Stroka("Class for FreeE Bnd calculation. Have ") + Itoa(NumClcNames,tmp,10) + " internal vars for output:";
 		for (map<Stroka,int>::iterator it = ClcVarNames.begin();it!=ClcVarNames.end();it++)
 			res += it->first + " ";
 		res += Stroka(".\n");
@@ -472,9 +472,9 @@ protected:
     double StatPres, StatTemp, StatDenc;
     static UrsCurve_PT_clc* CurPtr;
 	double FindDenc(double Pres, double Temp){
-		StatPres = max(Pres,1e-6);
-        StatTemp = max(Temp,1);
-        StatDenc = max(StatDenc, MinDenc);
+		StatPres = max<double>(Pres,1e-6);
+        StatTemp = max<double>(Temp,1);
+        StatDenc = max<double>(StatDenc, MinDenc);
         UrsCurve_PT_clc *Old = CurPtr;
         CurPtr = this;
 		int err;
@@ -486,7 +486,7 @@ protected:
 	}
 
     static double DeltaP(double Denc){
-        double y = log(max(1e-200,CurPtr->FreeClc->Pressure(Denc, CurPtr->StatTemp))/CurPtr->StatPres);
+        double y = log(max<double>(1e-200,CurPtr->FreeClc->Pressure(Denc, CurPtr->StatTemp))/CurPtr->StatPres);
 //cout<<" Denc "<<Denc<<" y "<<y<<" Temp "<<CurPtr->StatTemp<<" Pres "<<CurPtr->StatPres<<"\n";
         return y;
     }

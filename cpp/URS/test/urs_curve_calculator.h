@@ -53,27 +53,27 @@ struct UrsCurve_Calculator:URS_Curve::ClcVar{
         InputCurveNames.Release(); InputClcNames.Release();
         OutputCurveNames.Release();OutputClcNames.Release();
         si>>tmp;
-        while (stricmp(tmp,"}")!=0){
+        while (Stricmp(tmp,"}")!=0){
             InputCurveNames.push(Stroka(tmp));si>>tmp;
             InputClcNames.push(Stroka(tmp));si>>tmp;
-            if (stricmp(tmp,";")!=0)
+            if (Stricmp(tmp,";")!=0)
                 throw info_except(" Could not read name, wrong delimiter %s\n",tmp);
             si>>tmp;
         }
         si>>tmp>>tmp;
-        if (stricmp(tmp,"{")!=0)
+        if (Stricmp(tmp,"{")!=0)
             throw info_except(" Could not read name, wrong delimiter %s - have to be { \n",tmp);
         si>>tmp;
-        while (stricmp(tmp,"}")!=0){
+        while (Stricmp(tmp,"}")!=0){
             OutputCurveNames.push(Stroka(tmp));si>>tmp;
             OutputClcNames.push(Stroka(tmp));si>>tmp;
-            if (stricmp(tmp,";")!=0)
+            if (Stricmp(tmp,";")!=0)
                 throw info_except(" Could not read name, wrong delimiter %s - have to be ; \n",tmp);
             si>>tmp;
         }
         si>>tmp>>DefaultValue>>tmp>>tmp;
         si>>tmp;
-        while (stricmp(tmp,"}")!=0){
+        while (Stricmp(tmp,"}")!=0){
             Program +=Stroka(tmp)+Stroka(" ");
             si>>tmp;
         }

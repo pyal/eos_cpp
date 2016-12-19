@@ -306,7 +306,7 @@ void SetFluxK(VecFreeCl<ENOVarStruct> &u,
   par.LambdaNew=LambdaMax;
 // New CFL calculation
   double max_lambda=0,dx=min(u[Cent].pos-u[Cent-1].pos,u[Cent+1].pos-u[Cent].pos);
-  for (int k=1;k<=ENO_U_Dim;k++) max_lambda=max(max_lambda,fabs(Eig(k,k)));
+  for (int k=1;k<=ENO_U_Dim;k++) max_lambda=max<double>(max_lambda,fabs(Eig(k,k)));
   par.CFL_number=min(par.CFL_number,dx/max_lambda);
  };  
 void ClcFluxDif(VecFreeCl<ENOVarStruct> &f_plus,VecFreeCl<ENOVarStruct> &f_minus,

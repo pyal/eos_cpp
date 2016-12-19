@@ -1,15 +1,15 @@
 #pragma once
 
-#include "lib\std\deffunc.h"
-//#include "lib\std\interfac.h"
-#include "lib\std\const.h"
+#include "lib/std/deffunc.h"
+//#include "lib/std/interfac.h"
+#include "lib/std/const.h"
 #include "matt_fac.h"
 #include "fre_fac.h"
 //#include "matt_reg.h"
 
-#include "mat\dat_fac.h"
-#include "mat\dat_reg.h"
-#include "mat\spl_fac.h"
+#include "mat/dat_fac.h"
+#include "mat/dat_reg.h"
+#include "mat/spl_fac.h"
 #include "fre_bus.h"
 
 //#include "h2_liqui.h"
@@ -60,7 +60,7 @@ struct MatterFreeSpl:FreeEIO {
 		input>>spl_name;
 		FilterTextIn in(spl_name.c_str());
 		char tmp[256];in>>tmp;
-		while (stricmp(tmp,"GeneratedSpline")!=0 && in)
+		while (Stricmp(tmp,"GeneratedSpline")!=0 && in)
 			in>>tmp;
 		if (!in)
 			throw info_except("Wrong spline format. Spline file: %s\n",spl_name.c_str());

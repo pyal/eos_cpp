@@ -157,7 +157,7 @@ struct ManyVarSplGenerator:ManyVarFunction{
         if (!GenerateSpline){
 		    FilterTextIn in_(SplFileName.c_str());
 		    in_>>tmp;
-		    while (stricmp(tmp,"GeneratedSpline")!=0 && in_)
+		    while (Stricmp(tmp,"GeneratedSpline")!=0 && in_)
 			    in_>>tmp;
 		    if (!in_)
 			    throw info_except("Wrong spline format. Spline file: %s\n",SplFileName.c_str());

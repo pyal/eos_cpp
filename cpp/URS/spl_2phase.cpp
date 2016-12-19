@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 
 #include "spl_2phase.h"
 #include "Matt_spl.h"
@@ -56,7 +56,7 @@ struct BinodalPnt
 
 //void MakeSpline(CurveSpline &spl,int Nspl,double Misf,double *x,double *y,int NumX,
 void MakeSpline(CurveSpline &spl,int Nspl,double Misf,double *y,double *x,int NumX,//y(x)
-                char *err_name, int DebugOut=0)
+                const char *err_name, int DebugOut=0)
   {
    if (spl.Generate(Nspl,Misf,0,x,y,NumX)) 
    {
@@ -139,12 +139,12 @@ ZeroFunc_ErrorM=0;
   MakeSpline(IntegralSpline_Glob_P_V,NumSplD,Misf*0.0001,Pres,Vol,NumD," GenerateAllBnd P_V");
   IntegralFunc_Negative=0;IntegralFunc_Add=0;
   double PT_From;ZeroFunc_Spl_Vmin=Fmin(IntegralFunc_PV_Int,Vol[min(To+2,NumD-1)],
-                                        Vol[max(0,To-2)],Vol[To],Misf*0.1,PT_From);
+                                        Vol[max<int>(0,To-2)],Vol[To],Misf*0.1,PT_From);
 //cout<<"Found Pmin: "<<PT_From<<" VolMin: "<<ZeroFunc_Spl_Vmin<<"\n"<<flush;
   BinArr.SpinR[BinInd]=1/ZeroFunc_Spl_Vmin;
   IntegralFunc_Negative=1;
 //cout<<"Spline_MaximumPressure =============================================\n";
-  double PT_To;ZeroFunc_Spl_Vmax=Fmin(IntegralFunc_PV_Int,Vol[min(From+2,NumD-1)],Vol[max(0,From-2)],Vol[From],
+  double PT_To;ZeroFunc_Spl_Vmax=Fmin(IntegralFunc_PV_Int,Vol[min(From+2,NumD-1)],Vol[max<int>(0,From-2)],Vol[From],
                      Misf*0.1,PT_To);PT_To=-PT_To;
 //cout<<"Found Pmax: "<<PT_To<<" VolMax: "<<ZeroFunc_Spl_Vmax<<"\n"<<flush;
   BinArr.SpinL[BinInd]=1/ZeroFunc_Spl_Vmax;
@@ -160,7 +160,8 @@ ZeroFunc_ErrorM=0;
   BinArr.BinR[BinInd]=1/ZeroFunc_SplRes_Bmin;BinArr.BinL[BinInd]=1/ZeroFunc_SplRes_Bmax;
   double Dr=BinArr.BinR[BinInd],Dl=BinArr.BinL[BinInd];
   BinArr.BinRE[BinInd]=Mat->Energy(Dr,T);
-  double E0=BinArr.BinRE[BinInd],R0=BinArr.BinR[BinInd],P0=Mat->Pressure(R0,E0);
+  double E0=BinArr.BinRE[BinInd];
+//          R0=BinArr.BinR[BinInd];//,P0=Mat->Pressure(R0,E0);
   double E1=Mat->Energy(Dl,T);
 //  BinArr.dPdT[BinInd]=-(E0-E1)/(BinArr.BinR[BinInd]-BinArr.BinL[BinInd]);
   BinArr.dPdT[BinInd]=-(E0-E1)/(1/BinArr.BinR[BinInd]-1/BinArr.BinL[BinInd]);
@@ -193,7 +194,7 @@ void FindSpinEst(double *Pres,double *Denc,int NumD,double T,BinodalPnt &BinArr,
 int FormBinodalPnt(TData<double> &dat,BinodalPnt &BinArr,MatterIO *Mat,
                    int NumSplD,double Misf)
 {
-  int Tind=0,Dind=1,BinInd=1;
+  int Tind=0,Dind=1;//,BinInd=1;
   int k,Cur=0,NumT=dat.I[Tind],NumD=dat.I[Dind],FoundReg=0,Cont,Good=0;
   for (k=1;k<=NumT;k++)
     {
@@ -258,8 +259,8 @@ void SaveBound(char *res_name,BinodalPnt &BinArr,int &NumSplT,double Misf)
   SetMinMaxBinVal(BinArr);
   Bnd.Tmax=BinArr.Tmax;Bnd.Tmin=BinArr.Tmin;//Bnd.Emax=BinArr.Emax;Bnd.Emin=BinArr.Emin;
   Bnd.Dmax=BinArr.Dmax;Bnd.Dmin=BinArr.Dmin;
-//  FilterTextOut out(res_name);
-  Bnd.save_data_state(FilterTextOut(res_name));
+  FilterTextOut out(res_name);
+  Bnd.save_data_state(out);
 
 }
 int GenerateTwoPhaseBnd(istream &row,MatterIO *Mat)
@@ -275,7 +276,9 @@ int GenerateTwoPhaseBnd(istream &row,MatterIO *Mat)
 cout<<" Entered Cfg for GenerateTwoPhaseBnd\n";//ChRead();
    SetDatP_DT(dat,Mat,AddT,AddD,GetPnt);
 // First - Temperature, Second - Dencity
-   int Tind=0,Dind=1,NumT=dat.I[Tind],NumD=dat.I[Dind];
+   int Tind=0,
+//           Dind=1,
+           NumT=dat.I[Tind];//,NumD=dat.I[Dind];
    BinodalPnt BinArr(NumT+1);
    if (FormBinodalPnt(dat,BinArr,Mat,NumSplD,Misf))
       SaveBound(res_name,BinArr,NumSplT,Misf);
@@ -354,7 +357,7 @@ void FindBushCoefABC(istream &row,MatterIO  *Mat_In,double dPdT,
    if (!ReadTableRow(row,(TData<real>*)&dat)) { cout<<" Could not read param.";exit(0);}
    double Tmelt=( dynamic_cast<FreeM_SigmaMT *>((TwoVarFunction*)((FreeEBushman *)Mat_Static->FreeEPtr.pointer())->FreeM ) )->Temp_m0*1e3;
 //   double Tmelt=( (FreeM_SigmaMT *)((FreeEBushman *)Mat_Static->FreeEPtr)->FreeM )->Temp_m0*1e3;
-   double Dcold=( (FreeEBushman *)Mat_Static->FreeEPtr.pointer() )->Denc0;
+//   double Dcold=( (FreeEBushman *)Mat_Static->FreeEPtr.pointer() )->Denc0;
    double Dmelt=( (FreeEBushman *)Mat_Static->FreeEPtr.pointer() )->Denc0m;
    double Emelt=Mat_Static->Energy(Dmelt,Tmelt);
 //   dat.SetColumn(&Tmelt,1,0);
@@ -469,7 +472,8 @@ void SaveSolLiqBound(char *res_name,LiquidSolidBndDat &LiqSolBnd,int PntSpl,doub
   MakeSpline(Bnd.T_D,PntSpl,Misf,&LiqSolBnd.T[0],&LiqSolBnd.D[0],Num,"T_D",1);
   Bnd.Dmax=LiqSolBnd.Dmax;Bnd.Dmin=LiqSolBnd.Dmin;
 //  fstream out(res_name,ios::out);Bnd.SaveIni(out);out.close();
-  Bnd.save_data_state(FilterTextOut(res_name));
+    FilterTextOut out(res_name);
+  Bnd.save_data_state(out);
 };
 
 int GenerateSolLiqPhaseBnd(istream &row,MatterIO *MatSol)

@@ -4,7 +4,7 @@
 //#include "mat\NdimMin.h"
 //#include "mat\fun_fac.h"
 #include "fre_dis.h"
-#include "lib\ref\data_manip.h"
+#include "lib/ref/data_manip.h"
 
 namespace ClcIonisation {
 
@@ -39,7 +39,7 @@ namespace ClcIonisation {
                 return ;
             Dencity = denc;
             Temperature = temp;
-            double d = max(Dencity, MathZer) * MolVeight, t = max(Temperature, MathZer);
+            double d = max<double>(Dencity, MathZer) * MolVeight, t = max<double>(Temperature, MathZer);
             FreeE = FreeEl->FreeE(d, t) * MolVeight;
             FreeEder = (FreeEl->FreeE(d * (1 + 0.5 * DeriveConst), t) - FreeEl->FreeE(d * (1 - 0.5 * DeriveConst), t)) / (d * DeriveConst);
             FreeEder *= sqr(MolVeight);
@@ -149,7 +149,7 @@ namespace ClcIonisation {
 //  ====================================================================================
     struct FreeEIonSimple : FreeEIonStdIO {
         
-        FreeEIonSimple() : FreeEIonStdIO(), ElNumErr(1e-10), LastElNum(0.5){}
+        FreeEIonSimple() : FreeEIonStdIO(), LastElNum(0.5), ElNumErr(1e-10) {}
         Stroka MakeHelp(){
             Stroka res = FreeEIonStdIO::MakeHelp() +  
                 "\nSimple ionization (fixed ion potentials, no lowering).\n";
@@ -203,7 +203,7 @@ namespace ClcIonisation {
             FoundElNum = ClcIonNum();
             FoundIons = ClcIonNums(ClcElRelations(FoundElNum));
         }
-
+        using FreeEIonStdIO::FreeE;
         virtual double FreeE(){
             double res = FoundElNum * Electron.ClcFreeE(FoundElNum * clcDenc, clcTemp);
             //vector<double> elNums = ClcIonNums(ClcElRelations(elNum));
@@ -219,7 +219,7 @@ namespace ClcIonisation {
 
         vector<double> ClcElRelations(double elNum){
             vector<double> ret(clcPot);
-            double m = Electron.MolVeight;
+//            double m = Electron.MolVeight;
             double fElMul = Electron.ClcFreeE(elNum * clcDenc, clcTemp) + 
                             elNum * clcDenc * Electron.ClcFreeEDeriv(elNum * clcDenc, clcTemp);
             for(size_t i = 0; i < clcPot.size(); i++){
@@ -349,7 +349,7 @@ namespace ClcIonisation {
             char tmp[256];
             SavableClass *ptr;
             in>>tmp>>tmp;
-            if (stricmp("{", tmp) != 0)
+            if (Stricmp("{", tmp) != 0)
                 throw info_except("Bad input. Had to read <{> and read <%s>\n", tmp);
             VolFuncs.clear();
             while( !(!in) && !SavableClass::TestNextChar(in, '}') ){
@@ -371,7 +371,7 @@ namespace ClcIonisation {
         }
         virtual vector<double> GetIonPots(double denc, double temp) {
             vector<double> ionLev; ionLev = IonPot;
-            double V = 1. / max(MathZer, denc);
+            double V = 1. / max<double>(MathZer, denc);
             for(size_t i = 0; i < VolFuncs.size(); i++)
                 if (VolFuncs[i].nonnull())
                     ionLev[i] += VolFuncs[i]->Calculate(V);
@@ -422,12 +422,12 @@ namespace ClcIonisation {
         }
     protected:
 
-        double iterElNum;
         double ElNum2Err, LastElNum2;
+        double FoundEl2Num;
+        double iterElNum;
         double clcCoef1;
         double Coef1Mul;
 
-        double FoundEl2Num;
 
         void SetClcConst(double denc, double temp){
             FreeEIonSimple::SetClcConst(denc, temp);
@@ -761,11 +761,13 @@ namespace ClcIonisation {
             if (What == "ILambda")
                 return Anis.GetILambda(sum2el); // return 1 / (Anis.clcCoef2 * sqrt(sum2el));
             if (Str::GetNumberedVar(What, "IonPot_", numVar, 0, (int)Energy.size()))
-                return Anis.ClcPotentialAddition(sum2el)[numVar] / max(MathZer, Energy[numVar]);// * (1000 / (M_Na * M_Eau_J));
+                return Anis.ClcPotentialAddition(sum2el)[numVar] / max<double>(MathZer, Energy[numVar]);// * (1000 / (M_Na * M_Eau_J));
             if (Str::GetNumberedVar(What, "IonPotAU_", numVar, 0, (int)Energy.size()))
-                return Anis.ClcPotentialAddition(sum2el)[numVar] / max(MathZer, Energy[numVar]);
-            if (Str::GetNumberedVar(What, "PotDer_", numVar, 0, (int)Energy.size()))
-                return Anis.ClcDerivAdd(MakeElectronVector(sum2el))[numVar];
+                return Anis.ClcPotentialAddition(sum2el)[numVar] / max<double>(MathZer, Energy[numVar]);
+            if (Str::GetNumberedVar(What, "PotDer_", numVar, 0, (int)Energy.size())) {
+                vector<double> tmp = MakeElectronVector(sum2el);
+                return Anis.ClcDerivAdd(tmp)[numVar];
+            }
             throw info_except("Name <%s> is not defined.\nDefined vars: %s\n", What.c_str(), MakeNames().c_str());
         }
         vector<double> MakeElectronVector(double sum2el) {
@@ -773,7 +775,7 @@ namespace ClcIonisation {
             for(size_t i = 1; i < Energy.size(); i++)
                 stdNum2El += i * (i + 1);
             VecCl ret(int(Energy.size()));ret = ret * 0 + sum2el / stdNum2El;
-            ret[0] = max(MathZer, 1 - sum2el / stdNum2El * (Energy.size() - 1));
+            ret[0] = max<double>(MathZer, 1 - sum2el / stdNum2El * (Energy.size() - 1));
             return ret.Copy2Vector();
         }
         Stroka MakeNames() {
@@ -942,7 +944,7 @@ namespace ClcIonisation {
                 vector<double> iplus = ClcIonNums((huck + VecCl(Anis.ClcDerivAdd(ions))).Copy2Vector());
                 double err = MathZer;
                 for(size_t i1 = 0; i1 < iplus.size(); i1++)
-                    err += fabs(log(max(MathZer, iplus[i1]) / max(MathZer, ions[i1])));
+                    err += fabs(log(max<double>(MathZer, iplus[i1]) / max<double>(MathZer, ions[i1])));
                 ions = ((VecCl(ions) + VecCl(iplus)) / 2).Copy2Vector();
                 if (err < LogVectorErr)
                     break;
@@ -1305,7 +1307,7 @@ namespace ClcIonisation {
 //        return ElDenc;
 //    }
 //    void SetElDenc(double temp, double eldenc){
-//        ElDenc = max(eldenc,MathZer); 
+//        ElDenc = max<double>(eldenc,MathZer);
 //        ElE = FreeEelectron->FreeE(eldenc, temp);
 //        ElEder = (FreeEelectron->FreeE(eldenc*(1+0.5*DeriveConst), temp)-FreeEelectron->FreeE(eldenc*(1-0.5*DeriveConst), temp))/(eldenc*DeriveConst);
 //    }
@@ -1584,7 +1586,7 @@ namespace ClcIonisation {
 //        char tmp[256];
 //        SavableClass *ptr;
 //        in>>tmp>>tmp;
-//        if (stricmp("{", tmp) != 0)
+//        if (Stricmp("{", tmp) != 0)
 //            throw info_except("Bad input. Had to read <{> and read <%s>\n", tmp);
 //        VolFuncs.clear();
 //        while(!GuessNextChar(in, '}')){
@@ -1606,7 +1608,7 @@ namespace ClcIonisation {
 //    virtual vector<double> GetElectronLevels(const ClcDataStruct &FixData){
 //        vector<double> ionLev; ionLev = IonLevels;
 //        //DataManip::CopyVector(ionLev, IonLevels);
-//        double V = 1. / max(MathZer, FixData.FixMatD);
+//        double V = 1. / max<double>(MathZer, FixData.FixMatD);
 //        for(size_t i = 0; i < VolFuncs.size(); i++)
 //            if (VolFuncs[i].nonnull())
 //                ionLev[i] += VolFuncs[i]->Calculate(V);

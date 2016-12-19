@@ -97,8 +97,8 @@ void Hug2(Int_Par &P1,Int_Par &P2,Int_Par &Pr1,double &Dr1,Int_Par &Pr2,
    else P2.Pres=0.0001;
    if (Norm(P1-P2)<StndErr) 
    {Pr1=P1;Pr2=P2;Dr1=Mat1->Sound(P1.Dens,P1.Ener)+P1.Velo;Dr2=Dr1;return ;}
-   double A1=max(0.1,P1.Dens*Mat1->Sound(P1.Dens,P1.Ener));
-   double A2=max(0.1,P2.Dens*Mat2->Sound(P2.Dens,P2.Ener));
+   double A1=max<double>(0.1,P1.Dens*Mat1->Sound(P1.Dens,P1.Ener));
+   double A2=max<double>(0.1,P2.Dens*Mat2->Sound(P2.Dens,P2.Ener));
    Pest=(P2.Pres*A1+P1.Pres*A2+A1*A2*(P1.Velo-P2.Velo))/(A1+A2);
 
    S_Par1=P1;S_Par2=P2;S_Mat1=Mat1;S_Mat2=Mat2;

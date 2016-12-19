@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "fre_bus.h"
 
 static ClassDesc FreeEBushman_ClassDesc(typeid(FreeEBushman),"FreeEBushman",1,"MatterFreeE_category",create<FreeEBushman>);
@@ -50,7 +50,7 @@ double FreeEBushman::FreeE(double Denc,double T)
 */
 
 FreeEBushman::FreeEBushman():FreeEIOFind("material.cfg","Ni_Bushman"),
-		AtomVeight(58.71), Zconst(28), Denc0(8.92857), Denc0c(9.03342), Denc0m(7.83), Denc0e(8.92857),
+                             Denc0c(9.03342), Denc0(8.92857), Denc0m(7.83), Zconst(28), AtomVeight(58.71), Denc0e(8.92857),
         IncludeFcold(1), IncludeFelectron(1), IncludeFliquid(1), IncludeFsolid(1)
 {
 	ColdComp=new FreeCold_V();
@@ -124,7 +124,7 @@ int FreeColdR_V::save_data_state(FilterOut& output)
 
 double TetaExp_Sigma::Calculate(double x)
   {
-   double tmp=log(max(MathZer,x));
+   double tmp=log(max<double>(MathZer,x));
    double ret=Teta0*pow(x,2./3)*exp( (Gamma0-2./3)*(sqr(Bcoef)+sqr(Dcoef))/Bcoef
                                     *atan(tmp*Bcoef/(sqr(Bcoef)+Dcoef*(tmp+Dcoef))) );
 //for (double u=-1000;u<=1000;u+=1) cout<<u<<" "<<atan(u)<<"\n";
@@ -155,7 +155,7 @@ int HeatCapacity_SigmaT::save_data_state(FilterOut& output)
 
 double TetaL_SigmaLT::Teta(double sigL)
   {
-   double x=log(max(MathZer,sigL));
+   double x=log(max<double>(MathZer,sigL));
    double Coef=1;
 // double Sub=PowX0/PowRelease,Div=1/PowRelease,F0=atan(-Sub),
 //        F1=atan(Div-Sub);
@@ -202,14 +202,14 @@ int TetaL_SigmaLT::save_data_state(FilterOut& output)
 
 double TetaL_SigmaLT_Short::Teta(double sigL)
   {
-   double x=log(max(MathZer,sigL));
+   double x=log(max<double>(MathZer,sigL));
    double ret=Teta0*exp( (Gamma0-2./3)*(sqr(Bcoef)+sqr(Dcoef))/Bcoef
                                     *atan(x*Bcoef/(sqr(Bcoef)+Dcoef*(x+Dcoef))) );
    return ret;
   }
 double TetaL_SigmaLT_Short::Calculate(double sigL,double temp)
    { 
-     double Coef=1;
+//     double Coef=1;
      double ret=Temp_sa*(Temp_ca*Teta(sigL)+temp)*pow(sigL,2./3)/(Temp_ca+temp);
      return ret;
    };

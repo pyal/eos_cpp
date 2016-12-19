@@ -189,7 +189,7 @@ void Region::StepRegion(double TimeStp,double &MinTimeStp,double &PresDeriv)
    PresDeriv=0;
    for (k=1;k<N;k++)
       PresDeriv+=fabs(BV[k]->Pressure[BV[k]->NumPnt-2]-BV[k+1]->Pressure[1]);
-	  PresDeriv=max(log(max(1,PresDeriv))-8,0);
+	  PresDeriv=max<double>(log(max<double>(1,PresDeriv))-8,0);
  };
 
 void Region::ClcMass() 
@@ -220,7 +220,7 @@ void Region::StepRegion(double TimeStp,double &MinTimeStp,double &PresDeriv)
    PresDeriv=0;
    for (k=1;k<N;k++)
       PresDeriv+=fabs(BV[k]->Pressure[BV[k]->NumPnt-2]-BV[k+1]->Pressure[1]);
-	  PresDeriv=max(log(max(1,PresDeriv))-8,0);
+	  PresDeriv=max<double>(log(max<double>(1,PresDeriv))-8,0);
  };
 
 void Region::ClcMass() 

@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "ros_bin.h"
 //#include "Quad.h"
 
@@ -63,7 +63,7 @@ niu[0]=exp(niu[0]);niu[1]=exp(niu[1]);
    if (Diameter2>sqr(StndErr))  Int2=IntExp6Correlation(mixt->Exp6[1],niu[1],Diameter2);
 
    double niu_=pow(pow(niu[0],1./3)+pow(niu[1],1./3),3)/8;
-   double niu_mix=pow(pow(niu[0]/max(alpha,StndErr),1./3)+pow(niu[1]/max(1-alpha,StndErr),1./3),3)/8;
+   double niu_mix=pow(pow(niu[0]/max<double>(alpha,StndErr),1./3)+pow(niu[1]/max<double>(1-alpha,StndErr),1./3),3)/8;
    double Diameter_=pow(6*niu_mix/(BinRoss6Min->S_DensDia*M_PI*C),1./3);//*2.238515;// To obtain S_Diameter in Bor radius
 
    if ( (Diameter1>sqr(StndErr)) && (Diameter2>sqr(StndErr)) )   
@@ -84,10 +84,10 @@ double FixedPar;
 double MinimizeFunc(double par)
  {double niu[2];niu[MinimizePar]=par;niu[(MinimizePar==0)?1:0]=FixedPar;return CorBinMinFunc(&niu[0],2);}
 
-#include "mat\NdimMin.h"
+#include "mat/NdimMin.h"
  double CheckInLim(double X,double From,double To,int IncBounds)
  {
-   double ret=0;
+//   double ret=0;
    if (In_Lim(X,From,To,IncBounds)) return 0;
 //   cout<<" X "<<X<<" From "<<From<<" To "<<To<<"\n";
    return 1e5*sqr(min(fabs(From*1.1-X),fabs(To*0.9-X)))+1e5;
@@ -96,7 +96,8 @@ double MinimizeFunc(double par)
  {
    double *MinV,*MaxV,CorDeltaCoef;
    MinFuncClass(double *minv,double *maxv,double cordeltacoef)
-     :MaxV(maxv),MinV(minv),CorDeltaCoef(cordeltacoef){};
+     :MinV(minv),MaxV(maxv),CorDeltaCoef(cordeltacoef){};
+     using DeriveFuncClass::Execute;
    double Execute(VecCl &par)
    {
      //if (!In_Lim(par[1],MinV[0],MaxV[0],0)) return 1e50;
@@ -110,8 +111,8 @@ double MinimizeFunc(double par)
    double CorCoef(double cordeltacoef=-1)
    {if (cordeltacoef!=-1) CorDeltaCoef=cordeltacoef;return CorDeltaCoef;}
  };
-#include "mat\multimin.h"
-#include "mat\quad.h"
+#include "mat/multimin.h"
+#include "mat/quad.h"
 int LargeNiuStep(double *niu) 
 //{return 0;}
 {return ((niu[0]==-5)&&(niu[1]==-5))?1:0;}
@@ -120,7 +121,7 @@ void ClcMinNiu_New(double *niu,double *low,double *up,double &MinE,double FuncAc
 {
 // To be updated
 //MinFindNDimClass
-  double MaxNiuStp=1;
+//  double MaxNiuStp=1;
   Ref<MinFuncClass> minFunc=new MinFuncClass(low,up,0);
   Ref<Derive2DStd> D2=new Derive2DStd(minFunc);
   double MinError=FuncAccur;
@@ -223,12 +224,12 @@ double FreeBinaryCor(MixtureComposition &mixt,double Denc,double T)
    IntExp6Correlation_IntMethod=Exp6Param::ROS_INTEGRAL_SMOOTH_PLUSNIU;SmoothLimitUp=low[0]*20;SmoothLimitLo=low[0];
 //   IntExp6Correlation_IntMethod=Exp6Param::ROS_INTEGRAL_SMOOTH;
    up[0]*=mixt.alpha;up[1]*=(1-mixt.alpha);
-   up[0]=max(up[0],0.1*sqr(StndErr));up[1]=max(up[1],0.1*sqr(StndErr));
+   up[0]=max<double>(up[0],0.1*sqr(StndErr));up[1]=max<double>(up[1],0.1*sqr(StndErr));
    mixt.get_Niu(niu[0],niu[1]);
 
    up[1]=log(up[1]);up[0]=log(up[0]);low[1]=log(low[1]);low[0]=log(low[0]);
    niu[0]=log(niu[0]);niu[1]=log(niu[1]);
-   if (!CheckInLim(mixt,Denc,T,0.1,max(500,T*0.05))) 
+   if (!CheckInLim(mixt,Denc,T,0.1,max<double>(500,T*0.05)))
        SetLargeNiuStep(niu);
 //   FuncAccur=1e-6;
    FuncAccur=StndErr;
@@ -268,7 +269,7 @@ double FreeBinaryCor(MixtureComposition &mixt,double Denc,double T)
    IntExp6Correlation_IntMethod=Exp6Param::ROS_INTEGRAL_SMOOTH_PLUSNIU;SmoothLimitUp=low[0]*20;SmoothLimitLo=low[0];
 //   IntExp6Correlation_IntMethod=Exp6Param::ROS_INTEGRAL_SMOOTH;
    up[0]*=mixt.alpha;up[1]*=(1-mixt.alpha);
-   up[0]=max(up[0],0.1*sqr(StndErr));up[1]=max(up[1],0.1*sqr(StndErr));
+   up[0]=max<double>(up[0],0.1*sqr(StndErr));up[1]=max<double>(up[1],0.1*sqr(StndErr));
 
 up[1]=log(up[1]);up[0]=log(up[0]);low[1]=log(low[1]);low[0]=log(low[0]);
    mixt.get_Niu(niu[0],niu[1]);
@@ -280,15 +281,15 @@ up[1]=log(up[1]);up[0]=log(up[0]);low[1]=log(low[1]);low[0]=log(low[0]);
    FixedPar=niu[0];MinimizePar=1;niu[1]=Fmin(MinimizeFunc,low[1],up[1],niu[1],1e-4,Min_E);
    int err;
 
-//   niu[0]=max(0.001,niu[0]);niu[1]=max(0.001,niu[1]);
+//   niu[0]=max<double>(0.001,niu[0]);niu[1]=max<double>(0.001,niu[1]);
 //   FunAccur=1e-6;ResErr=sqrt(FunAccur);MaxFun=2;MaxIter=2;
    FunAccur=1e-6;ResErr=sqrt(FunAccur);MaxFun=2;MaxIter=2;
    stp[0]=stp[1]=FunAccur*10;
 //cout<<" FreeBinaryCor Rough\n";
 //   IntExp6Correlation_IntMethod=Exp6Param::ROS_INTEGRAL_SMOOTH;CorBinMinFunc(&low[0],2);// To reset old values of params
 ResErr=0.0002;
-//low[0]=max(niu[0]-ResErr*10,low[0]);
-//low[1]=max(niu[1]-ResErr*10,low[1]);
+//low[0]=max<double>(niu[0]-ResErr*10,low[0]);
+//low[1]=max<double>(niu[1]-ResErr*10,low[1]);
 //up[0]=min(niu[0]+ResErr*10,up[0]);
 //up[1]=min(niu[1]+ResErr*10,up[1]);
 //double MultiMin(int &Error,int N,double *x,double (*FuncClc)(double *x,int n) ,
@@ -312,7 +313,7 @@ ResErr=0.0002;
 
 //    up[0]=mixt.Exp6[0].CutDiameter_Niu;up[1]=mixt.Exp6[1].CutDiameter_Niu;
 //    up[0]*=mixt.alpha;up[1]*=(1-mixt.alpha);
-//    up[0]=max(up[0],0.1*sqr(StndErr));up[1]=max(up[1],0.1*sqr(StndErr));
+//    up[0]=max<double>(up[0],0.1*sqr(StndErr));up[1]=max<double>(up[1],0.1*sqr(StndErr));
 //    int badrestr=0,k;
 //    for (k=0;k<2;k++) if (niu[k]>up[k]) {badrestr=1;niu[k]=up[k];}
 //    if (badrestr) MinE=CorBinMinFunc(niu,2);
@@ -343,7 +344,7 @@ double FreeBinaryCor(MixtureComposition &mixt,double Denc,double T)
    double niu[2],low[2],up[2],stp[2];low[0]=low[1]=3e-5;
    up[0]=mixt.Exp6[0].CutDiameter_Niu;up[1]=mixt.Exp6[1].CutDiameter_Niu;
    up[0]*=mixt.alpha;up[1]*=(1-mixt.alpha);
-   up[0]=max(up[0],0.1*sqr(StndErr));up[1]=max(up[1],0.1*sqr(StndErr));
+   up[0]=max<double>(up[0],0.1*sqr(StndErr));up[1]=max<double>(up[1],0.1*sqr(StndErr));
 //   stp[0]=up[0]*StndErr*100;stp[1]=up[1]*StndErr*100;
 stp[0]=stp[1]=1e-4;
    mixt.get_Niu(niu[0],niu[1]);
@@ -362,8 +363,8 @@ cout<<" FreeBinaryCor Rough\n";
                low,up,10,0.25 );
 //   IntExp6Correlation_IntMethod=Exp6Param::ROS_INTEGRAL_STRICT;CorBinMinFunc(&low[0],2);// To reset old values of params
 ResErr=0.01;
-low[0]=max(niu[0]-ResErr*10,low[0]);
-low[1]=max(niu[1]-ResErr*10,low[1]);
+low[0]=max<double>(niu[0]-ResErr*10,low[0]);
+low[1]=max<double>(niu[1]-ResErr*10,low[1]);
 up[0]=min(niu[0]+ResErr*10,up[0]);
 up[1]=min(niu[1]+ResErr*10,up[1]);
 stp[0]=stp[1]=1e-5;

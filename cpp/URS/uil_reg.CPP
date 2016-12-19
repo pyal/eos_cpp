@@ -39,14 +39,14 @@ cout<<" NumMatter "<<NumMatter<<"\n";
        if ( !(Matter[k] << SavableClass::Read(input)) ) 
             throw info_except("Could not read. Exit.\n");
         int N = Matter[k]->NumInputVal()-2;
-        //NumIntPar = max(NumIntPar, N);
+        //NumIntPar = max<double>(NumIntPar, N);
         IntParNames[k].SetDim(NumIntPar);
        for(int i=0;i<N;i++){
            input>>tmp;
            IntParNames[k][i] = tmp;
        }
        for(int i=N;i<NumIntPar;i++)
-           IntParNames[k][i] = itoa(i,tmp,10);
+           IntParNames[k][i] = Itoa(i,tmp,10);
    }
 
    for (k=1;k<=NumMatter;k++) B[k]=new Body(BndMatter[k]-BndMatter[k-1]+1,Matter[k],
@@ -138,7 +138,7 @@ void Region::StepRegion(double TimeStp,double &MinTimeStp,double &PresDeriv){
     PresDeriv=0;
     for (int k=1;k<N;k++)
         PresDeriv+=fabs(BV[k]->Pressure[BV[k]->NumPnt-2]-BV[k+1]->Pressure[1]);
-    PresDeriv=max(log(max(1,PresDeriv))-8,0);
+    PresDeriv=max<double>(log(max<double>(1,PresDeriv))-8,0);
  };
 
 int Region::SetWorkDim(int n)

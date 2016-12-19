@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "matt_caloric_spl.h"
 
 static ClassDesc MatterCaloricSpl_ClassDesc(typeid(MatterCaloricSpl),"MatterCaloricSpl",1,"Matter_category",create<MatterCaloricSpl>);
@@ -14,7 +14,7 @@ void MatterCaloricSpl::Temperature(double *t,double *dencity,double *energy,int 
     if (!TempSpl) {
         memccpy(energy, t, num, sizeof(double));
         for(int k = 0; k < num; k++)
-            t[k] = max(StndErr, t[k]);
+            t[k] = max<double>(StndErr, t[k]);
         return ;
     }
     TempSpl->Evaluate(energy, dencity, t, num);

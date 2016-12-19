@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "matt_2phase.h"
 
 
@@ -118,7 +118,7 @@ map<Stroka, double> MatterStable::TwoPhaseBoundary::MakeBndPnt(){
     ret["DSl_T"] = 1/ZeroFunc_Spl_Vmax;
     IntegralFunc_Negative=0;
     double PT_est=IntegralFunc_PV_Int_Static( (ZeroFunc_Spl_Vmin+ZeroFunc_Spl_Vmax)*0.5 );
-    Fzero(ZeroFunc_PV_Int_Static, max(PT_From, sqrt(MathZer)), max(PT_To, sqrt(MathZer)), PT_est, Mis*0.1, Mis*0.1, 100);
+    Fzero(ZeroFunc_PV_Int_Static, max<double>(PT_From, sqrt(MathZer)), max<double>(PT_To, sqrt(MathZer)), PT_est, Mis*0.1, Mis*0.1, 100);
     //Fzero(ZeroFunc_PV_Int_Static, PT_From, PT_To, PT_est, Mis*0.1, Mis*0.1, 100);
     ZeroFunc_PV_Int_Static(PT_est);
     //ret["P_T"] = PT_est;
@@ -154,7 +154,7 @@ Stroka MatterStable::TwoPhaseBoundary::MakeSpline(CurveSpline &spl,int Nspl,doub
         throw info_except("GenerateTwoPhaseBnd SaveBound error Generating %s spline\n", err_name);
     res += Stroka(" MakeSpline Control ") +  err_name + Stroka("\n");
     for (int k=0;k<NumX-1;k++) { 
-      double tmp=(x[k]+x[k+1])/2;
+//      double tmp=(x[k]+x[k+1])/2;
       //char a[256];
       //res<<x[k]<<" "<<y[k]<<" "<<spl.Evaluate(x[k])<<"\n";
       //res<<(y[k]+y[k+1])/2<<" "<<spl.Evaluate(tmp)<<"\n";
@@ -184,6 +184,7 @@ Stroka MatterStable::TwoPhaseBoundary::SetBnd(map<Stroka, vector<double> > &data
     ret += MakeSpline(Bnd.DSr_T,NumSplPnt,SplMisfit,&(data["DSr_T"][0]),&(data["T"][0]),Num,"DSr_T");
     ret += MakeSpline(Bnd.DSl_T,NumSplPnt,SplMisfit,&(data["DSl_T"][0]),&(data["T"][0]),Num,"DSl_T");
 
-    Bnd.save_data_state(FilterTextOut(res_file_name.c_str()));
+    FilterTextOut out(res_file_name.c_str());
+    Bnd.save_data_state(out);
     return ret;
 };

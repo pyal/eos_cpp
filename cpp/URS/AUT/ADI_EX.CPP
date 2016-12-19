@@ -17,7 +17,7 @@ double PressurePorous(double r,double e)
   {
    SetIntPar(r,e);
    double P=MatterAdiabat->Pressure(r,e);
-   return max(MatterAdiabat->Pressure(r,e),Pcritical);
+   return max<double>(MatterAdiabat->Pressure(r,e),Pcritical);
 //   return MatterAdiabat->Pressure(r,e);
   };
 double SoundPorous(double r,double e)
@@ -53,7 +53,7 @@ NumDenc++;
      { cout <<" Error, could not find HugDenc\n";}
    e2=e1+de;
    p2=-(Stat_p0+Stat_coef*de);//p2=PressurePorous(r2,e2);
-   double tmp=sqrt(max(0,-(p2-p1)/(1/r2-1/r1)));
+   double tmp=sqrt(max<double>(0,-(p2-p1)/(1/r2-1/r1)));
    D=u1-tmp/r1;u2=tmp/r2+D;
   };
    
@@ -81,7 +81,7 @@ NumPres++;
      { cout <<" Error, could not find HugPres";}
 //   dv=-dv;
    r2=1/(Stat_v1+dv);e2=e1+Stat_coef*dv;
-   double tmp=sqrt(max(0,-(p2-p1)/(1/r2-Stat_v1)));
+   double tmp=sqrt(max<double>(0,-(p2-p1)/(1/r2-Stat_v1)));
    D=u1-tmp/r1;u2=tmp/r2+D;
   }; 
 

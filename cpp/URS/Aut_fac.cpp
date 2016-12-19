@@ -16,7 +16,7 @@ void ClcPos(One_Cell &Par,double &Pos0,double &Pos1,double &Pos2,double &L)
    if (Par.Sh2.Dvel!=0) Pos2=(Par.Sh2.Time-Ct)*(Par.Sh2.Dvel+Par.Sh1.Med.Velo);
    L=Par.Length+(Ct-Par.Sh0.Time)*dU;
    Pos1=L-Pos1;
-   Pos2=max(0,Pos2);Pos1=min(L,Pos1);
+   Pos2=max<double>(0,Pos2);Pos1=min<double>(L,Pos1);
    Pos0=Par.Position+(Ct-Par.Sh0.Time)*Par.Sh0.Med.Velo;
 };
 void ControlBound(One_Cell &Par)
@@ -52,14 +52,14 @@ void AddNewWave(One_Cell &Par,Shock_Par Res,int Fst)
    Res.Med=Res.Med-Par.Sh0.Med-Par.Sh1.Med-Par.Sh2.Med;
    if (Norm(Res.Med)<StndErr) {if (!Fst) ExchangeBounds(Par);return ;}
    double Pos1=Par.Sh1.Pos,Pos2=Par.Sh2.Pos,L=Par.Sh0.Pos;
-//   double Told=Pos2/max(StndErr,(Par.Sh2.Dvel+Par.Sh0.Med.Velo));
-//   double Tnew=L/max(StndErr,(Res.Dvel+Par.Sh0.Med.Velo));
+//   double Told=Pos2/max<double>(StndErr,(Par.Sh2.Dvel+Par.Sh0.Med.Velo));
+//   double Tnew=L/max<double>(StndErr,(Res.Dvel+Par.Sh0.Med.Velo));
 //   if ((Tnew<=Told) || (Norm(Par.Sh2.Med)<sqrt(MathZer)))
 	{
      Par.Sh2.Med=Par.Sh2.Med+Res.Med;Par.Sh2.Pos=L;
      Par.Sh2.Dvel=Res.Dvel;
-	 Par.Sh2.Time=L/max(StndErr,(Par.Sh2.Dvel+Par.Sh1.Med.Velo))+Par.CurTime;
-	 Par.Sh1.Time=(L-Pos2)/max(StndErr,(Par.Sh1.Dvel-Par.Sh2.Med.Velo))+Par.CurTime;
+	 Par.Sh2.Time=L/max<double>(StndErr,(Par.Sh2.Dvel+Par.Sh1.Med.Velo))+Par.CurTime;
+	 Par.Sh1.Time=(L-Pos2)/max<double>(StndErr,(Par.Sh1.Dvel-Par.Sh2.Med.Velo))+Par.CurTime;
 	 if (Norm(Par.Sh1.Med)<sqrt(MathZer)) Par.Sh1.Time=MathInf;
 	 if (!Fst) ExchangeBounds(Par);return ;
 	}// Just sum

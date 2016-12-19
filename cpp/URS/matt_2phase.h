@@ -8,9 +8,9 @@
 // =============================================================================
 // =====================  Two Phase EOS   ======================================
 // ========================== Start ============================================
-#include "mat\spl_fac.h"
-#include "lib\std\util.h"
-#include "mat\quad.h"
+#include "mat/spl_fac.h"
+#include "lib/std/util.h"
+#include "mat/quad.h"
 
    
 struct MatterStable: MatterIO
@@ -105,7 +105,7 @@ struct MatterStable: MatterIO
       if ((!Bnd.InTwoPhase(Dencity,Temperature)) && (!FixedUnstable))
          return MatUnstable->Energy(Dencity,Temperature);
       double e=Bnd.E_T.Evaluate(Temperature),Dr=Bnd.Dr_T.Evaluate(Temperature),
-             p=Bnd.P_T.Evaluate(Temperature),deriv=Bnd.dPdT_T.Evaluate(Temperature);
+             deriv=Bnd.dPdT_T.Evaluate(Temperature);//p=Bnd.P_T.Evaluate(Temperature)
       return e+(1/Dr-1/Dencity)*deriv;
      };
    double DencityCold() {return MatUnstable->DencityCold();};
@@ -157,7 +157,8 @@ struct MatterStable: MatterIO
      FixedUnstable=0;
      input>>tmp>>TwoPhaseName>>tmp;
 //     fstream in(TwoPhaseName,ios::in);Bnd.ReadIni(in);in.close();
-     Bnd.read_data_state(FilterTextIn(TwoPhaseName));
+     FilterTextIn in(TwoPhaseName);
+     Bnd.read_data_state(in);
      //delete MatUnstable;
      return !( !(MatUnstable << SavableClass::Read(input)) ); 
     };
@@ -223,7 +224,7 @@ struct MatterBinodalSpinodal:virtual MatterIO
         double x=MatStable->Bnd.Stability(Dencity,Temperature);
         if (x==0) InputValStorage["MatterStable"]=0;
         else if (x==1) InputValStorage["MatterStable"]=1;
-            else InputValStorage["MatterStable"]=min(InputValStorage["MatterStable"]+Time*TimeUnstable*x,1);
+            else InputValStorage["MatterStable"]=min<double>(InputValStorage["MatterStable"]+Time*TimeUnstable*x,1);
      }; 
 
 
@@ -312,7 +313,8 @@ struct MatterLiqSol:MatterIO
      if (!(Solid << SavableClass::Read(input) ))
         return 0;
 	 input>>tmp>>BndFile;
-	 if ( !Bnd.read_data_state(FilterTextIn(BndFile.c_str())) ) 
+	 FilterTextIn in(BndFile.c_str());
+	 if ( !Bnd.read_data_state(in) )
 		return 0;
      return 1;
    };

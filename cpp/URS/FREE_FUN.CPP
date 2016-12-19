@@ -1,5 +1,8 @@
 //  Main for FreeE - coexistance Curve
+#include <cpp/MAT/Spl_fac.h>
 #include "free_fun.h"
+#include "FRE_FAC.H"
+#include "MATT_ADI.H"
 
 double StndErr=1e-6;
 
@@ -146,7 +149,8 @@ void ShowBound_DencEQ1(fstream &in)
       InputTDataF(name,dat);
       fstream f_in(name,ios::in);f_in>>buf>>NumX>>buf>>Misf;f_in.close();
       Spl=new CurveSpline;Spl->Generate(NumX,Misf,0,*dat,0,1);
-      Spl->Evaluate(*dat);SetExt(name,name,"cmp");fstream f_out(name,ios::out);OutputTDataF(f_out,*dat);
+      Spl->Evaluate(*dat, -1, -1);
+       SetExt(name,name,"cmp");fstream f_out(name,ios::out);OutputTDataF(f_out,*dat);
 
 //  from min to max, for dencity, given dencity - search temperature
 //  draw - denctiy, temp, pressure, energy
@@ -197,7 +201,7 @@ out<<"     D      P        E1  \n";
   };
    
 
-void main(int argc,char *argv[])
+int main(int argc,char *argv[])
   {
 //   StndErr=1e-4;
    fstream in(argv[1],ios::in);
@@ -205,4 +209,5 @@ void main(int argc,char *argv[])
    ShowBound_DencEQ(in);
    ShowBound_DencEQ1(in);
    ShowIsotherm(in);
+    return 0;
   };

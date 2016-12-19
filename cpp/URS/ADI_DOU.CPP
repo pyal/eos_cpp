@@ -1,4 +1,4 @@
-#include <lib\precompiled\adi_dou.h>
+#include <lib/precompiled/adi_dou.h>
 
 #include "adi_dou.h"
 
@@ -137,7 +137,9 @@ void DoIterations(ostream &out,Sl_Par *Sl,int N_Sl,int N_Iter,int StoreOnlyData)
          };
      delete Res;
     };
+#ifndef MAC
 extern unsigned _stklen=64000;
+#endif
 double StndErr;
 int main(int argc,char *argv[])
   {

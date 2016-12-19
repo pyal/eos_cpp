@@ -1,8 +1,8 @@
-#include <lib\precompiled\urs_curve.h>
+#include <lib/precompiled/urs_curve.h>
 
-#include "urs\test\urs_curve.h"
-#include "lib\ref\commandline.h"
-#include "urs\curve_forcelnk.h"
+#include "urs/test/urs_curve.h"
+#include "lib/ref/commandline.h"
+#include "urs/curve_forcelnk.h"
 
 void DrawCurve(int argc,const char *argv[]){
     FilterTextIn in(argv[1]);
@@ -19,13 +19,20 @@ void DrawCurve(int argc,const char *argv[]){
 }
 
 
-
+#include "curve_forcelnk.h"
+#include "urs_forcelnk.h"
 
 Stroka GenerateDetailedHelp() {
     Stroka res = Stroka("Program build time ") + __TIMESTAMP__ + "\n";
     res += Stroka(" Registered curves:\n\n\n") + SavableClass::HelpForCategory("URS_Curve_category");
     res += Stroka(" Registered EOS FreeE:\n\n\n") + SavableClass::HelpForCategory("MatterFreeE_category");
     res += Stroka(" Registered EOS caloric:\n\n\n") + SavableClass::HelpForCategory("Matter_category");
+
+    StdClcUndefined udef;
+    StdClcDouble dou;
+    StdClcString ss;
+//    res += Stroka("\n") + udef.class_name()  + " " + dou.class_name() + " " + ss.class_name() + "\n";
+//    res += Stroka(" Registered VARS:\n\n\n") + SavableClass::HelpForCategory("StdClcTypes_category");
 //    Stroka str = DataSource::GenerateUnicName("tmp");
 //    FilterTextOut tmp(str.c_str(),DataSource::Memory);
 ////    tmp.SetRefMask(SavableClass::SingleFileStorage);

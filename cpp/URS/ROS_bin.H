@@ -9,7 +9,7 @@ struct MixtureComposition
   double MolVeight[2];
   int ClcInteractPart;
   Exp6Param Exp6[3];
-  MixtureComposition():alpha(0.1),ClcInteractPart(1){MolVeight[0] = 1;MolVeight[1] = 2;}
+  MixtureComposition():ClcInteractPart(1), alpha(0.1){MolVeight[0] = 1;MolVeight[1] = 2;}
   int ReadPar(istream &in)
    {
     char tmp[256];

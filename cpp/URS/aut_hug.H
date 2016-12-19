@@ -2,9 +2,9 @@
 #define __AUT_HUG_H
 
 #include "matt_reg.h"
-#include "mat\zero.h"
+#include "mat/zero.h"
 #include "matt_adi.h"
-#include "mat\matrics.h"
+#include "mat/matrics.h"
 
 
 

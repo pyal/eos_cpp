@@ -111,7 +111,7 @@ struct FreeERossN2:FreeEIOFind {
   }; 
 
 struct DissEnergyStruct{
-	DissEnergyStruct():DisE(4.735), DisV0(11.13055){Dis[0]=0; Dis[1]=0.013; Dis[2]=0.00732;}
+	DissEnergyStruct():DisV0(11.13055), DisE(4.735) {Dis[0]=0; Dis[1]=0.013; Dis[2]=0.00732;}
 	double Dis[3],DisV0,DisE,MolVeight;
 	int ReadPar(istream &in,double MolVeight_){ 
 		char tmp[256];in>>tmp>>DisE>>tmp>>DisV0>>tmp>>Dis[0]>>tmp>>Dis[1]>>tmp>>Dis[2];
@@ -121,7 +121,7 @@ struct DissEnergyStruct{
 		out<<" DisE "<<DisE <<" DisV0 "<<DisV0 <<" Dis0 "<<Dis[0] <<" Dis1 "<<Dis[1] <<" Dis2 "<<Dis[2]<<"  ";
 	}
 	double EnergyShift(double Denc,double T){
-   		double v0=DisV0,Eb=DisE,v=MolVeight/max(Denc,1e-10),dV=v-v0,dV2=sqr(dV),dV3=dV2*dV;
+   		double v0=DisV0,Eb=DisE,v=MolVeight/max<double>(Denc,1e-10),dV=v-v0,dV2=sqr(dV),dV3=dV2*dV;
 		if (v<=v0) Eb+=Dis[0]*dV+Dis[1]*dV2+Dis[2]*dV3;
   			Eb=Eb*M_eV_K*M_Rconst/MolVeight;
 		return Eb;
@@ -198,7 +198,7 @@ struct FreeERossH2_DisLim0:FreeEIOFind {
 	FreeEMetHCold *Fmet;
 	DissEnergyStruct Dis;
 
-	int DisLim0,DisPolynom,DisMet;
+    int DisMet, DisPolynom, DisLim0;
 	double AddMet;
    	FreeERossH2_DisLim0():FreeEIOFind("material.cfg","FreeERossH2DisGoodMet"), 
 		DisMet(0), DisPolynom(1), DisLim0(1), AddMet(1506)
@@ -217,16 +217,16 @@ struct FreeERossH2_DisLim0:FreeEIOFind {
      {
        double Id2=Fid2->FreeE(Denc,T);
      		double E2=Ros+Id2;
-       double Eb=max(Dis.EnergyShift(Denc,T),0);
+       double Eb=max<double>(Dis.EnergyShift(Denc,T),0);
 //    	  double v0=DissV0,Eb=DissE,v=Fid1->MolVeight/Denc,dV=v-v0;
 //	      if (v<=v0) Eb+=Diss1*dV+Diss2*sqr(dV)+Diss3*dV*dV*dV;
-//       Eb=max(Eb,0);
+//       Eb=max<double>(Eb,0);
        double DisCoef=Eb/Dis.EnergyShift(0,T);
 //cout<<" Eb "<<Eb<<" v "<<v<<"\n";
 //    		Eb=Eb*M_eV_K*M_Rconst/Fid1->MolVeight;
       if (DisPolynom)		E2+=Eb;
       else E2=Fmet->FreeE(Denc,T)+Ros+AddMet;
-//      double DisCoef=max(0,E2-ret)/Dis.EnergyShift(0,T);
+//      double DisCoef=max<double>(0,E2-ret)/Dis.EnergyShift(0,T);
     		double DiE=DissEnergy(E2,ret,Fid1->MolVeight,T);
 //cout<<Denc<<" "<<DisCoef<<" "<<" "<<Eb<<" "<<E2<<"  "<<ret<<" "<<DiE<<"\n";
       if (DisLim0) 
@@ -312,7 +312,7 @@ struct FreeERossXe:FreeEIOFind {
 	Exp6Param *par;
 	FreeEIdeal *Fid1;
 	int Ionize,Boltsman;
-	double DissA,DissV0,DissE,DegenerDo,DegenerUp;
+	double DegenerDo,DegenerUp,DissE,DissV0,DissA;
    	FreeERossXe():FreeEIOFind("material.cfg","XeStr1"), Ionize(1), Boltsman(0), 
 		DegenerDo(3), DegenerUp(5), DissE(8.26415), DissV0(27.9302), DissA(0.0188)
 		{par = new Exp6Param; Fid1 = new FreeEIdeal; }
@@ -328,7 +328,7 @@ struct FreeERossXe:FreeEIOFind {
 		   double E2=ret;
    		double a=DissA,v0=DissV0,Eb=DissE,v=Fid1->MolVeight/Denc;
     	if (v<=v0) Eb-=a*sqr(v0-v);
-		   Eb=max(0,Eb);
+		   Eb=max<double>(0,Eb);
 //		double Eb=DissE*log(13.13/Denc);
   		 if (Boltsman)
      {
@@ -394,7 +394,7 @@ struct FreeERossBin:FreeEIOFind {
 //       double miu3=Fid[2].MolVeight;
    	   double Id3=Fid[2].FreeE(Denc*al*miu1/miu_,T);
        Id1/=al;
-       double Shift=max(Dis.EnergyShift(Denc*miu1/miu_,T),0),DisCoef=Shift/Dis.EnergyShift(0,T);
+       double Shift=max<double>(Dis.EnergyShift(Denc*miu1/miu_,T),0),DisCoef=Shift/Dis.EnergyShift(0,T);
        if (DisIsConst) DisCoef=1;
      		double DisE=DissEnergy(Id3+Shift,Id1,miu1,T);
        DisE=DisE*DisCoef+(1-DisCoef)*Id1;

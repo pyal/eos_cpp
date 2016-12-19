@@ -6,7 +6,7 @@
 
 
 
-#include "mat\mtfunc.h"
+#include "mat/mtfunc.h"
 struct Matter2State:MatterIO {
     Ref<MatterIO> M1, M2;
     double MinP,VolProp12,Pres_ElseDenc; //V2=V1
@@ -83,7 +83,7 @@ struct MatterSum:MatterIO {
     //   void Temperature(double *S,double *Dencity,double *Energy,int Num);
 
     double DencityCold() {return min(M1->DencityCold(),M2->DencityCold());};
-    double DencityMax()  {return max(M1->DencityMax() ,M2->DencityMax() );};
+    double DencityMax()  {return max<double>(M1->DencityMax() ,M2->DencityMax() );};
 
     virtual int save_data_state( FilterOut&output){
         output<<" Pres_Denc "<<Pres_Denc<<" Pressure1_2 "<<MinP<<" Substances \n";
@@ -113,9 +113,10 @@ cout<<" Read M1 " << SavableClass::object2string(M1.pointer()) << " \n M2 " << S
     }
 
 	 virtual void ChangeInputVal(double Dencity,double Energy,double Time){ 
-        if (InputValStorage["State"]==0)
-            if (Pres_Denc) {if (Pressure(Dencity,Energy)>MinP) InputValStorage["State"]=1;}
-            else if (Dencity>MinP) InputValStorage["State"]=1;
+        if (InputValStorage["State"]==0) {
+            if (Pres_Denc) { if (Pressure(Dencity, Energy) > MinP) InputValStorage["State"] = 1; }
+            else if (Dencity > MinP) InputValStorage["State"] = 1;
+        }
      }; 
 	 virtual void ChangeInputVal(double *Dencity,double *Energy,int Num,double Time);
 };
