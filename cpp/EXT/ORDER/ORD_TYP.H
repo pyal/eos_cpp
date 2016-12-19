@@ -17,7 +17,7 @@ int seek_eoln(istream &i);
 // Интерфейс структуры определяющей тип данных
 // Данные должны определять - какой больше
 // Для ASCII данных также определяется процедуры записи и чтения
-// Также Pos - положения данного типа относительно начала 0 элемента 
+// Также Pos - положения данного типа относительно начала 0 элемента
 // Length  - длина типа
 struct FieldType
 {
@@ -32,14 +32,14 @@ struct FieldType
 	virtual int ReadPar(fstream &in,void *Ptr)=0;
 #endif
 	virtual ~FieldType(){};
-// Процедура для регистрации типа - по имени определяет какой именно 
+// Процедура для регистрации типа - по имени определяет какой именно
 // Экземпляр нужно создавать строка или real int long
 	friend int RegisterField(char *name,int Length,int Pos,FieldType *&Field);
 };
 
 // Описание типа строка
 struct FieldString:FieldType
-{int Order(void *Fst,void *Sec) { char *ch1=(char *)Fst,*ch2=(char *)Sec;return stricmp(ch1,ch2);};
+{int Order(void *Fst,void *Sec) { char *ch1=(char *)Fst,*ch2=(char *)Sec;return Stricmp(ch1,ch2);};
 #ifdef ASCI_FILE_DEF
 void SavePar(fstream &out,void *Ptr) {char *ch1=(char *)Ptr;out<<ch1;};
 int ReadPar(fstream &in,void *Ptr) {if (seek_eof(in))return 0;char *ch1=(char *)Ptr;in>>ch1;return 1;};
@@ -56,7 +56,7 @@ int ReadPar(fstream &in,void *Ptr) {if (seek_eof(in))return 0;double *ch1=(doubl
 };
 // Описание типа int
 struct FieldInt:FieldType
-{int Order(void *Fst,void *Sec) 
+{int Order(void *Fst,void *Sec)
 { int *ch1=(int*)Fst,*ch2=(int*)Sec;return *ch1-*ch2;};
 #ifdef ASCI_FILE_DEF
 void SavePar(fstream &out,void *Ptr) {int *ch1=(int *)Ptr;out<<*ch1;};
@@ -65,7 +65,7 @@ int ReadPar(fstream &in,void *Ptr) {if (seek_eof(in))return 0;int *ch1=(int *)Pt
 };
 // Описание типа long
 struct FieldLong:FieldType
-{int Order(void *Fst,void *Sec) 
+{int Order(void *Fst,void *Sec)
 { int *ch1=(int*)Fst,*ch2=(int*)Sec;return *ch1-*ch2;};
 #ifdef ASCI_FILE_DEF
 void SavePar(fstream &out,void *Ptr) {int *ch1=(int *)Ptr;out<<*ch1;};

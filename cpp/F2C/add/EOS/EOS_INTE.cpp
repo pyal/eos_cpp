@@ -8,15 +8,15 @@ int EOSReadStruct(EOSstruct *eos,FILE *hand)
    char name[256];
    fscanf(hand,"%s",&name);
 
-   if (stricmp(name,"MatterABu")==0) 
+   if (Stricmp(name,"MatterABu")==0)
      {eos->Pressure=PressureABu;eos->Sound=SoundABu;eos->Temperature=TemperatureABu;
       eos->ReadIni=ReadABu;eos->DeleteIni=DeleteABu;strcpy(eos->name,"MatterABu");}
 
-   else if (stricmp(name,"MatterGas")==0) 
+   else if (Stricmp(name,"MatterGas")==0)
      {eos->Pressure=PressureGas;eos->Sound=SoundGas;eos->Temperature=TemperatureGas;
       eos->ReadIni=ReadGas;eos->DeleteIni=DeleteGas;strcpy(eos->name,"MatterGas");}
 		
-   else if (stricmp(name,"MatterSpl")==0) 
+   else if (Stricmp(name,"MatterSpl")==0)
      {eos->Pressure=PressureSpl;eos->Sound=SoundSpl;eos->Temperature=TemperatureSpl;
       eos->ReadIni=ReadSpl;eos->DeleteIni=DeleteSpl;strcpy(eos->name,"MatterSpl");}
 		

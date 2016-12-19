@@ -37,7 +37,7 @@ int ReadSplStruct(FILE *in,DatSpline *DatSpl)
   {
    char tmp[256];double dtmp;int N;
    fscanf(in,"%s ",&tmp);// in>>tmp;
-   if (stricmp(tmp,"RegridSpline")!=0) return 0;
+   if (Stricmp(tmp,"RegridSpline")!=0) return 0;
    fscanf(in,"%s %lf %s %lf %s %lf %s %lf %s %lf %s %s %i",
       &tmp,&dtmp,&tmp,&dtmp,&tmp,&dtmp,&tmp,&dtmp,&tmp,&dtmp,&tmp,&tmp,&N);
 /* in>>tmp>>Delta>>tmp>>Xup>>tmp>>Xlow >>tmp>>Yup>>tmp>>Ylow >>tmp>>tmp>>N;*/
@@ -100,7 +100,7 @@ double SoundSpl(double Dencity,double Energy,void *IntPar)
    double Pp=PressureSpl(r+dr,Energy+P*dr/(r*r),IntPar);Pp-=P;
    if (Pp<0) {/*cout<<" MatterIO::Sound;  deriv is negative: " <<Pp<<" Sqrt from negative value          \n";*/
       Pp=0.1;}
-   double S=sqrt( max(0,Pp)/dr );
+   double S=sqrt( max<double>(0,Pp)/dr );
    return S;
   };
       

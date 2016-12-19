@@ -3,15 +3,15 @@
 int RegisterField(char *name,int Length,int Pos,FieldType *&Field)
 {
 //   char name[256];in>>name;
-   if (stricmp(name,"String")==0) Field=new FieldString;
+   if (Stricmp(name,"String")==0) Field=new FieldString;
    else
-	   if (stricmp(name,"Real")==0) Field=new FieldReal;
+	   if (Stricmp(name,"Real")==0) Field=new FieldReal;
 
 	else
-	   if (stricmp(name,"Long")==0) Field=new FieldLong;
+	   if (Stricmp(name,"Long")==0) Field=new FieldLong;
 
 	   else
-		   if (stricmp(name,"Int")==0) Field=new FieldInt;
+		   if (Stricmp(name,"Int")==0) Field=new FieldInt;
 		   else
     { cout<<" RegisterField; There is no such function \n"<<name<<"\n";return 0; }
 //   Func->ReadIni(in);
