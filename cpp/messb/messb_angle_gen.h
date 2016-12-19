@@ -193,7 +193,7 @@ struct RndBoltsman_GausWalk:RndFunc
 		double p1=rndBolt->Clc(a1),p2=rndBolt->Clc(a2);
 //		double rnd=(double(rand())/RAND_MAX);
 		double rnd=RandomClass::Rnd(1);
-		if (rnd<p1/max(MathZer,p1+p2)) CurAngle-=stp;else CurAngle+=stp;
+		if (rnd<p1/max<double>(MathZer,p1+p2)) CurAngle-=stp;else CurAngle+=stp;
     return CurAngle;
   };
 

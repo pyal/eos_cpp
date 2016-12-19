@@ -347,7 +347,7 @@ void FAArrSet::Output(ostream &output)
    for (int k=1;k<NumFunc;k++) 
      {
       char tmp[256];
-      output<<"Bnd"<<itoa(k,tmp,10)<<"        ";
+      output<<"Bnd"<<Itoa(k,tmp,10)<<"        ";
       for (int k1=1;k1<=MaxIter;k1++)
         {
          if (BndStp[k1][k]==0)  output<<"   F   ";
@@ -385,7 +385,7 @@ void FAArrSet::Input(istream &input)
            {cout<<"FAArrSet::Input;  Number of iterations is more then "
                 <<MaxIterations<<" Program halted\n";exit(1);}
          if (seek_eof(input)) {cout<<"FAArrSet::Input Unexpected end of file\n";exit(1);}
-         if (!stricmp(tmp,"f")) tmp_d[iter]=0;
+         if (!Stricmp(tmp,"f")) tmp_d[iter]=0;
          else                   tmp_d[iter]=1;
          input>>tmp;tmp_=tmp;
 //cout<<"FAArrSet::Input ; tmp_ = "<<tmp<<"\n";
@@ -401,7 +401,7 @@ void FAArrSet::Input(istream &input)
          for (int k1=1;k1<=iter;k1++)
            {
             input>>tmp;
-            if (!stricmp(tmp,"f")) BndStp[k1][k]=0;
+            if (!Stricmp(tmp,"f")) BndStp[k1][k]=0;
             else                   BndStp[k1][k]=1;
 //cout<<"FAArrSet::Input ; tmp = "<<tmp<<"  ";
            }
@@ -592,12 +592,12 @@ int FAStdRegister(fstream &in,FAIO *&Func,char *name)
    FAZer *SFunc=NULL;
    FAIO *AFunc=NULL;
    int ret=1;
-   if (!stricmp(name,"exponent")) {SFunc=(FAZer*)new FAZerExp;}
-   else if (!stricmp(name,"lorents")) {SFunc=(FAZer*)new FAZerLor;}
-     else if (!stricmp(name,"polynom")) {SFunc=(FAZer*)new FAZerPoly;}
-        else if (!stricmp(name,"sum_func"))  {AFunc=(FAIO*)new FAArrAdd;}
-           else if (!stricmp(name,"set_func")) {AFunc=(FAIO*)new FAArrSet;}
-             else if (!stricmp(name,"roll_func")) {AFunc=(FAIO*)new FARoll;}
+   if (!Stricmp(name,"exponent")) {SFunc=(FAZer*)new FAZerExp;}
+   else if (!Stricmp(name,"lorents")) {SFunc=(FAZer*)new FAZerLor;}
+     else if (!Stricmp(name,"polynom")) {SFunc=(FAZer*)new FAZerPoly;}
+        else if (!Stricmp(name,"sum_func"))  {AFunc=(FAIO*)new FAArrAdd;}
+           else if (!Stricmp(name,"set_func")) {AFunc=(FAIO*)new FAArrSet;}
+             else if (!Stricmp(name,"roll_func")) {AFunc=(FAIO*)new FARoll;}
                else ret=0;
    if (!ret) return ret;
    if (Func!=NULL) delete(Func);

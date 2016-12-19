@@ -60,7 +60,7 @@ void SphereAnglesGenerator::InitSphereSerie()
   double ProbNorm=0;
   for (k=1;k<=N;k++)
   {
-    Phi_arr[k]=VecCl::MakeStepVector(max(nP*fabs(sin(Teta[k]*M_PI/180)),1),lowP,upP,1);
+    Phi_arr[k]=VecCl::MakeStepVector(max<double>(nP*fabs(sin(Teta[k]*M_PI/180)),1),lowP,upP,1);
     s+=Phi_arr[k].Dim();
     Prob[k]=fabs(sin(Teta[k]*M_PI/180))/Phi_arr[k].Dim();
     ProbNorm+=fabs(sin(Teta[k]*M_PI/180));
@@ -77,7 +77,7 @@ void SphereAnglesGenerator::MakeRotAngles(V3D_Angles &rot_ax,V3D_Angles &view_ax
   double lowP,upP;
   if (SphereQuater)  { nP=RotNum;lowP=0;upP=90; }
   else             { nP=4*RotNum;lowP=0;upP=360; }
-  VecCl Phi=VecCl::MakeStepVector(max(nP*fabs(sin(RotAngle*M_PI/180)),1),lowP,upP,1);
+  VecCl Phi=VecCl::MakeStepVector(max<double>(nP*fabs(sin(RotAngle*M_PI/180)),1),lowP,upP,1);
 
   int k,N=Phi.Dim();
   rot_ang.clear();

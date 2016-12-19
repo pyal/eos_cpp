@@ -24,7 +24,7 @@ int FATMRegister(fstream &in,FAIO *&Func,char *name)
   {
    FAZer *SFunc=NULL;
    int ret=1;
-   if (!stricmp(name,"Time")) {SFunc=(FAZer*)new FAZerTM;}
+   if (!Stricmp(name,"Time")) {SFunc=(FAZer*)new FAZerTM;}
                    else ret=0;
    if (!ret) return ret;
    if (Func!=NULL) delete(Func);

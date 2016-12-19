@@ -109,7 +109,7 @@ void Rnd2AngleGenerator_Base::LinkAngles(vector<VecCl> &Angles,VecCl &Angles_Tim
     if (pMet[k-1]==3) {add_pos++;ang_pos++;resT[k]=Angles_Time[ang_pos];}
     else if (pMet[k-1]==2) {add_pos++;resT[k]=ToAdd_Time[add_pos];}
           else {ang_pos++;resT[k]=Angles_Time[ang_pos];}
-    for (int k1=0;k1<Na;k1++) resA[k1][k]=Angles[k1][max(1,ang_pos)];
+    for (int k1=0;k1<Na;k1++) resA[k1][k]=Angles[k1][max<double>(1,ang_pos)];
     resA[Na][k]=ToAdd[max(1,add_pos)];
   }
   Angles_Time=resT;

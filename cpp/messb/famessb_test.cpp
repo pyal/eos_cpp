@@ -73,7 +73,7 @@ int TestCase_Famessb_Static::GetHi(string &name,double &Hi,string &Err)
   for (int k=1;k<=N;k++)
   {
     num++;
-    //maxY=max(maxY,fabs(InArr->D[1][k]));
+    //maxY=max<double>(maxY,fabs(InArr->D[1][k]));
     //test+=fabs(InArr->D[1][k]-InArr->D[2][k]);
     int i=max(k-10,1),j=min(k+10,N);
     test+=Clc.GetDist(x.ExtractSubVector(i,j),y.ExtractSubVector(i,j),V2D_XY(InArr->D[0][k-1],InArr->D[2][k-1]));
@@ -174,7 +174,7 @@ int main( int argc, const char *argv[] )
     cout<<"Test time: "<<Time<<"\n";
     LeakTest();
     return 0;
-   //if ( (argc>=2) && (stricmp(argv[1],"/h")==0) ) 
+   //if ( (argc>=2) && (Stricmp(argv[1],"/h")==0) )
    //     {cout<<" usage "<<argv[0]<<" [/a] [/h] [/p] \n without parameters - standart test, /a - not to delete good results /h - draw this help /p - print discrepency estimations \n";exit(0);}
    //if ( GetCmd("/a",argc-1,argv)!=NULL ) TestCase_Famessb_Static::DeleteGoodResults=0;
    //if ( GetCmd("/p",argc-1,argv)!=NULL ) TestCase_Famessb_Static::PrintDiscrepencyEstimations=1;

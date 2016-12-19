@@ -3,7 +3,7 @@
 
 
 
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 #include "faobj.h"
 #include "fawobj.h"
 #include "faregist.h"

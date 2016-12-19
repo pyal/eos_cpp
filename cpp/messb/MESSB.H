@@ -5,7 +5,7 @@
 #include "mat\eigen_ma.h"
 #include "mat\uralgol.h"
 #include "mat\turnmat.h"
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 #include "mat\mtquad.h"
 
 #include "lib\ref\class_sav.h"

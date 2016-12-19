@@ -31,7 +31,7 @@ struct TetaGenerator:RefCount
     for (int k=1;k<=TetaStp.Dim();k++) 
         TetaProb[k]=RndGenerator->Clc(TetaStp[k]);
     if (NormCoef>=0) 
-        TetaProb=TetaProb*(NormCoef/max(TetaProb*(TetaProb*0+1),M_MinDouble2));
+        TetaProb=TetaProb*(NormCoef/max<double>(TetaProb*(TetaProb*0+1),M_MinDouble2));
   }
   int GetNextProb(double &Teta_H,double &Int_Teta)
   {
@@ -61,7 +61,7 @@ struct TetaGenerator_Paper9:TetaGenerator{
             TetaProb[k]=RndGenerator->Clc(TetaStp[k]);
         }
         if (NormCoef>=0) 
-            TetaProb=TetaProb*(NormCoef/max(TetaProb*(TetaProb*0+1),M_MinDouble2));
+            TetaProb=TetaProb*(NormCoef/max<double>(TetaProb*(TetaProb*0+1),M_MinDouble2));
     }
 };
 
@@ -217,7 +217,7 @@ struct MagnonFieldOptic:MagnonMeanField
   {
     double Phi=x*M_PI/180,CosX=cos(Phi),SinX=fabs(sin(Phi)),
            E2=sqrt(Energy(x)),Denom=q_sqrt(x);
-    return SinX*E2*(1+E_a0*E_a1*pow(1-CosX,E_a1-1))/max(Denom,M_MinDouble2);
+    return SinX*E2*(1+E_a0*E_a1*pow(1-CosX,E_a1-1))/max<double>(Denom,M_MinDouble2);
   }
   double Distrib(double x)
   {
@@ -463,7 +463,7 @@ struct MagnonFieldPaperPlus : MagnonFieldPaper{
     MagnonFieldPaperPlus(double js_const,double temp,double statistic,double q_a0,double q_a1,
         double Rconst,double q_max,double q_min,double dcosmax,double alpha)
         :MagnonFieldPaper(js_const,temp,statistic,q_a0,q_a1,Rconst,q_max,q_min,dcosmax){
-        AlphaPar=max(alpha,StndErr);
+        AlphaPar=max<double>(alpha,StndErr);
 //VecCl tmp=VecCl::MakeStepVector(100,0.1,100,1);
 //for (int k = 1;k<=tmp[0];k++) {
 //    Temp = tmp[k];
@@ -528,7 +528,7 @@ struct MagnonFieldPaperPlus : MagnonFieldPaper{
       if (fabs(der)<M_Eps2) der = M_Eps2;
 //cout<<" der "<<der<<" "<<" SinX "<<SinX<<"\n"; cout.flush();
 //      return -SinX/der;
-      return max(-SinX/der,0);
+      return max<double>(-SinX/der,0);
   }
   virtual double GetDisorderedInt(){
     double Coef = 0.8638721596138914*pow(JS_const/Temp,1.5);
@@ -632,7 +632,7 @@ protected:
 //  {
 //    double Eo=-Optic->GetExpFactor();
 //    double Ea=-Accustic->GetExpFactor();
-//    ExpFactor=max(Eo,Ea);
+//    ExpFactor=max<double>(Eo,Ea);
 //    Eo-=ExpFactor;Ea-=ExpFactor;
 //    NormOptic=SetExp(Eo);NormAccus=SetExp(Ea);
 //  }

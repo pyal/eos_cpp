@@ -557,9 +557,9 @@ void FAWIter::SmoothYParam(double *XParamPnt,double *YParamPnt,
 //   char name[256]; in>>name;
 //   FAWZer *Func;
 //   int ret=1;
-//   if (!stricmp(name,"std_appr_clc")) {Func=(FAWZer*)new FAWStand;}
+//   if (!Stricmp(name,"std_appr_clc")) {Func=(FAWZer*)new FAWStand;}
 //   else 
-////     if (!stricmp(name,"iter_appr_clc")) {Func=(FAWZer*)new FAWIter;}
+////     if (!Stricmp(name,"iter_appr_clc")) {Func=(FAWZer*)new FAWIter;}
 ////     else 
 //       ret=0;
 //   if (!ret)  { cout<<" There is no such work "<<name<<"\n";  }

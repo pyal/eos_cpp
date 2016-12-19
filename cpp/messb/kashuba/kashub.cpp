@@ -26,7 +26,7 @@ void MC_StepOld(VecCl &ph,double Phi0,int N,double MainHarm,int FurieDiscr,
    {
     ph[k]=Phi0;
     for (int j=1;j<=NumJ;j++) 
-      ph[k]+=(Phi_cos[j]*cos(M_PI*k*(j-1)/N)+Phi_sin[j]*sin(M_PI*k*(j-1)/N))/(sqrt(max(j-1,0.25))*(1+sqr(j)*StrongCoef));
+      ph[k]+=(Phi_cos[j]*cos(M_PI*k*(j-1)/N)+Phi_sin[j]*sin(M_PI*k*(j-1)/N))/(sqrt(max<double>(j-1,0.25))*(1+sqr(j)*StrongCoef));
    }
 
  };
@@ -58,7 +58,7 @@ void MC_Step(VecCl &ph,double Phi0,int N,double MainHarm,int FurieDiscr,
       double SCCoef=1;if ((r/2)*2!=r) SCCoef=-1;
       r=k*(j-1)-r*N+1;//if (r==0) r=N;
       ph[k]+=(SCCoef*Phi_cos[j]*CosIJ[r]+SCCoef*Phi_sin[j]*SinIJ[r])/
-                                         sqrt(max(j-1,0.25)*(1+sqr(j)*StrongCoef));
+                                         sqrt(max<double>(j-1,0.25)*(1+sqr(j)*StrongCoef));
      }
    }
  };
@@ -100,7 +100,7 @@ void MC_Step(VecCl &ph,double Phi0,int N,double MainHarm,int FurieDiscr,
 //      double SCCoef=1;if ((r/2)*2!=r) SCCoef=-1;
 //      r=k*(j-1)-r*N+1;//if (r==0) r=N;
 //      ph[k]+=(SCCoef*Phi_cos[j]*CosIJ[r]+SCCoef*Phi_sin[j]*SinIJ[r])/
-//                                         sqrt(max(j-1,0.25)*(1+sqr(j)*StrongCoef));
+//                                         sqrt(max<double>(j-1,0.25)*(1+sqr(j)*StrongCoef));
 //     }
 //   }
 //   Rnd_Angle=ph;Rnd_Time=VecCl::MakeStepVector(N,0,FullTime,0);

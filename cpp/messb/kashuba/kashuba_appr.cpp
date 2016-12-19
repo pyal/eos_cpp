@@ -35,7 +35,7 @@ void RndAngleGenerator_Kashuba::Rnd(VecCl &Rnd_Angle,VecCl &Rnd_Time)
       double SCCoef=1;if ((r/2)*2!=r) SCCoef=-1;
       r=k*(j-1)-r*N+1;//if (r==0) r=N;
       ph[k]+=(SCCoef*Phi_cos[j]*CosIJ[r]+SCCoef*Phi_sin[j]*SinIJ[r])/
-                                         sqrt(max(j-1,0.25)*(1+sqr(j)*StrongCoef));
+                                         sqrt(max<double>(j-1,0.25)*(1+sqr(j)*StrongCoef));
      }
    }
    Rnd_Angle=ph;Rnd_Time=VecCl::MakeStepVector(N,0,FullTime,0);

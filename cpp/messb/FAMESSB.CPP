@@ -418,7 +418,7 @@ void   FAZerQsHRelaxRandWalk::ClcBase(double *par,double *Xval,double *Res)
         new RndBoltsman_GausWalk(
           (RndGaus*)(new RndGaus(AngTeta,SigAngTeta))->Init(AngTeta-4*SigAngTeta,AngTeta+4*SigAngTeta,100,1e-5),
           (RndBoltsmanSinPower*)(new RndBoltsmanSinPower(AnisTeta,AnisPower))->Init(-180,180,360,1e-5)),
-        new RndTimeGenerator((new RndGaus(TimeTeta,SigTimeTeta))->Init(max(TimeTeta-4*SigTimeTeta,0),TimeTeta+4*SigTimeTeta,100,1e-5),0,Time));
+        new RndTimeGenerator((new RndGaus(TimeTeta,SigTimeTeta))->Init(max<double>(TimeTeta-4*SigTimeTeta,0),TimeTeta+4*SigTimeTeta,100,1e-5),0,Time));
    Ref<Rnd2AngleGenerator_Base> ang;
    if (!NoPhi) 
      ang=new Rnd2AngleGenerator(ang_t,
@@ -426,7 +426,7 @@ void   FAZerQsHRelaxRandWalk::ClcBase(double *par,double *Xval,double *Res)
         new RndBoltsman_GausWalk(
           (RndGaus*)(new RndGaus(AngPhi,SigAngPhi))->Init(AngPhi-4*SigAngPhi,AngPhi+4*SigAngPhi,100,1e-5),
           (RndBoltsmanSinPower*)(new RndBoltsmanSinPower(AnisPhi,AnisPower))->Init(-180,180,360,1e-5)),
-        new RndTimeGenerator((new RndGaus(TimePhi,SigTimePhi))->Init(max(TimePhi-4*SigTimePhi,0),TimePhi+4*SigTimePhi,100,1e-5),0,Time)));
+        new RndTimeGenerator((new RndGaus(TimePhi,SigTimePhi))->Init(max<double>(TimePhi-4*SigTimePhi,0),TimePhi+4*SigTimePhi,100,1e-5),0,Time)));
    else 
      ang=new Rnd2AngleGenerator_FixPhi(ang_t,0);
 
@@ -544,14 +544,14 @@ void   FAZerQsHRelaxRandJump::ClcBase(double *par,double *Xval,double *Res)
      new RndAngleGenerator(
 //          (new RndBoltsmanSinPower(AnisTeta,AnisPower))->Init(-180,180,360,1e-5),
           (new RndBoltsmanSinPower(AnisTeta,AnisPower))->Init(-90,90,180,1e-5),
-        new RndTimeGenerator((new RndGaus(TimeTeta,SigTimeTeta))->Init(max(TimeTeta-4*SigTimeTeta,0),TimeTeta+4*SigTimeTeta,100,1e-5),0,Time));
+        new RndTimeGenerator((new RndGaus(TimeTeta,SigTimeTeta))->Init(max<double>(TimeTeta-4*SigTimeTeta,0),TimeTeta+4*SigTimeTeta,100,1e-5),0,Time));
    Ref<Rnd2AngleGenerator_Base> ang;
    if (!NoPhi) 
      ang=new Rnd2AngleGenerator(ang_t,
       new RndAngleGenerator(
 //          (new RndBoltsmanSinPower(AnisTeta,AnisPower))->Init(-180,180,360,1e-5),
           (new RndBoltsmanSinPower(AnisPhi,AnisPower))->Init(-90,90,180,1e-5),
-        new RndTimeGenerator((new RndGaus(TimePhi,SigTimePhi))->Init(max(TimePhi-4*SigTimePhi,0),TimePhi+4*SigTimePhi,100,1e-5),0,Time)));
+        new RndTimeGenerator((new RndGaus(TimePhi,SigTimePhi))->Init(max<double>(TimePhi-4*SigTimePhi,0),TimePhi+4*SigTimePhi,100,1e-5),0,Time)));
    else 
      ang=new Rnd2AngleGenerator_FixPhi(ang_t,0);
 
@@ -1221,26 +1221,26 @@ int FAMessbRegister(fstream &in,FAIO *&Func,char *name)
   {
    FAZer *SFunc=NULL;
    int ret=1;
-   if (!stricmp(name,"hq_poly")) {SFunc=(FAZer*)new FAZerHQs;}
-   else if (!stricmp(name,"hq_mono")) {SFunc=(FAZer*)new FAZerHQsM;}
-//   else if (!stricmp(name,"qh_poly")) {SFunc=(FAZer*)new FAZerQsHR0;}
-//   else if (!stricmp(name,"hq_relax0")) {SFunc=(FAZer*)new FAZerHQsR0;}
-   else if (!stricmp(name,"hq_poly_rotate")) {SFunc=(FAZer*)new FAZerHQs_Rotate;}
-   //else if (!stricmp(name,"hq_relax")) {SFunc=(FAZer*)new FAZerHQsR;}
-   //else if (!stricmp(name,"hq_relax3")) {SFunc=(FAZer*)new FAZerHQsR3;}
-   //else if (!stricmp(name,"qh_relax6")) {SFunc=(FAZer*)new FAZerQsHR6;}
-   //else if (!stricmp(name,"hq_relax0h")) {SFunc=(FAZer*)new FAZerHQs0QsR;}
-   else if (!stricmp(name,"F_relax2")) {SFunc=(FAZer*)new FAZerFreeR;}
-   else if (!stricmp(name,"hq_aver")) {SFunc=(FAZer*)new FAZerHQsAver;}
-   else if (!stricmp(name,"qh_relax_Hn")) {SFunc=(FAZer*)new FAZerQsH_R_Hn;}
-   else if (!stricmp(name,"qh_relax_kashuba")) {SFunc=(FAZer*)new FAZerQsHRelaxKashuba;}
-   else if (!stricmp(name,"qh_relax_rand_walk")) {SFunc=(FAZer*)new FAZerQsHRelaxRandWalk;}
+   if (!Stricmp(name,"hq_poly")) {SFunc=(FAZer*)new FAZerHQs;}
+   else if (!Stricmp(name,"hq_mono")) {SFunc=(FAZer*)new FAZerHQsM;}
+//   else if (!Stricmp(name,"qh_poly")) {SFunc=(FAZer*)new FAZerQsHR0;}
+//   else if (!Stricmp(name,"hq_relax0")) {SFunc=(FAZer*)new FAZerHQsR0;}
+   else if (!Stricmp(name,"hq_poly_rotate")) {SFunc=(FAZer*)new FAZerHQs_Rotate;}
+   //else if (!Stricmp(name,"hq_relax")) {SFunc=(FAZer*)new FAZerHQsR;}
+   //else if (!Stricmp(name,"hq_relax3")) {SFunc=(FAZer*)new FAZerHQsR3;}
+   //else if (!Stricmp(name,"qh_relax6")) {SFunc=(FAZer*)new FAZerQsHR6;}
+   //else if (!Stricmp(name,"hq_relax0h")) {SFunc=(FAZer*)new FAZerHQs0QsR;}
+   else if (!Stricmp(name,"F_relax2")) {SFunc=(FAZer*)new FAZerFreeR;}
+   else if (!Stricmp(name,"hq_aver")) {SFunc=(FAZer*)new FAZerHQsAver;}
+   else if (!Stricmp(name,"qh_relax_Hn")) {SFunc=(FAZer*)new FAZerQsH_R_Hn;}
+   else if (!Stricmp(name,"qh_relax_kashuba")) {SFunc=(FAZer*)new FAZerQsHRelaxKashuba;}
+   else if (!Stricmp(name,"qh_relax_rand_walk")) {SFunc=(FAZer*)new FAZerQsHRelaxRandWalk;}
 
-//   else if (!stricmp(name,"HQ_relax_circular")) {SFunc=(FAZer*)new FAZerHQsRC;}
+//   else if (!Stricmp(name,"HQ_relax_circular")) {SFunc=(FAZer*)new FAZerHQsRC;}
    
-   else if (!stricmp(name,"Is_T")) {SFunc=(FAZer*)new FAZerIs_T;}
-   else if (!stricmp(name,"Int_T")) {SFunc=(FAZer*)new FAZerInt_T;}
-   else if (!stricmp(name,"Qs_T")) {SFunc=(FAZer*)new FAZerQs_T;}
+   else if (!Stricmp(name,"Is_T")) {SFunc=(FAZer*)new FAZerIs_T;}
+   else if (!Stricmp(name,"Int_T")) {SFunc=(FAZer*)new FAZerInt_T;}
+   else if (!Stricmp(name,"Qs_T")) {SFunc=(FAZer*)new FAZerQs_T;}
                    else ret=0;
    if (!ret) return ret;
    if (Func!=NULL) delete(Func);
