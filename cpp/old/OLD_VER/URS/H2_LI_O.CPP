@@ -78,7 +78,7 @@ double Psolid(double x,double T)
 
 double CCCa,CCCteta;
 double MisT(double T)
-  {return CCCa-T*CP.Rconst*(3*DebyFunc(CCCteta/max(T,StndErr))+LP.IncludeTurnE);}
+  {return CCCa-T*CP.Rconst*(3*DebyFunc(CCCteta/max<double>(T,StndErr))+LP.IncludeTurnE);}
 double TemperatureS(double r,double e)
   {
    double x=r/ColdParam.Denc;
@@ -136,7 +136,7 @@ double FindTemp(double x,double DeltaE)
        cout<<"Could not Find Temp\n" ;
 //cout<<" FindTemp  x "<<x<<" Tf  "<<T1<<" Tw "<<T2<<"\n";
 //   return T1;
-   return max(T1,T2);
+   return max<double>(T1,T2);
 
   };
 double PressureL(double r,double e)
@@ -303,7 +303,7 @@ double FindTemp(double x,double DeltaE)
        cout<<"Could not Find Temp\n" ;
 //cout<<" FindTemp  x "<<x<<" Tf  "<<T1<<" Tw "<<T2<<"\n";
 //   return T1;
-   return max(T1,T2);
+   return max<double>(T1,T2);
   };
 */
 /*

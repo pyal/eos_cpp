@@ -201,7 +201,7 @@ double FreeSSVT(RossParam *par,double Denc,double T)
       cout<<" Did not find RP->NiuL. Try old version\n";}
    PY_add=PY_Min(RP->NiuL);
    double F=RP->Zero+PY_add-RP->S_Temp*
-            (log(max(1/Denc,MathZer))+RP->CvId*log(T)+RP->HiT+
+            (log(max<double>(1/Denc,MathZer))+RP->CvId*log(T)+RP->HiT+
                  log(1-exp(-RP->Tvib/T)));
    return F;
   }; 
@@ -214,7 +214,7 @@ double FreeRCheck(RossParam *par,double Denc,double T,double niu)
 //   RP->DL=Denc;RP->TL=T;RP->NiuL=MinFunc(0.0001,0.7,PY_Min,1e-4);}
    PY_add=PY_Min(RP->NiuL);
    double F=RP->Zero+PY_add-RP->S_Temp*
-            (log(max(1/Denc,MathZer))+RP->CvId*log(T)+RP->HiT+
+            (log(max<double>(1/Denc,MathZer))+RP->CvId*log(T)+RP->HiT+
                  log(1-exp(-RP->Tvib/T)));
    return PY_add;
   }; 

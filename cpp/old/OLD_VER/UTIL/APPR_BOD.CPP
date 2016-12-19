@@ -129,7 +129,7 @@ void  OutGrDat(OutParStrc &OutPar)
               ExternHi.FuncObj.Clc(ExternHi.Xval[Num-OutPar.FirstRow+1]);
            }
          else ar[OutPar.ColTo]=NullNumber;
-         WriteStr(out,&ar[0],max(OutPar.ColTo,NumCol));
+         WriteStr(out,&ar[0],max<int>(OutPar.ColTo,NumCol));
         }
      }
   };
@@ -201,7 +201,7 @@ void ChangeFile(char *inname,char *outname,int LoadColumn,int LoadFileNames)
    fstream par(outname,ios::in);
    fstream in_new(inname,ios::out);
    in.getline(tmp,511);in_new<<tmp<<"\n";
-   while ( (stricmp(tmp,"GeneralBegin")!=0) && (!seek_eof(in)) )
+   while ( (Stricmp(tmp,"GeneralBegin")!=0) && (!seek_eof(in)) )
      { in>>tmp;in_new<<tmp<<"   ";if (seek_eoln(in)) in_new<<"\n";}
    if (!LoadFileNames) 
      {in>>tmp>>tmp1;in_new<<tmp<<"     "<<tmp1<<"\n";par>>tmp>>tmp;}
@@ -213,7 +213,7 @@ void ChangeFile(char *inname,char *outname,int LoadColumn,int LoadFileNames)
      {
       strcpy(tmp,"copy ");
 //      if (seek_eof(par)) {ReturnInNew(in,in_new,inname);break;}
-      while ( (stricmp(tmp,"SetBegin")!=0) && (!seek_eof(in)) )
+      while ( (Stricmp(tmp,"SetBegin")!=0) && (!seek_eof(in)) )
         { in>>tmp;in_new<<tmp<<"   ";if (seek_eoln(in)) in_new<<"\n";}
 //                Analize SetBegin String      
       in>>i;in_new<<"   "<<i<<"   ";

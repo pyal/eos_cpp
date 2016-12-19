@@ -44,7 +44,7 @@ double CoefUp;
 double RegionIO::Pres(MatterIO *Mat,double D,double E,double V,
                                                       double dV)
 //  {return Mat->Pressure(D,E-sqr(V)*0.5)*1e5;}
-  {  return max(Mat->Pressure(D,E)*1e5,10);}
+  {  return max<double>(Mat->Pressure(D,E)*1e5,10);}
 double RegionIO::Sound(MatterIO *Mat,double D,double E,double V)
 //  {  return Mat->Sound(D,E-sqr(V)*0.5); }
   {  return Mat->Sound(D,E); }
@@ -82,7 +82,7 @@ void CellFixed(RegionIO &Reg,double &PresDeriv)
 			PresDeriv=0;
    for (k=1;k<Reg.NumMatter;k++)
       PresDeriv+=fabs(P_l[Reg.BndMatter[k]-2]-P_l[Reg.BndMatter[k]+1]);
-			PresDeriv=max(log(max(1,PresDeriv))-8,0);
+			PresDeriv=max<double>(log(max<double>(1,PresDeriv))-8,0);
 //int n=0;for ( k=1;k<Num;k++) if (!Reg.Fixed[k]) n++;cout<<"\n n "<<n<<"\n";
 
 //cout<<" PresDeriv "<<PresDeriv<<"\n";
@@ -188,7 +188,7 @@ void CalcPos(RegionIO &Reg,double TimeStp,double &MinTimeStp)
 //                P_l[k]+=Ro_l[k]*V2*sqr(du)*1e5; //V2- coef to set
 //            }
 //         else P_l[k]=-10;
-//         P_l[k]=max(-10,P_l[k]);
+//         P_l[k]=max<double>(-10,P_l[k]);
         } 
 			P_l[0]=0;P_l[Num]=0;
 //cout<<" MinTimeStp=  \n";
@@ -339,7 +339,7 @@ cout<<" Coreleft "<<Coreleft()<<"\n";
 			               CurTime,TimeStp,TimeWrite,PresDerivCoef,EndTime); 
 //	my_file->close();};/*
 
-   if (argc>2) CoefUp=max(1,atoi(argv[3]));else CoefUp=1;
+   if (argc>2) CoefUp=max<double>(1,atoi(argv[3]));else CoefUp=1;
 //cout<<" Coreleft "<<coreleft()<<"\n";
 //			OutHead(*my_file,*Reg,CurTime,TimeStp,TimeWrite,PresDerivCoef,EndTime);
    ClcMass(*Reg);

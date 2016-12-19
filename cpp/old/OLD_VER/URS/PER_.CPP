@@ -105,10 +105,10 @@ out_it<<" r "<<r<<" niu "<<niu<<"\n";
    while ((l++<MaxIter) && (lz<30))
      {
       Low+=Tim;
-      Add=RecInt(IntegFunc,Low,Low+Tim/M_PI,StndErr*0.01*max(fabs(Int),1000*StndErr));
-      Add+=RecInt(IntegFunc,Low+Tim/M_PI,Low+Tim,StndErr*0.01*max(fabs(Int),1000*StndErr));
+      Add=RecInt(IntegFunc,Low,Low+Tim/M_PI,StndErr*0.01*max<double>(fabs(Int),1000*StndErr));
+      Add+=RecInt(IntegFunc,Low+Tim/M_PI,Low+Tim,StndErr*0.01*max<double>(fabs(Int),1000*StndErr));
       Int+=Add;
-      if (fabs(Add)<max(fabs(Int),0.1)*StndErr) lz++;
+      if (fabs(Add)<max<double>(fabs(Int),0.1)*StndErr) lz++;
       else lz=0;
 //cout<<l<<" "<<Int<<" "<<stackavail()<<" "<<Coreleft()<<"\n";
 if (!NotShowIt) out_it<<l<<" "<<Int<<"\n";

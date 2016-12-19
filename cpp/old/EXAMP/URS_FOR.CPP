@@ -335,7 +335,7 @@ double ClcTimeStp(MatterSumStruct &Sum)
      {
       Pnt=&Sum.Matter[k0];
       for (int k=1;k<=Pnt->Num;k++)
-         stp=max(stp,fabs(Pnt->Arr[k+1].U-Pnt->Arr[k].U)/
+         stp=max<double>(stp,fabs(Pnt->Arr[k+1].U-Pnt->Arr[k].U)/
                      (Pnt->CellPos[k+1]-Pnt->CellPos[k]));
      }
    stp=1/(Sum.TimeStab*stp);getstp=stp;
