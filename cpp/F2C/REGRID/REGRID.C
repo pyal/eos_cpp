@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int regrid_(integer *iopt, integer *mx, real *x, integer *my,
 	 real *y, real *z__, real *xb, real *xe, real *yb, real *ye, integer *
