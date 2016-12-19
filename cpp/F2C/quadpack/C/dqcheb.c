@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int dqcheb_(doublereal *x, doublereal *fval, doublereal *
 	cheb12, doublereal *cheb24)
