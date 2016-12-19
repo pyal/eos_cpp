@@ -60,6 +60,7 @@ class ExEnv {
     static void set_fout(FilterOut *o) { fout_=o; }
 //    static FilterOut &fout();// { if (!out_) set_out(&cout_);return *out_; }
 //    static FilterOut &ferr() { return fout(); }
+//    static FilterOut &ferr() { return fout(); }
 
     /// The amount of memory on this node.
     static unsigned long memory() { if (!initialized_) err(); return mem_; }

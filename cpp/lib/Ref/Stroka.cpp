@@ -83,7 +83,7 @@ Stroka::Stroka (int n) {
 //Stroka::Stroka(const Int &i){
 //    char tmp[256];
 //    p = null;
-//    assign(itoa(i.I, tmp, 10));
+//    assign(Itoa(i.I, tmp, 10));
 //}
 Stroka Stroka::copy() const {
     Stroka temp(*this); // Make referenced copy
@@ -169,17 +169,17 @@ Stroka& Stroka::resize(size_t n, char c) {
 /*
 int stroka::compare(const stroka &s1, const stroka &s2, const CodePage& cp)
 {
-    return cp.stricmp(s1.p, s2.p);
+    return cp.Stricmp(s1.p, s2.p);
 }
 
 int stroka::compare(const char* p, const stroka &s2, const CodePage& cp)
 {
-    return cp.stricmp(p, s2.p);
+    return cp.Stricmp(p, s2.p);
 }
 
 int stroka::compare(const stroka &s1, const char* p, const CodePage& cp)
 {
-    return cp.stricmp(s1.p, p);
+    return cp.Stricmp(s1.p, p);
 }
 
 bool stroka::is_prefix(const stroka &s, const CodePage& cp) const

@@ -34,7 +34,7 @@ void SavableClass::save_data_pref(FilterOut&so){so.setword("{");IncIdent();so<<K
 //void SavableClass::save_data_pref(FilterOut&so){so.setword("{");IncIdent(); };
 int SavableClass::read_data_post(FilterIn&si){ExeptionCheck(si,"}");return 1;}
 int SavableClass::read_data_pref(FilterIn&si){ExeptionCheck(si,"{");return 1;}
-                                              //return (stricmp("{",tmp)==0);};
+                                              //return (Stricmp("{",tmp)==0);};
 
 //SavableClass& SavableClass::operator=( SavableClass &from){
 ////    if (strcmp(from.class_name(),this->class_name())!=0)
@@ -375,7 +375,7 @@ void DataSource::CloseSource(streambuf *buf)
 //  for (std::map<ClassKey,ClassDescP>::iterator ind=ClassDesc::all_->begin();
 //       ind!=ClassDesc::all_->end(); ind++) {
 //      ClassDesc* classdesc = ind->second;
-//      if (stricmp(classdesc->category(),name)==0) { 
+//      if (Stricmp(classdesc->category(),name)==0) {
 //		  dsc = classdesc->create();
 //          obj=dynamic_cast<SavableClass*> ((DescribedClass*)dsc);
 //          if (obj && PrintIt&PrintObj){ 

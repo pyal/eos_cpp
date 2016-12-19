@@ -291,8 +291,8 @@ namespace DataManip {
             assert(dat[i].size() > 0);
             minV[i] = maxV[i] = dat[i][0];
             for(size_t i1 = 1; i1 < dat[i].size(); i1++) {
-                minV[i] = min(dat[i][i1], minV[i]);
-                maxV[i] = max(dat[i][i1], maxV[i]);
+                minV[i] = min<T>(dat[i][i1], minV[i]);
+                maxV[i] = max<T>(dat[i][i1], maxV[i]);
             }
         }
     }

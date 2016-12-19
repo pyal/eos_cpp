@@ -200,7 +200,7 @@ public:
 
     //static Stroka MakeFromNum(int Num){ 
     //    char tmp[256];
-    //    return Stroka(itoa(Num,tmp,10));
+    //    return Stroka(Itoa(Num,tmp,10));
     //  }
     Stroka &Trim(char ch = ' '){
         size_t pos =0;

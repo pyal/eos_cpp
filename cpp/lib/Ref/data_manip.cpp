@@ -19,7 +19,7 @@ namespace DataManip {
             stp/=N;
             start+=0.5*stp; 
         }
-        else stp /= max(N-1,1);
+        else stp /= max<int>(N-1,1);
         vector<double> vec(N);
         for (size_t k=0; k< (size_t)N; k++) {
             vec[k] = logscale?exp(start):start;

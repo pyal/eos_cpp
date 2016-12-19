@@ -67,8 +67,8 @@ struct SavableClass : virtual DescribedClass {
 // Make class friend of DecsClass ( version is there )
     virtual void save_data_post(FilterOut&so) ;//{so<<" }\n "; };
     virtual void save_data_pref(FilterOut&so) ;//{so<<" { "; };
-    virtual int read_data_post(FilterIn&si) ;//{char tmp[99];si>>tmp;return (stricmp("}",tmp)==0);};
-    virtual int read_data_pref(FilterIn&si) ;//{char tmp[99];si>>tmp;return (stricmp("{",tmp)==0);};
+    virtual int read_data_post(FilterIn&si) ;//{char tmp[99];si>>tmp;return (Stricmp("}",tmp)==0);};
+    virtual int read_data_pref(FilterIn&si) ;//{char tmp[99];si>>tmp;return (Stricmp("{",tmp)==0);};
 
 // Save the base classes (with save_data_state) and the members in the same order that 
 // the StateIn CTOR initializes them.  This must be implemented by the derived class if 
@@ -638,7 +638,7 @@ private:
         //if (!(*this))
         //    clear();
         //char tmp[512];
-        //ret.append("\nError position: ").append(itoa(tellg(),tmp,10)).append("\nChars after error\n");
+        //ret.append("\nError position: ").append(Itoa(tellg(),tmp,10)).append("\nChars after error\n");
         //read(tmp,512);tmp[511]=0;
         //ret = ret.append(tmp).append("\n\000");
         return ret;

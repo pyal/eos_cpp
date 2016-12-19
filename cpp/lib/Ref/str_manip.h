@@ -153,6 +153,14 @@ namespace Str {
         }
 
     };
+    template <class T>
+    Stroka Vec2Str(const vector<T> &v) {
+        strstream out;
+        for(size_t i = 0; i < v.size(); i++) {
+            i==0? out << v[i] : out << " " << v[i];
+        }
+        return out.str();
+    }
 }// namespace Str
 
 
