@@ -6,7 +6,7 @@
 #include <math.h>
 #include <iostream>
 #include <fstream>
-#include <new.h>
+//#include <new.h>
 #include "Interval.h"
 
 Interval::Interval(const integer &alpha, const integer &omega, const real *data) : origin(0)

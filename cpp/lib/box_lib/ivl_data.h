@@ -439,7 +439,7 @@ private:
     //class double_compare { //: public binary_function<double, double, bool> {
     //public:
     //    bool operator()(const double& _Left, const double& _Right) const {
-    //        return _Left < _Right && (fabs(_Left - _Right) > max(1e-10, fabs(_Left) + fabs(_Right))) * 1e-10;
+    //        return _Left < _Right && (fabs(_Left - _Right) > max<double>(1e-10, fabs(_Left) + fabs(_Right))) * 1e-10;
     //        //return _Left < _Right && fabs(log(_Left) - log(_Right)) > 1e-10;
     //    }
     //    double_compare(double _Pred) : comp(_Pred){};

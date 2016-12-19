@@ -9,7 +9,7 @@ my_comp  operator * (my_comp & x, my_comp & y)
   return my_comp(my_real(x) * my_real(y) - my_imag(x) * my_imag(y),
                  my_real(x) * my_imag(y) + my_imag(x) * my_real(y));
 }
-my_comp &  my_comp::operator*=(my_comp &y)
+my_comp &  my_comp::operator*=(const my_comp &y)
 {
     double re1 = re*my_real(y)-im*my_imag(y);
     im = re*my_imag(y)+im*my_real(y);
@@ -31,7 +31,7 @@ my_comp /* const */ operator / (my_comp& x, my_comp& y)
                  (xiden * yrden - xrden * yiden) / nrm);
 }
 
-my_comp& my_comp::operator /= (my_comp& y)
+my_comp& my_comp::operator /= (const my_comp& y)
 {
 //cout<<" x0 "<<*this<<" y "<<y<<"\n";
   double den = fabs(my_real(y)); den += fabs(my_imag(y));
@@ -46,7 +46,7 @@ my_comp& my_comp::operator /= (my_comp& y)
   return *this;
 }
 
-my_comp /* const */ operator / (double x, my_comp& y)
+my_comp /* const */ operator / (double x, const my_comp& y)
 {
   double den = norm(y);
   if (den == 0.0) errorFP((char*)"my_comp::operator/",(char*)"Attempted division by zero.");

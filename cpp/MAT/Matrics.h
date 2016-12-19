@@ -11,6 +11,9 @@
 */
 #include "lib/std/util.h"
 #include "lib/std/stdexception.h"
+
+#undef max
+#undef min
 #include <vector>
 #include <list>
 #include <float.h>
@@ -195,14 +198,14 @@ struct VecCl
            }
        return ret;
    }
-   Stroka ToString() {
+   Stroka ToString() const {
         const int BufSize = 100000;
         char buf[BufSize+1];
         std::strstream out(buf,BufSize);
         out<<*this;
         return Stroka(buf,0,out.pcount());
    }
-   double SumElements() {
+   double SumElements() const {
        double ret = 0;
        for(int k = 1; k <= Dim(); k++)
            ret += Ptr[k];
@@ -217,22 +220,24 @@ struct MatrCl
    double **Addr;
 // i - Row, j - Col
    double& operator()(int i,int j);
+   double operator()(int i,int j) const;
    MatrCl& operator=(const MatrCl& mat);
    MatrCl& operator=(const VecCl& vec);
-   friend MatrCl operator*(MatrCl &mat1,MatrCl &mat2);
-   friend MatrCl operator*(MatrCl &mat1,const double Const);
-   friend VecCl operator*(MatrCl &mat1,VecCl &vec);
-   friend VecCl operator*(VecCl &vec,MatrCl &mat1);
+   friend MatrCl operator*(const MatrCl &mat1,const MatrCl &mat2);
+   friend MatrCl operator*(const MatrCl &mat1,double Const);
+   friend VecCl operator*(const MatrCl &mat1,const VecCl &vec);
+   friend VecCl operator*(const VecCl &vec,const MatrCl &mat1);
 
 //  Add unit Matr
-   friend MatrCl operator+(MatrCl &mat1,const double Const);
-   friend MatrCl operator-(MatrCl &mat1,double Const);
-   friend MatrCl operator+(MatrCl &mat1,MatrCl &mat2);
-   friend MatrCl operator-(MatrCl &mat1,MatrCl &mat2);
+   friend MatrCl operator+(const MatrCl &mat1,double Const);
+   friend MatrCl operator-(const MatrCl &mat1,double Const);
+   friend MatrCl operator+(const MatrCl &mat1,const MatrCl &mat2);
+   friend MatrCl operator-(const MatrCl &mat1,const MatrCl &mat2);
    friend ostream& operator<<(ostream &output,const MatrCl &mat);
-   friend istream& operator>>(istream &input, MatrCl &mat1);
+   friend istream& operator>>(istream &input, const MatrCl &mat1);
 
-   int Dim(int NewDim=-1){if (NewDim>=0) SetMatr(NewDim);return DimX;};
+   int Dim(int NewDim){SetMatr(NewDim);return DimX;};
+   int Dim()const {return DimX;};
    void GetDimMN(int &X,int &Y)const { X=DimX;Y=DimY;};
 
    ~MatrCl()            { DeleteMatr(); };
@@ -251,23 +256,23 @@ struct MatrCl
    void NewMatr(int DX,int DY);
    void DeleteMatr();
    double Get(int i,int j) const {return Addr[i-1][j-1];};
-   static VecCl GetRow(MatrCl &Mat,int i);
-   static VecCl GetCol(MatrCl &Mat,int i);
-   static void  SetRow(MatrCl &Mat,int i,VecCl &row);
-   static void  SetCol(MatrCl &Mat,int i,VecCl &col);
+   static VecCl GetRow(const MatrCl &Mat,int i);
+   static VecCl GetCol(const MatrCl &Mat,int i);
+   static void  SetRow(MatrCl &Mat,int i,const VecCl &row);
+   static void  SetCol(MatrCl &Mat,int i,const VecCl &col);
 
   };
-MatrCl Transpon(MatrCl &Mat);
+MatrCl Transpon(const MatrCl &Mat);
 int Inverse(MatrCl &Mat);
-double Trace(MatrCl &Mat);
-MatrCl DirectMultiplyOfMat(MatrCl &Fst,MatrCl &Sec);
-double MatrNorm(MatrCl &Mat);
+double Trace(const MatrCl &Mat);
+MatrCl DirectMultiplyOfMat(const MatrCl &Fst,const MatrCl &Sec);
+double MatrNorm(const MatrCl &Mat);
 
 
 
 //MatrCl VectorNormalizeMatr(VecCl Lft,MatrCl &Mat,VecCl Rgt);
 MatrCl VectorNormalizeMatr(const VecCl &Lft,const MatrCl &Mat,const VecCl Rgt);
-                                                 
+
 #endif
 
 

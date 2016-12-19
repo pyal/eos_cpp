@@ -50,7 +50,7 @@ template <class CONTENTYPE>
 class BinTreeComplete : public BinTree<CONTENTYPE>
 {
  public:
-  BinTreeComplete() : maxlevel(0) { BinTree<CONTENTYPE>::BinTree(); }
+  BinTreeComplete() : maxlevel(0) { /*BinTree<CONTENTYPE>::BinTree();*/ }
 
   BinTreeComplete(integer MAXLEVEL, const CONTENTYPE &c);        
        // set maxlevel=MAXLEVEL and construct tree with contents of all

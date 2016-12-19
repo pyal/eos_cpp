@@ -17,7 +17,7 @@ struct NamedObjectStoreAbstract
 struct NamedObject : public SavableClass  //## Inherits: <unnamed>%3EF6CA430254
 {
 
-   NamedObject(char *obj_name_=NULL,SavableClass *store=NULL,int store_num=-1,int UmanagePtrForLocal=0):obj_name(0),StoredBy(0),StoredByNum(-1),ObjectStored(0)
+   NamedObject(const char *obj_name_=NULL,SavableClass *store=NULL,int store_num=-1,int UmanagePtrForLocal=0):obj_name(0),StoredBy(0),StoredByNum(-1)
     {if (!obj_name_) set_obj_name(".");else set_obj_name(obj_name_);
      StoredBy=store;NamedObjectStoreAbstract *tmp=get_store();
      if (tmp) {tmp->Add(this,store_num);};if (UmanagePtrForLocal) unmanage();}
@@ -27,7 +27,7 @@ struct NamedObject : public SavableClass  //## Inherits: <unnamed>%3EF6CA430254
      delete obj_name;obj_name=NULL;
     };
 
-   NamedObject(const NamedObject &right):obj_name(NULL),StoredBy(0),StoredByNum(-1),ObjectStored(0)
+   NamedObject(const NamedObject &right):obj_name(NULL),StoredBy(0),StoredByNum(-1)
     {set_obj_name(right.obj_name);};//put_in_store(right.StoredBy);
    
    virtual int save_data_state (FilterOut &so){if (!obj_name) set_obj_name(".");so<<KeyDesc("ObjectName")<<obj_name<<KeyDesc("StoredBy")<<StoredBy<<KeyDesc("StoredByNum")<<StoredByNum;return !(!so);}
@@ -40,7 +40,7 @@ struct NamedObject : public SavableClass  //## Inherits: <unnamed>%3EF6CA430254
    virtual void StoreChanged(){};
 
 
-   inline void set_obj_name (char* value)  {delete obj_name;obj_name=NULL;if (value==NULL) return;obj_name=new char[strlen(value)+1];strcpy(obj_name,value);}
+   inline void set_obj_name (const char* value)  {delete obj_name;obj_name=NULL;if (value==NULL) return;obj_name=new char[strlen(value)+1];strcpy(obj_name,value);}
    inline const char* get_obj_name () const{return obj_name==0?"":obj_name;}
 
    inline const int get_StoredByNum () const{return StoredByNum;};
@@ -82,7 +82,7 @@ struct NamedObject : public SavableClass  //## Inherits: <unnamed>%3EF6CA430254
  private: //## implementation
    char* obj_name;
    SavableClass* StoredBy;
-   int StoredByNum,ObjectStored;
+   int StoredByNum;//,ObjectStored;
 
    friend struct NamedStore;
 };
@@ -113,7 +113,7 @@ struct NamedStore : public SparceArray<Ref<NamedObject>,CopyStructRef<Ref<NamedO
      if (obj->get_StoredBy()==DefaultStorage) 
       {
        int StoreNum=obj->get_StoredByNum();
-       if (obj!=GetPtr(StoreNum)) {fcout<<" NamedStore::SetPtr To different objects in one point\n";abort();}
+       if (obj!=GetPtr(StoreNum)) {cout<<" NamedStore::SetPtr To different objects in one point\n";abort();}
        return StoreNum;
       }
      else return Add(obj);
@@ -144,7 +144,9 @@ struct NamedStore : public SparceArray<Ref<NamedObject>,CopyStructRef<Ref<NamedO
    virtual int Name2Pos(char *name);                       
 // from NamedObjectStoreAbstract
    virtual void DeleteObject(NamedObject *obj)      { if (!obj) return;Del(obj->get_StoredByNum()); };
-   virtual inline int Add (NamedObject* dat, int pos = -1) {Ref<NamedObject> tmp=dat;return Add(tmp,pos);}
+    using NamedObjectStoreAbstract::Add;
+    using SparceArray<Ref<NamedObject>,CopyStructRef<Ref<NamedObject> > >::Add;
+   virtual int Add (NamedObject* dat, int pos = -1) {Ref<NamedObject> tmp=dat;return Add(tmp,pos);}
    virtual void StoreChanged();
   protected:
    SavableClass *DefaultStorage;

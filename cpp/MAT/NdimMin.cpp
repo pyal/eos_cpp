@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 
 
 
@@ -21,10 +21,10 @@ int MinFind1DClass::ConstVec(vector<IndexedVal> &vec)
 {
   //double d1=(vec[1].ValInd());
   //  if ( fabs(d1-vec[0].ValInd())+
-  //      fabs(d1-vec[2].ValInd()) <MinStep*max(fabs(d1),MinDouble) ) return 1;
+  //      fabs(d1-vec[2].ValInd()) <MinStep*max<double>(fabs(d1),MinDouble) ) return 1;
   double d1=(vec[1].ValInd());
     if ( fabs(d1-vec[0].ValInd())+
-//      fabs(d1-vec[2].ValInd()) <FuncError*max(fabs(d1),MinDouble) ) return 1;
+//      fabs(d1-vec[2].ValInd()) <FuncError*max<double>(fabs(d1),MinDouble) ) return 1;
       fabs(d1-vec[2].ValInd()) <FuncError) return 1;
   return 0;
 }
@@ -106,7 +106,7 @@ double MinFind1DClass::FixedMin(double x1,double x2,double x3,double y1,double y
 }
 
 
-void Derive2DClass::Execute(VecCl &Par,VecCl &Stp,MatrCl &D2,VecCl &D1,double &D0)
+void Derive2DClass::Execute(const VecCl &Par, VecCl &Stp, MatrCl &D2, VecCl &D1, double &D0)
 {
   MatrCl F2(Par.Dim());
   VecCl F1(Par.Dim()),p=Par,s=Stp*0.01;
@@ -128,7 +128,7 @@ void Derive2DClass::Execute(VecCl &Par,VecCl &Stp,MatrCl &D2,VecCl &D1,double &D
     {D2(k1,k)=(F2(k,k1)-F1[k1]-F1[k]+D0)/(s[k]*s[k1]);D2(k,k1)=D2(k1,k);}
   }
 };
-void Derive2DClass::Execute(VecCl &Par,VecCl &Stp,VecCl &D1,double &D0)
+void Derive2DClass::Execute(const VecCl &Par, VecCl &Stp, VecCl &D1, double &D0)
 {
   D0=Execute(Par);
   VecCl p;p=Par;
@@ -139,7 +139,7 @@ void Derive2DClass::Execute(VecCl &Par,VecCl &Stp,VecCl &D1,double &D0)
     p[k]=Par[k];
   }
 };
-void Derive2DHi2::Execute(VecCl &Par,VecCl &Stp,MatrCl &D2,VecCl &D1,double &D0)
+void Derive2DHi2::Execute(const VecCl &Par, VecCl &Stp, MatrCl &D2, VecCl &D1, double &D0)
 {
   MatrCl Mat(Par.Dim(),Y0.Dim());
   D2.Dim(Par.Dim());D1.Dim(Par.Dim());
@@ -214,12 +214,14 @@ struct FormMinDirections
 {
   MatrCl D2;
   VecCl D1;
-VecCl StpGain;
+  VecCl StpGain;
   double D0,ErrorLQ,MathZer05,ZeroMatrVal;
-  double Lambda;int Method;enum  MethodType {NoLambda,StdLambda,OptimLambda,UnitNorm} ;// Not used now
+  double Lambda;
+  int Method;
+  enum  MethodType {NoLambda,StdLambda,OptimLambda,UnitNorm} ;// Not used now
   FormMinDirections(MatrCl &d2,VecCl &d1,double d0,double errorlq,double mathzer05,
-                    double zeromatrval) :D2(d2),D1(d1),D0(d0),Method(NoLambda),
-            ErrorLQ(errorlq),MathZer05(mathzer05),ZeroMatrVal(zeromatrval),Lambda(0){};
+                    double zeromatrval) :D2(d2),D1(d1),D0(d0),
+            ErrorLQ(errorlq),MathZer05(mathzer05),ZeroMatrVal(zeromatrval),Lambda(0),Method(NoLambda){};
   int Dim(){return D2.Dim();}
 //  void SetLambda(double lambda){Lambda=lambda;};
 
@@ -249,7 +251,7 @@ StpGain.Dim(Dim());
 //cout<<"Edelta\n"<<Edelta<<"EigV\n"<<EigV<<"D0 "<<D0<<"\n";
     for (int k=1;k<=Dim();k++) 
     {
-        double tmp = fabs(Edelta[k]*D0)>MathZer?fabs(sqr(Edelta[k])/(max(fabs(EigV[k]),MathZer05)*4*D0)):0;
+        double tmp = fabs(Edelta[k]*D0)>MathZer?fabs(sqr(Edelta[k])/(max<double>(fabs(EigV[k]),MathZer05)*4*D0)):0;
       if ((tmp>MathZer05) && (fabs(EigV[k])>ErrorLQ)) 
                       {tmp=tmp*fabs(D0);StpEst[k]=Edelta[k]/EigV[k];}
       else {StpEst[k]=0;tmp=0;}
@@ -338,22 +340,22 @@ private:
     for (int k=1;k<=Vec.Dim();k++) ret[k]*=Cvt[k];
     return ret;
   }
-  int GoodMatrAppr(MatrCl &m1,MatrCl &m2,double GoodEstMisf)
+  int GoodMatrAppr(const MatrCl &m1,const MatrCl &m2,double GoodEstMisf)
   { 
 //return 0;
 return (GoodMatrAppr(m1,m2)>GoodEstMisf)?0:1; }
 
-  double GoodMatrAppr(MatrCl &m1,MatrCl &m2)
+  double GoodMatrAppr(const MatrCl &m1,const MatrCl &m2)
   {
     int n=m1.Dim();
     double Mis=0,d;
     for (int k=1;k<=n;k++)
     {
       for (int k1=1;k1<=n;k1++) 
-        if ((d=max(fabs(m1(k,k1)),fabs(m2(k,k1))))>M_Eps2)
-        //if ((d=max(fabs(m1(k,k1)),fabs(m2(k,k1))))>sqrt(MathZer05))
-          Mis=max(Mis,fabs(m1(k,k1)-m2(k,k1))/d);
-        else Mis=max(Mis,fabs(m1(k,k1)-m2(k,k1)));
+        if ((d=max<double>(fabs(m1(k,k1)),fabs(m2(k,k1))))>M_Eps2)
+        //if ((d=max<double>(fabs(m1(k,k1)),fabs(m2(k,k1))))>sqrt(MathZer05))
+          Mis=max<double>(Mis,fabs(m1(k,k1)-m2(k,k1))/d);
+        else Mis=max<double>(Mis,fabs(m1(k,k1)-m2(k,k1)));
     }
     return Mis;
   }
@@ -378,8 +380,8 @@ int EigenVectMinim::save_data_state( FilterOut&so){
   return !(!so);
 };
 
-EigenVectMinim::EigenVectMinim():Deriv2(NULL),Min1D(NULL),ErrorLQ(1e-8),LambdaCoef(0.01),
-                                 ZeroEig(1e-10),MathEps05(M_Eps2),MathEps(M_Eps),BreakIterStp(1.555),BadWlk(0){  };
+EigenVectMinim::EigenVectMinim():Deriv2(NULL),Min1D(NULL),LambdaCoef(0.01),ErrorLQ(1e-8),
+                                 ZeroEig(1e-10),BreakIterStp(1.555),MathEps05(M_Eps2),MathEps(M_Eps),BadWlk(0){  };
 
 
 
@@ -493,7 +495,7 @@ void EigenVectMinim::Execute(double &HiStrt,VecCl &Par,VecCl &StpV,int NumIter,d
   MultiDim2One Func(Deriv2);
   Min1D->SetFunc(MultiDim2One::Func1D);
   //if (MakeRndMotion(HiStrt,Par,StpDir,StpEst,NormVarCoef,NumIter)) ;//return;
-  double Hi0=HiStrt;
+//  double Hi0=HiStrt;
 //return;
 //cout<<" BreakIt "<<BreakIterStp;
 //cout<<" gained ";double gain=0,Hi01;
@@ -544,7 +546,7 @@ int MinFindNDimClass::Execute(VecCl &Par,VecCl &Stp,int NumIter,double &FoundMis
   FoundMisf=HiStrt;
     double MathEps05,MathEps,ErrorLQ,ZeroEig;
     Minim->GetConst(MathEps05,MathEps,ErrorLQ,ZeroEig);
-  for (int k=1;k<=Stp.Dim();k++) Stp[k]=max(fabs(Par0[k]-Par[k])*10,100*MathEps05);
+  for (int k=1;k<=Stp.Dim();k++) Stp[k]=max<double>(fabs(Par0[k]-Par[k])*10,100*MathEps05);
 //      Stp=Stp*0+100*MathEps05;
 
   return Continue;
@@ -589,7 +591,7 @@ struct LambdaMin
     Func.SetDir(StpEst,Par,NormVarCoef);
     Func.InitFunc();
     double Stp1D=Min1D->Execute(1,HiStrt);
-    //Stp1D=min(1,Stp1D/(max(1,log_lambda+5)));
+    //Stp1D=min(1,Stp1D/(max<double>(1,log_lambda+5)));
     //HiStrt=Func.Func1D(Stp1D);
     Func.RestoreFunc();
     Func.X2Vec(Stp1D,ParRes);

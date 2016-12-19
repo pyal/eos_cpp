@@ -46,7 +46,7 @@ struct ResizeVector : public SavableClass
           CpM__::CopyArray(&data[NumToGet],arr,Len);
       }
 
-// AddBy - positive - add by num, negative - max(multiply in percents,AddBy)
+// AddBy - positive - add by num, negative - max<double>(multiply in percents,AddBy)
 // Release - 0 - Release to StartNum, positive - release in percents
 // FillElement - Unsettled will be filled by element
       void SetPolicy(int Start,int AddBy,int Release,T *Fill)
@@ -71,6 +71,7 @@ struct ResizeVector : public SavableClass
 
       int StartNum,AddByNum,ReleasePolicy,NotFill;
       T FillElement;
+      T ReadBuffer;
 
       int ElementNum,ArrayLen;
       T* data;
@@ -91,7 +92,7 @@ struct ResizeVector : public SavableClass
 
 template <class T,class CpM__>
 ResizeVector<T,CpM__>::ResizeVector 
-(const ResizeVector<T,CpM__> &vec):data(NULL), ElementNum(0),ArrayLen(0)
+(const ResizeVector<T,CpM__> &vec):ElementNum(0), ArrayLen(0),data(NULL)
  {
   SetPolicy(vec.StartNum,vec.AddByNum,vec.ReleasePolicy,NULL);
   if (!vec.NotFill) SetFill(&(vec.FillElement));
@@ -103,7 +104,7 @@ ResizeVector<T,CpM__>::ResizeVector
 
 template <class T,class CpM__>
 ResizeVector<T,CpM__>::ResizeVector (int Start,int AddBy,int Release,T* Fill)
-                                            :data(NULL), ElementNum(0),ArrayLen(0)
+                                            : ElementNum(0),ArrayLen(0), data(NULL)
  {SetPolicy(Start,AddBy,Release,Fill);Resize(0);};
 
 template <class T,class CpM__>
@@ -199,9 +200,14 @@ int ResizeVector<T,CpM__>::read_data_state (FilterIn &si)
  {
    Delete();
    int NewElNum,Start,Add,Pol,NotF;
-   T Fill;
    si>>StdKey>>Start>>StdKey>>Add>>StdKey>>Pol>>StdKey>>NotF;
-   if (!NotF) {si>>StdKey>>Fill;SetPolicy(Start,Add,Pol,&Fill);}
+   if (!NotF) {
+//       T Fill = Fill;
+       si>>StdKey >> ReadBuffer;
+       //TODO Possible problems!!!!
+//       si >> (Fill);
+       SetPolicy(Start,Add,Pol,&ReadBuffer);
+   }
    else SetPolicy(Start,Add,Pol,NULL);
    si>>StdKey>>NewElNum>>StdKey;
 

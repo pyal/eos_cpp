@@ -3,8 +3,8 @@
 
 #include "eigen_ma.h"
 #include "matrics.h"
-#include "lib\ref\class.h"
-#include "lib\ref\class_sav.h"
+#include "lib/ref/class.h"
+#include "lib/ref/class_sav.h"
 #include <algorithm>
 #include <vector>
 
@@ -14,14 +14,13 @@ struct IndexedVal:RefCount
 {
   double ValInd()const{return ValueInd;}
   double ValCmp()const{return ValueCmp;}
-  double ValInd(){return ValueInd;}
-  double ValCmp(){return ValueCmp;}
+  double& ValInd(){return ValueInd;}
+  double& ValCmp(){return ValueCmp;}
   IndexedVal():ValueInd(0),ValueCmp(0){};
   IndexedVal(double valueind,double valuecmp):ValueInd(valueind),ValueCmp(valuecmp){};
-  int operator<(const IndexedVal &sec)
+  bool operator<(const IndexedVal &sec) const
   {
-    int ret=(ValCmp()<sec.ValCmp());
-    return ret;
+    return (ValueCmp<sec.ValueCmp);
   }
 private:
   double ValueInd;
@@ -39,7 +38,7 @@ struct MinFind1DClass:RefCount
   //                        StpOverGo(stpovergo),Func(func){SetConst(0,0,5,3);};
   void SetConst(double minstep,double funcerror,double linearmulcoef,int maxliniter,int maxsearchiter)
   {
-    MinStep=max(minstep,M_Eps2);FuncError=max(funcerror,M_Eps2);
+    MinStep=max<double>(minstep,M_Eps2);FuncError=max<double>(funcerror,M_Eps2);
     MaxLinIter=maxliniter;MaxSearchIter=maxsearchiter;
     LinearMulCoef=linearmulcoef;
   };
@@ -75,25 +74,25 @@ private:
 };
 struct DeriveFuncClass:RefCount
 {
-  virtual double Execute(VecCl &Par){return 0;};
+  virtual double Execute(const VecCl &Par){return 0;};
 };
 struct DeriveStaticFunc:DeriveFuncClass
 {
-  double (*Func)(VecCl&);
-  DeriveStaticFunc(double (*f)(VecCl&)):Func(f){};
-  virtual double Execute(VecCl &Par){return Func(Par);};
+  double (*Func)(const VecCl &);
+  DeriveStaticFunc(double (*f)(const VecCl &)): Func(f){};
+  virtual double Execute(const VecCl &Par){return Func(Par);};
 };
 struct Derive2DClass:DeriveFuncClass
 {
-  virtual void   Execute(VecCl &Par,VecCl &Stp,MatrCl &D2,VecCl &D1,double &D0);
-  virtual void   Execute(VecCl &Par,VecCl &Stp,VecCl &D1,double &D0);
-  double Execute(VecCl &Par){return DeriveFuncClass::Execute(Par);};
+  virtual void   Execute(const VecCl &Par, VecCl &Stp, MatrCl &D2, VecCl &D1, double &D0);
+  virtual void   Execute(const VecCl &Par, VecCl &Stp, VecCl &D1, double &D0);
+  double Execute(const VecCl &Par){return DeriveFuncClass::Execute(Par);};
 };
 struct Derive2DStd:Derive2DClass
 {
   Ref<DeriveFuncClass> Func;
   Derive2DStd(DeriveFuncClass *func):Func(func){};
-  double Execute(VecCl &Par)  {return Func->Execute(Par);}
+  double Execute(const VecCl &Par)  {return Func->Execute(Par);}
 };
 // Calculate 2Deriv appr from 1Deriv for Hi square misfit function
 // Estimation of the derivative is done by formulas
@@ -121,11 +120,11 @@ struct Derive2DStd:Derive2DClass
 struct Derive2DHi2:Derive2DClass
 {
   VecCl Weight,Y0;
-  void (*Func)(VecCl &Par,VecCl &Res);
-  Derive2DHi2(const VecCl &weight,const VecCl &y0,void (*func)(VecCl &Par,VecCl &Res)):
+  void (*Func)(const VecCl &Par, VecCl &Res);
+  Derive2DHi2(const VecCl &weight, const VecCl &y0, void (*func)(const VecCl &Par, VecCl &Res)):
                 Weight(weight),Y0(y0),Func(func){};
-  void   Execute(VecCl &Par,VecCl &Stp,MatrCl &D2,VecCl &D1,double &D0);
-  double Execute(VecCl &Par)  {
+  void   Execute(const VecCl &Par, VecCl &Stp, MatrCl &D2, VecCl &D1, double &D0);
+  double Execute(const VecCl &Par)  {
       VecCl Res;
       Func(Par,Res);
       if (Res.CheckInfinity(1/MathZer))
@@ -155,9 +154,9 @@ struct GetParamsCorrelation
 
 struct LambdaData
 {
+  double CurCoef;
   double CoefStart;
   double DivideCoef;
-  double CurCoef;
   double DivideVal;
   LambdaData(double curcoef,double dividecoef,double divideval):
              CurCoef(curcoef),CoefStart(curcoef),DivideCoef(dividecoef),
@@ -172,7 +171,7 @@ struct MultiDim2One
   MultiDim2One(DeriveFuncClass *func):Func(func){};
   Ref<DeriveFuncClass> Func;
   VecCl Direction,StartPnt,Cvt;
-  void SetDir(VecCl &direction,VecCl &startpnt,VecCl &cvt)
+  void SetDir(const VecCl &direction,const VecCl &startpnt,const VecCl &cvt)
     {Direction=direction;StartPnt=startpnt;Cvt=cvt;};
   void ChangeCoord(VecCl &cvt){Cvt=cvt;}
   void X2Vec(double x,VecCl &Par)
@@ -224,11 +223,11 @@ struct MultiDimMinimizer:SavableClass
 };
 struct EigenVectMinim:MultiDimMinimizer
 {
-  double ErrorLQ,MathEps05,MathEps,ZeroEig,BreakIterStp;
-  double LambdaCoef;
-  int BadWlk;
-  Ref<MinFind1DClass> Min1D;
   Ref<Derive2DClass> Deriv2;
+  Ref<MinFind1DClass> Min1D;
+  double LambdaCoef;
+  double ErrorLQ,ZeroEig,BreakIterStp, MathEps05,MathEps;
+  int BadWlk;
   void SetFunc(MinFind1DClass *min1d,Derive2DClass *deriv2){Min1D=min1d;Deriv2=deriv2;}
   EigenVectMinim();
   EigenVectMinim(Derive2DClass *deriv2,MinFind1DClass *min1d,
@@ -277,8 +276,8 @@ struct LMMinim:EigenVectMinim
 };
 struct MinFindNDimClass:RefCount
 {
-  double ResErr;//,ZeroEig;
   Ref<MultiDimMinimizer> Minim;
+  double ResErr;//,ZeroEig;
   MinFindNDimClass(MultiDimMinimizer * minim,double reserr):
                    Minim(minim),ResErr(reserr) {if (ResErr<M_Eps) ResErr=M_Eps;}
 

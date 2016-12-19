@@ -35,27 +35,27 @@ public:
     my_comp();
 
     // complex manipulations
-    friend double     my_real(my_comp   &);   // the real part
-    friend double     my_imag(my_comp   &);   // the imaginary part
-    friend my_comp     conj(my_comp   &);  // the complex conjugate
-    friend double     norm(my_comp   &);   // the square of the magnitude
-    friend double     arg(my_comp   &);    // the angle in the plane
+    friend double     my_real(const my_comp   &);   // the real part
+    friend double     my_imag(const my_comp   &);   // the imaginary part
+    friend my_comp     conj(const my_comp   &);  // the complex conjugate
+    friend double     norm(const my_comp   &);   // the square of the magnitude
+    friend double     arg(const my_comp   &);    // the angle in the plane
 
     // Create a complex object given polar coordinates
     friend my_comp   polar(double __mag, double __angle);
 
     // Overloaded ANSI C math functions
-    friend my_comp     cos(my_comp   &);
-    friend my_comp     cosh(my_comp   &);
-    friend my_comp     exp(my_comp   &);
-    friend my_comp     log(my_comp   &);
-    friend my_comp     pow(my_comp   & __base, my_comp   & __expon);
-    friend my_comp     pow(my_comp   & __base, double __expon);
-    friend my_comp     sin(my_comp   &);
-    friend my_comp     sinh(my_comp   &);
-    friend my_comp     sqrt(my_comp   &);
+    friend my_comp     cos(const my_comp   &);
+    friend my_comp     cosh(const my_comp   &);
+    friend my_comp     exp(const my_comp   &);
+    friend my_comp     log(const my_comp   &);
+    friend my_comp     pow(const my_comp   & __base, my_comp   & __expon);
+    friend my_comp     pow(const my_comp   & __base, double __expon);
+    friend my_comp     sin(const my_comp   &);
+    friend my_comp     sinh(const my_comp   &);
+    friend my_comp     sqrt(const my_comp   &);
 //    friend double      abs(my_comp   &);
-    friend double      fabs(my_comp   &);
+    friend double      fabs(const my_comp   &);
 /*
     friend my_comp     pow(double __base, my_comp   & __expon);
     friend my_comp     acos(my_comp   &);
@@ -66,27 +66,27 @@ public:
     friend my_comp     tanh(my_comp   &);
 */
     // Binary Operator Functions
-    friend my_comp     operator+(my_comp   &, my_comp   &);
-    friend my_comp     operator+(double, my_comp   &);
-    friend my_comp     operator+(my_comp   &, double);
-    friend my_comp     operator-(my_comp   &, my_comp   &);
-    friend my_comp     operator-(double, my_comp   &);
-    friend my_comp     operator-(my_comp   &, double);
-    friend my_comp     operator*(my_comp   &, my_comp   &);
-    friend my_comp     operator*(my_comp   &, double);
-    friend my_comp     operator*(double, my_comp   &);
-    friend my_comp     operator/(my_comp   &, my_comp   &);
-    friend my_comp     operator/(my_comp   &, double);
-    friend my_comp     operator/(double, my_comp   &);
-    friend int     operator==(my_comp   &, my_comp   &);
-    friend int     operator!=(my_comp   &, my_comp   &);
-    my_comp   &   operator+=(my_comp   &);
+    friend my_comp     operator+(const my_comp   &, const my_comp   &);
+    friend my_comp     operator+(double, const my_comp   &);
+    friend my_comp     operator+(const my_comp   &, double);
+    friend my_comp     operator-(const my_comp   &, const my_comp   &);
+    friend my_comp     operator-(double, const my_comp   &);
+    friend my_comp     operator-(const my_comp   &, double);
+    friend my_comp     operator*(const my_comp   &, const my_comp   &);
+    friend my_comp     operator*(const my_comp   &, double);
+    friend my_comp     operator*(double, const my_comp   &);
+    friend my_comp     operator/(const my_comp   &, const my_comp   &);
+    friend my_comp     operator/(const my_comp   &, double);
+    friend my_comp     operator/(double, const my_comp   &);
+    friend int     operator==(const my_comp   &, const my_comp   &);
+    friend int     operator!=(const my_comp   &, const my_comp   &);
+    my_comp   &   operator+=(const my_comp   &);
     my_comp   &   operator+=(double);
-    my_comp   &   operator-=(my_comp   &);
+    my_comp   &   operator-=(const my_comp   &);
     my_comp   &   operator-=(double);
-    my_comp   &   operator*=(my_comp   &);
+    my_comp   &   operator*=(const my_comp   &);
     my_comp   &   operator*=(double);
-    my_comp   &   operator/=(my_comp   &);
+    my_comp   &   operator/=(const my_comp   &);
     my_comp   &   operator/=(double);
     my_comp   operator+();
     my_comp   operator-();
@@ -127,7 +127,7 @@ inline my_comp   my_comp::operator-()
 
 // Definitions of compound-assignment operator member functions
 
-inline my_comp   &   my_comp::operator+=(my_comp   & __z2)
+inline my_comp   &   my_comp::operator+=(const my_comp   & __z2)
 {
     re += __z2.re;
     im += __z2.im;
@@ -140,7 +140,7 @@ inline my_comp   &   my_comp::operator+=(double __re_val2)
     return *this;
 }
 
-inline my_comp   &   my_comp::operator-=(my_comp   & __z2)
+inline my_comp   &   my_comp::operator-=(const my_comp   & __z2)
 {
     re -= __z2.re;
     im -= __z2.im;
@@ -170,17 +170,17 @@ inline my_comp   &   my_comp::operator/=(double __re_val2)
 
 // Definitions of non-member complex functions
 
-inline double   my_real(my_comp   & __z)
+inline double   my_real(const my_comp   & __z)
 {
     return __z.re;
 }
 
-inline double   my_imag(my_comp   & __z)
+inline double   my_imag(const my_comp   & __z)
 {
     return __z.im;
 }
 
-inline my_comp   conj(my_comp   & __z)
+inline my_comp   conj(const my_comp   & __z)
 {
     return my_comp(__z.re, -__z.im);
 }
@@ -193,72 +193,72 @@ inline my_comp   polar(double __mag, double __angle)
 
 // Definitions of non-member binary operator functions
 
-inline my_comp   operator+(my_comp   & __z1, my_comp   & __z2)
+inline my_comp   operator+(const my_comp   & __z1, const my_comp   & __z2)
 {
     return my_comp(__z1.re + __z2.re, __z1.im + __z2.im);
 }
 
-inline my_comp   operator+(double __re_val1, my_comp   & __z2)
+inline my_comp   operator+(double __re_val1, const my_comp   & __z2)
 {
     return my_comp(__re_val1 + __z2.re, __z2.im);
 }
 
-inline my_comp   operator+(my_comp   & __z1, double __re_val2)
+inline my_comp   operator+(const my_comp   & __z1, double __re_val2)
 {
     return my_comp(__z1.re + __re_val2, __z1.im);
 }
 
-inline my_comp   operator-(my_comp   & __z1, my_comp   & __z2)
+inline my_comp   operator-(const my_comp   & __z1, const my_comp   & __z2)
 {
     return my_comp(__z1.re - __z2.re, __z1.im - __z2.im);
 }
 
-inline my_comp   operator-(double __re_val1, my_comp   & __z2)
+inline my_comp   operator-(double __re_val1, const my_comp   & __z2)
 {
     return my_comp(__re_val1 - __z2.re, -__z2.im);
 }
 
-inline my_comp   operator-(my_comp   & __z1, double __re_val2)
+inline my_comp   operator-(const my_comp   & __z1, double __re_val2)
 {
     return my_comp(__z1.re - __re_val2, __z1.im);
 }
 
-inline my_comp   operator*(my_comp   & __z1, double __re_val2)
+inline my_comp   operator*(const my_comp   & __z1, double __re_val2)
 {
     return my_comp(__z1.re*__re_val2, __z1.im*__re_val2);
 }
 
-inline my_comp   operator*(double __re_val1, my_comp   & __z2)
+inline my_comp   operator*(double __re_val1, const my_comp   & __z2)
 {
     return my_comp(__z2.re*__re_val1, __z2.im*__re_val1);
 }
 
-inline my_comp   operator/(my_comp   & __z1, double __re_val2)
+inline my_comp   operator/(const my_comp   & __z1, double __re_val2)
 {
     return my_comp(__z1.re/__re_val2, __z1.im/__re_val2);
 }
 
-inline int   operator==(my_comp   & __z1, my_comp   & __z2)
+inline int   operator==(const my_comp   & __z1, const my_comp   & __z2)
 {
     return __z1.re == __z2.re && __z1.im == __z2.im;
 }
 
-inline int   operator!=(my_comp   & __z1, my_comp   & __z2)
+inline int   operator!=(const my_comp   & __z1, const my_comp   & __z2)
 {
     return __z1.re != __z2.re || __z1.im != __z2.im;
 }
 
-inline double     arg(my_comp   &x)
+inline double     arg(const my_comp   &x)
 {
    return atan2(x.im, x.re);
 }
 
-inline double  fabs(my_comp &x)
+inline double  fabs(const my_comp &x)
  {
    return hypot(x.re, x.im);
  }
  
-inline double  norm(my_comp &x)      
+inline double  norm(const my_comp &x)
 {
   return (x.re * x.re + x.im * x.im);
 }

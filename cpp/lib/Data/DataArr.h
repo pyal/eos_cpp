@@ -2,8 +2,8 @@
 #ifndef DataArr_h
 #define DataArr_h 1
 
-#include "lib\ref\class_sav.h"
-#include "lib\std\util.h"
+#include "lib/ref/class_sav.h"
+#include "lib/std/util.h"
 #include "datavec.h"
 
 
@@ -220,8 +220,8 @@ DataVector<T, CpM_> DataArray<T>::SetRow (int Row, T* RowVar )
  {
   int k,N=columns.SetDim();
   DataVector<T, CpM_ > ret(N);ret=(T)0;
-  CheckProperties();if (!same_length) {ExEnv::ferr()<<"SetRow, Arr not same_length. Use SetRowMask. col:"<<columns;return ret;}
-  if (RowVar==NULL) if ( (N!=0) && (Row>=N) ) {ExEnv::ferr()<<"SetRow, Arr rows<RowToGet:"<<N<<" "<<Row<<"\n";return ret;}
+  CheckProperties();if (!same_length) {ExEnv::err()<<"SetRow, Arr not same_length. Use SetRowMask. col:"<<columns;return ret;}
+  if (RowVar==NULL) if ( (N!=0) && (Row>=N) ) {ExEnv::err()<<"SetRow, Arr rows<RowToGet:"<<N<<" "<<Row<<"\n";return ret;}
                     else {for (k=0;k<N;k++) ret[k]=data[k][Row];return ret;}
   else if (Row>N) {DataVector<int, CopyStructFast<int> > tmp(N);Resize(tmp=Row);for (k=N;k<Row;k++) SetRow<CpM_>(k,RowVar);return ret=RowVar;}
        else {for (k=0;k<N;k++) data[k][Row]=RowVar[k];}
@@ -232,10 +232,11 @@ template <class CpM_>
 void DataArray<T>::SetRow (int Row,DataVector<T, CpM_>& RowVar )
  {
   int k,N=columns.SetDim();
-  CheckProperties();if (!same_length) {ExEnv::ferr()<<"SetRow, Arr not same_length. Use SetRowMask. col:"<<columns;return ret;}
-  if (Row>N) {Resize(DataVector<double, CopyStructFast<double> > tmp(N)=Row);for (k=N;k<Row;k++) SetRow(k,RowVar);}
-  else {for (k=0;k<N;k++) data[k][Row]=RowVar[k];}
-  return ret=RowVar;
+  CheckProperties();if (!same_length) {ExEnv::err()<<"SetRow, Arr not same_length. Use SetRowMask. col:"<<columns;return;}
+//  if (Row>N) {Resize(DataVector<double, CopyStructFast<double> > tmp(N)=Row);for (k=N;k<Row;k++) SetRow(k,RowVar);}
+//  else
+  {for (k=0;k<N;k++) data[k][Row]=RowVar[k];}
+//  return ret=RowVar;
  };
 template <class T>
 void DataArray<T>::CheckProperties() 
@@ -261,7 +262,7 @@ DataArray<T> Transpon (DataArray<T>& ar)
  {
   ar.CheckProperties();
   DataVector<int, CopyStructFast<int> > ColVec=ar.SetDim();
-  if (!ar.same_length) {ExEnv::ferr()<<"Error in transpon; Array not same_length. Its dim: \n"<<ColVec;return ar;}
+  if (!ar.same_length) {ExEnv::err()<<"Error in transpon; Array not same_length. Its dim: \n"<<ColVec;return ar;}
   DataArray<T> ret(0);
   int col,row,Ncol=ColVec.SetDim();if (Ncol==0) return ret;
   int Nrow=ColVec[0];ret.SetDim(Nrow,Ncol);
@@ -312,11 +313,11 @@ template <class CpM_>
 DataVector<T, CpM_> DataArray<T>::operator * (const DataVector<T, CpM_>& coef)
  {
   CheckProperties();
-  if (!same_length) {ExEnv::ferr()<<"Error in Ar mul Vec; Array not same_len. Its dim: \n"<<columns;return coef;}
+  if (!same_length) {ExEnv::err()<<"Error in Ar mul Vec; Array not same_len. Its dim: \n"<<columns;return coef;}
   DataVector<T> ret(0);
   int col,row,Ncol=columns.SetDim();if (Ncol==0) return ret;
   int Nrow=columns[0];ret.SetDim(Nrow);ret=(T)0;
-  if (coef.SetDim()!=Ncol) {ExEnv::ferr()<<"Error in Ar mul Vec; Vec_len!=Ncol."<<coef.SetDim()<<" "<<Ncol;return ret;}
+  if (coef.SetDim()!=Ncol) {ExEnv::err()<<"Error in Ar mul Vec; Vec_len!=Ncol."<<coef.SetDim()<<" "<<Ncol;return ret;}
   for (row=0;row<Nrow;row++)
     {
      T sum=0;
@@ -330,10 +331,10 @@ template <class CpM_>
 DataArray<T> DataArray<T>::operator + (const DataVector<T, CpM_>& coef)
  {
   CheckProperties();
-  if (!square) { ExEnv::ferr()<<"Error in Ar plus Vec; Array not square. Its dim: \n"<<columns;return (*this);}
+  if (!square) { ExEnv::err()<<"Error in Ar plus Vec; Array not square. Its dim: \n"<<columns;return (*this);}
   DataArray<T> ret;ret=0;
   int col,Ncol=columns.SetDim();
-  if (coef.SetDim()!=Ncol) {ExEnv::ferr()<<"Error in Ar plus Vec; Vec_len!=Ncol."<<coef.SetDim()<<" "<<Ncol;return ret;}
+  if (coef.SetDim()!=Ncol) {ExEnv::err()<<"Error in Ar plus Vec; Vec_len!=Ncol."<<coef.SetDim()<<" "<<Ncol;return ret;}
   for (col=0;col<Ncol;col++) data[col][col]=data[col][col]+coef[col];
   return ret;
  }
@@ -342,10 +343,10 @@ template <class CpM_>
 DataArray<T> DataArray<T>::operator - (const DataVector<T, CpM_>& coef)
  {
   CheckProperties();
-  if (!square) {ExEnv::ferr()<<"Error in Ar minus Vec; Array not square. Its dim: \n"<<columns;return (*this);}
+  if (!square) {ExEnv::err()<<"Error in Ar minus Vec; Array not square. Its dim: \n"<<columns;return (*this);}
   DataArray<T> ret=coef;
   int col,Ncol=columns.SetDim();
-  if (coef.SetDim()!=Ncol) {ExEnv::ferr()<<"Error in Ar minus Vec; Vec_len!=Ncol."<<coef.SetDim()<<" "<<Ncol;return ret;}
+  if (coef.SetDim()!=Ncol) {ExEnv::err()<<"Error in Ar minus Vec; Vec_len!=Ncol."<<coef.SetDim()<<" "<<Ncol;return ret;}
   for (col=0;col<Ncol;col++) data[col][col]=data[col][col]-coef[col];
   return ret;
  }
@@ -354,13 +355,13 @@ template <class T>
 DataArray<T> DataArray<T>::operator * ( DataArray<T>& coef)
  {
   CheckProperties();
-  if (!same_length) {ExEnv::ferr()<<"Error in Ar1 mul Ar2; Ar1 not same_len. Its dim: \n"<<columns;return coef;}
+  if (!same_length) {ExEnv::err()<<"Error in Ar1 mul Ar2; Ar1 not same_len. Its dim: \n"<<columns;return coef;}
   coef.CheckProperties();
-  if (!coef.same_length) {ExEnv::ferr()<<"Error in Ar1 mul Ar2; Ar2 not same_len. Its dim: \n"<<coef.SetDim();return coef;}
+  if (!coef.same_length) {ExEnv::err()<<"Error in Ar1 mul Ar2; Ar2 not same_len. Its dim: \n"<<coef.SetDim();return coef;}
   DataArray<T> ret(0);
   int col,row,k,N1col=columns.SetDim();if (N1col==0) return ret;int N1row=columns[0];
   int N2col=coef.SetDim().SetDim();if (N2col==0) return ret;int N2row=coef.SetDim()[0];
-  if (N2row!=N1col) {ExEnv::ferr()<<"Error in Ar mul Ar; Ar1_col!=Ar2_row."<<N1col<<" "<<N2row;return ret;}
+  if (N2row!=N1col) {ExEnv::err()<<"Error in Ar mul Ar; Ar1_col!=Ar2_row."<<N1col<<" "<<N2row;return ret;}
   ret.SetDim(N2col,N1row);
   for (row=0;row<N1row;row++)
     {
@@ -376,7 +377,7 @@ DataArray<T> DataArray<T>::operator * ( DataArray<T>& coef)
 template <class T>
 DataArray<T> DataArray<T>::operator + (DataArray<T>& coef)
  {
-  if (columns!=coef.SetDim()) {ExEnv::ferr()<<"Error in Ar plus Ar; Array with dif dim. Ar dim, coef dim: \n"<<columns<<"\n"<<coef.SetDim()<<"\n";return coef;}
+  if (columns!=coef.SetDim()) {ExEnv::err()<<"Error in Ar plus Ar; Array with dif dim. Ar dim, coef dim: \n"<<columns<<"\n"<<coef.SetDim()<<"\n";return coef;}
   DataArray<T> ret(columns);
   int col,row,Ncol=columns.SetDim();
   for (col=0;col<Ncol;col++) {for (row=0;row<Ncol;row++) ret(row,col)=data[col][row]+coef(row,col);}
@@ -386,7 +387,7 @@ DataArray<T> DataArray<T>::operator + (DataArray<T>& coef)
 template <class T>
 DataArray<T> DataArray<T>::operator - (DataArray<T>& coef)
  {
-  if (columns!=coef.SetDim()) {ExEnv::ferr()<<"Error in Ar minus Ar; Array with dif dim. Ar dim, coef dim: \n"<<columns<<"\n"<<coef.SetDim()<<"\n";return coef;}
+  if (columns!=coef.SetDim()) {ExEnv::err()<<"Error in Ar minus Ar; Array with dif dim. Ar dim, coef dim: \n"<<columns<<"\n"<<coef.SetDim()<<"\n";return coef;}
   DataArray<T> ret(columns);
   int col,row,Ncol=columns.SetDim();
   for (col=0;col<Ncol;col++) {for (row=0;row<Ncol;row++) ret(row,col)=data[col][row]-coef(row,col);}
