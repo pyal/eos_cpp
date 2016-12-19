@@ -57,11 +57,11 @@ protected:
 #endif
     void insert(size_t off, size_t rep, size_t len, const char *text) {
 //        MemoryMove(message + off + rep, message + off + len, max(size_t(0), min(
-        MemoryMove(message + off + rep, message + off + len, max(size_t(0), min(
+        MemoryMove(message + off + rep, message + off + len, max<int>(size_t(0), min<int>(
             sizeof(message) - off - rep,
             sizeof(message) - off - len)));
 //        MemoryMove(text, message + off, max(size_t(0), min(
-        MemoryMove(text, message + off, max(size_t(0), min(
+        MemoryMove(text, message + off, max<int>(size_t(0), min<int>(
             len,
             sizeof(message) - off)));
         message[sizeof(message)-1] = 0;
@@ -86,7 +86,7 @@ public:
         char linfo[194];
         const char *f = strrchr(file, LOCSLASH_C);
         f = f ? f + 1 : file;
-        sprintf(linfo, "%.60s:%d:%.130s: ", f, line, func);
+        sprintf(linfo, "%.120s:%d:%.130s: ", f, line, func);
         insert(0, 0, strlen(linfo), linfo);
         return *this;
     }
@@ -95,7 +95,7 @@ public:
 	//	return out;
 	//}
 	// friend stdexception_with_line_info &operator<<(stdexception_with_line_info &out,int i){
-	//	char tmp[256];return out<<(const char*)itoa(i,&tmp[0],10);
+	//	char tmp[256];return out<<(const char*)Itoa(i,&tmp[0],10);
 	//}
 	// friend stdexception_with_line_info &operator<<(stdexception_with_line_info &out,double d){
 	//	char tmp[256];return out<<(const char*)_gcvt(d,8,&tmp[0]);
@@ -109,7 +109,13 @@ protected:
 //{ cout<<NAME<<"\n"<<"Exception caught:"<<e.what()<<"\n";return 1; }
 #define CATCHMAINEXCEPTION(NAME) catch(exception &e)\
 { cout<<NAME<<"\n"<<"Exception caught:"<<e.what()<<"\n";return 1; }
+
+#ifndef MAC
 #define CATCHEXCEPTION(NAME) catch(exception &e) { cout<<"In file:"<<__FILE__<<"\non line:"<<__LINE__<<"\nin function:"<<__FUNCDNAME__<<"\nexception caught name:"<<NAME<<"\nReason:"<<e.what()<<"\n"; }
+#else
+#define CATCHEXCEPTION(NAME) catch(exception &e) { cout<<"In file:"<<__FILE__<<"\non line:"<<__LINE__<<"\nin function:"<<__FUNCTION__<<"\nexception caught name:"<<NAME<<"\nReason:"<<e.what()<<"\n"; }
+#endif
+
 //{ cout<<"In file:"<<__FILE__<<"\non line:"<<__LINE__<<"\nin function:"<<__FUNCTION__<<"\nexception caught name:"<<NAME<<"\nReason:"<<e.what()<<"\n"; }
 
 

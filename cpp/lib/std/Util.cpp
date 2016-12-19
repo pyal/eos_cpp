@@ -226,6 +226,22 @@ char* Itoa(int i, char *buf, int base) {
 #endif
 }
 
+bool IsNan(double x) {
+#ifdef MAC
+    return isnan(x);
+#else
+    return _isnan(x);
+#endif
+}
+
+char* Gcvt(double x, int ndigit, char *tmp) {
+#ifdef MAC
+    return gcvt(x, ndigit, tmp);
+#else
+    return _gcvt(x, ndigit, tmp);
+#endif
+}
+
 void line_feed(istream &i)
   { char ch=' ';while ((i) && (ch!='\n')) i.get(ch); };
 
@@ -360,7 +376,7 @@ int In_Lim(double Val,double from,double to,int BndInclude)
 
   };
 
-void SetExt(char *src,char *dst,char *setext)
+void SetExt(const char *src,char *dst,const char *setext)
   {
 #ifdef MSDOS
    char path_buffer[50],name[50],drive[50],dir[50],ext[5];

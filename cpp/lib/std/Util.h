@@ -129,7 +129,7 @@ double sqr(double a);
 //	#define min(a,b) ((a) <= (b) ? (a) : (b))
 //	#define max(a,b) ((a) >= (b) ? (a) : (b))
 //#endif
-void SetExt(char *src,char *dst,char *setext);
+void SetExt(const char *src,char *dst,const char *setext);
 void SetPathExt(char *src,char *dst,char *setpath,char *setext);
 void SetPath(char *src,char *dst,char *setpath);
 void SetLength(char *name,int length);
@@ -153,7 +153,8 @@ char *Strlor(char *src);
 void MergePath(char *FullName,const char *drive,const char *dir,const char *name,const char *ext);
 void SplitPath(const char *FullName,char *drive,char *dir,char *name,char *ext);
 char* Itoa(int i, char *buf, int base);
-
+bool IsNan(double x);
+char* Gcvt(double x, int ndigit, char *tmp);
 void SetLeakTest();
 void LeakTest();
 int LeakTest(std::string &Err);
