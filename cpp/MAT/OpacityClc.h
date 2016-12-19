@@ -67,7 +67,7 @@ private:
             if (fabs(f1->Calculate(vec[i])*f2->Calculate(vec[i]))>1e-5)
                 break;
         }
-        intbeg = vec[max(0, i-1)];
+        intbeg = vec[max<int>(0, i-1)];
         for(i = (int)vec.size() - 1; i >= 0; i--){
             if (fabs(f1->Calculate(vec[i])*f2->Calculate(vec[i]))>1e-5)
                 break;

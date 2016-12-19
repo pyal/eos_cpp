@@ -11,7 +11,7 @@
 */
 #include "matrics.h"
 #include "cmatrics.h"
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 #include "uralgol.h"
 
 //  Return int Error

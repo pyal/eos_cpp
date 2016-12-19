@@ -1,5 +1,5 @@
 
-#include "lib\precompiled\math.h"
+#include "lib/precompiled/math.h"
 
 #include "opacityclc.h"
 #include "onevarcurves.h"
@@ -11,9 +11,9 @@ static ClassDesc PlancEmission_ClassDesc(typeid(PlancEmission),"PlancEmission",1
 
 
 BrigtnesTemp::BrigtnesTemp():L2OSourceCal(new ManyVarFunc2OneVar), L2OSourceExp(new PolynomFunc), 
-        L2ODetector(new ManyVarFunc2OneVar), InterFilter(new PolynomFunc), ZeroFilterSignal(1e-5),
-        WaveLength(500), SourceTemp(2700), Opacity(1), SingleLine(1), CalibrationSignal(0.6), 
-        ColorTempCoef(1){
+        L2ODetector(new ManyVarFunc2OneVar), InterFilter(new PolynomFunc),
+                             ColorTempCoef(1), WaveLength(500), SourceTemp(2700), Opacity(1), ZeroFilterSignal(1e-5), SingleLine(1), CalibrationSignal(0.6)
+        {
 }
 
 BrigtnesTemp *BrigtnesTemp::CurPtr;

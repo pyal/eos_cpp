@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 
 #include "spline.h"
 
@@ -52,7 +52,7 @@ void Spline(long N,double *X,double *Y,double *B,double *C,double *D)
           C[i+1]=(Y[i+1]-Y[i])/D[i];
           C[i]=C[i+1]-C[i];
         };
-// { Граничные условия. 3-и производные в точках X[1] и X[N] 
+// { Граничные условия. 3-и производные в точках X[1] и X[N]
 //   вычисляются с помощью разделенных разностей }
        B[1]=-D[1];
        B[N]=-D[N-1];
@@ -101,7 +101,7 @@ void Spline(long N,double *X,double *Y,double *B,double *C,double *D)
 double Seval(long N,double U,double *X,double *Y,double *B,double *C,
                                                             double *D)
 /*  
- { Эта функция вычисляет значение кубического сплайна 
+ { Эта функция вычисляет значение кубического сплайна
   Seval= Y[i]+B[i]*(U-X[i])+C[i]*(U-X[i])**2+D[i]*(U-X[i])**3,
   где X[i] < U < X[i+1]. Используется схема Горнера.
   Если U < X[1], то берется значение i=1, если U > X[N], то i=N

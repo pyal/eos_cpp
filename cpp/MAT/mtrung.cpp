@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "mtrung.h"
 
 double *parptr,*dirptr,*tmpptr;

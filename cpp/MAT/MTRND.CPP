@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 
 
 #include "mtrnd.h"
@@ -29,8 +29,8 @@ RndIntegral* RndIntegral::Init(double x_low,double x_up,int NumInt,double Misf)
   for (int k=1;k<dat.I[0];k++)
    {
      double tmp=Qags_IntSubInt(RndIntegral::xFunc,Cur-Stp2,Cur+Stp2,Misf/(NumInt+5),Misf/(NumInt+5),IntNumInt,IntResMis,IntErr);
-//	  S+=max(RecInt(RndIntegral::xFunc,Cur-Stp2,Cur+Stp2,Misf/(NumInt+5)),Misf/(NumInt+5));
-	  S+=max(tmp,Misf/(NumInt+5));
+//	  S+=max<double>(RecInt(RndIntegral::xFunc,Cur-Stp2,Cur+Stp2,Misf/(NumInt+5)),Misf/(NumInt+5));
+	  S+=max<double>(tmp,Misf/(NumInt+5));
     dat.D[0][k]=Cur;
     dat.D[1][k]=S;
     Cur+=Stp2*2;
@@ -89,9 +89,9 @@ void SetRndDistrib(X_func Func,double x_low,double x_up,int NumInt,double Misf,
 //  for (int k=2;k<=dat.I[0];k++)
   for (int k=1;k<dat.I[0];k++)
    {
-//    S+=max(RecInt(Func,Cur,Cur+Stp,Misf/(NumInt+5)),1e-7);
-//    S+=max(RecInt(Func,Cur,Cur+Stp,Misf/(NumInt+5)),sqrt(MathZer));
-    S+=max(RecInt(Func,Cur-Stp2,Cur+Stp2,Misf/(NumInt+5)),Misf*0.0001);
+//    S+=max<double>(RecInt(Func,Cur,Cur+Stp,Misf/(NumInt+5)),1e-7);
+//    S+=max<double>(RecInt(Func,Cur,Cur+Stp,Misf/(NumInt+5)),sqrt(MathZer));
+    S+=max<double>(RecInt(Func,Cur-Stp2,Cur+Stp2,Misf/(NumInt+5)),Misf*0.0001);
 //    S+=RecInt(Func,Cur,Cur+Stp,Misf/(NumInt+5)); //WWRROONNGG  NNOOWW
     dat.D[0][k]=Cur;
     dat.D[1][k]=S;

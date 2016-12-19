@@ -1,5 +1,6 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "mtfunc.h"
+#include "quad.h"
 
 double MTSign(double x)
 {

@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "zero.h"    
 double ZeroIn(double AX,double BX,X_func F,double Tol) 
    {
@@ -12,7 +12,8 @@ double ZeroIn(double AX,double BX,X_func F,double Tol)
     C=A;FC=FA;
     D=B-A;
     E=D;
- Start: FC=FC;
+ Start:
+//        FC=FC;
     if (fabs(FC) < fabs(FB)) 
        {
          A=B;B=C;C=A;

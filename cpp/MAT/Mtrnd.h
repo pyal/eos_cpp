@@ -7,7 +7,7 @@
 #include "spl_fac.h"
 #include "matrics.h"
 #include "quad.h"
-#include "lib\ref\ref.h"
+#include "lib/ref/ref.h"
 struct RndFunc:RefCount
 {
 // Generate random function distributed according to the given law
@@ -110,7 +110,7 @@ struct RndBlume:RndFunc
   RndBlume(VecCl &values,VecCl &prob)
   {
 	  StateTime=prob;
-	  for (int k=1;k<=StateTime[0];k++) StateTime[k]=1/max(StateTime[k], MathZer)/prob[0];
+	  for (int k=1;k<=StateTime[0];k++) StateTime[k]=1/max<double>(StateTime[k], MathZer)/prob[0];
 	  ParamVal=values;
 
 	  NormTime=StateTime/(StateTime*(StateTime*0+1));
@@ -126,7 +126,7 @@ struct RndBlume:RndFunc
    double RTime=1;
    TimeDisp=RTime*gausDisp;
    time.Set(RTime,TimeDisp);
-   time.Init(max(RTime-4*TimeDisp,sqrt(MathZer)),
+   time.Init(max<double>(RTime-4*TimeDisp,sqrt(MathZer)),
 	             RTime+4*TimeDisp,100,1e-5);
    //RelaxTime=StateTime*(StateTime*0+1);
    //TimeDisp=RelaxTime*gausDisp;
@@ -135,10 +135,10 @@ struct RndBlume:RndFunc
    //{
 	  // times[k]=new RndGaus();
 	  // //times[k]->Set(StateTime[k],gausDisp*StateTime[k]);
-	  // //times[k]->Init(max(StateTime[k]-4*gausDisp*StateTime[k],sqrt(MathZer)),
+	  // //times[k]->Init(max<double>(StateTime[k]-4*gausDisp*StateTime[k],sqrt(MathZer)),
 	  // //          StateTime[k]+4*gausDisp*StateTime[k],100,1e-5);
 	  // times[k]->Set(StateTime[k],TimeDisp);
-	  // times[k]->Init(max(StateTime[k]-4*TimeDisp,sqrt(MathZer)),
+	  // times[k]->Init(max<double>(StateTime[k]-4*TimeDisp,sqrt(MathZer)),
 	  //           StateTime[k]+4*TimeDisp,100,1e-5);
    //}
    TimesGenerated=1;
@@ -148,7 +148,7 @@ struct RndBlume:RndFunc
   double Rnd()
   {
 //	  double x=double(rand())/RAND_MAX*StateTime[0],s=0;
-	  double x=RandomClass::Rnd(StateTime[0]),s=0;
+	  double x=RandomClass::Rnd(StateTime[0]);
 	  CurrentState=(int)x+1;
 //cout<<x<<" RndChange "<<CurrentState<<"  "<<ParamVal[CurrentState]<<"\n";
 	  return ParamVal[CurrentState];
@@ -202,7 +202,7 @@ struct RndBlume
   void GenerateTimes(double gausDisp)
   {TimeDisp=RelaxTime*gausDisp;
    time.Set(RelaxTime,TimeDisp);
-   time.Init(max(RelaxTime-4*TimeDisp,sqrt(MathZer)),
+   time.Init(max<double>(RelaxTime-4*TimeDisp,sqrt(MathZer)),
 //	             RelaxTime+4*TimeDisp,100,1e-5*RelaxTime);
 	             RelaxTime+4*TimeDisp,100,1e-5);
    TimesGenerated=1;}

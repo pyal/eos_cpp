@@ -12,12 +12,12 @@ double Sound(double r,double e)
   {
    double P=(*PressurePtr)(r,e);
    double dr=StndErr;
-   double S=sqrt( max(0,((*PressurePtr)(r+dr,e+P*dr/(r*r))-P))/dr );
+   double S=sqrt( max<double>(0,((*PressurePtr)(r+dr,e+P*dr/(r*r))-P))/dr );
    return S;
   };
 */
 double PressurePorous(double r,double e)
-//  {return max(MatterAdiabat->Pressure(r,e),Pcritical);};
+//  {return max<double>(MatterAdiabat->Pressure(r,e),Pcritical);};
   {return MatterAdiabat->Pressure(r,e);};
 
 //double XXX;
@@ -116,8 +116,8 @@ int SoundIter(double v1,double p1,double e1,double du,double &s,double &s0,
      }
       else return 0;
      }
-   else if (ret!=0) ret=min(ret,s0);else ret=s0;
-   ret=(max(ret,s)*39+min(ret,s))/40;
+   else if (ret!=0) ret=min<double>(ret,s0);else ret=s0;
+   ret=(max<double>(ret,s)*39+min<double>(ret,s))/40;
 //cout<<" S "<<ret<<" S0 "<<s0<<" Mis "<<Mis<<"\n";
    s=ret;
    return 1;
@@ -138,7 +138,7 @@ void SetHugPar(double &v1,double &x,double &du,
 			ConstPar[1]=v1;ConstPar[2]=p1; ConstPar[3]=e1;  ConstPar[4]=du;
 //cout<<" du "<<du<<"\n";
 //   double PEderiv=( PressurePorous(r1,e1+StndErr)-p1 )/StndErr;
-//cout<<" PE "<<PEderiv<<" ";PEderiv=max(PEderiv,1);
+//cout<<" PE "<<PEderiv<<" ";PEderiv=max<double>(PEderiv,1);
    double Sound=MatterAdiabat->Sound(r1,e1);
    double s0=Sound;
 
@@ -486,7 +486,7 @@ void Hug(double u1,double r1,double p1,double e1,
 //      double v2=1/(Rcritical-StndErr*100);
       double v2;
 //      r2=(Rcritical-StndErr*100);      // Good for D=A+B*u EOS
-      r2=max(r1,MatterAdiabat->DencityCold())+1e4*StndErr;   
+      r2=max<double>(r1,MatterAdiabat->DencityCold())+1e4*StndErr;
       if (!ZeroNewtonIt(MisfitHug,r2,StndErr,1000,Rcritical-StndErr,StndErr))
         {cout<<" Could not find match in Hug.\n";ChRead();}
 //      r2=1/v2;

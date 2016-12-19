@@ -77,7 +77,7 @@ struct TTable:TData<T>
    }
      //{ TData<T>::TData(da_);}
    virtual TData<T>& operator=(TData<T> &dat)
-     {if (stricmp(dat.InterfaceIOName(),"TColumn")==0)
+     {if (Stricmp(dat.InterfaceIOName(),"TColumn")==0)
         TTableTColumn((TData<T>&)(*this),dat);
 //      else *this=(TData<T>::operator=)(dat);
       else (TData<T>::operator=)(dat);
@@ -111,7 +111,7 @@ struct TColumn:TData<T>
    TColumn(TData<T> &dat)
      { TData<T>::TData(dat);}
    virtual TData<T>& operator=(TData<T> &dat)
-     {if (stricmp(dat.InterfaceIOName(),"TTable")==0)
+     {if (Stricmp(dat.InterfaceIOName(),"TTable")==0)
         TTColumnTable((TData<T>&)(*this),dat);
 //      else *this=(TData<T>::operator=)(dat);
       else (TData<T>::operator=)(dat);
@@ -236,8 +236,8 @@ template <class T> int  TColumn<T>::ReadIni(istream &in )
 
 template <class T> int TTableTColumn(TData<T> &Res,TData<T> &dat)
   {
-   if ((stricmp(dat.InterfaceIOName(),"TColumn")!=0) ||
-       (stricmp(Res.InterfaceIOName(),"TTable")!=0))
+   if ((Stricmp(dat.InterfaceIOName(),"TColumn")!=0) ||
+       (Stricmp(Res.InterfaceIOName(),"TTable")!=0))
      throw info_except("Wrong types in TTableTColumn %s != TColumn || %s !=TTable\n", dat.InterfaceIOName(), Res.InterfaceIOName());
    if ( (dat.N!=3) || (dat.I[0]!=dat.I[1]) || (dat.I[0]!=dat.I[2]) )
      throw info_except(" Bad dimensions in TTableTColumn %i  %i %i (have to be same)\n", dat.I[0], dat.I[1], dat.I[2]);
@@ -258,8 +258,8 @@ template <class T> int TTableTColumn(TData<T> &Res,TData<T> &dat)
 
 template <class T> int TTColumnTable(TData<T> &Res,TData<T> &dat)
   {
-   if ( (stricmp(dat.InterfaceIOName(),"TTable")!=0) ||
-        (stricmp(Res.InterfaceIOName(),"TColumn")!=0))
+   if ( (Stricmp(dat.InterfaceIOName(),"TTable")!=0) ||
+        (Stricmp(Res.InterfaceIOName(),"TColumn")!=0))
         throw info_except(" Wrong types in TTColumnTable %s %s \n", dat.InterfaceIOName(), Res.InterfaceIOName());
    if ( (dat.N!=3) || (dat.I[0]*dat.I[1]!=dat.I[2]) )
        throw info_except(" Bad dimensions in TTColumnTable %i * %i != %i\n", dat.I[0], dat.I[1], dat.I[2]);
@@ -274,7 +274,7 @@ template <class T> int TTColumnTable(TData<T> &Res,TData<T> &dat)
 
 template <class T>  int ReadTableRow(istream &in,TData<T> *dat)
   {
-   if (stricmp(dat->InterfaceIOName(),"TTable")!=0) 
+   if (Stricmp(dat->InterfaceIOName(),"TTable")!=0)
      { cout<<" ReadTableRow work only with TTable. Wrong.";return 0;}
    char tmp[256];
    int i0,i1,ExpX,ExpY,k;

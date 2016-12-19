@@ -2,10 +2,10 @@
 #define __MATT_EXP_H
 
 #include "matt_fac.h"
-#include "mat\dat_mani.h"
-#include "mat\spl_fac.h"
-#include "mat\zero.h"
-#include "mat\mtquad.h"
+#include "mat/dat_mani.h"
+#include "mat/spl_fac.h"
+#include "mat/zero.h"
+#include "mat/mtquad.h"
 #include "matt_his.h"
 
 
@@ -50,11 +50,11 @@ struct MatterABuAdd:MatterIOFind{
 
 struct MatterABuExp:MatterIOFind{
    CurveSpline *Ph_s,*Eh_s,*G_s,*T_s,*Teta0_s,*Cv_s;
-   double AddE,AddP,AddT,MinT,MinV;
    double Denc;
-   double DencHisch;
-   double Misfit;
    int NumX;
+   double Misfit;
+   double AddP,AddE,AddT,MinT,MinV;
+   double DencHisch;
 
    MatterHisch Hisch;
 
@@ -108,7 +108,7 @@ cout<<" Fst Est "<<T0+(Energy-Eh0);Eh=T0+(Energy-Eh0);
       double teta;Teta0_s->Evaluate(&D,&teta,1);
       SubT=log(MinT);DivT=log(T0)-SubT;Teta0=teta;
       Cv_ss=Cv_s;
-      T0=max(Eh,sqrt(4*StndErr));
+      T0=max<double>(Eh,sqrt(4*StndErr));
       if (!ZeroMullerIt(MisfitE,T0,StndErr,1000))
         {cout<<" match in Temp. Mis "<<MisfitE(T0)<<" T0 "<<T0<<"\n";}
 cout<<" Lst "<<T0<<" Mis "<<T0-Eh<<"\n";
@@ -210,9 +210,9 @@ cout<<" Fst Est "<<T0+(Energy-Eh0);Eh=T0+(Energy-Eh0);
       SubT=log(MinT);DivT=log(T0)-SubT;Teta0=teta;
       Cv_ss=Cv_s;
 //      T0/=2;
-      T0=max(Eh,sqrt(4*StndErr));
+      T0=max<double>(Eh,sqrt(4*StndErr));
 //double Mist=StndErr;
-//      if (!ZeroNewtonIt(MisfitE,T0,StndErr,1000,1/StndErr,sqrt(StndErr),0.1*max(T0,0.1)))
+//      if (!ZeroNewtonIt(MisfitE,T0,StndErr,1000,1/StndErr,sqrt(StndErr),0.1*max<double>(T0,0.1)))
       if (!ZeroMullerIt(MisfitE,T0,StndErr,1000))
         {cout<<" match in Temp. Mis "<<MisfitE(T0)<<" T0 "<<T0<<"\n";}
 cout<<" Lst "<<T0<<" Mis "<<T0-Eh<<"\n";

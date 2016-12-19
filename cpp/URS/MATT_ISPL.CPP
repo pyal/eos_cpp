@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "matt_ispl.h"   
 //#include "empi_equ.h"
 //#include "matt_fac.h"

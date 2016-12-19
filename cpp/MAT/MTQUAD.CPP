@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "mtquad.h"
 static double MinInfinFunc= 1.0;
 static double InitStep = 0.1;
@@ -42,7 +42,7 @@ double InFinQunc10(X_func Func,double A,double AbsErr,double InFinZero,
                    int NumZero,long MaxFunc,int &Flag)
  
 // Normal   - use X20,Y20 -> X0,Y0; Xi -> Xi+Hm
-// Div step - use X0öX10,Y0öY10; mem X11öX20,Y11öY20  
+// Div step - use X0öX10,Y0öY10; mem X11öX20,Y11öY20
 // Mult step - use X20,Y20 -> X0,Y0
 // Normal after Div - use mem X11öX20,Y11öY20
 // Last interval - use X20,Y20 -> X0,Y0
@@ -70,17 +70,18 @@ double InFinQunc10(X_func Func,double A,double AbsErr,double InFinZero,
       if  (Toler<=AbsErr) 
         {
           Sum=Sum+ValueH;
-          if (Sum!=0.0)  if (fabs(ValueH/Sum)<=InFinZero)  
-            {
-              j++;
-              if ((j>=NumZero) && (X0>MinInfinFunc))
-                {
-                  Flag=0;
+          if (Sum!=0.0) {
+              if (fabs(ValueH / Sum) <= InFinZero) {
+                  j++;
+                  if ((j >= NumZero) && (X0 > MinInfinFunc)) {
+                      Flag = 0;
 //cout<<" NumIter "<<NumFunc<<" MaxX "<<X[20]<<"\n";
-                  return Sum;
-                };
-            } 
-          else j=0;
+                      return Sum;
+                  }
+              } else {
+                  j = 0;
+              }
+          }
           X0=X[20];
           Y0=Y[20];
           if (Toler*100<AbsErr) 
@@ -204,15 +205,16 @@ double InFinQulb9(X_func Func,double A,double AbsErr,double InFinZero,
       if  (Toler<=AbsErr) 
         {
           Sum=Sum+ValueH;
-          if (Sum!=0.0) if (fabs(ValueH/Sum)<=InFinZero) 
-            {
-              j++;
-              if ((j>=NumZero) && (X0>MinInfinFunc))
-                { Flag=0.0;
+          if (Sum!=0.0) {
+              if (fabs(ValueH / Sum) <= InFinZero) {
+                  j++;
+                  if ((j >= NumZero) && (X0 > MinInfinFunc)) {
+                      Flag = 0.0;
 //cout<<" NumIter "<<NumFunc<<" MaxX "<<X[20]<<"\n";
-				  return Sum;  }
-            } 
-          else j=0;
+                      return Sum;
+                  }
+              } else j = 0;
+          }
           X0=X[22];
           Y0=Y[22];
           if (Toler*100<AbsErr) 
@@ -404,7 +406,7 @@ function InfinQunc8(Func:FunType;A,AbsErr,InFinZero:RealType;NumZero:byte;
   MaxFunc:longint;var Flag:RealType):RealType;
 {
  Normal   - use X16,Y16 -> X0,Y0; Xi -> Xi+Hm
- Div step - use X0öX8,Y0öY8; mem X9öX16,Y9öY16  
+ Div step - use X0öX8,Y0öY8; mem X9öX16,Y9öY16
  Mult step - use X16,Y16 -> X0,Y0
  Normal after Div - use mem X9öX16,Y9öY16
  Last interval - use X16,Y16 -> X0,Y0
@@ -541,7 +543,7 @@ function InFinQunc10(Func:FunType;A,AbsErr,InFinZero:RealType;NumZero:byte;
   MaxFunc:longint;var Flag:RealType):RealType;
 {
  Normal   - use X20,Y20 -> X0,Y0; Xi -> Xi+Hm
- Div step - use X0öX10,Y0öY10; mem X11öX20,Y11öY20  
+ Div step - use X0öX10,Y0öY10; mem X11öX20,Y11öY20
  Mult step - use X20,Y20 -> X0,Y0
  Normal after Div - use mem X11öX20,Y11öY20
  Last interval - use X20,Y20 -> X0,Y0
@@ -678,7 +680,7 @@ function InFinQunc10(Func:FunType;A,AbsErr,InFinZero:RealType;NumZero:byte;
 function StepQunc8(Func:FunType;A,B,AbsErr:RealType;MaxFunc:longint;var Flag:RealType):RealType;
 {
  Normal   - use X16,Y16 -> X0,Y0; Xi -> Xi+Hm
- Div step - use X0öX8,Y0öY8; mem X9öX16,Y9öY16  
+ Div step - use X0öX8,Y0öY8; mem X9öX16,Y9öY16
  Mult step - use X16,Y16 -> X0,Y0
  Normal after Div - use mem X9öX16,Y9öY16
  Last interval - use X16,Y16 -> X0,Y0

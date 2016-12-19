@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 
 #include "turnmat.h"
 
@@ -7,7 +7,7 @@
 CMatrCl TurnSpinors::Turn4Mat(double Teta,double Phi)
   {
    CMatrCl Mat(4);
-   Mat=Mat*0;
+   Mat=Mat*my_comp(0);
    double c,s,c2,sq3,r1,r2,r3,r4,r5,r6;
    c=cos(Teta*Pi/360);s=sin(Teta*Pi/360);c2=cos(Teta*Pi/180);
    sq3=sqrt(3.);
@@ -27,7 +27,7 @@ CMatrCl TurnSpinors::Turn4Mat(double Teta,double Phi)
 CMatrCl TurnSpinors::Turn2Mat(double Teta,double Phi)
   {
    CMatrCl Mat(2);
-   Mat=Mat*0;
+   Mat=Mat*my_comp(0);
    double c,s;
    c=cos(Teta*Pi/360);s=sin(Teta*Pi/360);
    Phi*=Pi/180;my_comp e1=my_comp(cos(0.5*Phi),sin(0.5*Phi)),e2=conj(e1);
@@ -219,7 +219,7 @@ MatrCl Turn3D::ITurnMatr(V3D_Angles &rotate)
 //  return Transpon(TurnMatrAxis(3,rotate.phi())*TurnMatrAxis(2,rotate.teta()));
   return Transpon(TurnMatr(rotate));
 }
-V3D_XYZ Turn3D::TurnXYZ(V3D_XYZ &pnt,MatrCl &rotate)
+V3D_XYZ Turn3D::TurnXYZ(const V3D_XYZ &pnt,const MatrCl &rotate)
 {
   V3D_XYZ ret;
 //for (int k=1;k<=3;k++){for (int k1=1;k1<=3;k1++) if (fabs(rotate(k,k1))<1e-10) rotate(k,k1)=0;}
@@ -227,7 +227,7 @@ V3D_XYZ Turn3D::TurnXYZ(V3D_XYZ &pnt,MatrCl &rotate)
   ret.vec=rotate*pnt.vec;
   return ret;
 };
-V3D_Angles Turn3D::TurnAngles(V3D_Angles &pnt,MatrCl &rotate)
+V3D_Angles Turn3D::TurnAngles(const V3D_Angles &pnt,const MatrCl &rotate)
 {
   return V3D_Angles(TurnXYZ(V3D_XYZ(pnt),rotate));
 };

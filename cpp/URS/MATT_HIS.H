@@ -3,11 +3,11 @@
 
 #include "matt_fac.h"
 #include "hisch.h"
-#include "mat\dat_mani.h"
-#include "mat\mtquad.h"
-#include "mat\zero.h"
+#include "mat/dat_mani.h"
+#include "mat/mtquad.h"
+#include "mat/zero.h"
 //#include "matlib.h"
-#include "mat\mtrung.h"
+#include "mat/mtrung.h"
 
 
 
@@ -128,7 +128,7 @@ struct MatterABuExpFit:MatterIOFind{
     return (atan((u-S_TP)/S_TL)+M_PI/2.)/M_PI*(S_TB-S_TA)+S_TA;
 //    if (u/S_DencT>10) return StndErr;
 //cout<<" U/U0 "<<u/S_DencT<<" Cv "<<S_TB*(1-exp(-u/S_DencT))<<"\n";
-//    return max(StndErr,S_TB*(1-exp(-u/S_DencT))); 
+//    return max<double>(StndErr,S_TB*(1-exp(-u/S_DencT)));
     }
    static double IntegUT(double u,double t) 
      { double D=S_A+S_B*u,D1=S_B,DM,G=Grun(D/(D-u),0.5*sqr(u),S_H),Cv=CvU(u);
@@ -232,7 +232,7 @@ struct MatterABuExpFit:virtual InterfaceFindSubstanceIO,virtual MatterIO
    static HischConst S_H;
    static double ShockU(double u) { return S_A+S_B*u;}
    static double GrunU(double u) { double D=S_A+S_B*u;return Grun(D/(D-u),0.5*sqr(u),S_H);}
-   static double TempU(double u) { return max(S_TA+S_TB*u+S_TP*sqr(u),StndErr);}
+   static double TempU(double u) { return max<double>(S_TA+S_TB*u+S_TP*sqr(u),StndErr);}
 //============= for the function:       d(y)=d(x)*f(x,y) ===========
 //int NotRungCurt(XYZ_func func,double x_beg,double y_beg,double x_end,double &x,double &y,double &stp,double err=0,int MaxIter=1000,BrkXY_func Brk=NULL);
    void SetHisch() 
@@ -334,7 +334,7 @@ cout<<" Fst Est "<<T0+(Energy-Eh0);Eh=T0+(Energy-Eh0);
       double teta;Teta0_s->Evaluate(&D,&teta,1);
       SubT=log(MinT);DivT=log(T0)-SubT;Teta0=teta;
       Cv_ss=Cv_s;
-      T0=max(Eh,sqrt(4*StndErr));
+      T0=max<double>(Eh,sqrt(4*StndErr));
       if (!ZeroMullerIt(MisfitE,T0,StndErr,1000)) {cout<<" match in Temp. Mis "<<MisfitE(T0)<<" T0 "<<T0<<"\n";}
 cout<<" Lst "<<T0<<" Mis "<<T0-Eh<<"\n";
       return T0;

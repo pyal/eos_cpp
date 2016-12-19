@@ -2,7 +2,7 @@
 #define __MYAPPR_H
 
 #include "matrics.h"
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 #include "eigen_ma.h"
 //#include "matlib.h"
 //#include <alloc.h>

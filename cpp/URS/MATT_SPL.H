@@ -1,14 +1,14 @@
 #ifndef __MATT_SPL_H
 #define __MATT_SPL_H
 
-#include "lib\std\deffunc.h"
-#include "lib\std\const.h"
+#include "lib/std/deffunc.h"
+#include "lib/std/const.h"
 #include "matt_fac.h"
 #include "fre_fac.h"
 
-#include "mat\dat_fac.h"
-#include "mat\dat_reg.h"
-#include "mat\spl_fac.h"
+#include "mat/dat_fac.h"
+#include "mat/dat_reg.h"
+#include "mat/spl_fac.h"
 #include "fre_bus.h"
 
 //#include "h2_liqui.h"
@@ -51,13 +51,13 @@ cout<<"MatterIO::Sound; Dencity<MathZer :"<<Dencity<<"\n";
       double P=Pressure(r,Energy);
       double Pp=Pressure(r+dr,Energy+P*dr/(r*r));Pp-=P;
 //double Pp1=Pressure(r+dr,Energy);Pp1-=P;
-//cout<<" Pp "<<Pp<<" Pp1 "<<Pp1<<" S "<<sqrt( max(0,Pp)/dr )<<" S1 "<<sqrt( max(0,Pp1)/dr )<<"\n";
+//cout<<" Pp "<<Pp<<" Pp1 "<<Pp1<<" S "<<sqrt( max<double>(0,Pp)/dr )<<" S1 "<<sqrt( max<double>(0,Pp1)/dr )<<"\n";
       if (Pp<0)
         {
 //cout<<" MatterIO::Sound;  deriv is negative: " <<Pp<<" Sqrt from negative value          \n";
          Pp=0.1;
         }
-      double S=sqrt( max(0,Pp)/dr );
+      double S=sqrt( max<double>(0,Pp)/dr );
       return S;
      };
       

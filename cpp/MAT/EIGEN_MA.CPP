@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "eigen_ma.h"
 //  Return int Error
 int TestData(MatrCl &Mat,int MaxIter,double Tolerance)
@@ -272,6 +272,6 @@ if (TestData(RInMat,1,Tol)) { cout<<" Matrics not simmetric\n"<<
       NormMatr(EigenVect,Use);
      }
    if (!ret) cout<<" Ermit Matrics\n"<<RInMat<<" EigenV\n"<<REigenM;
-   delete Use;delete REigenV;
+   delete []Use;delete []REigenV;
    return ret;
   }

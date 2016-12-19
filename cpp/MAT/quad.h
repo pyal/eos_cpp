@@ -1,6 +1,4 @@
-#ifndef QUAD_H
-#define QUAD_H
-
+#pragma once
 
 #include "lib/std/util.h"
 //#include <stdlib.h>
@@ -67,7 +65,6 @@ double Fmin(X_func f,double From,double To,double Guess,double AbsErr,double &Fu
 
 
 extern int NumberEvaluations; // For Fzero | Fmin ?
-
 
 //double UncMin(int &Error,int N,double *x_start,double *x_res,double est_sol,
 //              double (*FuncClc)(double *x,int n) , double *GradStp=NULL,

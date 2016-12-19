@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "matt_his.h"
 #define TE_Zero 1e3
 
@@ -80,7 +80,7 @@ double TempDenc0,TempEnergy0,TempTHug,TempEHug,TempTetaHug,TempSubT;
 
 double TempCvFunc(double T)
   {
-   double teta=TempTetaHug+log(max(T,MathZer))-TempSubT;
+   double teta=TempTetaHug+log(max<double>(T,MathZer))-TempSubT;
 //   double teta=TempTetaHug+0.5*sqr(T)-TempSubT;
 //cout<<teta<<"     "<<EvalSpl((*CT->data),1,3,(*CT->Cv_Teta),teta)<<"\n";
 //   return EvalSpl((*CT->data),1,3,(*CT->Cv_Teta),log(teta+TE_Zero));
@@ -89,7 +89,7 @@ double TempCvFunc(double T)
 double TempMisfitE(double T)
   {
    if (T<sqrt(2*StndErr)) return 0;
-//   T=max(T,2*MathZer) ;
+//   T=max<double>(T,2*MathZer) ;
    double ret;ret=RecInt(TempCvFunc,TempTHug,T,StndErr);
    return ret+TempEHug-TempEnergy0; 
   }; 
@@ -104,7 +104,7 @@ double GetTemp(double Dencity,double Energy,TempParStruct *TempPar)
 
    TempSubT=log(TempTHug);
 //   TempSubT=0.5*sqr(TempTHug);
-   double T0=max(THug,sqrt(4*StndErr));
+   double T0=max<double>(THug,sqrt(4*StndErr));
    if (!ZeroMullerIt(TempMisfitE,T0,StndErr,1000))
         {cout<<" match in Temp. Mis "<<TempMisfitE(T0)<<" T0 "<<T0<<"\n";}
 //cout<<" Lst "<<T0<<" Thug"<<THug<<"\n";
@@ -122,7 +122,7 @@ double GetEnergy(double Dencity,double Temperature,TempParStruct *TempPar)
 //cout<<" THug "<<THug<<" EHug "<<EHug<<" TetaHug "<<TetaHug;
    TempSubT=log(TempTHug);
 //   TempSubT=0.5*sqr(TempTHug);
-//   double T0=max(THug,sqrt(4*StndErr));
+//   double T0=max<double>(THug,sqrt(4*StndErr));
 //cout<<" E "<<EHug+RecInt(TempCvFunc,TempTHug,Temperature,StndErr)<<"\n";
    return EHug+RecInt(TempCvFunc,TempTHug,Temperature,StndErr);
   };

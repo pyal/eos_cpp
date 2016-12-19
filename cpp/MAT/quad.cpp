@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 
 #include "quad.h"
 
@@ -217,11 +217,12 @@ double Qainf_OscilIntInf(X_func f,double From,double FromAssimpt,double ErrorAbs
   integer *iwork=new integer[3*wrksub];
 
    X_func tmpFunc=FuncStatic;FuncStatic=f;
-  int ret=sqainf_(&numfun, reinterpret_cast<U_fp>( &FuncSubNa6), &period, &gamma, a, b, &wrksub, 
+//  int ret=
+   sqainf_(&numfun, reinterpret_cast<U_fp>( &FuncSubNa6), &period, &gamma, a, b, &wrksub,
                   &emax, &minpts, &maxpts, &epsabs, &epsrel, &nw, &key, &restar, 
                   &result[0], &abserr, &neval, &ifail, &done, work, iwork);
   FuncStatic=tmpFunc;
-  delete work;delete iwork;delete a;delete b;
+  delete []work;delete []iwork;delete []a;delete []b;
   if (ifail) {cout<<" Qainf_OscilIntInf : error "<<ifail<<" ResErr "<<abserr<<" NumEval "<<neval<<"\n";cout.flush();};
   Err=ifail;ResErr=abserr;NumberEvaluations=neval;
 //cout<<" Oscil res "<<result[0]<<" neval "<<neval<<"\n";
@@ -824,8 +825,8 @@ int Fzero(X_func f,double From,double To,double &Guess,double ErrorAbs,double Er
      cout<<" Fzero; Flag "<<iflag<<" X "<<b<<" Func(X) "<<f(b)<<"\n"
            <<" function may be around singular point. Not zero, but From-To in given interval\n";
     
-   if (iflag==4)
-		iflag;
+//   if (iflag==4)
+//		iflag;
 //      cout<<" Fzero; Flag "<<iflag<<" X "<<b<<" Func(X) "<<f(b)<<"\n"
 //;//           <<" function may be around local minimum. Not zero, but From-To in given interval\n";
     
@@ -924,7 +925,7 @@ int SubstUncMinFuncStd(integer *n, doublereal *x, doublereal *f, doublereal *g)
   Double2LongD(*n,x_,x);
   (*StaticUncMinGradClcStd)(x_,g_,*n,f_);
   Double2LongD(*n,g_,g,1); *f=f_;
-  delete x_;delete g_;
+  delete []x_;delete []g_;
   return 0;
  }
 int SubstUncMinFuncUser(integer *n, doublereal *x, doublereal *f, doublereal *g)
@@ -941,7 +942,7 @@ int SubstUncMinFuncUser(integer *n, doublereal *x, doublereal *f, doublereal *g)
 //for (k=0;k<N;k++) cout<<g_[k]<<" ";
 
   Double2LongD(*n,g_,g,1); *f=f_;
-  delete x_;delete g_;
+  delete []x_;delete []g_;
   return 0;
  }
   
@@ -1011,10 +1012,10 @@ double UncMin(int &Error,int N,double *x_start,double *x_res,double est_sol,
 //     else lmqnbc_(&Error_, &N_, x_res_, &ret_, ResGrad_, WorkArr_, &WorkLen_, reinterpret_cast<U_fp>(SubstUncMinFuncUser),
 //                BoundMin_,BoundMax_,ipivot_//);
 //                           ,&msglvl, &maxit, &maxfun, &eta, &stepmx, &accrcy, &xtol);
-     delete BoundMin_;delete BoundMax_;delete ipivot_;
+     delete []BoundMin_;delete []BoundMax_;delete []ipivot_;
     }
 //int k;
-if ((Error_!=0) && ((fabs(ResGrad_[0])>1) || (fabs(ResGrad_[N-1])>1)) )
+if ((Error_!=0) && ((fabs(double(ResGrad_[0]))>1) || (fabs(double(ResGrad_[N-1]))>1)) )
  {
 //cout<<"\n\n Error "<<Error_<<" Found min "<<ret_<<"\n";
 //cout<<"Found vect ";
@@ -1024,9 +1025,9 @@ if ((Error_!=0) && ((fabs(ResGrad_[0])>1) || (fabs(ResGrad_[N-1])>1)) )
  }
    Error=Error_;ret=ret_;
    Double2LongD(N,x_res,x_res_,0);
-   delete ResGrad_;delete WorkArr_;delete x_res_;
+   delete []ResGrad_;delete []WorkArr_;delete []x_res_;
 
-   if (ToDeleteStp) delete GradStp;
+   if (ToDeleteStp) delete []GradStp;
 
    StaticUncMinGradClcUser=StaticUncMinGradClcUser_;
    StaticUncMinFuncClc=StaticUncMinFuncClc_;

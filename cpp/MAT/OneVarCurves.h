@@ -338,7 +338,7 @@ struct NoiseWavelet:OneVarFunction {
         File::ReadFile(NoiseFile.c_str(), vec, "NoiseWavelet");
         if (vec.size() == 0)
             throw info_except("Could not read data NumRow==0\n");
-        if (vec.size() <= (size_t)max(NoiseYcol, NoiseXcol))
+        if (vec.size() <= (size_t)max<size_t>(NoiseYcol, NoiseXcol))
             throw info_except("Bad input file Ncol <%i> Nrow<%i> but NoiseXcol <%i> NoiseYcol <%i>\n", vec.size(), vec[0].size(), NoiseXcol, NoiseYcol);
         Wavelet wave;
         std::vector<double> Y;

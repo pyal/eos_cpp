@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "spl_fac.h"
 //#include <bios.h>
 //#include <alloc.h>
@@ -110,14 +110,14 @@ int  RegridSpline::Generate(int &NumX,int &NumY,
               &SumSquareResiduals,RWork,&NRWork,IWork,&NIWork,&Result);
 //cout<<" Generate Good "<<Result<<" SX "<<SX<<" SY "<<SY<<" MisfR "<<SumSquareResiduals<<"\n";
 //cout<<" NumXi "<<NumXi<<" NumYi "<<NumYi<<" DX "<<DX<<" DY "<<DY;
-   if (SumSquareResiduals == 0 || Misf < SumSquareResiduals * 0.5 || _isnan(SumSquareResiduals))
+   if (SumSquareResiduals == 0 || Misf < SumSquareResiduals * 0.5 || IsNan(SumSquareResiduals))
        throw info_except("Could not make spline. Error %g have to be %g\n", SumSquareResiduals, Misf);
        //Result *= 100;
    Delta=Misf=SumSquareResiduals;NumX=SX;NumY=SY;
    if (Result != 10 && Result != 1000 )
      {BSpl.I[0]=SX;BSpl.I[1]=SY; BSpl.I[2]=(SX-px-1)*(SY-py-1);}
 //   Bspl=Bspl;
-   delete RWork;delete IWork;
+   delete []RWork;delete []IWork;
    return Result;
   }; 
 
@@ -145,7 +145,7 @@ if (ier!=0) {cout<<" Bad Evaluate Spl "<<ier<<"\n";}
       z[k]=rz;
      }  
 
-   delete wk;delete iw;
+   delete []wk;delete []iw;
    return ier;
   };
 
@@ -174,7 +174,7 @@ int RegridSpline::Evaluate (TData<real> &dat)
 //cout<<RD.D[0][k]<<"  "<<RD.D[1][k]<<"  " <<RD.D[2][k]<<"\n";
      }  
    dat=(TData<real>&)RD;
-   delete wk;delete iw;
+   delete []wk;delete []iw;
    return ier;
   };
 
@@ -221,7 +221,7 @@ int CurveSpline::Generate(int &NumX,double &Misf,int Cont,TData<real> &dat,
 //cout<<" NumXi "<<NumXi<<" NumYi "<<NumYi<<" DX "<<DX<<" DY "<<DY;
    NumX=NumXs_r;
 
-   if (Mis_ret == 0 || Misf < Mis_ret * 0.5 || _isnan(Mis_ret))
+   if (Mis_ret == 0 || Misf < Mis_ret * 0.5 || IsNan(Mis_ret))
        throw info_except("Could not make spline. Error %g have to be %g\n", Mis_ret, Misf);
        //Result *= 100;
 
@@ -231,8 +231,8 @@ else //if (Result!=0)
  { cout<<" problems in CurveSpline::Generate; Result: "<<Result<<"\n";}
 
 //   Bspl=Bspl;
-   delete RWork;delete IWork;
-   if (DelWeight) delete Weight;
+   delete []RWork;delete []IWork;
+   if (DelWeight) delete []Weight;
 //   Misf=Mis_ret;
    
 
@@ -288,7 +288,7 @@ int CurveSpline::Evaluate (TData<real> &dat,int Xcol,int Ycol)
    return Evaluate(dat.D[Xcol], dat.D[Ycol], (int)dat.I[Xcol]);
   };
 
-#include "lib\ref\data_manip.h"
+#include "lib/ref/data_manip.h"
 int CurveSpline::Evaluate (double *x,double *y,int nx)
   {
    vector<real> X(nx), Y(nx);
@@ -351,7 +351,7 @@ int CurveSpline_Noise::Evaluate (double *x,double *y,int nx){
 };
 
 double CurveSpline_Noise::Evaluate (double x){
-    real x1=x;
+//    real x1=x;
     integer IDER = 0, M = SplineOrder, N = BSpl.I[0], L = N/2;
     vector<real> Q(2*M);
     real X = x;

@@ -146,7 +146,7 @@ struct CurveAnalyzer{
     //    return *this;
     //}
     CurveAnalyzer& InitDat(vector<double> &xar, vector<double> &yar, int StpL, double MaxMisfit, int MaxNumPnt, double SameCoef){
-        int num = max(2, (int)xar.size()/StpL);
+        int num = max<int>(2, (int)xar.size()/StpL);
         vector<double> pnts = DataManip::MakeStepVector(num, 0, xar.size(), 0, 0);
         vector<AtomCurve> atoms(pnts.size()-1);
         for(size_t i = 0; i < atoms.size(); i++)
