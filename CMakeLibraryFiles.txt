@@ -574,3 +574,15 @@ set(MATH_FUNC_LIB_SOURCE_FILES
         cpp/F2C/math_func/spec_func/lea.cpp
         cpp/F2C/math_func/spec_func/lea.h
 )
+
+set(CELL_DAT_SOURCE_FILES
+        cpp/Urs/Uil_bod.cpp
+        cpp/Urs/uil_clc.cpp
+        #cpp/URS/uil_dat.CPP
+        cpp/Urs/uil_reg.CPP
+        cpp/Urs/urs_forcelnk.cpp
+        cpp/Urs/Uil_bod.h
+        cpp/Urs/uil_clc.h
+        cpp/Urs/Uil_reg.h
+        cpp/Urs/urs_forcelnk.h
+)
