@@ -6,6 +6,7 @@
 #include "lib/std/ex_out.h"
 #include "lib/ref/class_sav.h"
 #include "uil_e.h"
+#include "lib/std/Util.h"
 
 //
 //  units for pressure : (gram*km)/(cm^2*c^2)  
@@ -21,11 +22,14 @@
 #define ESC 283
 #endif
 
-
+#ifndef MAC
 extern unsigned _stklen=64000;
-
+#endif
 
 fstream *my_file;
+
+
+
 
 
 
@@ -71,7 +75,8 @@ Region* GetRegion(char *inname,fstream &output,int &FstIter,
                         double &CurTime,double &TimeStp,double &TimeWrite,
                                     double &PresDerivCoef,double &EndTime, Ref<ExternalEnergyInput> &energyAdd)
   {
-   int Cont=1,HeadRead=1;FstIter=1;
+//   int Cont=1;//,HeadRead=1
+   FstIter=1;
 	  char tmp[150];
   	double CurTime1,Buf;
    fstream input(inname,ios::in);
@@ -196,7 +201,11 @@ int main( int argc, char *argv[] ){
 #if defined WCPP || defined WCPP_NET
 		    if (_kbhit()) { BreakSignal=_getch();if (BreakSignal==ESC) break;}
 #else
+    #if defined MAC
+//            if (kbhit()) { BreakSignal=getch();if (BreakSignal==ESC) break;}
+    #else
             while ((BreakSignal=bioskey(1))!=0) if (BreakSignal==ESC) break;else {cout<<" "<<BreakSignal;bioskey(0);}
+    #endif
 #endif
         }
         cout<<Time<<"\n"<<" Coreleft "<<Coreleft()<<"\n";
@@ -214,13 +223,47 @@ int main( int argc, char *argv[] ){
 
 
 
+//int kbhit(void)
+//{
+//    struct timeval tv;
+//    fd_set read_fd;
+//
+//    /* Do not wait at all, not even a microsecond */
+//    tv.tv_sec=0;
+//    tv.tv_usec=0;
+//
+//    /* Must be done first to initialize read_fd */
+//    FD_ZERO(&read_fd);
+//
+//    /* Makes select() ask if input is ready:
+//     * 0 is the file descriptor for stdin    */
+//    FD_SET(0,&read_fd);
+//
+//    /* The first parameter is the number of the
+//     * largest file descriptor to check + 1. */
+//    if(select(1, &read_fd,NULL, /*No writes*/NULL, /*No exceptions*/&tv) == -1)
+//        return 0;  /* An error occured */
+//
+//    /*  read_fd now holds a bit map of files that are
+//     * readable. We test the entry for the standard
+//     * input (file 0). */
+//
+//    if(FD_ISSET(0,&read_fd))
+//        /* Character pending on stdin */
+//        return 1;
+//
+//    /* no characters were pending */
+//    return 0;
+//}
+//
+
 
 /*
    int FstIter=0;
    double TimeStp,EndTime,CurTime=0,TimeWrite,PresDerivCoef;
    Region *Reg=GetRegion(argv[1],*my_file,FstIter,
 			               CurTime,TimeStp,TimeWrite,PresDerivCoef,EndTime); 
-//	my_file->close();};/*
+//	my_file->close();};
 
    if (argc>2) CoefUp=max<double>(1,atoi(argv[3]));else CoefUp=1;
 //cout<<" Coreleft "<<coreleft()<<"\n";

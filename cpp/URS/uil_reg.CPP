@@ -38,11 +38,19 @@ cout<<" NumMatter "<<NumMatter<<"\n";
        //delete Matter[k];
        if ( !(Matter[k] << SavableClass::Read(input)) ) 
             throw info_except("Could not read. Exit.\n");
+       cout << " Read Matter " << Matter[k] << "\n";
         int N = Matter[k]->NumInputVal()-2;
+        assert(N <= NumIntPar);
+        map<Stroka, void*> names = Matter[k]->GetInputNamesMap();
         //NumIntPar = max<double>(NumIntPar, N);
         IntParNames[k].SetDim(NumIntPar);
        for(int i=0;i<N;i++){
            input>>tmp;
+           if (names.find(tmp) == names.end()) {
+               Stroka descr = Stroka("This matter have internal names to be settled.") +
+                 "Read bad internal name for the matter: " + tmp + " have to be one of the: " + Str::Vec2Str(Str::Map2Vec(names));
+               throw info_except(~descr);
+           }
            IntParNames[k][i] = tmp;
        }
        for(int i=N;i<NumIntPar;i++)

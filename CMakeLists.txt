@@ -168,7 +168,7 @@ target_link_libraries(cell_dat reflib stdlib urs_curve_lib quad_pack_lib mathlib
 add_dependencies(cell_dat version)
 
 add_executable(cell_kru cpp/Urs/uil_my.cpp ${CELL_KRU_SOURCE_FILES})
-target_link_libraries(cell_dat reflib stdlib urs_curve_lib quad_pack_lib mathlib
+target_link_libraries(cell_kru reflib stdlib urs_curve_lib quad_pack_lib mathlib
         waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
         )
 add_dependencies(cell_kru version)

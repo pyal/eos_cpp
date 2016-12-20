@@ -161,6 +161,13 @@ namespace Str {
         }
         return out.str();
     }
+    template <class KEY, class VAL>
+    vector<KEY> Map2Vec(const map<KEY, VAL> &m) {
+        vector<KEY> keys;
+        for(typename map<KEY, VAL>::const_iterator it = m.begin(); it != m.end(); it++)
+            keys.push_back(it->first);
+        return keys;
+    };
 }// namespace Str
 
 
