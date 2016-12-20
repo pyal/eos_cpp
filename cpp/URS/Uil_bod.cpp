@@ -26,7 +26,7 @@ int Body::ReadData(istream &input)
         }
    while ( (i<NumPnt-1) && (!seek_eof(input)) && 
 			                      (EnterStr(input,&d[0],NumR+1,1)==NumR) );
-   delete d;
+   delete []d;
    if ((i<NumPnt-1) || (NumPnt==0))
      {cout<<"Body::ReadData; Entered only part of points NumPnt i "
           <<NumPnt<<"   "<<i<<"\n";
@@ -56,7 +56,7 @@ void Body::SaveData(ostream &output)
 
         WriteStr(output,&d[0],5+NumIntPar);
      }
-   delete d;
+   delete []d;
   }; 
 
 

@@ -116,7 +116,7 @@ if ((k<2) || (k>Num-1)) rc=r0;
 tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*max<double>(1,fabs(du)));
          P_[k]-=Ro_[k]*du*tmp[k]*1e5;
         } 
-   delete Sound;delete L;delete tmp;
+   delete []Sound;delete []L;delete []tmp;
   };
 
 void ClcAddU(Body &WorkBody,double *AddU)
@@ -189,7 +189,7 @@ void CalcPosE(Body &WorkBody,double TimeStp)
           }    
        }
     }
-   delete AddU;
+   delete []AddU;
 };			
 
 

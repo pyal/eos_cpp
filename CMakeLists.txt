@@ -162,7 +162,8 @@ add_dependencies(urs_curve version)
 
 
 add_executable(cell_dat cpp/URS/uil_dat.CPP ${CELL_DAT_SOURCE_FILES})
-target_link_libraries(cell_dat
+target_link_libraries(cell_dat reflib stdlib urs_curve_lib quad_pack_lib mathlib
+        waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
         )
 #        reflib stdlib urs_curve_lib quad_pack_lib mathlib
 #        waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib)
