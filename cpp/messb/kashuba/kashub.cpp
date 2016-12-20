@@ -1,4 +1,4 @@
-#include <lib\precompiled\Messb.h>
+#include <lib/precompiled/Messb.h>
 // This program generates an array ph(2048) of random magnetic fields.
 // r(250) is used in the random numbers generator
 // JT is the physical ratio J/T

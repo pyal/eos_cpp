@@ -1,4 +1,4 @@
-#include <lib\precompiled\cell_kru.h>
+#include <lib/precompiled/cell_kru.h>
 
 
 

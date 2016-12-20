@@ -1,6 +1,6 @@
-#include <lib\precompiled\madiex.h>
-#include <lib\precompiled\cell_kru.h>
-#include <lib\precompiled\adi_dou.h>
+#include <lib/precompiled/madiex.h>
+#include <lib/precompiled/cell_kru.h>
+#include <lib/precompiled/adi_dou.h>
 
 #include "matt_adi.h"
 //#include "empi_equ.h"

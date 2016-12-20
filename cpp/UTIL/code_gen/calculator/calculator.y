@@ -4,7 +4,7 @@
  **************************************************************/
 
 %{
-#include <lib\precompiled\calc_lib.h>
+#include <lib/precompiled/calc_lib.h>
 #include "zubr_import.h"
 
 %}

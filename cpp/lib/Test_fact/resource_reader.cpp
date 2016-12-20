@@ -1,4 +1,4 @@
-#include "lib\precompiled\test_lib.h"
+#include "lib/precompiled/test_lib.h"
 
 #include "resource_reader.h"
 

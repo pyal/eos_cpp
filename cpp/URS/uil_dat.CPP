@@ -1,5 +1,5 @@
-//#include <lib\precompiled\cell_kru.h>
-#include <lib\precompiled\cell_dat.h>
+//#include <lib/precompiled/cell_kru.h>
+#include <lib/precompiled/cell_dat.h>
 
 #include "uil_reg.h"
 

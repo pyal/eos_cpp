@@ -1,4 +1,4 @@
-#include <lib\precompiled\Messb.h>
+#include <lib/precompiled/Messb.h>
 #include "messb_mean_field.h"
 
 //#define OnlyStat

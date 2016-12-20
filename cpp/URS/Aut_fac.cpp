@@ -1,4 +1,4 @@
-#include <lib\precompiled\adi_dou.h>
+#include <lib/precompiled/adi_dou.h>
 
 #include "aut_fac.h"
 
