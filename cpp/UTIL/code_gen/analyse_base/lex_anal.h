@@ -6,7 +6,7 @@
 //#include <list>
 //#include <stack>
 //#pragma warning( disable : 4267 )
-//#include "lib\ref\Stroka.h"
+//#include "lib/ref/Stroka.h"
 
 #include "stream_buf.h"
 struct Lex_Result

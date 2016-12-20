@@ -7,8 +7,8 @@ extern "C"
 #include "zubr_calculator_tab.h"
 
 #include "util\code_gen\analyse_base\lex_anal.h"
-#include "lib\ref\stroka.h"
-#include "lib\data\VecRes.h"
+#include "lib/ref/stroka.h"
+#include "lib/data/VecRes.h"
 
 struct Symbol:RefCount{
 	Symbol(){sym_ptr = this;};

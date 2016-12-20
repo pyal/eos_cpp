@@ -1,9 +1,9 @@
 #ifndef _Pnt_Defs_h
 #define _Pnt_Defs_h 1
 
-#include "lib\data\DataVec.h"
-#include "lib\data\DataTyp.h"
-#include "lib\ref\class_sav.h"
+#include "lib/data/DataVec.h"
+#include "lib/data/DataTyp.h"
+#include "lib/ref/class_sav.h"
 
 typedef DataVector<double> SpacePoint;
 typedef DataVector<int> IndexPoint;

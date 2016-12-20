@@ -3,7 +3,7 @@
 
 
 #include "Grid_Action.h"
-#include "lib\data\NamedObject.h"
+#include "lib/data/NamedObject.h"
 
 //#include "Grid_manip.h"
 #//include "grid_array.h"

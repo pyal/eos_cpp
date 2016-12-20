@@ -1,11 +1,11 @@
 #ifndef Eno_Main_h
 #define Eno_Main_h 1
 
-#include "lib\data\DataVec.h"
-#include "lib\data\DataTyp.h"
-#include "lib\data\DataArr.h"
+#include "lib/data/DataVec.h"
+#include "lib/data/DataTyp.h"
+#include "lib/data/DataArr.h"
 
-#include "Gasd\Topology\grid_operator.h"
+#include "Gasd/Topology/grid_operator.h"
 
 
 

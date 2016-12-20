@@ -9,6 +9,6 @@
 //
 //#include "util\code_gen\analyse_base\lex_anal.h"
 #include "zubr_impl.h"
-#include "lib\ref\commandline.h"
+#include "lib/ref/commandline.h"
 
 

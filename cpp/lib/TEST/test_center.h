@@ -3,7 +3,7 @@
 
 //#include "famessb_test_resource.h"
 //#include "lib\test_fact\resource_reader.h"
-#include "lib\data\data_forcelink.h"
+#include "lib/data/data_forcelink.h"
 
 //#include <vector>
 //extern int CopyFile(const char *src,const char *dst);
@@ -11,8 +11,8 @@
 //#include "Util\code_gen\analyse_base\lex_anal_test_forcelink.h"
 
 #include "lib\test_fact\test_case.h"
-#include "lib\ref\commandline.h"
-#include "lib\data\dataVec.h"
+#include "lib/ref/commandline.h"
+#include "lib/data/dataVec.h"
 
 //extern void test_sav();
 

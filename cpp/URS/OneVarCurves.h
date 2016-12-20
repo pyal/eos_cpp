@@ -2,9 +2,9 @@
 
 #include "mat\fun_fac.h"
 #include "mat\specfunc.h"
-#include "lib\ref\str_manip.h"
-#include "lib\ref\file_manip.h"
-#include "lib\ref\data_manip.h"
+#include "lib/ref/str_manip.h"
+#include "lib/ref/file_manip.h"
+#include "lib/ref/data_manip.h"
 #include "mat\curveanalyzer.h"
 
 struct Cold_Vinet:NamedOneVarFunction{

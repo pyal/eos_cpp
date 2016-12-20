@@ -4,7 +4,7 @@
 #include "Grid_Action.h"
 #include "Grid_Mask.h"
 
-#include "lib\data\NamedObject.h"
+#include "lib/data/NamedObject.h"
 
 
 

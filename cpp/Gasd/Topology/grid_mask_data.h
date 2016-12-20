@@ -3,7 +3,7 @@
 
 
 //struct GridMask;
-#include "lib\ref\ref.h"
+#include "lib/ref/ref.h"
 
 template <class T,class CpM>
 struct GridField;

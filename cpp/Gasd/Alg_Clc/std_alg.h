@@ -2,8 +2,8 @@
 #ifndef Std_Alg_h
 #define Std_Alg_h 1
 
-#include "lib\data\DataVec.h"
-#include "lib\data\DataTyp.h"
+#include "lib/data/DataVec.h"
+#include "lib/data/DataTyp.h"
 
 
 

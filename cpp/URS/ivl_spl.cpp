@@ -77,7 +77,7 @@ void Show(map<Stroka, Stroka> par) {
 
 
 #include "lib/std/ex_out.h"
-#include "lib\ref\commandline.h"
+#include "lib/ref/commandline.h"
 
 
 int main( int argc, const char *argv[] )

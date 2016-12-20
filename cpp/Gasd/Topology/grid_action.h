@@ -1,9 +1,9 @@
 #ifndef Grid_Action_h
 #define Grid_Action_h 1
 
-#include "lib\data\DataVec.h"
-#include "lib\data\DataTyp.h"
-#include "lib\ref\class_sav.h"
+#include "lib/data/DataVec.h"
+#include "lib/data/DataTyp.h"
+#include "lib/ref/class_sav.h"
 
 
 #define GridIndex int

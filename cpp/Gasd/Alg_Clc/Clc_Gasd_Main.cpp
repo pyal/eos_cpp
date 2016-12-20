@@ -23,7 +23,7 @@ static ClassDesc GasdCalculator_Simple1D_cd(typeid(GasdCalculator_Simple1D),
 //=======================================================================
 //======================       GasdCalculator        ====================
 //=======================================================================
-#include "Gasd\Topology\grid_util.h"
+#include "Gasd/Topology/grid_util.h"
 FieldInterface *GasdCalculator::CreateGrid()
  {
 //  Ref<GridCenter> stor;//=new GridCenter;//stor.unmanage();

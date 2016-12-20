@@ -16,11 +16,11 @@
 #include "lib/std/util.h"
 //#include "described.h"
 //#include "class.h"
-#include "lib\ref\class_sav.h"
+#include "lib/ref/class_sav.h"
 #include "lib/std/stdexception.h"
-#include "lib\ref\stroka.h"
+#include "lib/ref/stroka.h"
 
-#include "lib\ref\ref.h"
+#include "lib/ref/ref.h"
 #include "mat\matrics.h"
 
 #define MaxFunctions    60

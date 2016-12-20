@@ -1,11 +1,11 @@
 
-#include "lib\data\DataVec.h"
+#include "lib/data/DataVec.h"
 //#include "IndBase.h"
-#include "lib\data\DataArr.h"
+#include "lib/data/DataArr.h"
 //#include "IndStruc.h"
 //#include "FreeReg.h"
 //#include "exenv.h"
-#include "Gasd\Topology\grid_center.h"
+#include "Gasd/Topology/grid_center.h"
 //#include "grid_bound.h"
 #include "lib/std/ex_out.h"
 
@@ -97,7 +97,7 @@ fcout.ClearRef();
  }
 
     
-#include "Gasd\Topology\grid_array.h"
+#include "Gasd/Topology/grid_array.h"
   
 
 

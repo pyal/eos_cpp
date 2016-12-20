@@ -5,7 +5,7 @@
 
 #include "test_urs.h"
 #include "lib\test_fact\test_case.h"
-#include "lib\ref\stroka.h"
+#include "lib/ref/stroka.h"
 #include "lib/std/ex_out.h"
 
 static ClassDesc TestCase_Urs_Static_ClassDesc(typeid(TestCase_Urs_Static),"TestCase_Urs_Static",1,"TestCase_Urs_Static_category",create<TestCase_Urs_Static>);

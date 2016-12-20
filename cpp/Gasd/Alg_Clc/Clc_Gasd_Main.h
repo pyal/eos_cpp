@@ -6,9 +6,9 @@
 
 #include "std_alg.h"
 //#include "grid_bound.h"
-#include "lib\data\dataarr.h"
-#include "Gasd\Topology\grid_array.h"
-#include "Gasd\Topology\grid_center.h"
+#include "lib/data/dataarr.h"
+#include "Gasd/Topology/grid_array.h"
+#include "Gasd/Topology/grid_center.h"
 
 #define HEAD(variable) "\n========================================\n============"<<variable<<"=============\n===========================================\n"
 
@@ -88,8 +88,8 @@ struct Config_Gasd_ReadPar:Config_Gasd
 
   
 #include "Gasd\Alg_Clc\ENO_Alg\eno_main.h"
-#include "Gasd\Topology\grid_util.h"
-#include "Gasd\Topology\grid_array.h"
+#include "Gasd/Topology/grid_util.h"
+#include "Gasd/Topology/grid_array.h"
 
   
 struct GasdCalculator_Simple1D:GasdCalculator
