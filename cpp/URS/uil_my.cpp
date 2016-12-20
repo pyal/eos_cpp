@@ -3,7 +3,7 @@
   
 //#include <alloc.h>
 #include "uil_reg.h"
-#include "lib\std\ex_out.h"
+#include "lib/std/ex_out.h"
 #include "lib\ref\class_sav.h"
 #include "uil_e.h"
 

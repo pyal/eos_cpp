@@ -7,7 +7,7 @@
 //#include "exenv.h"
 #include "Gasd\Topology\grid_center.h"
 //#include "grid_bound.h"
-#include "lib\std\ex_out.h"
+#include "lib/std/ex_out.h"
 
 #define HEAD(variable) "\n========================================\n============"<<variable<<"=============\n===========================================\n"
 

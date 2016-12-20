@@ -1,6 +1,6 @@
 
 #include "test_center.h"
-#include "lib\std\ex_out.h"
+#include "lib/std/ex_out.h"
 
 #include "UTIL\code_gen\analyse_base\lex_anal_test_forcelink.h"
 

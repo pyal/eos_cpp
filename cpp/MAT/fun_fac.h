@@ -1,7 +1,7 @@
 #ifndef __FUN_FAC_H
 #define __FUN_FAC_H
 
-//#include "lib\std\interfac.h"
+//#include "lib/std/interfac.h"
 #include "lib/ref/class_sav.h"
 #include "lib/ref/str_manip.h"
 #include "util/code_gen/calculator/calculator_std.h"

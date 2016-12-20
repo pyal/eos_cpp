@@ -2,7 +2,7 @@
 #define __Messb_Mean_Field_H
 
 //#include "matrics.h"
-#include "lib\std\ex_out.h"
+#include "lib/std/ex_out.h"
 #include "messb.h"
 #include "mat\mtrnd.h"
 #include "famessb.h"

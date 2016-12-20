@@ -9,7 +9,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "fobj.h"
-#include "lib\std\const.h"
+#include "lib/std/const.h"
 #include "lib/std/util.h"
 
 #define LST ( (GrLine*)(Item*)(*this) )

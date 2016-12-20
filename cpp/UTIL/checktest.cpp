@@ -1,7 +1,7 @@
 
 
 #include "lib/ref/file_manip.h"
-#include "lib\std\ex_out.h"
+#include "lib/std/ex_out.h"
 #include "lib\ref\commandline.h"
 
 double StndErr=1e-6;

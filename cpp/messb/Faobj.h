@@ -17,7 +17,7 @@
 //#include "described.h"
 //#include "class.h"
 #include "lib\ref\class_sav.h"
-#include "lib\std\stdexception.h"
+#include "lib/std/stdexception.h"
 #include "lib\ref\stroka.h"
 
 #include "lib\ref\ref.h"
