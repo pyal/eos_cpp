@@ -1,9 +1,14 @@
 
 #include <lib\precompiled\Ref.h>
-
+#include <lib\ref\data_manip.h>
+#include <lib\ref\file_manip.h>
 
 #include "str_manip.h"
 //using namespace std;
+
+
+static ClassDesc StrokaStorage_ClassDesc(typeid(Str::StrokaStorage),"StrokaStorage",1,"StrManip_category",create<Str::StrokaStorage>);
+
 
 namespace Str {
 
@@ -45,6 +50,12 @@ namespace Str {
         return splittedWords;
     };
     Stroka JoinLine(const std::vector<Stroka> &vec, char Delim, int FromInd, int ToInd){
+        char tmp[2];
+        tmp[0] = Delim;
+        tmp[1] = 0;
+        return JoinLine(vec, tmp, FromInd, ToInd);
+    }
+    Stroka JoinLine(const std::vector<Stroka> &vec, const char* Delim, int FromInd, int ToInd){
         if (FromInd<0)
             FromInd = 0;
         if (ToInd<0)
@@ -70,6 +81,29 @@ namespace Str {
                 throw info_except("Did not find parameter <%s>. Parameters to be defined are:\n%s\nInput string \n%s\n",tst[i].c_str(),CheckParams, Params.c_str() );
         return Res;
     }
+
+    map<Stroka,Stroka> ReadDefinedParams(const Stroka &params, const map<Stroka, Stroka> &definedParams, const char *nonDefaultMark, const char *errorDescr_) {
+        map<Stroka,Stroka> res = definedParams;
+        Stroka errorDescr = Stroka("Can set parameters:\n") + JoinLine(DataManip::Map2Vector(definedParams), '|') + "\nInput string \n" +  ~params + "\n";
+        if (errorDescr_)
+            errorDescr +=  Stroka("Description:<") +  errorDescr_ + ">\n";
+        vector<Stroka> wrds = SplitLine(params);
+        if (wrds.size() % 2 != 0)
+            throw info_except("Number of words have to even, and it is not.\n%s", ~errorDescr);
+        for (size_t i = 0; i + 1 < wrds.size(); i += 2) {
+            if (definedParams.find(wrds[i]) == definedParams.end()) {
+                //cout << " Descr " << errorDescr << " \nParameter <" << wrds[i] << "\n";  cout.flush();
+                throw info_except("Unknown parameter <%s>. %s\n", ~wrds[i], ~errorDescr);
+                //throw info_except(~(Stroka("Unknown parameter <") + wrds[i] + ">\nDescr:\n" + errorDescr));
+            }
+            res[wrds[i]] = wrds[i+1];
+        }
+        for(map<Stroka, Stroka>::iterator it = res.begin(); it != res.end(); it++)
+            if (nonDefaultMark && it->second == Stroka(nonDefaultMark))
+                throw info_except("Mandatory parameter (marked as %s ) is not defined <%s> %s. Formed params:\n%s\n", nonDefaultMark, ~it->first, ~errorDescr, ~DataManip::Map2Str(res, "\t"));
+        return res;
+    }
+
     int FindWord(const Stroka &word_lst, const Stroka &word, int CreateZeroString, char Delim){
         std::vector<Stroka> wrds = SplitLine(word_lst, CreateZeroString, Delim);
         for(size_t i = 0;i<wrds.size();i++)
@@ -228,6 +262,67 @@ namespace Str {
             return true;
         return (res >= LimLow && res < LimUp);
     }
+
+    const char *Chomp(const char *src_) {
+        char *src = (char*)src_;
+        if (!src)
+            return src;
+        int l = strlen(src) - 1;
+        while( l >= 0 && (src[l] == '\n' || src[l] == '\r') )
+            l--;
+        src[l + 1] = 0;
+        return src;
+    }
+
+    void StrokaStorage::ReadFromFile(const char *file) {
+        Clear();
+        FILE *in = File::open(file, "r", "Could not open StrokaStorage file");
+        std::vector<Stroka> line;
+        while(File::GetLine(in, line)) {
+            if (line.size() >= 1) {
+                std::map<Stroka, int>::iterator it = StrMap.find(line[0]);
+                if (it == StrMap.end())
+                    Add(~line[0]);     
+            }
+        }
+    }
+    void StrokaStorage::SaveToFile(const char *file) {
+        FILE *out = File::open(file, "w", "Could not write open StrokaStorage file");
+        fprintf(out, "%s", ~Str::JoinLine(ToStrVec(), "\n"));
+        
+        File::close(out);
+    }
+
+
+    void TestChar(const Stroka &str, int pos, char ch) {
+        if (str[pos] != ch)
+            throw info_except("in string \n%s\nchar at pos %i is %c not %c\n", ~str, pos, str[pos], ch);
+    }
+
+    Stroka Obj2Str(const int& val) {
+        char tmp[256];
+        sprintf(tmp, "%i", val);
+        return Stroka(tmp);
+    }
+    Stroka Obj2Str(const double& val) {
+        char tmp[256];
+        sprintf(tmp, "%f", val);
+        return Stroka(tmp);
+    }
+
+    int Str2Obj(int &val, const Stroka& str, int start) {
+        start = SkipSpace(~str, start, str.size(), 1);
+        int end = SkipWord(~str, start, str.size(), 1);
+        val = atoi(~Stroka(str, start, end));
+        return end;
+    }
+    int Str2Obj(double &val, const Stroka& str, int start) {
+        start = SkipSpace(~str, start, str.size(), 1);
+        int end = SkipWord(~str, start, str.size(), 1);
+        val = atof(~Stroka(str, start, end));
+        return end;
+    }
+
 }// namespace Str
 
 

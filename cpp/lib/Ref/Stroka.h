@@ -162,7 +162,18 @@ public:
     Stroka(double f) {
         p = null;
         char buf[265];
-        if (sprintf(buf,"%f",f))
+        if (sprintf(buf,"%g",f))
+            assign(buf);
+    }
+    Stroka(double f, int prec) {
+        p = null;
+        char buf[265];
+		char format[256] = "%.";
+		itoa(prec, &format[2], 10);
+		int l = strlen(format);
+		format[l] = 'g';
+		format[l+1] = 0;
+        if (sprintf(buf, &format[0], f))
             assign(buf);
     }
     Stroka (const Stroka &s, size_t pos, size_t n);

@@ -29,13 +29,17 @@ namespace DataManip {
     std::ostream &operator<<(std::ostream &out, const std::vector<std::vector<T> > &vec){
         if (vec.size() == 0)
             return out;
-        for(size_t k = 0; k < vec.size(); k++) 
-            if (vec[k].size() != vec[0].size())
-                throw info_except("Working with same size vectors and col0(%0) col%i(%i)\n", vec[0].size(), k, vec[k].size());
-        for(size_t k1 = 0; k1 < vec[0].size(); k1++) {
-            for(size_t k = 0; k < vec.size(); k++) 
-                out << vec[k][k1] << " ";
-            out << "\n";
+        //for(size_t k = 0; k < vec.size(); k++) 
+        //    if (vec[k].size() != vec[0].size())
+        //        throw info_except("Working with same size vectors and col0(%0) col%i(%i)\n", vec[0].size(), k, vec[k].size());
+        //for(size_t k1 = 0; k1 < vec[0].size(); k1++) {
+        //    for(size_t k = 0; k < vec.size(); k++) 
+        //        out << vec[k][k1] << " ";
+        //    out << "\n";
+        //}
+        for(size_t k = 0; k < vec.size(); k++) {
+            out << "Vector " << k << "\n";
+            out << vec[k] << "\n";
         }
         return out;
     }
@@ -209,6 +213,23 @@ namespace DataManip {
 			ret[i] = it->first;
         return ret;
     };
+
+    template<class T, class T1>
+    Stroka Map2Str(const std::map<T, T1> &m, const char *fstSec = " ", const char *elemSep = "\n") {
+        typedef typename std::map<T, T1>::const_iterator  cIter;
+        const int bufSize = 100000;
+        char buf[bufSize+1];
+        ostrstream out(buf, bufSize);
+        //TExtraInfoOutput out(new TMemoryOutput(buf, BufSize));
+        for (cIter it = m.begin(); it != m.end(); it++)
+            out << it->first << fstSec << it->second << elemSep;
+        return Stroka(buf, 0, out.pcount());
+    }
+    template<class T, class T1>
+    ostream &operator<<(ostream &out, const pair<T, T1> &p) {
+        out << "( " << p.first << ", " << p.second << " )";
+        return out;
+    }
 
     template<class T>
     void XYTable2Planar(std::vector<std::vector<T> > &planar, const std::vector<std::vector<T> > &table) {

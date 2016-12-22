@@ -5,6 +5,8 @@
 #include <map>
 #include "Stroka.h"
 
+#include "lib/ref/class_sav.h"
+
 namespace Str {
     enum Language {Russian, English};
 // Spliting string using delimiter Delim,
@@ -15,11 +17,13 @@ namespace Str {
     std::vector<Stroka> SplitLine(const Stroka &word);
 // Joid vector elements into string
     Stroka JoinLine(const std::vector<Stroka> &vec, char Delim=' ', int FromInd = -1, int ToInd = -1);
+    Stroka JoinLine(const std::vector<Stroka> &vec, const char *Delim, int FromInd = -1, int ToInd = -1);
 // Find a given word in the WordLst, uses SplitLine
 // If CreateZeroString - creating also ZeroWords, when delimiters go one after another without space
     int FindWord(const Stroka &word_lst, const Stroka &word, int CreateZeroString=0, char Delim=' ');
 // Extract given params from the string, if no - throw exception
     std::map<Stroka,Stroka> ReadParams(const Stroka &Params,const char *CheckParams);
+    std::map<Stroka,Stroka> ReadDefinedParams(const Stroka &params, const std::map<Stroka, Stroka> &definedParams, const char *nonDefaultMark, const char *errorDescr_ = NULL);
 
     size_t SkipWord(const char *str, size_t pos, size_t len, int CheckSpace );
     size_t SkipSpace(const char *str, size_t pos, size_t len, int CheckSpace );
@@ -40,6 +44,18 @@ namespace Str {
 // For unix compatibility... Not really necessary
     int stricmp(const char *str1, const char *str2);
     char* itoa(int i, char *buf);
+    const char *Chomp(const char *src);
+    template<class T, class T1>
+    T1 &GetKey(map<T, T1> &m, const T &key, const char *errMes = NULL) {
+        if (m.find(key) == m.end()) {
+            Stroka add;
+            if (errMes)
+                add = Stroka("Additional help:\n") + errMes + "\n";
+            throw info_except("Could not find key in map\n%s", ~add);
+        }
+        return m[key];
+    }
+
 
     void EncodeData(char *str, size_t len, char table[256]);
     void MakeEncodeTable(char *buf, const char *fr, const char *to, char def);
@@ -97,9 +113,25 @@ namespace Str {
 
     bool GetNumberedVar(const Stroka &input, const Stroka &prefix, int &res, int LimLow = -1, int LimUp = -1);
 
-    struct StrokaStorage {
-        StrokaStorage(){
+
+    struct StrokaStorage : SavableClass {
+        StrokaStorage() 
+            : DataFile("str2id") {
             Init();
+        }
+        StrokaStorage(const char *dataFile)
+            : DataFile(dataFile) {
+            Init();
+        }
+        StrokaStorage(const StrokaStorage &fst) {
+            Init(fst);
+            DataFile = fst.DataFile;
+            StrVec = fst.StrVec;
+            StrMap = fst.StrMap;
+            LastNum = fst.LastNum;
+        }
+        StrokaStorage &operator=(const StrokaStorage &fst) {
+            Init(fst);
         }
         int Str2Num(const char *str, int AddIfNo){
             if (strlen(str) == 0)
@@ -134,7 +166,30 @@ namespace Str {
         void Init(){
             LastNum = 0;
         }
+
+        std::vector<Stroka> ToStrVec() {
+            return StrVec;
+        }
+        void ReadFromFile(const char *file);
+        void SaveToFile(const char *file);
+        virtual int save_data_state( FilterOut&so) {
+            so << " DataFile " << DataFile; 
+            SaveToFile(~DataFile);
+            return 1; 
+        };
+        virtual int read_data_state(FilterIn&si) {
+            char tmp[256];
+            si >> tmp >> DataFile;
+            ReadFromFile(~DataFile);
+            return 1;
+        };
+        Stroka SetStorageFile(const char *dataFile = NULL) {
+            if (dataFile)
+                DataFile = dataFile;
+            return DataFile;
+        }
     private:
+        Stroka DataFile;
         std::vector<Stroka>  StrVec;
         std::map<Stroka, int> StrMap;
         int LastNum;
@@ -145,8 +200,55 @@ namespace Str {
             LastNum++;
             return LastNum-1;
         }
+        void Init(const StrokaStorage &fst) {
+            DataFile = fst.DataFile;
+            StrVec = fst.StrVec;
+            StrMap = fst.StrMap;
+            LastNum = fst.LastNum;
+        }
 
     };
+
+
+
+    void TestChar(const Stroka &str, int pos, char ch);
+
+    template<class T>
+    Stroka Obj2Str(const T& val) {
+        throw info_except("For type %s is not implemented", typeid(T).name());
+    }
+    template<class T>
+    int Str2Obj(T &val, const Stroka &str, int start = 0) {
+        throw info_except("For type %s is not implemented", typeid(T).name());
+    }
+    Stroka Obj2Str(const int& val);
+    Stroka Obj2Str(const double& val);
+    template<class T>
+    Stroka Obj2Str(const vector<T>& val) {
+        vector<Stroka> v;
+        for(size_t i = 0; i < val.size(); i++)
+            v.push_back(Obj2Str(val[i]));
+        return Stroka("[ ") + JoinLine(v, '\t') + " ]";
+    }
+
+    int Str2Obj(int &val, const Stroka& str, int start = 0);
+    int Str2Obj(double &val, const Stroka& str, int start = 0);
+    template<class T>
+    int Str2Obj(vector<T> &val, const Stroka& str, int start = 0) {
+        val.clear();
+        start = SkipSpace(~str, start, str.size(), 1);
+        TestChar(str, start, '[');
+        start = SkipSpace(~str, start + 1, str.size(), 1);
+        while(str[start] != ']' && start < str.size()) {
+            T x;
+            start = Str2Obj(x, str, start);
+            val.push_back(x);
+            start = SkipSpace(~str, start, str.size(), 1);
+        }
+        if (start == str.size())
+            throw info_except("Could not read vector");
+        return start + 1;
+    }
 }// namespace Str
 
 

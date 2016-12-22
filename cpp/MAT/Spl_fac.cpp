@@ -104,6 +104,7 @@ int  RegridSpline::Generate(int &NumX,int &NumY,
 // 	integer *lwrk, integer *iwrk, integer *kwrk, integer *ier)
 
 */
+
    regrid_(&Conti,&DX,RD.D[0],&DY,RD.D[1],RD.D[2],
            &Xlow,&Xup,&Ylow,&Yup,&px,&py,
              &MisfR,&NumXi,&NumYi,&SX,BSpl.D[0],&SY,BSpl.D[1],BSpl.D[2],
@@ -111,7 +112,7 @@ int  RegridSpline::Generate(int &NumX,int &NumY,
 //cout<<" Generate Good "<<Result<<" SX "<<SX<<" SY "<<SY<<" MisfR "<<SumSquareResiduals<<"\n";
 //cout<<" NumXi "<<NumXi<<" NumYi "<<NumYi<<" DX "<<DX<<" DY "<<DY;
    if (SumSquareResiduals == 0 || Misf < SumSquareResiduals * 0.5 || _isnan(SumSquareResiduals))
-       throw info_except("Could not make spline. Error %g have to be %g\n", SumSquareResiduals, Misf);
+       throw info_except("Could not make spline. Error %g have to be %g . Result is %i \n", SumSquareResiduals, Misf, Result);
        //Result *= 100;
    Delta=Misf=SumSquareResiduals;NumX=SX;NumY=SY;
    if (Result != 10 && Result != 1000 )

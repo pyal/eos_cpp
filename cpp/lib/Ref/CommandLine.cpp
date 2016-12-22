@@ -77,7 +77,7 @@ namespace NRef {
                 pos = i + 1;
                 continue;
             }
-            if (isspace(str[i])) {
+            if (str[i] > 0 && isspace(str[i])) {
                 NextLine = 0;
                 Line += Stroka(str, pos, i - pos);
                 return i;
@@ -88,29 +88,31 @@ namespace NRef {
         return len;
     }
 
-    TCommandParse::TKeyData::TKeyData(const char *mode,const char *help, const char *params, MAINFUNC *func)
+    TCommandParse::TKeyData::TKeyData(const char *mode,const char *help, const char *params, MAINFUNC *func, int givenDefaultsMode)
         :Mode(mode)
         , Help(help)
+        , GivenDefaultsMode(givenDefaultsMode)
         , Func(func) {
         vector<Stroka> vec = Str::SplitLine(params, 0, '\n');
         Par2Descr.clear();
-        Params = "";
-        ParamsPlus = "";
+        Params2Defaults.clear();
+        ParamsSettings = "";
+        ParamsNames = "";
         for (size_t i = 0; i < vec.size(); i++) {
             vector<Stroka> par = Str::SplitLine(vec[i], 0);
+            if (!par.size())
+                continue;
             Par2Descr[par[0]] = Str::JoinLine(par, ' ', 2);
-
-            Params = Params + Stroka(" ") + par[0];
-            if (ParamsPlus != "")
-                ParamsPlus += Stroka("  ");
-            ParamsPlus += par[0] + Stroka(" ");
-            if (par.size() > 1)
-                ParamsPlus += par[1];
-
+            Stroka defaultValue = par.size() > 1 ? par[1] : " ";
+            Params2Defaults[par[0]] = defaultValue;
+            Stroka prefix = (ParamsSettings.size() != 0) ? "  " : "";
+            ParamsSettings += prefix + par[0] + Stroka(" ") + defaultValue;
+            ParamsNames += prefix + par[0];
         }
     };
     Stroka TCommandParse::TKeyData::MakeHelp() {
-        Stroka ret = Help + "\nParameters: ~+\n";
+        Stroka addInfo = GivenDefaultsMode ? "(define only non default ones)" : "(define all of them)";
+        Stroka ret = Help + "\nParameters" + addInfo + ": ~+\n";
         for (map<Stroka, Stroka>::iterator it = Par2Descr.begin(); it != Par2Descr.end(); it++) {
             ret += it->first + " :~+~+ " + it->second + "~-~-\n";
         }
@@ -119,36 +121,121 @@ namespace NRef {
     }
 
     int TCommandParse::SimpleRun(int argc, const char *argv[]) {
-        if (argc<2 || argc>3) {
-            Stroka str = "General help for the program is:~+\n" + MainHelp + "~-\n";
+        int formattedLength = 90;
+        if (argc<2) {
+        Stroka descr = "Program build date is :" + Stroka(__DATE__) + "\t" + Stroka(__TIME__) + "\n\n";
+            Stroka str = descr + "General help for the program is:~+\n" + MainHelp + "~-\n";
             str += "Parameters defined are: ";
             for (int i = 1; i < min(argc,5); i++)
                 str += Stroka("<") + argv[i] + "> ";
             str += "\nHave to define 2 paramteres: mode \"mode parameters\"\n" + MakeHelp() + "\n";
-            std::cout << ~(TFormatOutput("    ", 0, 70).Format(~str));
+            std::cout<<TFormatOutput("    ", 0, formattedLength ).Format(~str);
             std::cout.flush();
             exit(1);
         }
         Stroka par;
         if (argc == 3)
             par = argv[2];
+        else
+            for(int i = 2; i < argc; i++)
+                par += Stroka(argv[i]) + " ";
         map<Stroka, TKeyData>::iterator it = Params.find(argv[1]);
         if (it == Params.end()) {
-            std::cout<<"Mode <"<<argv[1]<<"> is not defined.\n"<<~(TFormatOutput("    ", 0, 70).Format(~MakeHelp()))<<"\n";
+            std::cout<<"Mode <"<<argv[1]<<"> is not defined.\n"<<TFormatOutput("    ", 0, formattedLength ).Format(~MakeHelp())<<"\n";
             exit(1);
         }
-        it->second.Func(Str::ReadParams(par.c_str(), it->second.Params.c_str()));
+        if (it->second.GivenDefaults())
+            it->second.Func(Str::ReadDefinedParams(~par, it->second.GetParams2Defaults(), "TOBEDEFINED"));
+        else
+            it->second.Func(Str::ReadParams(~par, ~it->second.GetParamsNames()));
         return 1;
     }
     Stroka TCommandParse::MakeHelp() {
         Stroka ret = "Available modes are:~+\n";
         for (map<Stroka, TKeyData>::iterator iter = Params.begin(); iter != Params.end(); iter++) {
-            ret += iter->first + " \"" + iter->second.ParamsPlus + "\"~+\n";
+            ret += iter->first + " \"" + iter->second.GetParamsSettings() + "\"~+\n";
             ret += iter->second.MakeHelp() + "~-\n";
         }
         ret += "~-";
         return ret;
     }
+
+    //TCommandParse::TKeyData::TKeyData(const char *mode,const char *help, const char *params, MAINFUNC *func)
+    //    :Mode(mode)
+    //    , Help(help)
+    //    , Func(func) {
+    //    vector<Stroka> vec = Str::SplitLine(params, 0, '\n');
+    //    Par2Descr.clear();
+    //    Params = "";
+    //    ParamsPlus = "";
+    //    for (size_t i = 0; i < vec.size(); i++) {
+    //        vector<Stroka> par = Str::SplitLine(vec[i], 0);
+    //        Par2Descr[par[0]] = Str::JoinLine(par, ' ', 2);
+
+    //        Params = Params + Stroka(" ") + par[0];
+    //        if (ParamsPlus != "")
+    //            ParamsPlus += Stroka("  ");
+    //        ParamsPlus += par[0] + Stroka(" ");
+    //        if (par.size() > 1)
+    //            ParamsPlus += par[1];
+
+    //    }
+    //};
+    //Stroka TCommandParse::TKeyData::MakeHelp() {
+    //    Stroka ret = Help + "\nParameters: ~+\n";
+    //    for (map<Stroka, Stroka>::iterator it = Par2Descr.begin(); it != Par2Descr.end(); it++) {
+    //        ret += it->first + " :~+~+ " + it->second + "~-~-\n";
+    //    }
+    //    ret += " ~- ";
+    //    return ret;
+    //}
+
+    //int TCommandParse::SimpleRun(int argc, const char *argv[]) {
+    //    if (argc<2 || argc>3) {
+    //        Stroka str = "General help for the program is:~+\n" + MainHelp + "~-\n";
+    //        str += "Parameters defined are: ";
+    //        for (int i = 1; i < min(argc,5); i++)
+    //            str += Stroka("<") + argv[i] + "> ";
+    //        str += "\nHave to define 2 paramteres: mode \"mode parameters\"\n" + MakeHelp() + "\n";
+    //        std::cout << ~(TFormatOutput("    ", 0, 70).Format(~str));
+    //        std::cout.flush();
+    //        exit(1);
+    //    }
+    //    Stroka par;
+    //    if (argc == 3)
+    //        par = argv[2];
+    //    map<Stroka, TKeyData>::iterator it = Params.find(argv[1]);
+    //    if (it == Params.end()) {
+    //        std::cout<<"Mode <"<<argv[1]<<"> is not defined.\n"<<~(TFormatOutput("    ", 0, 70).Format(~MakeHelp()))<<"\n";
+    //        exit(1);
+    //    }
+    //    it->second.Func(Str::ReadParams(par.c_str(), it->second.Params.c_str()));
+    //    return 1;
+    //}
+    //Stroka TCommandParse::MakeHelp() {
+    //    Stroka ret = "Available modes are:~+\n";
+    //    for (map<Stroka, TKeyData>::iterator iter = Params.begin(); iter != Params.end(); iter++) {
+    //        ret += iter->first + " \"" + iter->second.ParamsPlus + "\"~+\n";
+    //        ret += iter->second.MakeHelp() + "~-\n";
+    //    }
+    //    ret += "~-";
+    //    return ret;
+    //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

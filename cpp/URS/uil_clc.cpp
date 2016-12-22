@@ -45,6 +45,7 @@ void CellFixed(Body &WorkBody)
 //   if ((fabs(U_[0]-U_[1])>1e-4) || (fabs(P_[0]-P_[1])>11)) {F_[1]=0;F_[2]=0;}
 //   if ((fabs(U_[Num]-U_[Num-1])>1e-4) || (fabs(P_[Num]-P_[Num-1])>11)) F_[Num-1]=0;
    F_[Num]=0;
+   F_[Num - 1]=0;
    F_[2]=0;
    F_[1]=0;
    if (UilWorkDim==1)
@@ -77,8 +78,9 @@ void CalcTStpVisc(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeSt
 //  Next TimeStep Clc
    for (k=1;k<Num-1;k++) if (!F_[k]) 
     {
-     tmp[k]=max(fabs(Sound[k]),fabs(U_[k]-U_[k+1]));
-     tmp[k]=max(tmp[k],fabs(U_[k-1]-U_[k]));
+     //tmp[k]=max(fabs(Sound[k]),fabs(U_[k]-U_[k+1]));
+     //tmp[k]=max(tmp[k],fabs(U_[k-1]-U_[k]));
+     tmp[k]=fabs(Sound[k]) + fabs(U_[k]-U_[k+1]) + fabs(U_[k-1]-U_[k]);
      if (k>1)
          L[k]=min(R_[k]-R_[k-1],R_[k+1]-R_[k]);
      else
@@ -110,8 +112,8 @@ void CalcTStpVisc(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeSt
         { 
          double du=U_[k+1]-U_[k];
 //if (du<0) du=0;
-double r0=R_[Num-1]-R_[Num-2],rc=R_[k]-R_[k-1];
-if ((k<2) || (k>Num-1)) rc=r0;
+//double r0=R_[Num-1]-R_[Num-2],rc=R_[k]-R_[k-1];
+//if ((k<2) || (k>Num-1)) rc=r0;
 //tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*log(max(1,fabs(du))));
 tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*max(1,fabs(du)));
          P_[k]-=Ro_[k]*du*tmp[k]*1e5;

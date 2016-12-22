@@ -10,27 +10,49 @@
 
 #include "lib/ref/file_manip.h"
 
-struct SavableDouble:SavableClass{
-    SavableDouble(double dat):Dat(dat){};
+struct SavableDouble : SavableClass {
+    SavableDouble(double dat) :
+		Dat(dat){
+	};
     double Dat;
-	virtual int save_data_state( FilterOut&so) {so.precision(12);so.width(17);so<<Dat;return 1; };
-	virtual int read_data_state(FilterIn&si){ si>>Dat;return 1;};
+	virtual int save_data_state( FilterOut&so) {
+		so.precision(12);
+		so.width(17);
+		so << Dat;
+		return 1; 
+	};
+	virtual int read_data_state(FilterIn&si) {
+		si >> Dat;
+		return 1;
+	};
 };
 
 
-struct URS_Curve:SavableClass{
-	URS_Curve():NumIter(0),out(new Output){
+struct URS_Curve : SavableClass {
+	URS_Curve()
+		: NumIter(0)
+		, out(new Output) {
 		Vars[Stroka("ClcVar")] = new ClcVar();
 	};
     int save_data_state( FilterOut&so);
     int read_data_state(FilterIn&si);
 
-	struct ClcVar:SavableClass{
-        ClcVar():Dat(NULL), Res(0){};
-		virtual void ClcStart(URS_Curve* Data){Dat = Data;LastStp.clear();Res = 0;};
+	struct ClcVar : SavableClass {
+        ClcVar()
+			: Dat(NULL)
+			, Res(0){
+		};
+		virtual void ClcStart(URS_Curve* Data) {
+			Dat = Data;
+			LastStp.clear();
+			Res = 0;
+		};
 		virtual void ClcEnd(){};
 // normally not to be redefined
-        virtual Ref<SavableClass> GetRes(const Stroka &SubName){CheckStp(SubName, this);return new SavableDouble(Res);}
+        virtual Ref<SavableClass> GetRes(const Stroka &SubName){
+			CheckStp(SubName, this);
+			return new SavableDouble(Res);
+		}
 //	    virtual int save_data_state( FilterOut&so) {return 1; };
 //		virtual int read_data_state(FilterIn&si){ return 1;};
 		//virtual string print_help(){
@@ -52,20 +74,20 @@ struct URS_Curve:SavableClass{
 		//	Ref<ClcVar> form = new ClcVar();
 		//	out<<form;
 		//}
-		void CheckStp(const Stroka &SubName, void *Obj){
-			int CurStp = Dat->CurItet;
-            ObjStpStruct &ObjStp = LastStp[Obj];
-            map<Stroka, int>::iterator it = ObjStp.Stps.find(SubName + "::");
-            if ( it == ObjStp.Stps.end() || CurStp!=it->second ){
-                ClcNewStp(CurStp,SubName);
-                ObjStp.Stps[SubName + "::"] = CurStp;
-                ObjStp.CurStp = CurStp;
+		void CheckStp(const Stroka &subName, void *obj){
+			int curStp = Dat->CurItet;
+            ObjStpStruct &objStp = LastStp[obj];
+            map<Stroka, int>::iterator it = objStp.Stps.find(subName + "::");
+            if ( it == objStp.Stps.end() || curStp!=it->second ){
+                ClcNewStp(curStp, subName);
+                objStp.Stps[subName + "::"] = curStp;
+                objStp.CurStp = curStp;
 			}
 		};
-        int FirstVarStpClc(void *Obj){
-			int CurStp = Dat->CurItet;
-            ObjStpStruct &ObjStp = LastStp[Obj];
-            return (ObjStp.CurStp!=CurStp);
+        int FirstVarStpClc(void *obj){
+			int curStp = Dat->CurItet;
+            ObjStpStruct &objStp = LastStp[obj];
+            return (objStp.CurStp != curStp);
         }
 // It is assistance to work with different data..........
 		double GetVar(const Stroka name){
@@ -76,24 +98,31 @@ struct URS_Curve:SavableClass{
 			return d->Dat;
 		}
 // Working function!!!
-		virtual void ClcNewStp(int CurStp, const Stroka &SubName){Res = CurStp;};
+		virtual void ClcNewStp(int curStp, const Stroka &subName) {
+			Res = curStp;
+		};
 
         URS_Curve *Dat;
         double Res;
 		//int LastStp;
-        struct ObjStpStruct{
-            ObjStpStruct():CurStp(-1){};
+        struct ObjStpStruct {
+            ObjStpStruct()
+				: CurStp(-1) {
+			};
             map<Stroka, int> Stps;
             int CurStp;
         };
 		map<void*, ObjStpStruct> LastStp;
 	};
-	struct Output:SavableClass{
-        Output():OutFile(""),Dat(NULL){};
-		virtual void OutStart(int NumIter, URS_Curve* Data){
-            Dat = Data;
+	struct Output : SavableClass {
+        Output()
+			: OutFile("")
+			, Dat(NULL) {
+		};
+		virtual void OutStart(int numIter, URS_Curve* data) {
+            Dat = data;
             out.OpenBuf(OutFile.c_str(),1);
-            for(list<Stroka>::iterator it = OutNames.begin();it!=OutNames.end();it++){
+            for(list<Stroka>::iterator it = OutNames.begin();it!=OutNames.end();it++) {
                 Ref<ClcVar> clc = Dat->GetClcVar(*it);
                 if (!clc) 
                     throw info_except("variable %s is not of ClcVar type...\n",it->c_str());
@@ -101,33 +130,34 @@ struct URS_Curve:SavableClass{
             }
             out<<"\n";
         }
-		virtual void OutStep(){
-            for(list<Stroka>::iterator it = OutNames.begin();it!=OutNames.end();it++){
-                Ref<SavableClass> dat= Dat->CalculateVar(*it);
-                if (dat){
-                    dat->save_data_state(out);out<<" ";
+		virtual void OutStep() {
+            for(list<Stroka>::iterator it = OutNames.begin();it != OutNames.end(); it++) {
+                Ref<SavableClass> dat = Dat->CalculateVar(*it);
+                if (dat) {
+                    dat->save_data_state(out);
+					out << " ";
                 } 
-                //else
-                    //return 0;
             }
-            out<<"\n";out.flush();
-            //return 1;
+            out << "\n";
+			out.flush();
         }
-        virtual void OutEnd(){out.CloseBuf(0);};
-	    virtual int save_data_state( FilterOut&so) {
-            so<<"FileToStore"<<OutFile;
-            so<<" VectorOfNames { ";
-            for(list<Stroka>::iterator it = OutNames.begin();it!=OutNames.end();it++)
-                so<<*it<<" ";
-            so<<" }\n";
+        virtual void OutEnd() {
+			out.CloseBuf(0);
+		};
+	    virtual int save_data_state(FilterOut &so) {
+            so << "FileToStore" << OutFile;
+            so << " VectorOfNames { ";
+            for(list<Stroka>::iterator it = OutNames.begin(); it!=OutNames.end(); it++)
+                so << *it << " ";
+            so << " }\n";
             return 1; 
         };
-		virtual int read_data_state(FilterIn&si){ 
+		virtual int read_data_state(FilterIn &si){ 
             char tmp[256];
-            si>>tmp>>OutFile>>tmp>>tmp>>tmp;
-            while (stricmp(tmp,"}")!=0) {
+            si >> tmp >> OutFile >> tmp >> tmp >> tmp;
+            while (stricmp(tmp,"}") != 0) {
                 OutNames.push_back(tmp);
-                si>>tmp;
+                si >> tmp;
             }
             return 1;
         };
@@ -152,7 +182,7 @@ struct URS_Curve:SavableClass{
 
 
     void Do(){
-        out->OutStart(NumIter,this);
+        out->OutStart(NumIter, this);
         //for (list<Stroka>::iterator it = Vectors.begin();it!=Vectors.end();it++)
         //    GetClcVar(*it)->ClcStart(NumIter,this);
 		for (map<Stroka, Ref<SavableClass> >::iterator it = Vars.begin();it!=Vars.end();it++){
@@ -203,9 +233,9 @@ struct URS_Curve:SavableClass{
     virtual void SetOutput(Output *out_) {
         out = out_;
     }
-	Stroka MakeNames(const Stroka name, Stroka &SubName){
+	Stroka MakeNames(const Stroka name, Stroka &subName){
 		Stroka tmp(name);//, 0, name.find_first_of(".",0));
-		SubName = tmp.substr(tmp.find_first_of(".")+1);
+		subName = tmp.substr(tmp.find_first_of(".") + 1);
         return tmp.substr(0, tmp.find_first_of("."));//VarName 
 	}
     Stroka MakeHelp(){
@@ -247,7 +277,7 @@ struct URS_Curve:SavableClass{
 //        ClassDesc::WriteHelpOnCategory(tmp,"URS_Curve_Var_category",ClassDesc::PrintHelp);
 //        return string(DataSource::GetStr("urs_curve::print_help").c_str());
 //	}
-	int SetNumIter(int num=-1){
+	int SetNumIter(int num = -1) {
 		if (num!=-1)
 			NumIter = num;
 		return NumIter;
@@ -265,24 +295,25 @@ protected:
 //============================    UrsCurve_StepClc       =======================================
 //==============================================================================================
 
-struct UrsCurve_StepClc:URS_Curve::ClcVar{
-    UrsCurve_StepClc():MinVal(0), MaxVal(100), NumDivStp(100), LogScale(0), NumSame(1), Centered(0){};
-	virtual void ClcStart(URS_Curve* Data){
-		URS_Curve::ClcVar::ClcStart(Data);
+struct UrsCurve_StepClc : URS_Curve::ClcVar {
+    UrsCurve_StepClc() : MinVal(0), MaxVal(100), NumDivStp(100), LogScale(0), NumSame(1), Centered(0){
+	};
+	virtual void ClcStart(URS_Curve* data){
+		URS_Curve::ClcVar::ClcStart(data);
 		int NumStp = Dat->NumIter;
-        if (NumSame*NumDivStp==0 || NumStp%(NumSame*NumDivStp)!=0)
-            throw info_except(" NumStp %i is not product of NumSame %i and NumDivStp %i \n",NumStp,NumSame,NumDivStp);
+        if (NumSame * NumDivStp == 0 || NumStp % (NumSame * NumDivStp) != 0)
+            throw info_except(" NumStp %i is not product of NumSame %i and NumDivStp %i \n", NumStp, NumSame, NumDivStp);
     };
 //    virtual Ref<SavableClass> GetRes(){return new SavableDouble(Res);}
-    virtual int save_data_state( FilterOut&so) { 
-        so<<"MinVal"<<MinVal<<"MaxVal"<<MaxVal<<"NumDivStp"<<NumDivStp
-          <<"LogScale"<<LogScale<<"NumSame"<<NumSame<<"Centered"<<Centered;
+    virtual int save_data_state( FilterOut &so) { 
+        so << "MinVal" << MinVal << "MaxVal" << MaxVal << "NumDivStp" << NumDivStp
+          << "LogScale" << LogScale << "NumSame" << NumSame << "Centered" << Centered;
         return 1; 
     };
-	virtual int read_data_state(FilterIn&si){ 
+	virtual int read_data_state(FilterIn &si){ 
         char tmp[256];
-        si>>tmp>>MinVal>>tmp>>MaxVal>>tmp>>NumDivStp
-          >>tmp>>LogScale>>tmp>>NumSame>>tmp>>Centered;
+        si >> tmp >> MinVal >> tmp >> MaxVal >> tmp >> NumDivStp
+          >> tmp >> LogScale >> tmp >> NumSame >> tmp >> Centered;
         return 1; 
     };
 	virtual Stroka MakeHelp(){
@@ -290,16 +321,16 @@ struct UrsCurve_StepClc:URS_Curve::ClcVar{
         return res;
 	}
 protected:
-	virtual void ClcNewStp(int CurStp, const Stroka &SubName){
+	virtual void ClcNewStp(int curStp, const Stroka &subName) {
         if (!FirstVarStpClc(this))
             return;
-        int Cur = NumSame==1?CurStp%NumDivStp:CurStp/NumSame;
-        double nDiv = Centered?NumDivStp:NumDivStp-1;
-        double mi = LogScale?log(MinVal):MinVal, 
-               ma = LogScale?log(MaxVal):MaxVal, stp = (ma-mi)/max(nDiv,1);
+        int cur = NumSame == 1 ? curStp % NumDivStp : curStp / NumSame;
+        double nDiv = Centered ? NumDivStp : NumDivStp - 1;
+        double mi = LogScale ? log(MinVal) : MinVal, 
+               ma = LogScale ? log(MaxVal) : MaxVal, stp = (ma - mi) / max(nDiv, 1);
         if (Centered)
-            mi+=0.5*stp;
-        Res = mi+stp*Cur;
+            mi += 0.5 * stp;
+        Res = mi + stp * cur;
         if (LogScale)
             Res = exp(Res);
 	}
@@ -314,20 +345,25 @@ protected:
 
 #include "urs\matt_fac.h"
 #include "urs\fre_fac.h"
-struct EOS_Savable:SavableClass{
+
+struct EOS_Savable : SavableClass {
     Ref<MatterIO> Mat;
-	EOS_Savable():Mat(NULL){};
-	EOS_Savable(MatterIO *mat):Mat(mat){};
-    ~EOS_Savable(){};//{delete Mat;};
-	virtual int save_data_state( FilterOut&so) {
-        so<<Mat;
+	EOS_Savable() : Mat(NULL){
+	};
+	EOS_Savable(MatterIO *mat) 
+		: Mat(mat){
+	};
+    ~EOS_Savable(){
+	};//{delete Mat;};
+	virtual int save_data_state( FilterOut &so) {
+        so << Mat;
         //SavableClass* m = dynamic_cast<SavableClass*>((MatterIO*)Mat);
         //if (!SavableClass::Save(so,m))
         //    throw info_except("Could not save matter\n");
 		return !(!so);
     };
-	virtual int read_data_state(FilterIn&si){ 
-        si>>Mat;
+	virtual int read_data_state(FilterIn &si){ 
+        si >> Mat;
         if (!(Mat))
             throw info_except("Could not read matter\n");
 		return 1;
@@ -341,7 +377,7 @@ struct EOS_Savable:SavableClass{
  //       tmp<<form;
  //       return string(DataSource::GetStr("urs_curve::EOS_Savable::print_help").c_str());
  //   }
-	virtual Stroka MakeHelp(){
+	virtual Stroka MakeHelp() {
 		Stroka res = "Internal var for making EOS calculation.\n";
         return res;
     }
@@ -351,30 +387,33 @@ struct EOS_Savable:SavableClass{
 //============================    UrsCurve_EOS_RoT  - base   ===================================
 //==============================================================================================
 
-struct UrsCurve_EOS_RoT:URS_Curve::ClcVar{
-	UrsCurve_EOS_RoT():URS_Curve::ClcVar(),NameDenc("Dencity"),NameTemp("Temperature"),NameMatter("Mat"){};
-	virtual void ClcStart(URS_Curve* Data){
-		URS_Curve::ClcVar::ClcStart(Data);
-		//ClcNewStp(-1);
-    	Ref<URS_Curve::ClcVar> Denc,Temp;
-		Denc = Dat->GetClcVar(NameDenc);
-		Temp = Dat->GetClcVar(NameTemp);
+struct UrsCurve_EOS_RoT : URS_Curve::ClcVar {
+	UrsCurve_EOS_RoT() 
+		: URS_Curve::ClcVar()
+		, NameDenc("Dencity")
+		, NameTemp("Temperature")
+		, NameMatter("Mat"){
+	};
+	virtual void ClcStart(URS_Curve* data){
+		URS_Curve::ClcVar::ClcStart(data);
+    	Ref<URS_Curve::ClcVar> denc, temp;
+		denc = Dat->GetClcVar(NameDenc);
+		temp = Dat->GetClcVar(NameTemp);
 		Mat  = dynamic_cast<EOS_Savable*>((SavableClass*)Dat->GetVar(NameMatter));
-		if (!Mat || !Denc || !Temp)
+		if (!Mat || !denc || !temp)
 			throw info_except("Could not get Matter?%i Denc?%i or Temperature?%i..\n",
-                Mat==NULL,Denc==NULL,Temp==NULL);
+                Mat == NULL, denc == NULL, temp == NULL);
 		if (!Mat->Mat)
 			throw info_except("Matter's matter - poorly defined...\n");
-
     };
 
-    virtual int save_data_state( FilterOut&so) { 
-		so<<"NameDenc"<<NameDenc.c_str()<<"NameTemp"<<NameTemp.c_str()<<"NameMatter"<<NameMatter.c_str();
+    virtual int save_data_state( FilterOut &so) { 
+		so << "NameDenc" << NameDenc.c_str() << "NameTemp" << NameTemp.c_str() << "NameMatter" << NameMatter.c_str();
         return 1; 
     };
-	virtual int read_data_state(FilterIn&si){ 
+	virtual int read_data_state(FilterIn &si){ 
         char tmp[256];
-        si>>tmp>>NameDenc>>tmp>>NameTemp>>tmp>>NameMatter;
+        si >> tmp >> NameDenc >> tmp >> NameTemp >> tmp >> NameMatter;
         return 1; 
     };
     Stroka MakeHelp(){
@@ -382,7 +421,7 @@ struct UrsCurve_EOS_RoT:URS_Curve::ClcVar{
         return res;
     }
 protected:
-    Stroka NameDenc,NameTemp,NameMatter;
+    Stroka NameDenc, NameTemp, NameMatter;
    	Ref<EOS_Savable> Mat;
 };
 
@@ -390,28 +429,32 @@ protected:
 //============================    UrsCurve_EOS_RoE  - base   ===================================
 //==============================================================================================
 
-struct UrsCurve_EOS_RoE:URS_Curve::ClcVar{
-	UrsCurve_EOS_RoE():URS_Curve::ClcVar(),NameDenc("Dencity"),NameEner("Energy"),NameMatter("Mat"){};
-	virtual void ClcStart(URS_Curve* Data){
-		URS_Curve::ClcVar::ClcStart(Data);
-		//ClcNewStp(-1);
-    	Ref<URS_Curve::ClcVar> Denc,Ener;
-		Denc = Dat->GetClcVar(NameDenc);
-		Ener = Dat->GetClcVar(NameEner);
+struct UrsCurve_EOS_RoE : URS_Curve::ClcVar {
+	UrsCurve_EOS_RoE() 
+		:URS_Curve::ClcVar()
+		, NameDenc("Dencity")
+		, NameEner("Energy")
+		, NameMatter("Mat"){
+	};
+	virtual void ClcStart(URS_Curve* data){
+		URS_Curve::ClcVar::ClcStart(data);
+    	Ref<URS_Curve::ClcVar> denc, ener;
+		denc = Dat->GetClcVar(NameDenc);
+		ener = Dat->GetClcVar(NameEner);
 		Mat  = dynamic_cast<EOS_Savable*>((SavableClass*)Dat->GetVar(NameMatter));
-		if (!Mat || !Denc || !Ener)
+		if (!Mat || !denc || !ener)
 			throw info_except("Could not get Matter Denc or Energy..\n");
 		if (!Mat->Mat)
 			throw info_except("Matter's matter - poorly defined...\n");
     };
 
     virtual int save_data_state( FilterOut&so) { 
-		so<<"NameDenc"<<NameDenc.c_str()<<"NameEnergy"<<NameEner.c_str()<<"NameMatter"<<NameMatter.c_str();
+		so << "NameDenc" << NameDenc.c_str() << "NameEnergy" << NameEner.c_str() << "NameMatter" << NameMatter.c_str();
         return 1; 
     };
 	virtual int read_data_state(FilterIn&si){ 
         char tmp[256];
-        si>>tmp>>NameDenc>>tmp>>NameEner>>tmp>>NameMatter;
+        si >> tmp >> NameDenc >> tmp >> NameEner >> tmp >> NameMatter;
         return 1; 
     };
     Stroka MakeHelp(){
@@ -420,7 +463,7 @@ struct UrsCurve_EOS_RoE:URS_Curve::ClcVar{
     }
 
 protected:
-    Stroka NameDenc,NameEner,NameMatter;
+    Stroka NameDenc, NameEner, NameMatter;
    	Ref<EOS_Savable> Mat;
 };
 
@@ -428,26 +471,30 @@ protected:
 //============================    UrsCurve_EOS_Ro   - base   ===================================
 //==============================================================================================
 
-struct UrsCurve_EOS_Ro:URS_Curve::ClcVar{
-	UrsCurve_EOS_Ro():URS_Curve::ClcVar(),NameDenc("Dencity"),NameMatter("Mat"){};
-	virtual void ClcStart(URS_Curve* Data){
-		URS_Curve::ClcVar::ClcStart(Data);
-    	Ref<URS_Curve::ClcVar> Denc;
-		Denc = Dat->GetClcVar(NameDenc);
+struct UrsCurve_EOS_Ro : URS_Curve::ClcVar {
+	UrsCurve_EOS_Ro() 
+		: URS_Curve::ClcVar()
+		, NameDenc("Dencity")
+		, NameMatter("Mat"){
+	};
+	virtual void ClcStart(URS_Curve* data){
+		URS_Curve::ClcVar::ClcStart(data);
+    	Ref<URS_Curve::ClcVar> denc;
+		denc = Dat->GetClcVar(NameDenc);
 		Mat  = dynamic_cast<EOS_Savable*>((SavableClass*)Dat->GetVar(NameMatter));
-		if (!Mat || !Denc )
+		if (!Mat || !denc )
 			throw info_except("Could not get Matter or Denc ..\n");
 		if (!Mat->Mat)
 			throw info_except("Matter's matter - poorly defined...\n");
     };
 
-    virtual int save_data_state( FilterOut&so) { 
-		so<<"NameDenc"<<NameDenc.c_str()<<"NameMatter"<<NameMatter.c_str();
+    virtual int save_data_state( FilterOut &so) { 
+		so << "NameDenc" << NameDenc.c_str() << "NameMatter" << NameMatter.c_str();
         return 1; 
     };
-	virtual int read_data_state(FilterIn&si){ 
+	virtual int read_data_state(FilterIn &si){ 
         char tmp[256];
-        si>>tmp>>NameDenc>>tmp>>NameMatter;
+        si >> tmp >> NameDenc >> tmp >> NameMatter;
         return 1; 
     };
 protected:
@@ -469,35 +516,25 @@ struct UrsCurve_Caloric:UrsCurve_EOS_RoE{
 		for (int k=0;k<NumClcNames;k++)
             if (SubName==ClcNames[k])
 				return ClcName(k);
-		//MatStat = Mat->Mat;
 		return 	new SavableDouble( Mat->Mat->OutputValClc(
                 GetVar(NameDenc),
                 GetVar(NameEner), SubName ));
-//		throw info_except("Cannot calculate variable %s\n",SubName.c_str());
 	}
 	virtual Stroka MakeHelp(){
         char tmp[256];
         Stroka res = UrsCurve_EOS_RoE::MakeHelp();
         res += Stroka("Have ") + itoa(NumClcNames,tmp,10) + " internal vars for output:";
-		for (int k=0;k<NumClcNames;k++)
+		for (int k = 0; k < NumClcNames; k++)
 			res += ClcNames[k] + " ";
 		res += ".\n";
         return res;
 	}
 	
 protected:
-	//virtual void MakeHelp(FilterTextOut &out){
-	//	out<<"Class for EOS calculation. Have "<<NumClcNames<<" internal vars for output:";
-	//	for (int k=0;k<NumClcNames;k++)
-	//		out<<ClcNames[k].c_str();
-	//	out<<".\n";
-	//	Ref<UrsCurve_Caloric> form = new UrsCurve_Caloric();
- //       out<<form;
-	//}
-	virtual void ClcNewStp(int CurStp, const Stroka &SubName){
+	virtual void ClcNewStp(int curStp, const Stroka &subName){
         if (!FirstVarStpClc(this))
             return;
-		for (int k=0;k<NumClcNames;k++)
+		for (int k = 0;k < NumClcNames; k++)
 			eos_res[k] = 0;
 	}
 	Ref<SavableClass> eos_res[NumClcNames];
@@ -506,9 +543,15 @@ protected:
 	static Stroka ClcNames[NumClcNames]; 
 	static 	MatterIO *MatStat;
 
-	static double ClcPressure(double r,double e){ return MatStat->Pressure(r,e);}
-	static double ClcSound(double r,double e){ return MatStat->Sound(r,e);}
-	static double ClcTemp(double r,double e){ return MatStat->Temperature(r,e);}
+	static double ClcPressure(double r,double e) {
+		return MatStat->Pressure(r,e);
+	}
+	static double ClcSound(double r,double e) {
+		return MatStat->Sound(r,e);
+	}
+	static double ClcTemp(double r,double e) { 
+		return MatStat->Temperature(r,e);
+	}
 
 private:
     virtual Ref<SavableClass> ClcName(int k){

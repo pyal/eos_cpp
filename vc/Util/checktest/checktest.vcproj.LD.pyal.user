@@ -10,8 +10,8 @@
 			>
 			<DebugSettings
 				Command="$(TargetPath) "
-				WorkingDirectory="C:\Pyal\Work\job\test\check"
-				CommandArguments=""
+				WorkingDirectory="C:\Pyal\Work\job\courses\DiscreteOptimization\week1\knapsack\data"
+				CommandArguments="ks_4_0"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"
@@ -39,7 +39,7 @@
 			<DebugSettings
 				Command="$(TargetPath)"
 				WorkingDirectory=""
-				CommandArguments=""
+				CommandArguments="ks_4_0"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"
@@ -50,7 +50,7 @@
 				SQLDebugging=""
 				Environment=""
 				EnvironmentMerge="true"
-				DebuggerFlavor=""
+				DebuggerFlavor="0"
 				MPIRunCommand=""
 				MPIRunArguments=""
 				MPIRunWorkingDirectory=""

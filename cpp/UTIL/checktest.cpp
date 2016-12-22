@@ -419,6 +419,76 @@ void testrobot(map<Stroka, Stroka> par) {
 
 //113121IB
 
+//// We are trying to solve the problem - given a list of 9 numbers 5 - insert all possible operations and breaks between them
+//// Find the first possitive number which cannot be obtained by the obtained formulas.
+//
+//#include <string>
+//#include <map>
+//#include <iostream>
+//#include <vector>
+//#include <list>
+//#include <stdio.h>
+//#include <cmath>
+//#include <algorithm>
+//#include <list>
+//#include <set>
+//#include <strstream>
+//#include <numeric>
+//#include "math.h"
+// 
+//using namespace std;
+// 
+//// Get all vars after adding next number
+//// Make all possible operations with the input list +-*/
+//void GetVars(int num, set<int> &vars) {
+//	set<int> was = vars;
+//	vars.clear();
+//	for(set<int>::iterator it = was.begin(); it != was.end(); it++) {
+//		int i = *it;
+//// operations +-* do not depend on the order
+//		vars.insert(i + 5);
+//		vars.insert(i - 5);
+//		vars.insert(i * 5);
+//// operation / depend on the order - we get 2 different choices
+//// after the division we are making rounding of the answer
+//		vars.insert(int(i / 5));
+//// we prohibit infinity. We can try to take it into account of cause.
+//		if (i)
+//			vars.insert(int(5 / i));
+//	}
+//}
+//int main( int argc,   char *argv[] ) {
+//// in our case numOfNum = 9 number of numbers in the formula
+//// and the value of number is 5
+//	int number = 5, numOfNum = 9;
+//// set of possible results done by the formula
+//	set<int> vars;
+//// put initial number - result for numOfNum = 1
+//	vars.insert(number);
+//	vars.insert(-number);
+//	for(int i = 2; i <= numOfNum; i++) {
+//// one by one constructing the results for increasing length of the formula
+//		GetVars(number, vars);
+//	}
+//// finding the first gap in the results
+//	int foundMin = 0;
+//	set<int>::iterator it = vars.begin();
+//// skip negative numbers
+//	while(it != vars.end() && *it <= 0)
+//		it++;
+//// break as soon as the gap is found
+//	while(it != vars.end() && *it == foundMin + 1) {
+//		foundMin++;
+//		it++;
+//	}
+//	cout << foundMin + 1 << "\n";
+//    return 0;
+//}
+//
+
+// We are trying to solve the problem - given a list of 9 numbers 5 - insert all possible operations and breaks between them
+// Find the first possitive number which cannot be obtained by the obtained formulas.
+
 #include <string>
 #include <map>
 #include <iostream>
@@ -435,344 +505,280 @@ void testrobot(map<Stroka, Stroka> par) {
  
 using namespace std;
  
+/*
+ID: pyal1
+PROG:  preface
+LANG: C++
+*/
+
+#include <string>
+#include <map>
+#include <iostream>
+#include <vector>
+#include <list>
+#include <stdio.h>
+#include <cmath>
+#include <algorithm>
+#include <list>
+#include <set>
+#include <strstream>
+#include <numeric>
+#include "math.h"
+#include <fstream>
+#include <stack>
+#include <string.h>
+#include <queue>
+
+
+using namespace std;
+ 
 typedef long long l2;
+typedef pair<int, int> p2;
+typedef pair<double, double> d2;
 template<class T>
-void ReadData(vector<T> &dat, int s = 0) {
-	if (!s)
-		cin >> s;
-	dat.resize(s);
-	for(size_t i = 0; i < dat.size(); i++) {
-		cin >> dat[i];
-	}
+vector<T> &ReadData(vector<T> &dat, int s = 0) {
+    if (!s)
+        cin >> s;
+    dat.resize(s);
+    for(size_t i = 0; i < dat.size(); i++)
+        cin >> dat[i];
+    return dat;
 }
+template<class T, class T1>
+ostream& operator<<(ostream &out, const pair<T, T1> &pnt) {
+    out << pnt.first << " " << pnt.second << " ";
+    return out;
+};
+template<class T, class T1>
+istream& operator>>(istream &in, pair<T, T1> &pnt) {
+    in >> pnt.first >> pnt.second;
+    return in;
+};
+
 template<class T>
-void PrintVector(vector<T> &dat, const char *sep = NULL) {
-	if (!dat.size())
-		return;
-	for(size_t i = 0; i < dat.size() - 1; i++)
-		if (!sep)
-			cout << dat[i] << "\t";
-		else
-			cout << dat[i] << sep;
-	cout << dat[dat.size() - 1];
+ostream& operator<<(ostream &out, const set<T> &s) {
+    for(set<T>::const_iterator i = s.begin(); i != s.end(); i++) {
+        out << *i << " ";
+        //if ((i+1) != s.end())
+        //    out << " ";
+    }
+    return out;
+};
+
+template<class T>
+ostream& operator<<(ostream &out, const vector<T> &vec) {
+    for(size_t i = 0; i < vec.size(); i++) {
+        out << vec[i];
+        if (i != vec.size() -1 )
+            out << " ";
+    }
+    return out;
+};
+
+template<class T>
+void PrintVector(const vector<T> &dat, const char *sep = NULL) {
+    if (!dat.size())
+        return;
+    for(size_t i = 0; i < dat.size() - 1; i++)
+        if (!sep)
+            cout << dat[i] << "\t";
+        else
+            cout << dat[i] << sep;
+    cout << dat[dat.size() - 1];
 }
 template<class T>
 void PrintArray(vector<vector<T> > &dat, const char *sep = NULL) {
-	for(size_t i = 0; i < dat.size(); i++) {
-		PrintVector(dat[i], sep);
-		cout << "\n";
-	}
-	cout << "\n";
+    for(size_t i = 0; i < dat.size(); i++) {
+        PrintVector(dat[i], sep);
+        cout << "\n";
+    }
 }
-#include <stack>
-struct TAtom {
-	enum Types {Const, Op};
-	enum Operations {Add, Sub, Mul, Div, Cmp, L, R, NUL, BAD, DIGIT};
-	static vector<char> Char2Operation;
-	static vector<char> Operation2Char;
-	static vector<char> Operation2Prior;
-	int Type, Val, Operation, Position;
-	TAtom() {}
-	void Clc(stack<int> &data) {
-		if (Operation==DIGIT) {
-			data.push(Val);
-			return;
-		}
-		int n2 = data.top();data.pop();
-		//int n1 = data.top();data.pop();
-		int n1 = data.top();
-		int res;
-		switch (Operation) {
-			case Add:	res = n1 + n2; break;
-			case Sub:	res = n1 - n2; break;
-			case Mul:	res = n1 * n2; break;
-			case Div:	res = n1 / n2; break;
-			case Cmp:	res = n1 == n2; break;
-		}
-		data.top() = res;
-	}
-	void Init(string &str, int &pos) {
-		Type = Op;
-		Operation = NUL;
-		Val = 0;
-		Position = pos;
-		if (pos >= (int)str.length()) {
-			Operation = BAD;
-			return;
-		}
-		Operation = Char2Operation[str[pos]];
-		if (Operation == DIGIT) { 
-			int i = pos + 1;
-			while ( i < (int)str.length() && Char2Operation[str[i]] == DIGIT)
-				i++;
-			string tmp(str.begin() + pos, str.begin() + i);
-			Val = atoi(tmp.c_str());
-			Type = Const;
-			pos = i;
-		} else 
-			pos++;
-		while(pos < (int)str.length() && isspace(str[pos]))
-			pos++;
-		
-	}
-	static void InitStatic() {
-		Char2Operation.resize(128, NUL);
-		Char2Operation['*'] = Mul;
-		Char2Operation['/'] = Div;
-		Char2Operation['-'] = Sub;
-		Char2Operation['+'] = Add;
-		Char2Operation['='] = Cmp;
-		Char2Operation['('] = L;
-		Char2Operation[')'] = R;
-		fill(Char2Operation.begin() + '0', Char2Operation.begin() + '9' + 1, DIGIT);
-		Operation2Char.resize(DIGIT + 1, 'd');
-		Operation2Char[Mul] = '*';
-		Operation2Char[Div] = '/';
-		Operation2Char[Sub] = '-';
-		Operation2Char[Add] = '+';
-		Operation2Char[Cmp] = '=';
-		Operation2Char[NUL] = '?';
-		Operation2Char[L] = '(';
-		Operation2Char[R] = ')';
-		Operation2Prior.resize(DIGIT + 1, 0);
-		Operation2Prior[Mul] = 2;
-		Operation2Prior[Div] = 2;
-		Operation2Prior[Sub] = 2;
-		Operation2Prior[Add] = 2;
-		Operation2Prior[Cmp] = 1;
-		Operation2Prior[NUL] = 2;
-	}
-	TAtom(string &str, int &pos) {
-		Init(str, pos);
-	}
-};
-vector<char> TAtom::Char2Operation, TAtom::Operation2Char, TAtom::Operation2Prior;
-
-struct TTriad {
-	int *Operation;
-	int *D1, *D2;
-	//TTriad(){};
-	TTriad(int *i1, int *i2, int *oper) :Operation(oper), D1(i1), D2(i2), res(-10) {}
-	int res;
-};
-
-struct TTriadClc {
-	vector<TTriad> Triads;
-	int *Answer;
-	int Result;
-	void Init(vector<TAtom> &expr) {
-//PrintVector(expr);cout.flush();
-		stack<int*> buf;
-		Triads.reserve(expr.size());
-		for(int i = 0; i < (int)expr.size(); i++) {
-			if (expr[i].Operation==TAtom::DIGIT) {
-//cout << " pushing " << expr[i].Val << "\n";
-				buf.push(&expr[i].Val);
-				continue;
-			}
-			if (expr[i].Operation==TAtom::Cmp) {
-//cout << " poping == " << *buf.top() << "\n";
-				int *i2 = buf.top();buf.pop();
-//cout << " changing == " << *buf.top() << "\n";
-				int *i1 = buf.top();
-				Answer = i2;
-				Result = *i1;
-				break;
-			}
-//cout << " poping " << *buf.top() << "\n";
-			int *i2 = buf.top();buf.pop();
-//cout << " changing " << *buf.top() << "\n";
-			int *i1 = buf.top();
-			Triads.push_back(TTriad(i1, i2, &expr[i].Operation));
-			buf.top() = &(Triads.back().res);
-		}
-	}
-	int Clc() {
-		for(int i = 0; i < (int)Triads.size(); i++) {
-			TTriad &cur = Triads[i];
-			if (*cur.Operation == 0) {
-				cur.res = *cur.D1 + *cur.D2;
-			} else if (*cur.Operation == 1) {
-				cur.res = *cur.D1 - *cur.D2;
-			} else
-				cur.res = *cur.D1 * *cur.D2;
-//cout << " ++ " <<  *cur.D1 << " " << *cur.Operation << " " <<  *cur.D2 << " = " << cur.res << "\n";
-		}
-		return (Result == *Answer);
-	}
-};
-
-ostream& operator<<(ostream &out, TAtom &atom) {
-	cout << " Operation  " << atom.Operation << " " << TAtom::Operation2Char[atom.Operation] << " val " << atom.Val << " pos " << atom.Position << "\n";
-	return out;
+template<class T>
+map<T, int> Vector2Map(const vector<T> &vec, int InitByInd = 1) {
+    map<T, int> res;
+    for (size_t i = 0; i < vec.size(); i++)
+        if (InitByInd)
+            res[vec[i]] = (int)i;
+        else
+            res[vec[i]] = 0;
+    return res;
 }
-struct TCalculator {
-	vector<TAtom> Expression;
-	vector<int> Permute;
-	string Line;
-	TCalculator(string &line) {
-		Init(line);
-	}
-	void AddElem(int addPrior, stack<pair<TAtom, int> > &ops, TAtom &el) {
-		int curPrior = TAtom::Operation2Prior[el.Operation] + addPrior;
-		while(!ops.empty() && curPrior <= ops.top().second){
-			Expression.push_back(ops.top().first);
-			ops.pop();
-		}
-		ops.push(pair<TAtom, int>(el, curPrior));
-	}
-	void Init(string &line) {
-		Line = line;
-		int pos = 0, prevPos = 0;;
-		stack<pair<TAtom, int> > Ops;
-		TAtom nul;nul.Operation = TAtom::NUL;nul.Val = 0;
-		TAtom el(line, pos);
-		if (el.Operation == TAtom::NUL)
-			el.Init(line, pos);
-		int addPrior = 0, prevDigit = 0;
-		while(el.Operation != TAtom::BAD) {
-			nul.Position = prevPos - 1;
-			prevPos = pos;
-			switch (el.Operation) {
-				case TAtom::DIGIT	: if (prevDigit) AddElem(addPrior, Ops, nul);Expression.push_back(el);prevDigit = 1;break;
-				case TAtom::L		: if (prevDigit) AddElem(addPrior, Ops, nul);addPrior += 10;prevDigit = 0;break;
-				case TAtom::R		: if (!prevDigit) {cout << "bad\n";exit(11);}addPrior -= 10;prevDigit = 1;break;
-				case TAtom::Add: case TAtom::Sub: case TAtom::Mul: case TAtom::Div: case TAtom::Cmp: case TAtom::NUL :
-					AddElem(addPrior, Ops, el);
-					if (!prevDigit) {
-						cout << " bad data; trying to add operation after operation\n";
-						cout << line << "\n" << &line.c_str()[pos] << "\n";
-						PrintVector(Expression, "");cout.flush();
-					}
+template<class T1, class T2>
+map<T1, T2> Vector2Map(const vector<pair<T1, T2> > &vec) {
+    map<T1, T2> res;
+    for (size_t i = 0; i < vec.size(); i++)
+            res[vec[i].first] = vec[i].second;
+    return res;
+}
 
-					prevDigit = 0;
-					break;
-			}
-//cout << " pos " << pos;
-			el.Init(line, pos);
-//cout << " new " << pos << " ";cout << el;cout.flush();
+template <class T>
+struct TCmpVector {
+    vector<T> Vector;
 
-		}
-		while(!Ops.empty()){
-			Expression.push_back(Ops.top().first);
-			Ops.pop();
-		}
-		for(int i = 0; i < (int)Expression.size(); i++)
-			if (Expression[i].Operation == TAtom::NUL) {
-				Permute.push_back(i);
-			}
-	}
-	int Clc() {
-		stack<int> data;
-		for(int i = 0; i < (int)Expression.size(); i++)
-			Expression[i].Clc(data);
-		return data.top();
-	}
-	int FindCombUp(stack<int> lDat, int level = 0) {
-		//stack<int> lDat;// = data_;
-		if (level == Permute.size()) {
-			int prevI = 0;
-			if (level > 0)
-				prevI = Permute[level - 1];
-			for(int i = prevI; i < (int)Expression.size(); i++)
-				Expression[i].Clc(lDat);
-			return lDat.top();
-		}
-		int prevI = 0, newInd = Permute[level];
-		if (level > 0)
-			prevI = Permute[level - 1];
-		for(int i = prevI; i < newInd; i++)
-			Expression[i].Clc(lDat);
-		for(int i = TAtom::Mul; i >= TAtom::Add; i--) {
-			Expression[Permute[level]].Operation = i;
-			if (FindCombUp(lDat, level + 1))
-				return 1;
-		}
-		return 0;
-	}
-	int FindComb0(int level = 0) {
-		stack<int> data;
-		return FindCombUp(data, level);
-	}
-	int FindComb1(int level = 0) {
-		if (level == Permute.size()) 
-			return Clc();
-		for(int i = TAtom::Add; i < TAtom::Div; i++) {
-			Expression[Permute[level]].Operation = i;
-			if (FindComb1(level + 1))
-				return 1;
-		}
-		return 0;
-	}
-	int FindComb() {
-		TTriadClc calculator;
-		calculator.Init(Expression);
-		vector<TTriad> &triads = calculator.Triads;
-		int n = (int)triads.size();
-		if (n == 0)
-			return calculator.Clc();
-		for(int i = 0 ; i < n; i++)
-			*triads[i].Operation = 0;
-		while(1) {
-			if (calculator.Clc())
-				return 1;
-			int lev = 0;
-			while(*triads[lev].Operation == 2) {
-					if (lev >= n - 1)
-						return 0;
-					*triads[lev].Operation = 0;
-					lev++;
-			} 
-			(*triads[lev].Operation)++;
-		}
-	}
-
-	int FindComb11() {
-		int n = (int)Permute.size();
-		if (n == 0)
-			return Clc();
-		for(int i = 0 ; i < n; i++)
-			Expression[Permute[i]].Operation = TAtom::Add;
-		while(1) {
-			if (Clc())
-				return 1;
-			int lev = 0;
-			while(Expression[Permute[lev]].Operation == TAtom::Div) {
-					if (lev >= n -1)
-						return 0;
-					Expression[Permute[lev]].Operation = TAtom::Add;
-					lev++;
-			} 
-			Expression[Permute[lev]].Operation++;
-		}
-	}
-
-	string GetLine() {
-		string line = Line;
-		for(int i = 0; i < (int)Permute.size(); i++)
-			line[Expression[Permute[i]].Position] = TAtom::Operation2Char[Expression[Permute[i]].Operation];
-		string ret;
-		for(int i = 0; i < line.size(); i++)
-			if (!isspace(line[i]))
-				ret.push_back(line[i]);
-		return ret;
-	}
-
+    TCmpVector() {};
+    TCmpVector(const vector<T> &srcV) : Vector(srcV) {};
+    TCmpVector(const TCmpVector &src) : Vector(src.Vector){}
+    TCmpVector& operator=(const TCmpVector &src) {
+        Vector = src.Vector;
+        return *this;
+    }
+    int operator<(const TCmpVector &src) const {
+        for(size_t i = 0; i < Vector.size(); i++) {
+            if (Vector[i] > src.Vector[i])
+                return 0;
+            if (Vector[i] < src.Vector[i])
+                return 1;
+        }
+        return 0;
+    }
+    int operator==(const TCmpVector &src) {
+        for(size_t i = 0; i < Vector.size(); i++)
+            if (Vector[i] != src.Vector[i])
+                return 0;
+        return 1;
+    }
 };
+template<class T>
+void ReadAll(istream &in, vector<T> &vec) {
+    T el;
+    vec.clear();
+    while(1) {
+        in >> el;
+        if (!in)
+            break;
+        vec.push_back(el);
+    }
+}
+void *StaticSortArray;
+template<class T>
+bool greaterWeight( int w1, int w2 ){
+    return ((T*)StaticSortArray)[w1] > ((T*)StaticSortArray)[w2];
+}
+template<class T>
+bool lessWeight( int w1, int w2 ){
+    return ((T*)StaticSortArray)[w1] < ((T*)StaticSortArray)[w2];
+};
+template<class T>
+std::vector<int> Sort(const std::vector<T> &vec, int AscendingOrder){
+    std::vector<int> ind(vec.size());
+    for(size_t i = 0;i<ind.size();i++)
+        ind[i] = (int)i;
+    StaticSortArray = (void*)&vec[0 ];
+    if (AscendingOrder)
+        std::sort(ind.begin(), ind.end(), lessWeight<T>);
+    else
+        std::sort(ind.begin(), ind.end(), greaterWeight<T>);
+    return ind;
+};
+
+void HashInsert(map<char, int> &hashCode, vector<char> &hashV, char ch) {
+    int p = hashCode[ch];
+    while (hashV[p] != '0')
+        if (++p >= (int)hashV.size())
+            p = 0;
+    hashV[p] = ch;
+}
+
+int IsPossible(map<char, int> &hashCode, vector<char> &hashV) {
+    vector<char> order = hashV;
+    sort(order.begin(), order.end());
+    int j = 0;
+    do {
+        //cout << j++ << " ";
+        vector<char> buf(hashV.size(), '0');
+        for(size_t i = 0; i < order.size(); i++)
+            HashInsert(hashCode, buf, order[i]);
+        if (buf == hashV)
+            return 1;
+    } while(next_permutation(order.begin(), order.end()));
+    cout << "\n";
+    return 0;
+}
+
+
+typedef pair<int, int> i2i;  // value2weight
+istream &operator>>(istream &in, i2i &x) {
+    in >> x.first >> x.second;
+    return in;
+}
+bool operator<(i2i &fst, i2i &sec) {
+    return (double)fst.first / fst.second < (double)sec.first / sec.second;
+}
+
+void Set(vector<int> &index, int p, int q) {
+    q = index[q];
+    p = index[p];
+    for(size_t i = 0; i < index.size(); i++)
+        if (index[i] == p)
+            index[i] = q;
+}
+int Parent(int i, vector<int> &uni) {
+    while(uni[i] != i)
+        i = uni[i];
+    return i;
+}
+void Set(int p, int q, vector<int> &uni, vector<int> &sUni) {
+    p = Parent(p, uni);
+    q = Parent(q, uni);
+        swap(p, q);
+    if (sUni[p] > sUni[q])
+        swap(p, q);
+    sUni[q] += sUni[p];
+    uni[p] = uni[q];
+}
+
+
+
+void PrintLevel() {
+    vector<int> index(10), s(10, 1);
+    int p, i = 0;
+    while(i < 10 && scanf("%i", &p) == 1) {
+        index[i] = p;
+        i++;
+    }
+    cout << "\n" << index << "\n";
+    for(size_t i = 0; i < index.size(); i++) {
+        int j = 0, c = i;
+        cout << i ;
+        while(index[c] != c) {
+            c = index[c];
+            cout << " -> " << c;
+            s[c]++;
+            if (j++ > 10) {
+                cout << " \nfound circle\n";
+                return;
+            }
+        }
+        cout << "\n";
+    }
+    for(size_t i = 0; i < index.size(); i++) {
+        cout << i << "(" << s[i] <<")  ";
+    }
+    cout << "\n";
+}
+
+
 
 int main( int argc,   char *argv[] ) {
-    freopen("input.txt","r", stdin);
-    freopen("output.txt","w", stdout);
-	string line;
-	getline(cin, line);
-	TAtom::InitStatic();
-	TCalculator calc(line);
-	if (!calc.FindComb())
-		line = "-1";
-	else
-		line = calc.GetLine();
+    freopen(argv[1],"r", stdin);
+    for(int i = 0; i < 5; i++)
+        PrintLevel();
+    exit(1);
+    vector<int> index(10);
+    vector<int> s(index.size(), 1);
+    for(size_t i = 0; i < index.size(); i++)
+        index[i] = i;
+    int p, q;
+    while(scanf("%i-%i", &p, &q)== 2) {
+        Set(index, p, q);
+        //Set(p, q, index, s);
+    cout << index << "    " << p << " " << q << "\n";
+    }
+    cout << index << "\n";
+    //freopen("output.txt","w", stdout);
+    //fstream in("input.txt", ios::in);
+    Time_struct time;
 
-	cout << line << "\n";
     return 0;
 }
 
@@ -786,6 +792,758 @@ int main( int argc,   char *argv[] ) {
 
 
 
+
+
+
+
+
+
+//struct TKnapSack {
+//    vector<int> Order;
+//    vector<i2i> Value2Weight;
+//    int NumItems, CapacityK;
+//    void ReadData() {
+//        cin >> NumItems >> CapacityK;
+//        //Value2Weight.resize(NumItems);
+//        ::ReadData(Value2Weight, NumItems);
+//        Order = Sort(Value2Weight, 0);
+//    }
+//    int MaxValueGreedy(vector<int> &solution) {
+//        solution.resize(NumItems, 0);
+//        int capLeft = CapacityK, value = 0;
+//        for(size_t i = 0; i < Order.size(); i++) {
+//            if (Value2Weight[Order[i]].second <= capLeft) {
+//                capLeft -= Value2Weight[Order[i]].second;
+//                value += Value2Weight[Order[i]].first;
+//                solution[Order[i]] = 1;
+//            }
+//        }
+//        return value;
+//    }
+//    int MaxValueStrict(vector<int> &solution) {
+//        solution.clear();
+//        solution.resize(NumItems, 0);
+//        vector<vector<int> > Item2Size_Value;
+//        for(size_t item = 0; item < Order.size(); item++) {
+//            Item2Size_Value.push_back(vector<int>(CapacityK + 1, 0));
+//            if (item == 0) {
+//                for(size_t cap = Value2Weight[Order[item]].second; cap < Item2Size_Value[item].size(); cap++)
+//                    Item2Size_Value[item][cap] = Value2Weight[Order[item]].first;
+//                continue;
+//            }
+//            for(size_t cap = 0; cap < (size_t)Value2Weight[Order[item]].second && cap < Item2Size_Value[item].size(); cap++)
+//                Item2Size_Value[item][cap] = Item2Size_Value[item - 1][cap];
+//            for(size_t cap = Value2Weight[Order[item]].second; cap < Item2Size_Value[item].size(); cap++)
+//                Item2Size_Value[item][cap] = max(Item2Size_Value[item - 1][cap - Value2Weight[Order[item]].second] + Value2Weight[Order[item]].first, Item2Size_Value[item -1][cap]); 
+//        }
+//        int curCap = CapacityK, curValue = 0;
+//        int value = Item2Size_Value[Item2Size_Value.size() - 1][curCap];
+//        for(size_t item = Order.size() - 1; item > 0; item--) {
+//            if (Item2Size_Value[item][curCap] != Item2Size_Value[item - 1][curCap]) {
+//                solution[Order[item]] = 1;
+//                curCap -= Value2Weight[Order[item]].second;
+//            }
+//        }
+//        if (Item2Size_Value[0][curCap] != 0)
+//            solution[Order[0]] = 1;
+//        return value;
+//    }
+//    int Present(int curCap, vector<int> &steps) {
+//        for(size_t i = 0; i < steps.size(); i++)
+//            if (steps[i] == curCap)
+//                return 1;
+//        return 0;
+//    }
+//    int MaxValueStrict1(vector<int> &solution) {
+//        solution.clear();
+//        solution.resize(NumItems, 0);
+//        vector<vector<int> > Item2Size_Step(NumItems);
+//        vector<int> size_ValueCur(CapacityK + 1, 0), size_ValueNext(CapacityK + 1, 0);
+//        for(size_t item = 0; item < Value2Weight.size(); item++) {
+//            for(int cap = 0; cap < Value2Weight[item].second && cap < CapacityK + 1; cap++)
+//                size_ValueNext[cap] = size_ValueCur[cap];
+//            for(int cap = Value2Weight[item].second; cap < CapacityK + 1; cap++) {
+//                int newVal = size_ValueCur[cap - Value2Weight[item].second] + Value2Weight[item].first;
+//                if (newVal > size_ValueCur[cap]) {
+//                    size_ValueNext[cap] = newVal;
+//                    Item2Size_Step[item].push_back(cap);
+//                } else
+//                    size_ValueNext[cap] = size_ValueCur[cap];
+//            }
+//            size_ValueCur = size_ValueNext;
+//        }
+//        int curCap = CapacityK, curValue = 0;
+//        int value = size_ValueCur[curCap];
+//        for(int item = Value2Weight.size() - 1; item >= 0; item--) {
+//            if (Present(curCap, Item2Size_Step[item])) {
+//            //if (Item2Size_Value[item][curCap] != Item2Size_Value[item - 1][curCap]) {
+//                solution[item] = 1;
+//                curCap -= Value2Weight[item].second;
+//            }
+//        }
+//        //if (Item2Size_Value[0][curCap] != 0)
+//        //    solution[Order[0]] = 1;
+//        return value;
+//    }
+//    double UnitProbSize() {
+//        double sum = 0;
+//        for(size_t item = 0; item < Order.size(); item++) {
+//            double sig = (double)Value2Weight[Order[item]].first / Value2Weight[Order[item]].second;
+//            double s = log(Value2Weight[Order[item]].second + 2.);
+//            sum += Value2Weight[Order[item]].second * sig * s;
+//        }
+//        return sum;
+//    }
+//    vector<int> RndSol(TKnapSack &shortSack, double partToMake) {
+////cout << "partToMake " << partToMake << "\n";
+//        vector<int> rndSol(Value2Weight.size(), 0);
+//        int toGet = (1 - partToMake) * CapacityK, got = 0;
+//        double pSingle = CapacityK / UnitProbSize();
+//        pSingle *= 4;
+////cout << "pSingle " << pSingle << "\n";
+////cout << "toGet " << toGet << " lowLim " << toGet - (CapacityK - toGet) * 0.1 << "\n";
+//        for(size_t item = 0; item < Order.size() && got < toGet - (CapacityK - toGet) * 0.1; item++) {
+//            double sig = (double)Value2Weight[Order[item]].first / Value2Weight[Order[item]].second;
+//            double s = log(Value2Weight[Order[item]].second + 2.);
+//            int curS = Value2Weight[Order[item]].second;
+//            if (!((double)rand() / (RAND_MAX + 1) < pSingle * sig * s && got + curS <= toGet))
+//                continue;
+//            got += curS;
+//            rndSol[Order[item]] = 1;
+//        }
+//        shortSack.NumItems = NumItems;
+//        shortSack.CapacityK = CapacityK - got;
+//        shortSack.Value2Weight = Value2Weight;
+//        shortSack.Order.clear();
+//        for(size_t item = 0; item < Order.size(); item++) {
+//            if (rndSol[Order[item]] == 0)
+//                shortSack.Order.push_back(Order[item]);
+//        }
+////cout << "GotSize " << got << "\n";
+////cout << "left items " << shortSack.Order.size() << " left size " << shortSack.CapacityK << "\n";
+//        return rndSol;
+//    }
+//    double EstimatePart() {
+//        double time = (double)CapacityK * (double)NumItems / 500000.;
+//        double coef = time / 300.;
+//        return 1 / pow(coef, 1);
+//    }
+//    vector<int> AppendSol(vector<int> &fst, vector<int> sec) {
+//        vector<int> ret(fst);
+//        for(size_t i = 0; i < ret.size(); i++)
+//            if (sec[i])
+//                ret[i] = 1;
+//        return ret;
+//    }
+//    int GetValue(vector<int> &sol) {
+//        int s = 0;
+//        for(size_t i = 0; i < sol.size(); i++)
+//            if (sol[i])
+//                s += Value2Weight[i].first;
+//        return s;
+//    }
+//
+//};
+//int main( int argc,   char *argv[] ) {
+//    freopen(argv[1],"r", stdin);
+//    //freopen("output.txt","w", stdout);
+//    //fstream in("input.txt", ios::in);
+//    TKnapSack knap;
+//    knap.ReadData();
+//    vector<int> solution;
+//    //int maxValue = knap.MaxValueGreedy(solution);
+//    //cout << maxValue << " 0\n";
+//    //cout << solution << "\n";
+//    Time_struct time;
+//        int maxValue = knap.MaxValueStrict1(solution);
+//        cout << maxValue << " 1\n";
+//        cout << solution << "\n";
+//        //cout << "size " << knap.CapacityK * knap.NumItems / 500000. << " time " << time.Print() << "\n";
+//        return 0;
+//}
+//
+//
+
+
+
+
+
+
+
+//int main( int argc,   char *argv[] ) {
+//    freopen(argv[1],"r", stdin);
+//    //freopen("output.txt","w", stdout);
+//    //fstream in("input.txt", ios::in);
+//    TKnapSack knap;
+//    knap.ReadData();
+//    vector<int> solution;
+//    //int maxValue = knap.MaxValueGreedy(solution);
+//    //cout << maxValue << " 0\n";
+//    //cout << solution << "\n";
+//    Time_struct time;
+//    double part = (double)knap.CapacityK * (double)knap.NumItems / 500000. ;
+////cout << "part " << part << "\n";cout.flush();
+//    if (part < 0) {
+//        int maxValue = knap.MaxValueStrict(solution);
+//        cout << maxValue << " 1\n";
+//        cout << solution << "\n";
+//        //cout << "size " << knap.CapacityK * knap.NumItems / 500000. << " time " << time.Print() << "\n";
+//        return 0;
+//    }
+//    int numRnd = 10;
+//    part = knap.EstimatePart() / sqrt((double)numRnd);
+//    part = 1 / 25.;
+////cout << " EndPart " << 1. / part << "\n";cout.flush();return 0;
+//    int bestValue = 0;
+//    vector<int> bestSol;
+//    for(int i = 0; i < numRnd; i++) {
+//        Time_struct t;
+//        TKnapSack shortKnap;
+//        vector<int> sol1 = knap.RndSol(shortKnap, part), sol2;
+////cout << " gotRnd " << knap.GetValue(sol1) << "\n";
+//        shortKnap.MaxValueStrict(sol2);
+//        vector<int> sol = knap.AppendSol(sol1, sol2);
+//        int gotValue = knap.GetValue(sol);
+////cout << " res " << gotValue << " shortS " << shortKnap.CapacityK << " capCoef " << knap.CapacityK / (double)shortKnap.CapacityK << " ";
+////cout << t.Print() << "\n";cout.flush();
+//        if (gotValue <= bestValue)
+//            continue;
+//        bestValue = gotValue;
+//        bestSol = sol;
+//    }
+//    cout << bestValue << " 0\n";
+//    cout << bestSol << "\n";
+//    //cout << "size " << knap.CapacityK * knap.NumItems / 500000. << " time " << time.Print() << "\n";
+//    return 0;
+//}
+
+//    vector<i2i> Insert(vector<i2i> cap2value, int cap, int value) {
+//        if (cap > CapacityK)
+//            return cap2value;
+//        vector<i2i> ret;
+//        size_t prevInd = 0, curInd = -1;
+//        int curCap = 0, curValue = 0;
+//        for(; curInd < cap2value.size(); prevInd++) {
+//            if (curInd >= 0) {
+//                curCap = cap2value[curInd].first;
+//                curValue = cap2value[curInd].second;
+//            }
+//            for(; prevInd < cap2value.size() && cap2value[prevInd].first < cap + curCap; prevInd++) 
+//                ret.push_back(cap2value[prevInd]);
+//            if (cap2value[prevInd].first == cap + curCap) {
+//                if (cap2value[prevInd].second < value + curValue) {
+//                    ret.insert(i2i(cap, value));
+//                }
+//            }
+//                ret.push_back(cap2value[i]);
+//            }
+//        }
+//        if (ret.size() == cap2value.size()) {
+//            ret.insert(i2i(cap, value));
+//            return ret;
+//        }
+//        size_t j = i + 1;
+//        for(; j < cap2value.size(); j++) {
+//            if (cap2value[i].first + cap < cap2value[j].first
+//        }
+//    }
+//    int MaxValueSF(vector<int> &solution) {
+//        solution.clear();
+//        solution.resize(NumItems, 0);
+//        vector<vector<i2i> > Item2Size_Value;
+//        for(size_t item = 0; item < Order.size(); item++) {
+//            //Item2Size_Value.push_back(vector<int>(CapacityK + 1, 0));
+//            if (item == 0) {
+//                Item2Size_Value.push_back(vector<i2i>);
+//                Item2Size_Value[item].push_back(i2i(Value2Weight[Order[item]].second, Value2Weight[Order[item]].first));
+//                continue;
+//            }
+//            Item2Size_Value.push_back(Insert(Item2Size_Value[item - 1], Value2Weight[Order[item]].second, Value2Weight[Order[item]].first);
+//        }
+//        int curCap = CapacityK, curValue = 0;
+//        int value = Item2Size_Value[Item2Size_Value.size() - 1][Item2Size_Value[Item2Size_Value.size() - 1].size() - 1].second;
+//        for(size_t item = Order.size() - 1; item > 0; item--) {
+//            if (Item2Size_Value[item][curCap] != Item2Size_Value[item - 1][curCap]) {
+//                solution[Order[item]] = 1;
+//                curCap -= Value2Weight[Order[item]].second;
+////curValue += Value2Weight[Order[item]].first;
+////cout << curCap << " " << curValue << " " << Order[item] << "\n";
+//            }
+//        }
+//        if (Item2Size_Value[0][curCap] != 0)
+//            solution[Order[0]] = 1;
+//        return value;
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//int main( int argc,   char *argv[] ) {
+//    freopen(argv[1],"r", stdin);
+//    //freopen("test.out","w", stdout);
+//
+//    Time_struct t, t0;
+//    int knapSize;
+//    vector<TItem> items;
+//    cin >> knapSize;
+//    knapSize++;
+//    ReadData(items);
+//    vector<int> row(knapSize, 0);
+//    vector<vector<int> > A(items.size(), row);
+//    for(int s = items[0].Weight; s < knapSize; s++) 
+//        A[0][s] = items[0].Value;
+//    for(size_t i = 1; i < items.size(); i++) {
+//        for(int s = 0; s < knapSize; s++){
+//            int noItem = A[i - 1][s];
+//            int plusItem = s - items[i].Weight >= 0 ? A[i - 1][s - items[i].Weight] + items[i].Value : 0;
+//            A[i][s] = max(noItem, plusItem);
+//        }
+//    }
+//    cout << A[items.size() - 1][knapSize - 1] << "\n";
+//    cout << t0;
+//    return 0;
+//}
+
+
+//int IsGood(vector<int> &curPos, int level) {
+//    for(int i = 0; i < level; i++)
+//        if (curPos[i] == curPos[level] || curPos[i] + level - i == curPos[level] || curPos[i] - level + i == curPos[level])
+//            return 0;
+//    return 1;
+//}
+//int SetNext(vector<int> &curPos, int level) {
+//    if (level < 0)
+//        return 0;
+//    int setPos = curPos[level] + 1;
+//    while(curPos[level] <= (int)curPos.size()) {
+//        int badPos = 0;
+//        for(int i = 0; i < level; i++) {
+//            int t = curPos[i], br = 0;
+//            if (t == setPos || t + level - i == setPos || t - level + i == setPos) {
+//                badPos = 1;
+//                break;
+//            }
+//        }
+//        if (!badPos)
+//            break;
+//        setPos++;
+//    }
+//    curPos[level] = setPos;
+//    if (curPos[level] > (int)curPos.size()) {
+//        curPos[level] = 0;
+//        if (!SetNext(curPos, level - 1))
+//            return 0;
+//        return SetNext(curPos, level);
+//    }
+//    return 1;
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//int GetCombs(int money, vector<int> &coins, set<TCmpVector<int> > &combinations) {
+//    combinations.clear();
+//    if (money < 0)
+//        return 0;
+//    if (money == 0) {
+//        combinations.insert(TCmpVector<int>(vector<int>(coins.size())));
+//        return 1;
+//    }
+//    for(size_t i = 0; i < coins.size(); i++) {
+//        set<TCmpVector<int> > curCombs;
+//        GetCombs(money - coins[i], coins, curCombs);
+//        for(set<TCmpVector<int> >::iterator it = curCombs.begin(); it != curCombs.end(); it++) {
+//            TCmpVector<int> comb = *it;
+//            comb.Vector[i]++;
+//            combinations.insert(comb);
+//        }
+//    }
+//    return combinations.size();
+//}
+//
+//
+//int GetAllCombs(int money, vector<int> &coins){
+//    set<TCmpVector<int> > combinations;
+//    int ret = GetCombs(money, coins, combinations);
+//for(set<TCmpVector<int> >::iterator it = combinations.begin(); it != combinations.end(); it++)   cout <<  it->Vector << "\n";
+//    return ret;
+//}
+//
+//int main( int argc,   char *argv[] ) {
+//    freopen("test.in","r", stdin);
+//    freopen("test.out","w", stdout);
+//
+//    //freopen("milk3.in","r", stdin);
+//    //freopen("milk3.out","w", stdout);
+//    int money;
+//    vector<int> coins;
+//    cin >> money;
+//    ReadData(coins);
+//    cout << GetAllCombs(money, coins) << "\n";
+//    return 0;
+//}
+//
+
+//
+//
+//
+//set<int> FindAllPQ(int pqMax) {
+//}
+//int IsGood(int a, int b, set<int> numbers) {
+//}
+//
+//
+//int main( int argc,   char *argv[] ) {
+//    freopen("test.in","r", stdin);
+//    freopen("test.out","w", stdout);
+//
+//    //freopen("clocks.in","r", stdin);
+//    //freopen("clocks.out","w", stdout);
+//    int lArithmProgr, pqMax;
+//    cin >> lArithmProgr >> pqMax;
+//    set<int> gotNums = FindAllPQ(pqMax);
+//    if (gotNums.size() < lArithmProgr) {
+//        cout << "NONE\n";
+//        return 0;
+//    }
+//    vector<pair<int, int> > res;
+//    for(int a = *gotNums.begin(); a < *(gotNums.end() - lArithmProgr); a++) {
+//        for(int b = 1; b < (*(gotNums.end()-1) - *gotNums.begin()) / lArithmProgr); b++)
+//            if (IsGood(a, b, gotNums))
+//                res.push_back(pair<int, int>(b, a));
+//    }
+//    sort(res.begin(), res,end());
+//    for(size_t i = 0; i < res.size(); i++)
+//        cout << res[i].second << " " << res[i].second << "\n";
+//    return 0;
+//}
+
+
+//#include <string>
+//#include <map>
+//#include <iostream>
+//#include <vector>
+//#include <list>
+//#include <stdio.h>
+//#include <cmath>
+//#include <algorithm>
+//#include <list>
+//#include <set>
+//#include <strstream>
+//#include <numeric>
+//#include "math.h"
+//#include <fstream>
+//#include <stack>
+//
+//
+//using namespace std;
+// 
+//typedef long long l2;
+//template<class T>
+//void ReadData(vector<T> &dat, int s = 0) {
+//    if (!s)
+//        cin >> s;
+//    dat.resize(s);
+//    for(size_t i = 0; i < dat.size(); i++) {
+//        cin >> dat[i];
+//    }
+//}
+//
+//template<class T>
+//void PrintVector(const vector<T> &dat, const char *sep = NULL) {
+//    if (!dat.size())
+//        return;
+//    for(size_t i = 0; i < dat.size() - 1; i++)
+//        if (!sep)
+//            cout << dat[i] << "\t";
+//        else
+//            cout << dat[i] << sep;
+//    cout << dat[dat.size() - 1];
+//}
+//template<class T>
+//void PrintArray(vector<vector<T> > &dat, const char *sep = NULL) {
+//    for(size_t i = 0; i < dat.size(); i++) {
+//        PrintVector(dat[i], sep);
+//        cout << "\n";
+//    }
+//    cout << "\n";
+//}
+//template<class T>
+//map<T, int> Vector2Map(const vector<T> &vec, int InitByInd = 1) {
+//    map<T, int> res;
+//    for (size_t i = 0; i < vec.size(); i++)
+//        if (InitByInd)
+//            res[vec[i]] = (int)i;
+//        else
+//            res[vec[i]] = 0;
+//    return res;
+//}
+//struct TEncodeChar {
+//    char Ch;
+//    int Length;
+//    int PosBeg;
+//    int PosEnd;
+//    TEncodeChar(char ch = 0, int pos = -1, length = 1)
+//        : Ch(ch)
+//        , PosBeg(pos)
+//        , PosEnd(pos)
+//        , Length(length) {
+//    }
+//    static vector<TEncodeChar> CvtStr(string &str_) {
+//        vector<TEncodeChar> ret;
+//        string str(str_.size(), ' ');
+//        transform(str_.begin(), str_.end(), str.begin(), ::tolower);
+//        for(size_t i = 0; i < str.size(); i++) {
+//            if (str[i] >= 'a' && str[i] <= 'z') {
+//                if (ret.size() && ret.back().Ch == str[i]) {
+//                    ret.back().Length++;
+//                    ret.back().PosEnd = i;
+//                }
+//                ret.push_back(TEncodeChar(str[i], i));
+//            }
+//        }
+//        return ret;
+//    }
+//};
+//
+//ostream &operator<<(ostream &out, const TEncodeChar &ch) {
+//    for(int i = 0; i < ch.Length; i++)
+//        out << ch.Ch;
+//    return out;
+//}
+//string ReadFile() {
+//    char buf[1256];
+//    string ret;
+//    while(1) {
+//        cin.getline(&buf[0], 1256);
+//        if (!cin)
+//            break;
+//        if (ret.size())
+//            ret.append("\n");
+//        ret.append(buf);
+//    }
+//    return ret;
+//}
+//
+//int GetPolyL(vector<TEncodeChar> encStr, int center, pair<int, int> &bnd) {
+//    int i = 1;
+//    int c2 = center / 2;
+//    int shift = (center%2);
+//    int len = (shift)?0:encStr[c2].Length();
+//    bnd = (shift)? pair<int, int>(0, 0) : pair<int, int>(encStr[c2].PosBeg, encStr[c2].PosEnd);
+//    for(; i <= min(c2, (int)encStr.size() - 1 - c2 + shift); i++) {
+//        if (encStr[c2 - i].Ch != encStr[c2 + i - shift].Ch)
+//            break;
+//        if (encStr[c2 - i].Length != encStr[c2 + i - shift].Length) {
+//            len += 2 * min(encStr[c2 - i].Length, encStr[c2 + i - shift].Length);
+//            bnd = pair<int, int>(encStr[c2].PosBeg, encStr[c2].PosEnd)
+//            break;
+//        }
+//        len += 2 * encStr[c2 - i].Length;
+//    }
+//    return len;
+//}
+//string GetPolyStr(string inStr, vector<TEncodeChar> encStr, int polyL, int polyCent) {
+//    int shift = polyL % 2;
+//    int fr = polyCent / 2 - polyL / 2, to = polyCent / 2 + polyL / 2 - 1 + shift;
+//    int lft = encStr[fr].Pos, rgt = encStr[to].Pos;
+//    return string(inStr.begin() + lft, inStr.begin() + rgt + 1);
+//}
+//
+//int main( int argc,   char *argv[] ) {
+//    freopen("test.in","r", stdin);
+//    freopen("test.out","w", stdout);
+//
+//    //freopen("calfflac.in","r", stdin);
+//    //freopen("calfflac.out","w", stdout);
+//    string inStr = ReadFile();
+//    vector<TEncodeChar> encStr = TEncodeChar::CvtStr(inStr);
+//    int maxL = 0, maxI;
+//    for(size_t i = 0; i < 2 * encStr.size(); i++) {
+//        int curMax = GetPolyL(encStr, i);
+//        if (curMax <= maxL)
+//            continue;
+//        maxL = curMax;
+//        maxI = i;
+//    }
+//    cout << maxL << "\n" << GetPolyStr(inStr, encStr, maxL, maxI) << "\n";
+//    return 0;
+//}
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//int Permute(vector<int> &permutes, vector<int> &numV, int &num3, int &num21, int &num22) {
+//    if (!permutes.size()) {
+//        permutes.resize(5);
+//    } else {
+//        for(int i = 0; i < permutes.size(); i++) {
+//            permutes[i]++;
+//            if (permutes[i] < numV.size())
+//                break;
+//            permutes[i] = 0;
+//        }
+//        if (permutes.back() >= numV.size())
+//            return 0;
+//    }
+//    num3 = 0;
+//    for(int i = 0; i < 3; i++)
+//        num3 += numV[permutes[i]] * pow(i, 10);
+//    num21 = numV[permutes[3]];
+//    num22 = numV[permutes[4]];
+//}
+//int PossibleNum(int num, map<int, int> &numM, int l) {
+//    char nStr[256];
+//    sprintf(nStr, "%i", num);
+//    if (strlen(nStr) != l)
+//        return 0;
+//    for(int i = 0; i < l; i++)
+//        if (numM.find(nStr[i]) == numM.end())
+//            return 0;
+//    return 1;
+//}
+//
+//int main( int argc,   char *argv[] ) {
+//    freopen("test.in","r", stdin);
+//    freopen("test.out","w", stdout);
+//
+//    //freopen("crypt1.in","r", stdin);
+//    //freopen("crypt1.out","w", stdout);
+//    vector<int> numV;
+//    ReadData(numV);
+//    map<int, int> numM = Vector2Map(numV);
+//    vector<int> permutes;
+//    int r1, r2, num3, n21, n22, nVar = 0;
+//    while(Permute(permutes, numV, num3, num21, num22) {
+//        if (!PossibleNum(num3 * n21, numM, 3) || !PossibleNum(num3 * n22, numM, 3))
+//            continue;
+//        if (!PossibleNum(num3 * (n21 * 10 + n22), numM, 4))
+//            continue;
+//        nVar++;
+//cout << num3 << "\n" << num21 * 10 + num22 << "\n\n" << r2 << "\n" << r1 * 10 << "\n\n" << r1 * 10 + r2 << "\n\n\n";
+//    }
+//    cout << nVar << "\n";
+//    return 0;
+//}
+//
+
+
+
+
+
+
+
+
+    //sort(gaps.begin(), gaps.end(), greater<int>());
+    //int wasGaps = accumulate(gaps.begin(), gaps.end(), 0);
+    //gaps.resize(nBoards - 1);
+    //int leftGaps = accumulate(gaps.begin(), gaps.end(), 0);
+    //cout << cows.back() - cows.front() << " " <<  wasGaps << " " << wasGaps + cows.size() << " " << leftGaps << "\n";
+    //cout << cows.back() - cows.front() - leftGaps + 1<< "\n";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//int main( int argc,   char *argv[] ) {
+//    freopen("input.txt","r", stdin);
+//    freopen("output.txt","w", stdout);
+//	int number, numOfNum;
+//	cin >> number >> numOfNum;
+//	set<int> vars;
+//	vars.insert(number);
+//	for(int i = 2; i <= numOfNum; i++) {
+//		GetVars(number, vars);
+//	}
+//	int foundMin = 0;
+//	set<int>::iterator it = vars.begin();
+//	while(it != vars.end() && *it <= 0)
+//		it++;
+//	while(it != vars.end() && *it == foundMin+1) {
+//		foundMin++;
+//		it++;
+//	}
+//	cout << foundMin + 1 << "\n";
+//    return 0;
+//}
 
 
 //map<int, map<int, l2> > Cmn;
