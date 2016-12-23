@@ -111,7 +111,7 @@ private:
         SearchE = e;
         if (!In_Lim(LastT, IvlParam->MinT, IvlParam->MaxT))
             LastT = (IvlParam->MinT + IvlParam->MaxT) * 0.5;
-        MatterConverterSplIO *oldPtr = CurPtr;
+//        MatterConverterSplIO *oldPtr = CurPtr;
         CurPtr = this;
         double ErrorRel = MisfitFindE, ErrorAbs = ErrorRel;
         int MaxIter = 1000, err;

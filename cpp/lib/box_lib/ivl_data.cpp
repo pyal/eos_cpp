@@ -13,12 +13,13 @@ static ClassDesc TIvlTable2Spl_ClassDesc(typeid(TIvlTable2Spl),"TIvlTable2Spl",1
 
 IIvlParametersBase::IIvlParametersBase()
     : SavableClass()
-    , NumVolPnt(100)
-    , NumTempPnt(100)
-    , pTVname("ivl_ptv.dat")
-    , eTVname("ivl_etv.dat")
     , MinVol(1e-3)
     , MaxVol(1e3)
     , MinT(50)
-    , MaxT(1e6) {
+    , MaxT(1e6)
+        , NumVolPnt(100)
+        , NumTempPnt(100)
+        , pTVname("ivl_ptv.dat")
+        , eTVname("ivl_etv.dat")
+{
 }

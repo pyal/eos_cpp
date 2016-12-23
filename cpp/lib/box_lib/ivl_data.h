@@ -314,7 +314,7 @@ public:
     }
     int read_data_state(FilterIn&si){ 
         Stroka tmp;
-        SavableClass *obj;
+//        SavableClass *obj;
         si >> tmp;
         P_tv_data.read_data_state(si);
         si >> tmp >> P_t_spl >> tmp;

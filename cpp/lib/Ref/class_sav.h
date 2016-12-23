@@ -394,7 +394,7 @@ struct FilterIn:virtual istream{
     virtual void get(long &buf)=0;
     virtual void get(KeyDesc &buf)=0;
     virtual void get(void *&buf)=0;
-    virtual void getword(char *buf,const char *delims=" \t\n")=0;
+    virtual void getword(char *buf,const char *delims=" \t\r\v\f\n")=0;
 
   //  virtual void getstring(char *buf,char delim='\n');
 
@@ -508,15 +508,12 @@ public:
                 }
                 str = getword();
             }
-            //ConstructObject(sc, NULL);
             cout << " Build object str " << str << "\n";
             ConstructObject(sc, ~str);
-            cout << " Build object " << sc << "\n";
-            if (refmask==SavableClass::SingleFileStorage)  
+            if (refmask==SavableClass::SingleFileStorage)
                 refsaved[numrefsaved-1]=(void*)sc;
             GetObjectBody(sc);
             return (sc!=NULL);
-        //} catch(stdexception &ex){
         } catch(exception &ex){
             throw info_except("Got an error %s.\n %s",ex.what(), ReadingError(sc).c_str());
         }
@@ -680,7 +677,7 @@ struct FilterTextIn:FilterIn{
   void get(char &buf)  {istream::get(buf);};
   void get(long &buf)  {istream::operator>>((long &)buf);};
   void get(KeyDesc &buf) {char tmp[256];getword(&tmp[0]);buf=&tmp[0];};
-  void getword(char *buf,const char *delims=" \t\n"){
+  void getword(char *buf,const char *delims=" \t\r\v\f\n") {
 	  do{
 		  get(buf[0]);
 	  }while (!istream::operator!() && strchr(delims,buf[0])!=NULL);
@@ -688,7 +685,7 @@ struct FilterTextIn:FilterIn{
 		   buf[0] = 0;
 		   return;
 	  }
-	  int i=0;	  
+	  int i=0;
 	  do{
 		  i++;
 		  get(buf[i]);
@@ -698,20 +695,12 @@ struct FilterTextIn:FilterIn{
 	  else {
 		  istream::unget();buf[i] = 0;
 	  }
-
-
-//	  (istream::operator>>)((char *)buf);
   };
-//  void getword(char *buf,const char *delims=" \t\n"){istream::get((char *)buf,-1);};//,delims);};
-//  void getword(char *buf,const char *delims=" \t\n"){istream::get((char *)buf,WORDLENGTH);};//,delims);};
   void get(void *&buf)   {
         char tmp[256];
         istream::get(tmp, 255);
         buf=NULL;
     };
-//  void get(void *&buf)   {char tmp[256];istream::operator>>((char *)&tmp[0]);buf=NULL;};
-//  void get(void *&buf)   {char tmp[256];istream::operator>>((char *)&tmp[0]);buf=0x1;};
-
 };
 
 struct FilterBinIn:FilterIn
@@ -729,7 +718,7 @@ struct FilterBinIn:FilterIn
   void get(long &buf)  {read((char*)&buf,sizeof(long));};
   void get(void *&buf)  {read((char*)&buf,sizeof(void*));};
   void get(KeyDesc &buf) {};//{getword(buf.name);};
-  void getword(char *buf,const char *delims=" \t\n")
+  void getword(char *buf,const char *delims=" \t\r\v\f\n")
     {int len;read((char*)&len,sizeof(int));read(buf,len);buf[len]=0;};
 
   virtual int get_arr(char *buf)  
@@ -1007,31 +996,45 @@ struct FilterBinOut:FilterOut
 
 
 inline FilterIn &operator>>(FilterIn &si, char *buf) {
+    assert(!(!si));
     si.getword(buf);
+    assert(!(!si));
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, char &buf) {
+    assert(!(!si));
     si.get(buf);
+    assert(!(!si));
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, double &buf) {
+    assert(!(!si));
     si.get(buf);
+    assert(!(!si));
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, int &buf) {
+    assert(!(!si));
     si.get(buf);
+    assert(!(!si));
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, long &buf) {
+    assert(!(!si));
     si.get(buf);
+    assert(!(!si));
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, KeyDesc &buf) {
+    assert(!(!si));
     si.get(buf);
+    assert(!(!si));
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, SavableClass *&buf) {
+    assert(!(!si));
     si.getobject(buf);
+    assert(!(!si));
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, SavableClass &buf) {
@@ -1039,7 +1042,9 @@ inline FilterIn &operator>>(FilterIn &si, SavableClass &buf) {
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, RefBase &buf) {
+    assert(!(!si));
     si.getobject(buf);
+    assert(!(!si));
     return si;
 }
 

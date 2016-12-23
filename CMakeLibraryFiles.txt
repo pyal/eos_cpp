@@ -37,6 +37,7 @@ set(UNIT_TESTS_SOURCE_FILES
         cpp/lib/Ref/TEST/classtest.cpp
         cpp/lib/Ref/TEST/class_sav_test.cpp
         cpp/lib/Ref/TEST/class_sav_lib.cpp
+        cpp/lib/Ref/TEST/io_test.cpp
         )
 
 set(URS_CURVE_LIB_SOURCE_FILES
@@ -601,4 +602,21 @@ set(CELL_KRU_SOURCE_FILES
         cpp/URS/uil_e.h
         cpp/Urs/Uil_reg.h
         cpp/Urs/urs_forcelnk.h
+)
+
+set(IVL_CVT_SOURCE_FILES
+        #cpp/URS/IVL_CVT.CPP
+        #cpp/URS/ivl_spl.cpp
+        cpp/lib/box_lib/box_forcelnk.cpp
+        cpp/lib/box_lib/box_forcelnk.h
+)
+set(BOX_LIB_SOURCE_FILES
+        cpp/lib/box_lib/box_face.h
+        cpp/lib/box_lib/ivl_box.cpp
+        cpp/lib/box_lib/ivl_box.h
+        cpp/lib/box_lib/ivl_data.cpp
+        cpp/lib/box_lib/ivl_data.h
+        cpp/lib/box_lib/show_box.h
+        cpp/lib/box_lib/box_forcelnk.cpp
+        cpp/lib/box_lib/box_forcelnk.h
 )

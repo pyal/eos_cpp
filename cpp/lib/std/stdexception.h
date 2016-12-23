@@ -67,11 +67,15 @@ protected:
         message[sizeof(message)-1] = 0;
 //		out.operator::strstream(
     }
-    char message[40024];
+    char message[80024];
 };
 
 #define info_except stdexception_with_line_info(__FILE__, __LINE__,__FUNCTION__)
 #define info_mark (Stroka("Current pos: file ") + __FILE__ + " line " + Stroka::Int2Str(__LINE__) + " function " + __FUNCTION__ + "\n" ).c_str()
+
+#ifdef MAC
+#include <execinfo.h>
+#endif
 
 class stdexception_with_line_info: public stdexception {
 public:
@@ -83,10 +87,19 @@ public:
         va_list args;
         va_start(args, format);
         print(format, args);
-        char linfo[194];
+        char linfo[10940];
         const char *f = strrchr(file, LOCSLASH_C);
         f = f ? f + 1 : file;
-        sprintf(linfo, "%.120s:%d:%.130s: ", f, line, func);
+        sprintf(linfo, "%.120s:%d:%.130s: \n", f, line, func);
+#ifdef MAC
+        void* callstack[128];
+        int i, frames = backtrace(callstack, 128);
+        char** strs = backtrace_symbols(callstack, frames);
+        for (i = 0; i < frames; ++i) {
+            sprintf(&linfo[strlen(linfo)], "%s\n", strs[i]);
+        }
+        free(strs);
+#endif
         insert(0, 0, strlen(linfo), linfo);
         return *this;
     }

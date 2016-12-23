@@ -121,6 +121,9 @@ add_dependencies(regridlib version)
 add_library(math_func_lib STATIC ${MATH_FUNC_LIB_SOURCE_FILES})
 add_dependencies(math_func_lib version)
 
+add_library(box_lib STATIC ${BOX_LIB_SOURCE_FILES})
+add_dependencies(box_lib version)
+
 
 
 
@@ -172,3 +175,10 @@ target_link_libraries(cell_kru reflib stdlib urs_curve_lib quad_pack_lib mathlib
         waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
         )
 add_dependencies(cell_kru version)
+
+add_executable(ivl_cvt cpp/URS/ivl_spl.cpp ${IVL_CVT_SOURCE_FILES})
+target_link_libraries(ivl_cvt reflib stdlib urs_curve_lib quad_pack_lib mathlib
+        waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
+        box_lib
+        )
+add_dependencies(ivl_cvt version)

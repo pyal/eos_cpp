@@ -11,11 +11,12 @@ static ClassDesc MatterConverterSplIO_ClassDesc(typeid(MatterConverterSplIO),"Ma
 
 MatterConverterSplIO::MatterConverterSplIO()
     : IBlackBoxBase()
-    , MisfitFindE(1e-6)
-    , NumEGridPnt(100)
-    , NumVGridPnt(100)
-    , EOSspl("ivl_cvt.spl")
     , IvlParam(new TIvlParametersSplIO)
     , Pspl(new ExtendedRegridSpline)
-    , Tspl(new ExtendedRegridSpline) {
+    , Tspl(new ExtendedRegridSpline)
+        , MisfitFindE(1e-6)
+        , NumEGridPnt(100)
+        , NumVGridPnt(100)
+        , EOSspl("ivl_cvt.spl")
+{
 }
