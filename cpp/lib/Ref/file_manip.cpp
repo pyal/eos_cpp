@@ -33,21 +33,37 @@ namespace File {
         file = 0;
     }
 
-    int GetLine(FILE *file, Stroka &str){
+    int GetLine(FILE *file, Stroka &str) {
 #define MAXLINELEN 1000
-        char Line[MAXLINELEN+1];
-        Line[MAXLINELEN] = 0;
+        char line[MAXLINELEN+1];
+        line[MAXLINELEN] = 0;
         char *buf;
         str = "";
-        if ( (buf=fgets(Line, MAXLINELEN, file)) == NULL )
+        if ((buf = fgets(line, MAXLINELEN, file)) == NULL)
             return 0;
-        while( buf!=0 && strlen(Line)==MAXLINELEN-1 && !(Line[MAXLINELEN-2]=='\n')){
-            str += Line;
-            buf = fgets(Line, MAXLINELEN, file);
+        while (buf != 0 && strlen(line) == MAXLINELEN-1 && !(line[MAXLINELEN-2] == '\n')) {
+            str += line;
+            buf = fgets(line, MAXLINELEN, file);
         }
-        str += Line;
+        Str::Chomp(line);
+        str += line;
         return 1;
     }
+//    int GetLine(FILE *file, Stroka &str){
+//#define MAXLINELEN 1000
+//        char Line[MAXLINELEN+1];
+//        Line[MAXLINELEN] = 0;
+//        char *buf;
+//        str = "";
+//        if ( (buf=fgets(Line, MAXLINELEN, file)) == NULL )
+//            return 0;
+//        while( buf!=0 && strlen(Line)==MAXLINELEN-1 && !(Line[MAXLINELEN-2]=='\n')){
+//            str += Line;
+//            buf = fgets(Line, MAXLINELEN, file);
+//        }
+//        str += Line;
+//        return 1;
+//    }
     int GetLine(FILE *file, Stroka &str, char *Buf, int BufLen){
         char *buf;
         str = "";
@@ -60,11 +76,11 @@ namespace File {
         str += Buf;
         return 1;
     }
-    int GetLine(FILE *file, std::vector<Stroka> &line){
+    int GetLine(FILE *file, std::vector<Stroka> &line, char delim) {
         Stroka str;
         if (!GetLine(file, str))
             return 0;
-        line = Str::SplitLine(str);
+        line = (delim == ' ') ?  Str::SplitLine(str) : Str::SplitLine(str, 1, delim);
         return 1;
     }
     int GetLine(FILE *file, std::vector<Stroka> &line, char *Buf, int BufLen){
@@ -74,6 +90,34 @@ namespace File {
         line = Str::SplitLine(str);
         return 1;
     }
+    std::map<Stroka, Stroka> ReadFile2Map(const char *file, const char delim, int KeyCol, int StrCol, const char *err_mes) {
+        FILE *in = open(file, "r", err_mes);
+        Stroka Buf(10000);
+        map<Stroka, Stroka> res;
+        Stroka line;
+        while ( GetLine(in, line, (char*)Buf.c_str(), (int)Buf.size()) ) {
+            if (int(delim) == 0)
+                res[line] = "";
+            else {
+                vector<Stroka> lines;
+                if (delim == ' ')
+                    lines = Str::SplitLine(line);
+                else
+                    lines = Str::SplitLine(line, 1, delim);
+                if (lines.size() <= (size_t)KeyCol)
+                    continue;
+                if (StrCol == -1 || lines.size() <= (size_t)StrCol)
+                    res[lines[KeyCol]] = "";
+                else
+                    res[lines[KeyCol]] = lines[StrCol];
+            }
+        }
+        close(in);
+        if (res.size() == 0 && err_mes)
+            throw info_except("File <%s> - is zero. Error mesage is:\n<%s>\n", file, err_mes);
+        return res;
+    }
+
 //  make vector of columns (for tableData)
 //  else - make vector of rows
     int ReadFile(const char *file, vector<vector<double > > &vec, const char *mes, int makeVectorOfColumns) {

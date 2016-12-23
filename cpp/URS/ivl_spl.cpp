@@ -52,20 +52,23 @@ void Show(map<Stroka, Stroka> par) {
 	double ans,  curTime = 0;
 	while(File::GetLine(in, line)) {
 		lineV = Str::SplitLine(line);
-		if (lineV.size() == 0)
+		if (lineV.size() < 2)
 			continue;
 		if (lineV[0] == timeName) {
-			if (lineV.size() > 1 && IsDouble(~lineV[1], ans, 1)) {
+			if (IsDouble(~lineV[1], ans, 1)) {
 				curPos = 0;
 				curTime = ans;
-			}
+			} 
 			continue;
 		}
+		int bad = 0;
 		for(size_t i = 0; i < lineV.size(); i++)
 			if (!IsDouble(~lineV[i], ans, 1))
-				continue;
+				bad = 1;
+		if (bad)
+			continue;
 		if (pnt.find(curPos) != pnt.end()) {
-			Stroka l = Stroka(curTime) + " " + line;
+			Stroka l = Stroka(curTime, 15) + " " + line + "\n";
 			fwrite(~l, sizeof(char), l.size(), pnt[curPos]);
 		}
 		curPos++;

@@ -1,5 +1,5 @@
 //  Main for FreeE - coexistance Curve
-#include <cpp/MAT/Spl_fac.h>
+#include <MAT/Spl_fac.h>
 #include "free_fun.h"
 #include "FRE_FAC.H"
 #include "MATT_ADI.H"

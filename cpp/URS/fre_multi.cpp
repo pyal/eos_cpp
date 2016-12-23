@@ -11,7 +11,11 @@ static ClassDesc FreeESumMatter_ClassDesc(typeid(FreeESumMatter),"FreeESumMatter
 
 
 FreeESumMatter::FreeESumMatter()
-	:FreeEIOFind("material.cfg","MatterSumH2Met"){FreeCoef.push_back(1);FreeVect.push_back(new FreeEIdeal);}
+	:FreeEIOFind("material.cfg","MatterSumH2Met"){
+  FreeCoef.push_back(1);
+  FreeVect.push_back(new FreeEIdeal);
+  SetInternalNames();
+}
 
 
 

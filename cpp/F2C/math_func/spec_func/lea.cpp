@@ -10,7 +10,7 @@
  * the uniform rv's being 0.0 since this will result in infinte
  * values, and double count the 0 == 2pi.
  */
-#include <cpp/lib/std/Util.h>
+#include <lib/std/Util.h>
 #include "stdlib.h"
 #include "lib/std/const.h"
 #include "float.h"

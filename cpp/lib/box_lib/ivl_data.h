@@ -259,7 +259,7 @@ private:
     void AppendPlanar(vector<vector<double> > &z_tv, const vector<double> &z, double temp) {
         vector<double> v = E_tv_data.GetYVector();
         int vSize = v.size();
-        for(size_t iDenc = 0; iDenc < vSize; iDenc++) {
+        for(size_t iDenc = 0; iDenc < (size_t)vSize; iDenc++) {
             int iVol = vSize - 1 - iDenc;
             z_tv[0].push_back(temp);
             z_tv[1].push_back(1 / v[iVol]);
@@ -314,11 +314,9 @@ public:
     }
     int read_data_state(FilterIn&si){ 
         Stroka tmp;
-//        SavableClass *obj;
         si >> tmp;
         P_tv_data.read_data_state(si);
         si >> tmp >> P_t_spl >> tmp;
-        si >> tmp;
         E_tv_data.read_data_state(si);
         si >> tmp >> T_e_spl;
         return 1;
@@ -339,12 +337,16 @@ struct TIvlTable2Spl : IBlackBoxBase {
         , Econverter(new TExpConverter)
         , SplFile("h2.ispl")
         , SplDescription("test spline")
-        , NumEPnt(300) {
+        , UsePT_RE_Files(0)
+        , P_RE_SaveFile("P_RE_file")
+        , T_RE_SaveFile("T_RE_file")
+        , NumEPnt(300)
+    {
     }
 
     virtual void DoIt() {
         double minE, maxE;
-        PTspl.GetMinMaxE(minE, maxE);
+        PTE_reader.GetMinMaxE(minE, maxE);
         vector<double> e = Econverter->MakeEncodedStepVector(minE, maxE, NumEPnt, 0);
         vector<vector<double> > pres_er, temp_er;
         GetPT(e, pres_er, temp_er);
@@ -367,8 +369,8 @@ struct TIvlTable2Spl : IBlackBoxBase {
         so << " NumEPnt2NewSpl " << NumEPnt << " Econverter2NewSpl " << Econverter << SavableClass::EOLN();
         so << " P_RE_SaveFile " << P_RE_SaveFile << " T_RE_SaveFile " << T_RE_SaveFile << " UsePT_RE_Files " << UsePT_RE_Files << SavableClass::EOLN();
 
-        so << " PTspl_reader ";
-        PTspl.save_data_state(so);
+        so << " PTE_reader_reader "  << SavableClass::EOLN();
+        PTE_reader.save_data_state(so);
         so << SavableClass::EOLN();
         so << " Pspl_finGenerator " << Pspl;
         so << " Tspl_finGenerator " << Tspl;
@@ -383,32 +385,35 @@ struct TIvlTable2Spl : IBlackBoxBase {
         si >> tmp >> NumEPnt >> tmp >> Econverter;
         si >> tmp >> P_RE_SaveFile >> tmp >> T_RE_SaveFile >> tmp >> UsePT_RE_Files;
         si >> tmp;
-        PTspl.read_data_state(si);
+        PTE_reader.read_data_state(si);
         si >> tmp >> Pspl >> tmp >>Tspl; 
 
         return 1;
     };
 private:
     void IterateMakeSpline(ISplineGenerator *spl, vector<vector<double> > dat, const char *mes) {
-        ISplineGeneratorStd *s = dynamic_cast<ISplineGeneratorStd *>(spl);
-        if (!s)
-            throw info_except("not std generator %s\n", typeid(*spl).name());
-        double mis = s->GetMisfit();
-        int c = 0;
-        while(!s->GenerateExtra(dat, mis)) {
-            if (c++ > 10)
-                throw info_except("Cannot make spline with misfit %f\n%s", mis, mes);
-            mis *= 10;
-        }
+        int res = spl->Generate(dat);
+        if (res > 0)
+            throw info_except("could not generate spline error: ", res);
+        //ISplineGeneratorStd *s = dynamic_cast<ISplineGeneratorStd *>(spl);
+        //if (!s)
+        //    throw info_except("not std generator %s\n", typeid(*spl).name());
+        //double mis = s->GetMisfit();
+        //int c = 0;
+        //while(!s->GenerateExtra(dat, mis)) {
+        //    if (c++ > 10)
+        //        throw info_except("Cannot make spline with misfit %f\n%s", mis, mes);
+        //    mis *= 10;
+        //}
     }
 
     void GetPT(const vector<double> &e, vector<vector<double> > &pres_er, vector<vector<double> > &temp_er) {
         vector<vector<double> > p_rt, e_rt;
-        PTspl.GetPE_rt(p_rt, e_rt);
+        PTE_reader.GetPE_rt(p_rt, e_rt);
         File::WriteFile(~(P_RE_SaveFile + ".p_rt"), p_rt, NULL, NULL);
         File::WriteFile(~(P_RE_SaveFile + ".e_rt"), e_rt, NULL, NULL);
         if (!UsePT_RE_Files) {
-            PTspl.GetPT(e, pres_er, temp_er);
+            PTE_reader.GetPT(e, pres_er, temp_er);
             File::WriteFile(~P_RE_SaveFile, pres_er, NULL, NULL);
             File::WriteFile(~T_RE_SaveFile, temp_er, NULL, NULL);
             return;
@@ -416,7 +421,7 @@ private:
         File::ReadFile(~P_RE_SaveFile, pres_er, NULL);
         File::ReadFile(~T_RE_SaveFile, temp_er, NULL);
     }
-    TIvlTableDataReconstruct PTspl;
+    TIvlTableDataReconstruct PTE_reader;
     Ref<ISplineGenerator> Pspl, Tspl;
     Ref<IFunctionConverter> Econverter;
     Stroka SplFile, SplDescription;

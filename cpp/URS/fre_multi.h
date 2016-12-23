@@ -60,6 +60,7 @@ struct FreeESumMatter:FreeEIOFind{
 			//cout<<" FreeESumMatter::ReadSubstancePar read matter "<<f->class_name()<<"\n";
             FreeVect.push_back(f);
         } while (1);
+        SetInternalNames();
 //cout<<" FreeESumMatter::ReadSubstancePar end read matter \n";
     }
     void SaveSubstancePar(ostream &out) {
@@ -70,6 +71,33 @@ struct FreeESumMatter:FreeEIOFind{
         }
         out<<" } ";
     }
+
+    virtual void SetInternalNames(){
+	    FreeEIOFind::SetInternalNames();
+        int numSubst = FreeCoef.size();
+        for (size_t k = 0; k < size_t(numSubst); k++) {
+            vector<Stroka> names = Str::SplitLine(FreeVect[k]->GetOutputNames());
+            for(size_t i = 0; i < names.size(); i++)
+                OutputNames[Stroka::Int2Str(int(k)) + "_" + names[i]] = NULL;
+        }
+    }
+
+     int GetSubstNum_ParName(const Stroka &str, int &substNum, Stroka &parName) {
+        vector<Stroka> strVec = Str::SplitLine(str, 1, '_');
+        if (strVec.size() == 0)
+            return 0;
+        substNum = atoi(strVec[0].c_str());
+        parName = Str::JoinLine(strVec, '_', 1);
+        return substNum < int(FreeVect.size()) && substNum >= 0;
+    }
+    virtual double OutputValClc(const map<Stroka,double> &Input, const Stroka &Output) {
+        int numVar;
+        Stroka outName;
+        if (GetSubstNum_ParName(Output, numVar, outName))
+            return FreeVect[numVar]->OutputValClc(Input, outName);
+	    return FreeEIOFind::OutputValClc(Input, Output);
+    }
+
 }; 
 
 

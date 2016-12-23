@@ -46,14 +46,30 @@ typedef void (MAINFUNC) (map<Stroka,Stroka> );
             char Key;
             int Exist;
             Stroka Mode, Help;
-            map<Stroka, Stroka> Par2Descr;
+            std::map<Stroka, Stroka> Par2Descr, Params2Defaults;
+            Stroka ParamsSettings;
+            Stroka ParamsNames;
+            int GivenDefaultsMode;
         public:
             TKeyData() {
             }
-            TKeyData(const char *mode,const char *help, const char *params, MAINFUNC *func);
+            TKeyData(const char *mode,const char *help, const char *params, MAINFUNC *func, int givenDefaultsMode);
+            //TKeyData(const char *mode,const char *help, const char *params, MAINFUNC *func);
             Stroka MakeHelp();
 
-            Stroka Params, ParamsPlus;
+            Stroka GetParamsSettings() {
+                return ParamsSettings;
+            }
+            Stroka GetParamsNames() {
+                return ParamsNames;
+            }
+            map<Stroka, Stroka> &GetParams2Defaults() {
+                return Params2Defaults;
+            }
+            int GivenDefaults() {
+                return GivenDefaultsMode;
+            }
+
             MAINFUNC *Func;
         };
         Stroka MakeHelp();
@@ -63,8 +79,8 @@ typedef void (MAINFUNC) (map<Stroka,Stroka> );
             : MainHelp(mainhelp) {
         };
 // Add new program mode
-        void Add(void (func) (map<Stroka,Stroka> ), const char *mode, const char *help, const char *params) {
-            Params[Stroka(mode)] = TKeyData(mode, help, params, func);
+        void Add(void (func) (map<Stroka,Stroka> ), const char *mode, const char *help, const char *params, int givenDefaultsMode = 0) {
+            Params[Stroka(mode)] = TKeyData(mode, help, params, func, givenDefaultsMode);
         }
 // Parse input, run proper function
         int SimpleRun(int argc, const char *argv[]);
@@ -73,6 +89,30 @@ typedef void (MAINFUNC) (map<Stroka,Stroka> );
     };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// obsolute       USE TCommandParse INSTEAD
 // Class for extracting command line keys and purging the rest command arguments
 // stores help info for all keys, capable to print it
 // Keys are referenced by there names
@@ -143,95 +183,6 @@ private:
 } // namespace NRef
 
 
-
-//// Class for formating of the string, by level
-//class FormatStrClass: public DescribedClass{
-//public:
-//    virtual int GetLevel() = 0;
-//    virtual int SetLevel(int level) = 0;
-//    virtual Stroka Format(const char *str) = 0;
-//    virtual ~FormatStrClass(){}
-//};
-//class aFormatStrSimple:public FormatStrClass{
-//public:
-//    aFormatStrSimple(const char *ident = 0, int level = 0):Level(level){
-//        if (ident!=0) Ident = ident;
-//    }
-//    virtual int GetLevel(){
-//        return Level;
-//    }
-//    virtual int SetLevel(int level){
-//        Level = level;
-//        return Level;
-//    }
-//    virtual Stroka Format(const char *str);
-//private:
-//    int Level;
-//    Stroka Ident;
-//};
-//// Class for extracting command line keys and purging the rest command arguments
-//// stores help info for all keys, capable to print it
-//// Keys are referenced by there names
-//// checks if the key is setted in the command line, 
-//// if argument of the type /p23 - 23 will be stored as value of key
-//class CommandLineExe{
-//public:
-//    Ref<FormatStrClass> Format;
-//    CommandLineExe(const char *mainhelp, char commandprefix = 0)
-//        :Format(new aFormatStrSimple("   ", 0)), MainHelp(mainhelp), CommandPrefix(commandprefix){
-//            if (CommandPrefix==0){
-//#ifdef WIN32
-//                CommandPrefix = '/';
-//#else
-//                CommandPrefix = '-';
-//#endif
-//            }
-//    };
-//    struct KeyData{
-//        KeyData(char key,const char *name,const char *help):Key(key), Exist(0), Help(help), Name(name){
-//        };
-//        KeyData():Key(0), Exist(0){
-//        };
-//        void SetVal(const char *val, int exist){
-//            Exist = exist;
-//            Val = val;
-//        }
-//        char Key;
-//        int Exist;
-//        Stroka Help;
-//        Stroka Name;
-//        Stroka Val;
-//    };
-//// Get the KeyData info for the key with given name
-//    KeyData& Get(const char *name);
-//// Generate help for the program and all its keys
-//    Stroka MakeHelp();
-//// Store next key
-//    void Add(char key, const char *name, const char *help){
-//        Params[Stroka(name)] = KeyData(key, name, help);
-//    }
-//// Insert command line arguments, to analize presence of keys
-//// Creates purged command line arguments  Argc    Argv  - without key args
-//    void Analize(int argc, const char *argv[]);
-//// Extract array of args, with or without keys ( parameter ExtractKeys  )
-//    int Get(vector<Stroka> &args, int ExtractKeys = 1);
-//// purged command line arguments  Argc    Argv  - without key args
-//    size_t Argc;
-//    const char *Argv[1024];
-//    Stroka MainHelp;
-//private:
-//    char CommandPrefix;
-//    vector<Stroka> GetCommandLine(int argc,const char *argv[]);
-//    void SetCommandLine(const vector<Stroka> vec, size_t &argc,const char *argv[]);
-//    void ExtractKeyData();
-//    int KeyName(const char *arg, Stroka &Name);
-//
-//
-//    map<Stroka, KeyData> Params;
-//    vector<Stroka> Arguments;
-//    vector<Stroka> ArgumentsExtra;
-//    KeyData Zero;
-//};
 
 
 #endif
