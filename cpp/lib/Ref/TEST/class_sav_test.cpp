@@ -28,7 +28,7 @@
 #include "lib/std/Util.h"
 #include "lib/Ref/class.h"
 #include "lib/Ref/class_sav.h"
-#include "unit_test.h"
+#include "lib/std/unit_test.h"
 
 namespace class_sav_test {
     class AAA : virtual public SavableClass {

@@ -29,6 +29,7 @@ HedgePer::HedgePer(const integer &DIM, const integer &n,
       exit(1);
     }
   integer p=maxlevel();
+    ((void)(p));
   assert( ((DIM>>p)<<p) == DIM );                       // dim divisible by 2^p ?
 }
 

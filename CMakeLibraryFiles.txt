@@ -13,9 +13,12 @@ set(STDLIB_SOURCE_FILES
         cpp/lib/std/Util.h
         cpp/lib/std/stdexception.h
         cpp/F2C/libf2c/math.h
+        cpp/lib/std/logger.cpp
+        cpp/lib/std/unit_test.cpp
         )
 
 set(REFLIB_SOURCE_FILES
+        cpp/lib/Ref/CommandParse.cpp
         cpp/lib/Ref/CommandLine.cpp
 #        cpp/lib/Ref/NamedRegistry.cpp
         cpp/lib/Ref/Stroka.cpp
@@ -27,11 +30,11 @@ set(REFLIB_SOURCE_FILES
         cpp/lib/Ref/ref.cpp
         cpp/lib/Ref/refmanip.cpp
         cpp/lib/Ref/str_manip.cpp
-        cpp/lib/Ref/TEST/unit_test.cpp
         )
 
 set(UNIT_TESTS_SOURCE_FILES
-        cpp/lib/Ref/TEST/unit_test.cpp
+        cpp/lib/std/test/exception_playground.cpp
+        cpp/lib/std/test/exception_test.cpp
         cpp/lib/Ref/TEST/reftest.cpp
         cpp/lib/Ref/TEST/reftestx.cpp
         cpp/lib/Ref/TEST/classtest.cpp

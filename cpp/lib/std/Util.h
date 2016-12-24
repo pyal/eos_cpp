@@ -153,6 +153,7 @@ char *Strlor(char *src);
 void MergePath(char *FullName,const char *drive,const char *dir,const char *name,const char *ext);
 void SplitPath(const char *FullName,char *drive,char *dir,char *name,char *ext);
 char* Itoa(int i, char *buf, int base);
+string Itoa(int i);
 bool IsNan(double x);
 bool Finite(double x);
 char* Gcvt(double x, int ndigit, char *tmp);

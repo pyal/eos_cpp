@@ -105,7 +105,7 @@
 
 //struct Time_struct
 //  {
-//#if defined WCPP || defined WCPP_NET 
+//#if defined WCPP || defined WCPP_NET
 //// double elapsed_time;
 //   clock_t start, finish;
 //   Time_struct() {start=clock();}
@@ -124,7 +124,7 @@
 //   friend ostream& operator<<(ostream &output,Time_struct &time)
 //     { output<<" RunTime 0 ";return output; };
 //#endif
-//  }; 
+//  };
 //
 //int InputPar(fstream &in,double &from,double &min,double &max,
 //                                                 double &stp,char *write);

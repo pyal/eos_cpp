@@ -155,18 +155,22 @@ int seek_eof(istream &i)
   {
    char ch=' ';
    int ret=0;
-   while ( (i) && ((ch==' ') || (ch=='\n')) ) i.get(ch);
+   while ( (i) && ((ch==' ') || (ch=='\n') || ch == '\r' || ch == '\t') ) i.get(ch);
    if (i) { i.putback(ch);}
    if (!i) ret=1;
    return ret;
   };
+
 int seek_eoln(istream &i)
   {
    char ch=' ';
    int ret=0;
-   while ( (i) && (ch==' ') ) i.get(ch);
-   if (ch=='\n') ret=1;
-   else if (i) i.putback(ch);
+   while ( (i) && (ch==' ' || ch == '\t') ) i.get(ch);
+   while ((i) && ((ch == '\n') || (ch == '\r'))) {
+       i.get(ch);
+       ret=1;
+   }
+   if (i) i.putback(ch);
    if (!i) ret=1;
    return ret;
   };
@@ -225,6 +229,10 @@ char* Itoa(int i, char *buf, int base) {
     return itoa(i, buf, base);
 #endif
 }
+string Itoa(int i){
+    char buf[80];
+    return Itoa(i, buf, 10);
+}
 
 bool IsNan(double x) {
 #ifdef MAC
@@ -250,8 +258,12 @@ char* Gcvt(double x, int ndigit, char *tmp) {
 #endif
 }
 
-void line_feed(istream &i)
-  { char ch=' ';while ((i) && (ch!='\n')) i.get(ch); };
+void line_feed(istream &i) {
+      char ch=' ';
+      while ((i) && (ch!='\n') && (ch!='\r')) i.get(ch);
+      while ((i) && ((ch == '\n') || (ch == '\r'))) i.get(ch);
+      if ((i)) i.putback(ch);
+  };
 
 int seek_str(istream &in,char *Str)
   {

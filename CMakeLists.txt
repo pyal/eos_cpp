@@ -28,6 +28,7 @@ file(WRITE ${CMAKE_BINARY_DIR}/version.h.in "\#define VERSION \"@VERSION@\"\n")
 
 option(ASAN "Enable Address Sanitizer (http://clang.llvm.org/docs/AddressSanitizer.html)" OFF)
 if(ASAN)
+    message("!!! ASSAN !!!")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 endif()
 
@@ -145,7 +146,7 @@ add_executable(set1grph cpp/UTIL/SET1GRPH.CPP)
 target_link_libraries(set1grph stdlib)
 add_dependencies(set1grph version)
 
-add_executable(unit_tests cpp/lib/Ref/TEST/unit_test_driver.cpp ${UNIT_TESTS_SOURCE_FILES})
+add_executable(unit_tests cpp/lib/std/unit_test_driver.cpp ${UNIT_TESTS_SOURCE_FILES})
 target_link_libraries(unit_tests reflib stdlib)
 add_dependencies(unit_tests version)
 
