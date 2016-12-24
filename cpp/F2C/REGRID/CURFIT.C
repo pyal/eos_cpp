@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int curfit_(integer *iopt, integer *m, real *x, real *y, 
 	real *w, real *xb, real *xe, integer *k, real *s, integer *nest, 

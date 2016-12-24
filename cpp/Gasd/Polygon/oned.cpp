@@ -5,7 +5,7 @@
 #include "region.h"
 
 void main(const char *argv[], int argc) {
-    cout<<"OK\n";
+    cout << "OK\n";
     Region test;
     test.Print();
 }

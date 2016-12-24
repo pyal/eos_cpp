@@ -1,5 +1,5 @@
-#include <lib\precompiled\cell_kru.h>
-#include <lib\precompiled\cell_dat.h>
+#include <lib/precompiled/cell_kru.h>
+#include <lib/precompiled/cell_dat.h>
 
 #include "uil_reg.h"
 
@@ -38,15 +38,23 @@ cout<<" NumMatter "<<NumMatter<<"\n";
        //delete Matter[k];
        if ( !(Matter[k] << SavableClass::Read(input)) ) 
             throw info_except("Could not read. Exit.\n");
+       cout << " Read Matter " << Matter[k] << "\n";
         int N = Matter[k]->NumInputVal()-2;
-        //NumIntPar = max(NumIntPar, N);
+        assert(N <= NumIntPar);
+        map<Stroka, void*> names = Matter[k]->GetInputNamesMap();
+        //NumIntPar = max<double>(NumIntPar, N);
         IntParNames[k].SetDim(NumIntPar);
        for(int i=0;i<N;i++){
            input>>tmp;
+           if (names.find(tmp) == names.end()) {
+               Stroka descr = Stroka("This matter have internal names to be settled.") +
+                 "Read bad internal name for the matter: " + tmp + " have to be one of the: " + Str::Vec2Str(Str::Map2Vec(names));
+               throw info_except(~descr);
+           }
            IntParNames[k][i] = tmp;
        }
        for(int i=N;i<NumIntPar;i++)
-           IntParNames[k][i] = itoa(i,tmp,10);
+           IntParNames[k][i] = Itoa(i,tmp,10);
    }
 
    for (k=1;k<=NumMatter;k++) B[k]=new Body(BndMatter[k]-BndMatter[k-1]+1,Matter[k],
@@ -138,7 +146,7 @@ void Region::StepRegion(double TimeStp,double &MinTimeStp,double &PresDeriv){
     PresDeriv=0;
     for (int k=1;k<N;k++)
         PresDeriv+=fabs(BV[k]->Pressure[BV[k]->NumPnt-2]-BV[k+1]->Pressure[1]);
-    PresDeriv=max(log(max(1,PresDeriv))-8,0);
+    PresDeriv=max<double>(log(max<double>(1,PresDeriv))-8,0);
  };
 
 int Region::SetWorkDim(int n)

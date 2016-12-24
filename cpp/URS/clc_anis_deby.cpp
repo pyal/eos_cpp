@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 
 #include "fre_anis_deby.h"
 
@@ -19,7 +19,6 @@
 //double FreeEIonOneMat::LastElDencStatic = sqrt(MathZer);
 
 
-
 namespace ClcIonisation {
 
     MathAnisIon::MathAnisIon(){};
@@ -28,4 +27,4 @@ namespace ClcIonisation {
     MathAnisIon *MathAnisIon::CurPtr = NULL;
 
 
-}; //ClcIonisation
+};   //ClcIonisation

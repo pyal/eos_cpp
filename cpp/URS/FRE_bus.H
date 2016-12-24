@@ -1,7 +1,7 @@
 #ifndef __MATT_BUS_H
 #define __MATT_BUS_H
 
-#include "mat\fun_fac.h"
+#include "mat/fun_fac.h"
 #include "fre_fac.h"
 
 struct FreeEBushman:FreeEIOFind {
@@ -171,7 +171,7 @@ struct TetaL_SigmaLT_Short:TwoVarFunction{
   };
 struct FreeM_SigmaMT:TwoVarFunction{
 	FreeM_SigmaMT():Temp_m0(1.73), Am(0.97009), Bm(0.), Cm(-0.2), PowAm(1.66666666){}
-   double Temp_m0,Cm,Am,Bm,PowAm;
+   double Temp_m0,Am,Bm,Cm, PowAm;
    TetaExp_Sigma TetaL;
    virtual double Calculate(double sigM,double temp);
    virtual int save_data_state(FilterOut&so);
@@ -180,7 +180,7 @@ struct FreeM_SigmaMT:TwoVarFunction{
 
 struct HeatCapacityE_SigmaT:TwoVarFunction{
    HeatCapacityE_SigmaT():Zconst(28), SigmaZ(0.7), SigmaI(0.35), Tz(500), Ti(27), PowVE(-1){}
-   double Zconst,SigmaZ,Tz,Ti,SigmaI,PowVE;
+   double Zconst,SigmaZ,SigmaI,Tz,Ti,PowVE;
    virtual double Calculate(double sigma,double temp)
      {
          double ExpFactor = 1;
@@ -209,7 +209,7 @@ struct HeatCapacityE_SigmaT:TwoVarFunction{
 
 struct GammaE_SigmaT:TwoVarFunction{
 	GammaE_SigmaT():Ge0(1.07), Gei(0.66666), Gm(0), Tg(110), SigmaE(1), SigmaD(1e50){}
-   double Gei,Ge0,Gm,Tg,SigmaE,SigmaD;
+   double Ge0,Gei,Gm,Tg,SigmaE,SigmaD;
    virtual double Calculate(double sigma,double temp)
      {return Gei+( Ge0-Gei+Gm*temp/Tg )*exp(-temp/Tg-sqr(sigma-SigmaE)/sigma/SigmaD);}
    virtual int read_data_state(FilterIn& input)
@@ -222,7 +222,7 @@ struct GammaE_SigmaT:TwoVarFunction{
 
 struct BfuncE_T:OneVarFunction{
 	BfuncE_T():B0(0.02), Bi(0.01), Bm(0), Tb(6){}
-	double Bi,B0,Bm,Tb;
+	double B0,Bi,Bm,Tb;
    virtual double Calculate(double temp)
      {return 2/sqr(temp)*( 0.5*Bi*sqr(temp)+(Bm+B0-Bi)*Tb*temp+sqr(Tb)*(Bi-B0-2*Bm)+
                            Tb*exp(-temp/Tb)*(Tb*(2*Bm+B0-Bi)+Bm*temp) );}

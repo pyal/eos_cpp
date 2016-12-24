@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "matt_exp.h"
 
 static ClassDesc MatterABuAdd_ClassDesc(typeid(MatterABuAdd),"MatterABuAdd",1,"Matter_category",create<MatterABuAdd>);

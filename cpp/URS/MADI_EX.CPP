@@ -1,4 +1,4 @@
-#include <lib\precompiled\madiex.h>
+#include <lib/precompiled/madiex.h>
 
 #include "matt_adi.h"
 #include "matt_h2.h"

@@ -5,26 +5,30 @@
 #include "Grid_Interface.h"
 
 
-
-struct MaskBoundaryCond
- {
-  GridMask MaskGet,MaskPut;
- };
+struct MaskBoundaryCond {
+    GridMask MaskGet, MaskPut;
+};
 
 
 GridMask Dat2Mask(FieldInterface *dat);
-void Mask2Dat(GridMask &mask,FieldInterface *dat);
-void SetData2Coord(FieldInterface *data,GridMask &mask,int axis);
-void SetCoord2Data(FieldInterface *data,GridMask &mask,int axis);
+void Mask2Dat(GridMask &mask, FieldInterface *dat);
+void SetData2Coord(FieldInterface *data, GridMask &mask, int axis);
+void SetCoord2Data(FieldInterface *data, GridMask &mask, int axis);
 // Circle Boundary Masks  Do not work for unstructured of cause
 // Algorithm now do not treat corners,can be added
-// For each ghost point - finds point in region on the boundary 
+// For each ghost point - finds point in region on the boundary
 // Result example : reg 0..50, accuracy 2 ; Get : 2 3 50 51 Put 52 53 0 1
-void SetCircleBoundaryMask(GridManipulator *grid,MaskBoundaryCond &BndCond,int AccuracySpace);
+void SetCircleBoundaryMask(
+    GridManipulator *grid,
+    MaskBoundaryCond &BndCond,
+    int AccuracySpace);
 
-DataVector<double> GetGridCoord(GridManipulator *grid,GridMask &mask,int axis);
-void SetGridCoord(GridManipulator *grid,GridMask &mask,int axis,DataVector<double> &ToSet);
-
+DataVector<double> GetGridCoord(GridManipulator *grid, GridMask &mask, int axis);
+void SetGridCoord(
+    GridManipulator *grid,
+    GridMask &mask,
+    int axis,
+    DataVector<double> &ToSet);
 
 
 /*

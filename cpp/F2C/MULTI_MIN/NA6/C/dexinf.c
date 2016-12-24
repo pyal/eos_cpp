@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int dexinf_(integer *numfun, doublereal *gamma, doublereal *
 	c__, integer *key, integer *n, doublereal *t, doublereal *ct, integer 

@@ -2,20 +2,20 @@
 #define __AUT_HUG_H
 
 #include "matt_reg.h"
-#include "mat\zero.h"
+#include "mat/zero.h"
 #include "matt_adi.h"
-#include "mat\matrics.h"
+#include "mat/matrics.h"
 
 
 
 struct Int_Par  
 	{ double Pres,Dens,Ener,Velo;
-      friend Int_Par operator*(Int_Par &Par,double coef);
+      friend Int_Par operator*(const Int_Par &Par,double coef);
 //      friend Int_Par operator/(Int_Par &Par,double coef);
-      friend Int_Par operator+(Int_Par &Par,double coef);
-      friend Int_Par operator+(Int_Par &Par1,Int_Par &Par2); 
-      friend Int_Par operator-(Int_Par &Par1,Int_Par &Par2); 
-      friend double Norm(Int_Par &Par); 
+      friend Int_Par operator+(const Int_Par &Par,double coef);
+      friend Int_Par operator+(const Int_Par &Par1,const Int_Par &Par2);
+      friend Int_Par operator-(const Int_Par &Par1,const Int_Par &Par2);
+      friend double Norm(const Int_Par &Par);
 	}; 
 
 VecCl Par2Vec(Int_Par &Par);

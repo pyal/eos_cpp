@@ -55,7 +55,7 @@ void OutFile(double *theo,double *Param)
    cout<<" Write data to file out.dat[y/n]\n";
 input:
    cin>>str;
-   if (stricmp(str,"y")==0)
+   if (Stricmp(str,"y")==0)
      {
       fstream f("out.dat",ios::out);
       double HiEnd=Hi_Func(Param);
@@ -68,7 +68,7 @@ randomize();
       for (int k=1;k<=Exp[0];k++)
          f<<Yval[k]<<"    "<<Exp[k]<<"    "<<theo[k]+0*(double)rand()/RAND_MAX*TruePar[2]/SHOUT<<"\n";
      }
-   else if (stricmp(str,"n")!=0) goto input;
+   else if (Stricmp(str,"n")!=0) goto input;
   };
 
 void OutputParam(double *Param)

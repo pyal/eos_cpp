@@ -5,9 +5,6 @@
 #include "polygon_forcelnk.h"
 
 
-
-
-
 //ForceLinkVoid<URS_Curve> Dummy_URS_Curve;
 
 namespace NPolygon {
@@ -22,7 +19,7 @@ namespace NPolygon {
     //ForceLinkVoid<TSimpleContructor> Dummy_TSimpleContructor;
     //ForceLinkVoid<TSimpleContructor::TRegData> Dummy_TSimpleContructor_TRegData;
     ForceLinkVoid<TGridMaskSimple> Dummy_TGridMaskSimple;
-    ForceLinkVoid<TGridVar<double> > Dummy_TGridVar_Double;
+    ForceLinkVoid<TGridVar<double>> Dummy_TGridVar_Double;
     ForceLinkVoid<TPolyMarchTestZero> Dummy_TPolyMarchTestZero;
     ForceLinkVoid<TPolyMarchBody> Dummy_TPolyMarchBody;
     ForceLinkVoid<TPolyMarchTestU2> Dummy_TPolyMarchTestU2;
@@ -30,7 +27,6 @@ namespace NPolygon {
 
     ForceLinkVoid<TPolyMarchDriver> Dummy_TPolyMarchDriver;
     ForceLinkVoid<TPolyMarchDriverFluxU2> Dummy_TPolyMarchDriverFluxU2;
-
 
 
     ForceLinkVoid<TRegBoundaryCircle> Dummy_TRegBoundaryCircle;
@@ -41,6 +37,3 @@ namespace NPolygon {
     ForceLinkVoid<TPolyMarchPlusE> Dummy_TPolyMarchPlusE;
     ForceLinkVoid<TPolyMarchPlusGase> Dummy_TPolyMarchPlusGase;
 };
-
-
- 

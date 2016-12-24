@@ -114,6 +114,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				WholeProgramOptimization="false"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CLOCK;MSDOS;NO_ONEXIT;NO_FPINIT"
 				RuntimeLibrary="0"
 				StructMemberAlignment="0"

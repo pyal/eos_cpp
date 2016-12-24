@@ -53,55 +53,55 @@
 //   char name[256];in>>name;
 //
 ////#ifdef MatterABu_Register
-//   if (stricmp(name,"MatterABu")==0) Func=new MatterABu;
+//   if (Stricmp(name,"MatterABu")==0) Func=new MatterABu;
 //   else
-//		   if (stricmp(name,"MatterGas")==0) Func=new MatterGas;
+//		   if (Stricmp(name,"MatterGas")==0) Func=new MatterGas;
 //		   else
-//		   if (stricmp(name,"MatterBornMaier")==0) Func=new MatterBornMaier;
+//		   if (Stricmp(name,"MatterBornMaier")==0) Func=new MatterBornMaier;
 //		   else
-//		   if (stricmp(name,"MatterZubarev")==0) Func=new MatterZubarev;
+//		   if (Stricmp(name,"MatterZubarev")==0) Func=new MatterZubarev;
 //		   else
-//		   if (stricmp(name,"MatterMurnaganBerch")==0) Func=new MatterMurnaganBerch;
+//		   if (Stricmp(name,"MatterMurnaganBerch")==0) Func=new MatterMurnaganBerch;
 //		   else
-//		   if (stricmp(name,"MatterVacuum")==0) Func=new MatterVacuum;
+//		   if (Stricmp(name,"MatterVacuum")==0) Func=new MatterVacuum;
 //		   else
-//		   if (stricmp(name,"MatterStable")==0) Func=new MatterStable;
+//		   if (Stricmp(name,"MatterStable")==0) Func=new MatterStable;
 //		   else
 //
 ////#endif
 //#ifdef MatterH2Liq_Register
-//   if (stricmp(name,"MatterH2Liq")==0) Func=new MatterH2Liq;
+//   if (Stricmp(name,"MatterH2Liq")==0) Func=new MatterH2Liq;
 //   else
-//   if (stricmp(name,"MatterH2Sol")==0) Func=new MatterH2Sol;
+//   if (Stricmp(name,"MatterH2Sol")==0) Func=new MatterH2Sol;
 //   else
 //#endif
 //#ifdef MatterHisch_Register
-//   if (stricmp(name,"MatterHisch")==0) Func=new MatterHisch;
+//   if (Stricmp(name,"MatterHisch")==0) Func=new MatterHisch;
 //		   else
-//     if (stricmp(name,"MatterIVL")==0) Func=new MatterIVL;
+//     if (Stricmp(name,"MatterIVL")==0) Func=new MatterIVL;
 //		   else
-//     if (stricmp(name,"MatterABuExpFit")==0) Func=new MatterABuExpFit;
+//     if (Stricmp(name,"MatterABuExpFit")==0) Func=new MatterABuExpFit;
 //   else
 //#endif
 //#ifdef MatterSpline_Register
-//   if (stricmp(name,"MatterSpl")==0) Func=new MatterSpl;
+//   if (Stricmp(name,"MatterSpl")==0) Func=new MatterSpl;
 //   else
 //#endif
 //#ifdef FreeE_Register
-//   if (stricmp(name,"MatterFreeE")==0) Func=new MatterFreeE;
+//   if (Stricmp(name,"MatterFreeE")==0) Func=new MatterFreeE;
 //   else
 //#endif
 //#ifdef InternalPointsUrs 
-//   if (stricmp(name,"MatterSum")==0) Func=new MatterSum;
+//   if (Stricmp(name,"MatterSum")==0) Func=new MatterSum;
 //   else
-//   if (stricmp(name,"MatterBinodalSpinodal")==0) Func=new MatterBinodalSpinodal;
+//   if (Stricmp(name,"MatterBinodalSpinodal")==0) Func=new MatterBinodalSpinodal;
 //   else
 //
 //#endif
 //#ifdef MatterABuExp_Register
-//     if (stricmp(name,"MatterABuAdd")==0) Func=new MatterABuAdd;
+//     if (Stricmp(name,"MatterABuAdd")==0) Func=new MatterABuAdd;
 //		   else
-//     if (stricmp(name,"MatterABuExp")==0) Func=new MatterABuExp;
+//     if (Stricmp(name,"MatterABuExp")==0) Func=new MatterABuExp;
 //		   else
 //#endif
 //    { cout<<" MatterRegister; There is no such function \n"<<name<<"\n";return 0; }
@@ -155,36 +155,36 @@
 //  {
 //   char name[256];in>>name;
 //
-//   if (stricmp(name,"FreeEVanDerVals")==0) Func=new FreeEVanDerVals;
+//   if (Stricmp(name,"FreeEVanDerVals")==0) Func=new FreeEVanDerVals;
 //   else
-//   if (stricmp(name,"FreeEIdeal")==0) Func=new FreeEIdeal;
+//   if (Stricmp(name,"FreeEIdeal")==0) Func=new FreeEIdeal;
 //   else
-//   if (stricmp(name,"FreeEVirial")==0) Func=new FreeEVirial;
+//   if (Stricmp(name,"FreeEVirial")==0) Func=new FreeEVirial;
 //   else
-//   if (stricmp(name,"FreeESumMatter")==0) Func=new FreeESumMatter;
+//   if (Stricmp(name,"FreeESumMatter")==0) Func=new FreeESumMatter;
 //   else
-//   if (stricmp(name,"FreeEElectron")==0) Func=new FreeEElectron;
+//   if (Stricmp(name,"FreeEElectron")==0) Func=new FreeEElectron;
 //   else
-//		   if (stricmp(name,"FreeEH2Liquid")==0) Func=new FreeEH2Liquid;
+//		   if (Stricmp(name,"FreeEH2Liquid")==0) Func=new FreeEH2Liquid;
 //		   else
-//		   if (stricmp(name,"FreeEH2Solid")==0) Func=new FreeEH2Solid;
+//		   if (Stricmp(name,"FreeEH2Solid")==0) Func=new FreeEH2Solid;
 //		   else
 //#ifdef MatterUrl_Register  
-//     if (stricmp(name,"FreeEUrlLiquid")==0) Func=new FreeEUrlLiquid;
+//     if (Stricmp(name,"FreeEUrlLiquid")==0) Func=new FreeEUrlLiquid;
 //		   else
-//     if (stricmp(name,"FreeEUrlSolid")==0) Func=new FreeEUrlSolid;
+//     if (Stricmp(name,"FreeEUrlSolid")==0) Func=new FreeEUrlSolid;
 //		   else
 //#endif
-//     if (stricmp(name,"FreeEMetHCold")==0) Func=new FreeEMetHCold;
+//     if (Stricmp(name,"FreeEMetHCold")==0) Func=new FreeEMetHCold;
 //		   else
-//     if (stricmp(name,"FreeEEmpiLiquid")==0) Func=new FreeEEmpiLiquid;
+//     if (Stricmp(name,"FreeEEmpiLiquid")==0) Func=new FreeEEmpiLiquid;
 //		   else
-//     if (stricmp(name,"FreeEEmpiSolid")==0) Func=new FreeEEmpiSolid;
+//     if (Stricmp(name,"FreeEEmpiSolid")==0) Func=new FreeEEmpiSolid;
 //		   else
-//     if (stricmp(name,"FreeEEmpiLiquidPres")==0) Func=new FreeEEmpiLiquidPres;
+//     if (Stricmp(name,"FreeEEmpiLiquidPres")==0) Func=new FreeEEmpiLiquidPres;
 //		   else
 //#ifdef FreeE_BushmanRegister
-//		   if (stricmp(name,"FreeEBushman")==0) Func=new FreeEBushman;
+//		   if (Stricmp(name,"FreeEBushman")==0) Func=new FreeEBushman;
 //		   else
 //#endif
 //
@@ -239,17 +239,17 @@
 //
 //#endif
 //#ifdef FreeE_RossRegister
-//   if (stricmp(name,"FreeERossH2")==0) Func=new FreeERossH2;
+//   if (Stricmp(name,"FreeERossH2")==0) Func=new FreeERossH2;
 //   else
-//   if (stricmp(name,"FreeERossN2")==0) Func=new FreeERossN2;
+//   if (Stricmp(name,"FreeERossN2")==0) Func=new FreeERossN2;
 //   else
-//   if (stricmp(name,"FreeERossXe")==0) Func=new FreeERossXe;
+//   if (Stricmp(name,"FreeERossXe")==0) Func=new FreeERossXe;
 //   else
-//   if (stricmp(name,"FreeERossBin")==0) Func=new FreeERossBin;
+//   if (Stricmp(name,"FreeERossBin")==0) Func=new FreeERossBin;
 //   else
-//   if (stricmp(name,"FreeERossH2_DisLim0")==0) Func=new FreeERossH2_DisLim0;
+//   if (Stricmp(name,"FreeERossH2_DisLim0")==0) Func=new FreeERossH2_DisLim0;
 //   else
-//   if (stricmp(name,"FreeERossH2_Minim")==0) Func=new FreeERossH2_Minim;
+//   if (Stricmp(name,"FreeERossH2_Minim")==0) Func=new FreeERossH2_Minim;
 //   else
 //
 //#endif

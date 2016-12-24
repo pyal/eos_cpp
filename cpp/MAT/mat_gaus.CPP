@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "mat_gaus.h"
 
 int GauseSolve::NotLUSolve(MatrCl &Matr,VecCl &ConstVec,VecCl &ResultVec)
@@ -10,8 +10,8 @@ int GauseSolve::NotLUSolve(MatrCl &Matr,VecCl &ConstVec,VecCl &ResultVec)
    ConstVecPtr=new VecCl(ConstVec);
    ResVecPtr=&ResultVec;
 
-   if (error=Initialize(Matr)) goto exi;
-   if (error=LU_Decompose()) goto exi;
+   if (error==Initialize(Matr)) goto exi;
+   if (error==LU_Decompose()) goto exi;
 
    error=LU_Solve(*ConstVecPtr,*ResVecPtr);
    exi:

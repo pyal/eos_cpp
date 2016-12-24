@@ -121,7 +121,7 @@ struct ContiniousRelaxationAverageSolver:Solver
 
 
 
-#include "lib\std\ex_out.h"
+#include "lib/std/ex_out.h"
 struct ContiniousRelaxationAverageSolver_DirectMatrMul:Solver
 {
   Ref<HamTimeAverageGenerator> HamSer;

@@ -6,22 +6,20 @@
 #include "lib/std/util.h"
 
 struct TestY;
-struct TestX : SavableClass
- {
-  TestX(TestY *ptr=NULL);
-  ~TestX();
-  Ref<TestY> y;
-  int save_data_state (FilterOut &so) ; 
-  int read_data_state (FilterIn &si) ; 
- };
+struct TestX : SavableClass {
+    TestX(TestY *ptr = NULL);
+    ~TestX();
+    Ref<TestY> y;
+    int save_data_state(FilterOut &so);
+    int read_data_state(FilterIn &si);
+};
 
-struct TestY : SavableClass
- {
-  TestY(TestX *ptr=NULL);
-  ~TestY();
-  TestX* x;
-  int save_data_state (FilterOut &so);  
-  int read_data_state (FilterIn &si) ; 
- };
+struct TestY : SavableClass {
+    TestY(TestX *ptr = NULL);
+    ~TestY();
+    TestX *x;
+    int save_data_state(FilterOut &so);
+    int read_data_state(FilterIn &si);
+};
 
 #endif

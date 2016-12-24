@@ -1,4 +1,4 @@
-#include <lib\precompiled\Messb.h>
+#include <lib/precompiled/Messb.h>
 #include "faobj.h"
 //#include "malloc.h"
 
@@ -204,7 +204,7 @@ void FASingleIO::Input(istream &input)
         {cout<<"Number of iterations is more then "<<MaxIterations
              <<" Program halted\n";exit(1);}
       if (seek_eof(input)) {cout<<" Unexpected end of file\n";exit(1);}
-      if (!stricmp(tmp,"f")) tmp_d[MaxIter]=0;
+      if (!Stricmp(tmp,"f")) tmp_d[MaxIter]=0;
       else                   tmp_d[MaxIter]=1;
       input>>tmp;tmp_=tmp;
 //cout<<tmp_<<"\n";
@@ -222,7 +222,7 @@ void FASingleIO::Input(istream &input)
         {
          input>>tmp;
 //cout<<tmp<<"\n";
-         if (!stricmp(tmp,"f")) Stp[k1][k]=0;
+         if (!Stricmp(tmp,"f")) Stp[k1][k]=0;
          else                   Stp[k1][k]=1;
         }
       input>>Par[k];

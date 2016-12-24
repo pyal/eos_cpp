@@ -28,7 +28,7 @@ void PutBuf(fstream &in,char *BStr,char *buf,int len)
    int  ch;
    strstream buf_stream(buf,len,ios::out);
    strcpy(tmp,"");
-   while ( (stricmp(tmp,BStr)!=0) && (!in.eof()) )
+   while ( (Stricmp(tmp,BStr)!=0) && (!in.eof()) )
      {
       buf_stream<<tmp;
       while (( (ch=in.get())==' ' ) || ( ch=='\n' )) buf_stream.put(ch);
@@ -61,10 +61,10 @@ void main( int argc, char *argv[] )
    char tmp[128],name[128];
    fstream in=fstream(argv[1],ios::in);
    SetExt(argv[2],name,"cfg");
-   if (stricmp(name,argv[1])==0) SetExt(argv[2],name,"cf1");
+   if (Stricmp(name,argv[1])==0) SetExt(argv[2],name,"cf1");
    fstream out=fstream(name,ios::out);
 
-   while ( (stricmp(tmp,"GeneralBegin")!=0) && (!seek_eof(in)) )
+   while ( (Stricmp(tmp,"GeneralBegin")!=0) && (!seek_eof(in)) )
      { in>>tmp;out<<tmp<<"   ";if (seek_eoln(in)) out<<"\n";}
    in>>tmp>>tmp;
    out<<argv[2]<<"     "<<tmp;//<<"\n";
@@ -79,7 +79,7 @@ void main( int argc, char *argv[] )
      {
 /*
       if (seek_eoln(in)) out<<"\n";in>>tmp;
-      while ( (stricmp(tmp,"SetBegin")!=0) && (!seek_eof(in)) )
+      while ( (Stricmp(tmp,"SetBegin")!=0) && (!seek_eof(in)) )
         { out<<tmp<<"   ";if (seek_eoln(in)) out<<"\n";in>>tmp;}
       if (seek_eof(in)) break;
 */

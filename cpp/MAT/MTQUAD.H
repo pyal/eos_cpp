@@ -1,4 +1,4 @@
-#include "lib\std\deffunc.h"
+#include "lib/std/deffunc.h"
 //#include "cmatrics.h"
 // Kvitovs module
 

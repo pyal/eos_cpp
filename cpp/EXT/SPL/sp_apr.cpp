@@ -36,687 +36,647 @@ evalsp.c, and all derivatives
 #define LMAX 1001
 #define KMAX 24
 
-/* ---ANNOUNCE FUNCTIONS--- */ 
-int    l2knts(),
-       bsplpp(),
-       bsplvb(),
-       interv();
-double ppvalu(),
-       ppigr(),
-       zbrent();
+/* ---ANNOUNCE FUNCTIONS--- */
+int l2knts(), bsplpp(), bsplvb(), interv();
+double ppvalu(), ppigr(), zbrent();
 
 /* ---GLOBAL VARIABLES (are zero-initialized)--- */
-int    k, km1, l, n, left, jbsp, ihi, ilo = 1, hhon, nextremes, nomaxmax=1;
-int    firsttime=1, very_uncertain;
-double brek[LMAX], bcoef[LMAX+KMAX], coef[KMAX][LMAX], ppvalue,
-       deltal[KMAX], deltar[KMAX]; 
+int k, km1, l, n, left, jbsp, ihi, ilo = 1, hhon, nextremes, nomaxmax = 1;
+int firsttime = 1, very_uncertain;
+double brek[LMAX], bcoef[LMAX + KMAX], coef[KMAX][LMAX], ppvalue, deltal[KMAX],
+    deltar[KMAX];
 double halfheight, extrsum, maxmax, zerolevel;
-FILE   *fpw, *fps, *fpf, *fpr, *fpx;
-
+FILE *fpw, *fps, *fpf, *fpr, *fpx;
 
 
 /* ---MAIN--- */
-main(argc,argv)  int argc; char *argv[];
-        {
-        /* ---DECLARATIONS (note: auto-arrays can't be initialized)--- */
-        register int i, j;
-        int          xflag, ntau, m, fileind, val, ext, inf, are, fou;
-        int          background;
-        double       xbegin, xend, xstep, y, x, t[LMAX+KMAX], b, bb, a[KMAX],
-                     scrtch[KMAX][KMAX], c, a0, a1, a2, yder, ymax, step,
-                     xv[NMAX], value, smin, smax, sstep, pi, s, fourr, fouri,
-                     tpis, pref, argb, arga, bg;
-        char         str[100];
+main(argc, argv) int argc;
+char *argv[];
+{
+    /* ---DECLARATIONS (note: auto-arrays can't be initialized)--- */
+    register int i, j;
+    int xflag, ntau, m, fileind, val, ext, inf, are, fou;
+    int background;
+    double xbegin, xend, xstep, y, x, t[LMAX + KMAX], b, bb, a[KMAX], scrtch[KMAX][KMAX],
+        c, a0, a1, a2, yder, ymax, step, xv[NMAX], value, smin, smax, sstep, pi, s, fourr,
+        fouri, tpis, pref, argb, arga, bg;
+    char str[100];
 
-        /* ---INITIALIZATION---*/
-          fpr = stdin;
-          xflag = fileind = val = ext = inf = are = fou = 0;
-          background = 0;
+    /* ---INITIALIZATION---*/
+    fpr = stdin;
+    xflag = fileind = val = ext = inf = are = fou = 0;
+    background = 0;
 
-        /* ---GET RUN TIME OPTION---*/
-          if (argc > 1)
-          {
-              for (m=1; m<argc; m++)
-              {
-                  switch( *argv[m] )
-                  {
-                  case '-':
-                      switch( *(argv[m]+1) )
-                      {
-                      case 'x' : xbegin = atof(argv[++m]);
-                                 xend = atof(argv[++m]);
-                                 xstep = atof(argv[++m]);
-                                 xflag = 1;
-                                 break;
-                      case 'v' : val = 1;
-                                 value = atof(argv[++m]);
-                                 break;
-                      case 'b' : background = 1;
-                                 bg = atof(argv[++m]);
-                                 break;
-                      case 'e' : ext = 1;
-                                 break;
-                      case 'h' : ext = hhon = 1;
-                                 break;
-                      case 'i' : inf = 1;
-                                 break;
-                      case 'a' : are = 1;
-                                 break;
-                      case 'F' : fou = 1;
-                                 smin = atof(argv[++m]);
-                                 smax = atof(argv[++m]);
-                                 sstep = atof(argv[++m]);
-                                 break; 
-                      case 'f' : fileind = xflag = 1;
-                                 strcpy(str,argv[++m]);
-                                 if ((fpx = fopen(str,"r")) == NULL)
-                                 {
-                                        printf("\n cannot open %s\n", str);
-                                        exit(1);
-                                 }
-                                 break;
-                      default : printf("\n Flag unknown: ignored.\n");
-                                break;
-                      }
-                      break;
-                  default : strcpy(str,argv[m]);                   
-                            if ((fpr = fopen(str,"r")) == NULL)
-                            {
-                                printf("\n cannot open %s\n", str);
-                                exit(1);
-                            }
-                  }
-              }
-          }
+    /* ---GET RUN TIME OPTION---*/
+    if(argc > 1) {
+        for(m = 1; m < argc; m++) {
+            switch(*argv[m]) {
+            case '-':
+                switch(*(argv[m] + 1)) {
+                case 'x':
+                    xbegin = atof(argv[++m]);
+                    xend = atof(argv[++m]);
+                    xstep = atof(argv[++m]);
+                    xflag = 1;
+                    break;
+                case 'v':
+                    val = 1;
+                    value = atof(argv[++m]);
+                    break;
+                case 'b':
+                    background = 1;
+                    bg = atof(argv[++m]);
+                    break;
+                case 'e':
+                    ext = 1;
+                    break;
+                case 'h':
+                    ext = hhon = 1;
+                    break;
+                case 'i':
+                    inf = 1;
+                    break;
+                case 'a':
+                    are = 1;
+                    break;
+                case 'F':
+                    fou = 1;
+                    smin = atof(argv[++m]);
+                    smax = atof(argv[++m]);
+                    sstep = atof(argv[++m]);
+                    break;
+                case 'f':
+                    fileind = xflag = 1;
+                    strcpy(str, argv[++m]);
+                    if((fpx = fopen(str, "r")) == NULL) {
+                        printf("\n cannot open %s\n", str);
+                        exit(1);
+                    }
+                    break;
+                default:
+                    printf("\n Flag unknown: ignored.\n");
+                    break;
+                }
+                break;
+            default:
+                strcpy(str, argv[m]);
+                if((fpr = fopen(str, "r")) == NULL) {
+                    printf("\n cannot open %s\n", str);
+                    exit(1);
+                }
+            }
+        }
+    }
 
 
-        /* ---OPEN FILE FOR WRITING---*/
-          if ((fpw = fopen("evlres","w")) == NULL)
-                  printf("\n....Cannot open writefile....\n");
+    /* ---OPEN FILE FOR WRITING---*/
+    if((fpw = fopen("evlres", "w")) == NULL)
+        printf("\n....Cannot open writefile....\n");
 
-        /* ---OPEN FILE FOR WRITING---*/
-          if ((fps = fopen("evlsum","w")) == NULL)
-                  printf("\n....Cannot open writefile....\n");
+    /* ---OPEN FILE FOR WRITING---*/
+    if((fps = fopen("evlsum", "w")) == NULL)
+        printf("\n....Cannot open writefile....\n");
 
-        /* ---OPEN FILE FOR WRITING---*/
-          if ((fpf = fopen("evlfour","w")) == NULL)
-                  printf("\n....Cannot open writefile....\n");
+    /* ---OPEN FILE FOR WRITING---*/
+    if((fpf = fopen("evlfour", "w")) == NULL)
+        printf("\n....Cannot open writefile....\n");
 
-        /* ---PROCEED---*/
-        fscanf(fpr, "%d %d", &k, &l);
-        if (k <= 1)
-        {
-                /*
+    /* ---PROCEED---*/
+    fscanf(fpr, "%d %d", &k, &l);
+    if(k <= 1) {
+        /*
                 printf(" spline order too low for option -v, ignored\n");
                 */
-                val = 0;
-        }
-        if (k <= 2)
-        {
-                /*
+        val = 0;
+    }
+    if(k <= 2) {
+        /*
                 printf(" spline order too low for option -e, ignored\n");
                 */
-                ext = 0;
-        }
-        if (k <= 3)
-        {
-                /*
+        ext = 0;
+    }
+    if(k <= 3) {
+        /*
                 printf(" spline order too low for option -i, ignored\n");
                 */
-                inf = 0;
-        }
-        for (i = 1; i <= l+1; i++) fscanf(fpr, "%lf", brek+i);
-        km1 = k-1;
-        for (i = 1; i <= l+km1; i++) fscanf(fpr, "%lf", bcoef+i);
-        if (xflag == 0)
-        {
-                xbegin = brek[1];
-                xend = brek[l+1];
-                xstep = (xend-xbegin)/250;
-        }
-        if (fileind == 1)
-        {
-                i = 1;
-                while (fscanf(fpx, "%lf", xv+i) != EOF && i < NMAX-1) i++;
-                ntau = i-1;
-                xbegin = xv[1];
-                xend = xv[ntau];
-        }
-        else ntau = (xend-xbegin)/xstep+1;
-        l2knts(brek,&l,&k,t,&n);
-        bsplpp(t,bcoef,&n,&k,scrtch,brek,coef,&l);
+        inf = 0;
+    }
+    for(i = 1; i <= l + 1; i++)
+        fscanf(fpr, "%lf", brek + i);
+    km1 = k - 1;
+    for(i = 1; i <= l + km1; i++)
+        fscanf(fpr, "%lf", bcoef + i);
+    if(xflag == 0) {
+        xbegin = brek[1];
+        xend = brek[l + 1];
+        xstep = (xend - xbegin) / 250;
+    }
+    if(fileind == 1) {
+        i = 1;
+        while(fscanf(fpx, "%lf", xv + i) != EOF && i < NMAX - 1)
+            i++;
+        ntau = i - 1;
+        xbegin = xv[1];
+        xend = xv[ntau];
+    } else
+        ntau = (xend - xbegin) / xstep + 1;
+    l2knts(brek, &l, &k, t, &n);
+    bsplpp(t, bcoef, &n, &k, scrtch, brek, coef, &l);
 
-        relaunch:
-        for (i = 1; i <= ntau; i++)
-        {
-                if (fileind == 1) b = xv[i];
-                else b = xbegin+(i-1)*xstep;
-                if (firsttime) fprintf(fpw, " %g", b);
-                for (j = 0; j <= km1; j++)
-                {
-                        a[j] = ppvalu(brek,coef,&l,&k,&b,j);
-                        if (firsttime) fprintf(fpw, " %g", a[j]);
-                }
-                if (firsttime) fprintf(fpw, "\n");
-        if (val == 1 && i > 1 && (a[0]-value)*(a0-value) <= 0. && a0 != 0)
-                {
-                        if (a[0]-value == 0.) x = b;
-                        else x = zbrent(bb,b,0,value);
-                        if (firsttime) {
-                        printf(" root...: x = %g\ty = %g\n", x, value);
-                        fprintf(fps, " root...: x = %g\ty = %g\n", x, value);
-                        }
-                        else {
-                        printf(" 1/2w.pt: x = %g\ty = %g\n", x, value);
-                        fprintf(fps, " 1/2w.pt: x = %g\ty = %g\n", x, value);
-                        }
-                }
-                if (ext == 1 && i > 1 && a[1]*a1 <= 0. && a1 != 0 && a[2] != 0)
-                {
-                        if (a[1] == 0.) x = b;
-                        else x = zbrent(bb,b,1,0);
-                        ymax = ppvalu(brek,coef,&l,&k,&x,0);
-                        if (a1 > 0.)
-                        {
-                        nextremes++;
-                        if (hhon) {
-                                extrsum += ymax;
-                                if (ymax>maxmax || nomaxmax) 
-                                        {maxmax = ymax; nomaxmax=0;}
-                                }
-                        printf(" //MAX\\\\: x = %g\ty = %g\n", x, ymax);
-                        fprintf(fps, " //MAX\\\\: x = %g\ty = %g\n", x, ymax);
-                        }
-                        else
-                        {
-                        nextremes++;
-                        if (hhon) {
-                                extrsum += ymax;
-                                if (ymax>maxmax) maxmax = ymax;
-                                }
-                        printf(" \\\\min//: x = %g\ty = %g\n", x, ymax);
-                        fprintf(fps, " \\\\min//: x = %g\ty = %g\n", x, ymax);
-                        }
-                }
-                if (inf == 1 && i > 1 && a[2]*a2 <= 0. && a2 != 0 && a[3] != 0)
-                {
-                        if (a[2] == 0.) x = b;
-                        else x = zbrent(bb,b,2,0);
-                        ymax = ppvalu(brek,coef,&l,&k,&x,0);
-                        yder = ppvalu(brek,coef,&l,&k,&x,1);
-        if(yder>0.0){
-        printf(" //ifp//: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
-        fprintf(fps, " //ifp//: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
+relaunch:
+    for(i = 1; i <= ntau; i++) {
+        if(fileind == 1)
+            b = xv[i];
+        else
+            b = xbegin + (i - 1) * xstep;
+        if(firsttime)
+            fprintf(fpw, " %g", b);
+        for(j = 0; j <= km1; j++) {
+            a[j] = ppvalu(brek, coef, &l, &k, &b, j);
+            if(firsttime)
+                fprintf(fpw, " %g", a[j]);
         }
-        if(yder<0.0){
-        printf(" \\\\ifp\\\\: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
-        fprintf(fps, " \\\\ifp\\\\: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
+        if(firsttime)
+            fprintf(fpw, "\n");
+        if(val == 1 && i > 1 && (a[0] - value) * (a0 - value) <= 0. && a0 != 0) {
+            if(a[0] - value == 0.)
+                x = b;
+            else
+                x = zbrent(bb, b, 0, value);
+            if(firsttime) {
+                printf(" root...: x = %g\ty = %g\n", x, value);
+                fprintf(fps, " root...: x = %g\ty = %g\n", x, value);
+            } else {
+                printf(" 1/2w.pt: x = %g\ty = %g\n", x, value);
+                fprintf(fps, " 1/2w.pt: x = %g\ty = %g\n", x, value);
+            }
         }
-        if(yder==0.0){
-        printf(" --ifp--: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
-        fprintf(fps, " --ifp--: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
-        }
+        if(ext == 1 && i > 1 && a[1] * a1 <= 0. && a1 != 0 && a[2] != 0) {
+            if(a[1] == 0.)
+                x = b;
+            else
+                x = zbrent(bb, b, 1, 0);
+            ymax = ppvalu(brek, coef, &l, &k, &x, 0);
+            if(a1 > 0.) {
+                nextremes++;
+                if(hhon) {
+                    extrsum += ymax;
+                    if(ymax > maxmax || nomaxmax) {
+                        maxmax = ymax;
+                        nomaxmax = 0;
+                    }
                 }
-                a0 = a[0];
-                a1 = a[1];
-                a2 = a[2];
-                bb = b;
+                printf(" //MAX\\\\: x = %g\ty = %g\n", x, ymax);
+                fprintf(fps, " //MAX\\\\: x = %g\ty = %g\n", x, ymax);
+            } else {
+                nextremes++;
+                if(hhon) {
+                    extrsum += ymax;
+                    if(ymax > maxmax)
+                        maxmax = ymax;
+                }
+                printf(" \\\\min//: x = %g\ty = %g\n", x, ymax);
+                fprintf(fps, " \\\\min//: x = %g\ty = %g\n", x, ymax);
+            }
         }
+        if(inf == 1 && i > 1 && a[2] * a2 <= 0. && a2 != 0 && a[3] != 0) {
+            if(a[2] == 0.)
+                x = b;
+            else
+                x = zbrent(bb, b, 2, 0);
+            ymax = ppvalu(brek, coef, &l, &k, &x, 0);
+            yder = ppvalu(brek, coef, &l, &k, &x, 1);
+            if(yder > 0.0) {
+                printf(" //ifp//: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
+                fprintf(fps, " //ifp//: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
+            }
+            if(yder < 0.0) {
+                printf(" \\\\ifp\\\\: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
+                fprintf(fps, " \\\\ifp\\\\: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
+            }
+            if(yder == 0.0) {
+                printf(" --ifp--: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
+                fprintf(fps, " --ifp--: x = %g\ty = %g   y' = %g\n", x, ymax, yder);
+            }
+        }
+        a0 = a[0];
+        a1 = a[1];
+        a2 = a[2];
+        bb = b;
+    }
 
-        if (are == 1)
-        {
-                y = ppigr(brek,coef,&l,&k,&xbegin,&xend);
+    if(are == 1) {
+        y = ppigr(brek, coef, &l, &k, &xbegin, &xend);
         printf(" area...[ x = %g\tx = %g ]  A = %g\n", xbegin, xend, y);
         fprintf(fps, " area...[ x = %g\tx = %g ]  A = %g\n", xbegin, xend, y);
+    }
+
+    if(fou == 1) {
+        pi = 4 * atan(1.);
+        for(s = smin; s <= smax; s += sstep) {
+            if(fabs(s) < 1e-6 * sstep) {
+                fourr = ppigr(brek, coef, &l, &k, &xbegin, &xend);
+                fouri = 0;
+            } else {
+                fourr = fouri = 0;
+                tpis = 2 * pi * s;
+                pref = 1;
+                for(j = 1; j <= k; j++) {
+                    pref /= tpis;
+                    c = ppvalu(brek, coef, &l, &k, &xbegin, j - 1);
+                    b = ppvalu(brek, coef, &l, &k, &xend, j - 1);
+                    arga = tpis * xbegin + .5 * pi * j;
+                    argb = tpis * xend + .5 * pi * j;
+                    fourr += pref * (c * cos(arga) - b * cos(argb));
+                    fouri += pref * (b * sin(argb) - c * sin(arga));
+                }
+                for(i = 2; i <= l; i++) {
+                    if(brek[i] > xbegin && brek[i] <= xend)
+                        ;
+                    {
+                        argb = tpis * brek[i] + .5 * pi * k;
+                        b = coef[k][i] - coef[k][i - 1];
+                        fourr += pref * b * cos(argb);
+                        fouri -= pref * b * sin(argb);
+                    }
+                }
+            }
+            fprintf(fpf, "%g %g %g\n", s, fourr, fouri);
         }
+    }
 
-        if (fou == 1)
-        {
-                pi = 4*atan(1.);
-                for (s = smin; s <= smax; s += sstep)
-                {
-                        if (fabs(s) < 1e-6*sstep)
-                        {
-                                fourr = ppigr(brek,coef,&l,&k,&xbegin,&xend);
-                                fouri = 0;
-                        }
-                        else
-                        {
-                                fourr = fouri = 0;
-                                tpis = 2*pi*s;
-                                pref = 1;
-                                for (j = 1; j <= k; j++)
-                                {
-                                        pref /= tpis;   
-                                        c = ppvalu(brek,coef,&l,&k,&xbegin,j-1);
-                                        b = ppvalu(brek,coef,&l,&k,&xend,j-1);
-                                        arga = tpis*xbegin+.5*pi*j;
-                                        argb = tpis*xend+.5*pi*j;
-                                        fourr += pref*(c*cos(arga)-b*cos(argb));
-                                        fouri += pref*(b*sin(argb)-c*sin(arga));
-                                }
-                                for (i = 2; i <= l; i++)
-                                {
-                                if (brek[i] > xbegin && brek[i] <= xend);
-                                        {
-                                                argb = tpis*brek[i]+.5*pi*k;
-                                                b = coef[k][i]-coef[k][i-1];
-                                                fourr += pref*b*cos(argb);
-                                                fouri -= pref*b*sin(argb);
-                                        }
-                                }
-                        }
-                        fprintf(fpf, "%g %g %g\n", s, fourr, fouri);
+    if(ext) {
+        printf(" xtremes: N = %d\n", nextremes);
+        fprintf(fps, " xtremes: N = %d\n", nextremes);
+    }
+
+    if(hhon) {
+        if(nextremes < 1 || nomaxmax) {
+            printf(" half-height points cannot be determined\n");
+            fprintf(fps, " half-height points cannot be determined\n");
+        } else {
+            if(nextremes > 1 && !background) {
+                zerolevel = (extrsum - maxmax) / (nextremes - 1);
+                halfheight = zerolevel + (maxmax - zerolevel) / 2.0;
+            } else {
+                if(!background) {
+                    zerolevel = 0.0;
+                    halfheight = maxmax / 2.0;
+                    very_uncertain = 1;
+                } else {
+                    zerolevel = bg;
+                    halfheight = zerolevel + (maxmax - zerolevel) / 2.0;
                 }
+            }
+            printf(" bckgrnd:\t\ty = %g (estimated level", zerolevel);
+            if(very_uncertain)
+                printf("; very uncertain");
+            printf(")\n");
+            fprintf(fps, " bckgrnd:\t\ty = %g (estimated level", zerolevel);
+            if(very_uncertain)
+                fprintf(fps, "; very uncertain");
+            fprintf(fps, ")\n");
+            printf(" 1/2hght:\t\ty = %g (estimated half-height", halfheight);
+            if(very_uncertain)
+                printf("; very uncertain");
+            printf(")\n");
+            fprintf(fps, " 1/2 hght:\t\ty = %g (estimated half-height", halfheight);
+            if(very_uncertain)
+                fprintf(fps, "; very uncertain");
+            fprintf(fps, ")\n");
+            /* reset options */
+            ext = hhon = inf = are = fou = firsttime = 0;
+            val = 1;
+            value = halfheight;
+            goto relaunch;
         }
+    }
 
-        if (ext) {
-                printf(" xtremes: N = %d\n", nextremes);
-                fprintf(fps," xtremes: N = %d\n", nextremes);
-                }
+    /* ---CLOSE READFILE---*/
+    fclose(fpx);
 
-        if (hhon) {
-                if (nextremes<1 || nomaxmax) {
-                        printf(" half-height points cannot be determined\n");
-                        fprintf(fps,
-                        " half-height points cannot be determined\n");
-                        }
-                else {
-                        if (nextremes>1 && !background) {
-                        zerolevel = (extrsum-maxmax)/(nextremes-1);
-                        halfheight = zerolevel+(maxmax-zerolevel)/2.0;
-                        }
-                        else {
-                        if (!background) {
-                                zerolevel = 0.0;
-                                halfheight = maxmax/2.0;
-                                very_uncertain = 1;
-                                }
-                        else {
-                                zerolevel = bg;
-                                halfheight = zerolevel+(maxmax-zerolevel)/2.0;
-                                }
-                        }
-        printf(" bckgrnd:\t\ty = %g (estimated level", zerolevel);
-        if (very_uncertain) printf("; very uncertain");
-        printf(")\n");
-        fprintf(fps," bckgrnd:\t\ty = %g (estimated level", zerolevel);
-        if (very_uncertain) fprintf(fps,"; very uncertain");
-        fprintf(fps,")\n");
-        printf(" 1/2hght:\t\ty = %g (estimated half-height", halfheight);
-        if (very_uncertain) printf("; very uncertain");
-        printf(")\n");
-        fprintf(fps, " 1/2 hght:\t\ty = %g (estimated half-height", 
-        halfheight);
-        if (very_uncertain) fprintf(fps,"; very uncertain");
-        fprintf(fps,")\n");
-                        /* reset options */
-                        ext = hhon = inf = are = fou = firsttime = 0;
-                        val = 1;
-                        value = halfheight;
-                        goto relaunch;
-                        }
-                }
+    /* ---CLOSE READFILE---*/
+    fclose(fpr);
 
-        /* ---CLOSE READFILE---*/
-        fclose(fpx);
+    /* ---CLOSE WRITEFILE---*/
+    fclose(fps);
 
-        /* ---CLOSE READFILE---*/
-        fclose(fpr);
+    /* ---CLOSE WRITEFILE---*/
+    fclose(fpw);
 
-        /* ---CLOSE WRITEFILE---*/
-        fclose(fps);
+    /* ---CLOSE WRITEFILE---*/
+    fclose(fpf);
 
-        /* ---CLOSE WRITEFILE---*/
-        fclose(fpw);
-
-        /* ---CLOSE WRITEFILE---*/
-        fclose(fpf);
-
-        /* ---EXIT--- */
-        exit(0);
-        } /* --end main-- */
+    /* ---EXIT--- */
+    exit(0);
+} /* --end main-- */
 
 /*------------------------------------------------------------------*/
-double ppigr(ara,dara,iptr,jptr,xptr,yptr)
-        int     *iptr, *jptr;
-        double  *xptr, *yptr, ara[], dara[][LMAX];
+double ppigr(ara, dara, iptr, jptr, xptr, yptr) int *iptr, *jptr;
+double *xptr, *yptr, ara[], dara[][LMAX];
 
-        /*  calculates integral from *xptr to *yptr  */
+/*  calculates integral from *xptr to *yptr  */
 {
-        int     i, j, right, ndummy;
-        double  h, aa, bb, ppintgr;
-        ppintgr = 0.;
-        interv(ara,iptr,xptr,&left,&ndummy);
-        h = *xptr-ara[left];
-        bb = 0.;
-        for (j = *jptr; j >= 1; j--) bb = (bb+dara[j][left])*h/j;
-        interv(ara,iptr,yptr,&right,&ndummy);
-        for (i = left; i < right; i++)
-        {
-                aa = 0.;
-                h = ara[i+1]-ara[i];
-                for (j = *jptr; j >= 1; j--)
-                {
-                        aa = (aa+dara[j][i])*h/j;
-                }
-                ppintgr += aa;
-        }
-        h = *yptr-ara[right];
+    int i, j, right, ndummy;
+    double h, aa, bb, ppintgr;
+    ppintgr = 0.;
+    interv(ara, iptr, xptr, &left, &ndummy);
+    h = *xptr - ara[left];
+    bb = 0.;
+    for(j = *jptr; j >= 1; j--)
+        bb = (bb + dara[j][left]) * h / j;
+    interv(ara, iptr, yptr, &right, &ndummy);
+    for(i = left; i < right; i++) {
         aa = 0.;
-        for (j = *jptr; j >= 1; j--) aa = (aa+dara[j][right])*h/j;
-        ppintgr = ppintgr+aa-bb;
-        return(ppintgr);
+        h = ara[i + 1] - ara[i];
+        for(j = *jptr; j >= 1; j--) {
+            aa = (aa + dara[j][i]) * h / j;
+        }
+        ppintgr += aa;
+    }
+    h = *yptr - ara[right];
+    aa = 0.;
+    for(j = *jptr; j >= 1; j--)
+        aa = (aa + dara[j][right]) * h / j;
+    ppintgr = ppintgr + aa - bb;
+    return (ppintgr);
 }
 
 /*------------------------------------------------------------------*/
-int l2knts(ara,iptr,jptr,arb,kptr)
-        int     *iptr, *jptr, *kptr;
-        double  *ara, *arb;  
+int l2knts(ara, iptr, jptr, arb, kptr) int *iptr, *jptr, *kptr;
+double *ara, *arb;
 
-        /*  breakpoints to knots  */
+/*  breakpoints to knots  */
 {
-        int     i;
-        for (i = 1; i <= km1; i++) arb[i] = ara[1];
-        for (i = 1; i <= *iptr; i++) arb[km1+i] = ara[i];
-        n = km1+(*iptr);
-        for (i = 1; i <= *jptr; i++) arb[*kptr+i] = ara[*iptr+1];
+    int i;
+    for(i = 1; i <= km1; i++)
+        arb[i] = ara[1];
+    for(i = 1; i <= *iptr; i++)
+        arb[km1 + i] = ara[i];
+    n = km1 + (*iptr);
+    for(i = 1; i <= *jptr; i++)
+        arb[*kptr + i] = ara[*iptr + 1];
 }
 
 /*------------------------------------------------------------------*/
-int bsplpp(ara,arb,iptr,jptr,dara,arc,darb,kptr)
-        int     *iptr, *jptr, *kptr;
-        double  ara[], arb[], arc[], dara[][KMAX], darb[][LMAX];
+int bsplpp(ara, arb, iptr, jptr, dara, arc, darb, kptr) int *iptr, *jptr, *kptr;
+double ara[], arb[], arc[], dara[][KMAX], darb[][LMAX];
 
-        /*  converts spline to piecewise polynomial representation  */
+/*  converts spline to piecewise polynomial representation  */
 {
-        int     lsofar, j, i, jp1, kmj;
-        double  diff, sum, biatx[KMAX];
-        arc[1] = ara[*jptr];
-        lsofar = 0;
-        for (left = *jptr; left <= *iptr; left++)
-        {
-                if(ara[left+1] != ara[left])
-                {
-                        lsofar++;
-                        arc[lsofar+1] = ara[left+1];
-                        if (*jptr <= 1) darb[1][lsofar] = arb[left];
-                        else
-                        {
-                                for (i = 1; i <= *jptr; i++)
-                                {
-                                        dara[i][1] = arb[left-*jptr+i];
-                                }
-                                for (jp1 = 2; jp1 <= *jptr; jp1++)
-                                {
-                                        j = jp1-1;
-                                        kmj = k-j;
-                                        for(i = 1; i <= kmj; i++)
-                                        {
-                                        diff = ara[left+i]-ara[left+i-kmj];
-                                                if (diff > 0.)
-                                                {
-                        dara[i][jp1] = ((dara[i+1][j]-dara[i][j])/diff)*kmj;
-                                                }
-                                        }
-                                }
-                                bsplvb(ara,1,1,&ara[left],&left,biatx);
-                                darb[*jptr][lsofar] = dara[1][*jptr];
-                                for(jp1 = 2; jp1 <= *jptr; jp1++)
-                                {
-                                bsplvb(ara,jp1,2,&ara[left],&left,biatx);
-                                        kmj = k+1-jp1;
-                                        sum = 0.;
-                                        for(i = 1; i <=jp1; i++)
-                                        {
-                                                sum += biatx[i]*dara[i][kmj];
-                                                darb[kmj][lsofar] = sum;
-                                        }
-                                }
-                        }
+    int lsofar, j, i, jp1, kmj;
+    double diff, sum, biatx[KMAX];
+    arc[1] = ara[*jptr];
+    lsofar = 0;
+    for(left = *jptr; left <= *iptr; left++) {
+        if(ara[left + 1] != ara[left]) {
+            lsofar++;
+            arc[lsofar + 1] = ara[left + 1];
+            if(*jptr <= 1)
+                darb[1][lsofar] = arb[left];
+            else {
+                for(i = 1; i <= *jptr; i++) {
+                    dara[i][1] = arb[left - *jptr + i];
                 }
+                for(jp1 = 2; jp1 <= *jptr; jp1++) {
+                    j = jp1 - 1;
+                    kmj = k - j;
+                    for(i = 1; i <= kmj; i++) {
+                        diff = ara[left + i] - ara[left + i - kmj];
+                        if(diff > 0.) {
+                            dara[i][jp1] = ((dara[i + 1][j] - dara[i][j]) / diff) * kmj;
+                        }
+                    }
+                }
+                bsplvb(ara, 1, 1, &ara[left], &left, biatx);
+                darb[*jptr][lsofar] = dara[1][*jptr];
+                for(jp1 = 2; jp1 <= *jptr; jp1++) {
+                    bsplvb(ara, jp1, 2, &ara[left], &left, biatx);
+                    kmj = k + 1 - jp1;
+                    sum = 0.;
+                    for(i = 1; i <= jp1; i++) {
+                        sum += biatx[i] * dara[i][kmj];
+                        darb[kmj][lsofar] = sum;
+                    }
+                }
+            }
         }
-        *kptr = lsofar;
+    }
+    *kptr = lsofar;
 }
 
 /*------------------------------------------------------------------*/
-int bsplvb(ara,jhigh,index,xptr,iptr,arb)
-        int     jhigh, index, *iptr;
-        double  ara[], arb[], *xptr;
+int bsplvb(ara, jhigh, index, xptr, iptr, arb) int jhigh, index, *iptr;
+double ara[], arb[], *xptr;
 
-        /*  calculates all nonzero beta-splines at *xptr  */
+/*  calculates all nonzero beta-splines at *xptr  */
 {
-        int     jp1, i;
-        double  saved, term;
-        if (index == 1)
-        {
-                jbsp = 1;
-                arb[1] = 1.;
+    int jp1, i;
+    double saved, term;
+    if(index == 1) {
+        jbsp = 1;
+        arb[1] = 1.;
+    }
+    while(jbsp < jhigh) {
+        jp1 = jbsp + 1;
+        deltar[jbsp] = ara[*iptr + jbsp] - *xptr;
+        deltal[jbsp] = (*xptr) - ara[*iptr + 1 - jbsp];
+        saved = 0.;
+        for(i = 1; i <= jbsp; i++) {
+            term = arb[i] / (deltar[i] + deltal[jp1 - i]);
+            arb[i] = saved + deltar[i] * term;
+            saved = deltal[jp1 - i] * term;
         }
-        while (jbsp < jhigh)
-        {
-                jp1 = jbsp+1;
-                deltar[jbsp] = ara[*iptr+jbsp]-*xptr;
-                deltal[jbsp] = (*xptr)-ara[*iptr+1-jbsp];
-                saved = 0.;
-                for (i = 1; i <= jbsp; i++)
-                {
-                        term = arb[i]/(deltar[i]+deltal[jp1-i]);
-                        arb[i] = saved+deltar[i]*term;
-                        saved = deltal[jp1-i]*term;
-                }
-                arb[jp1] = saved;
-                jbsp++;
-        }
+        arb[jp1] = saved;
+        jbsp++;
+    }
 }
 
 /*------------------------------------------------------------------*/
-double ppvalu(ara,dara,iptr,jptr,xptr,jderiv)
-        int     *iptr, *jptr, jderiv;
-        double  *xptr, ara[], dara[][LMAX];
+double ppvalu(ara, dara, iptr, jptr, xptr, jderiv) int *iptr, *jptr, jderiv;
+double *xptr, ara[], dara[][LMAX];
 
-        /*  evaluates the jderiv-th derivative of a pp-function  */
+/*  evaluates the jderiv-th derivative of a pp-function  */
 {
-        int     fmmjdr, i, ndummy, m;
-        double  h;
-        ppvalue = 0.;
-        fmmjdr = *jptr-jderiv;
-        if (fmmjdr > 0)
-        {
-                interv(ara,iptr,xptr,&i,&ndummy);
-                h = *xptr-ara[i];
-                for (m = *jptr; m >= jderiv+1; m--)
-                {
-                        ppvalue = (ppvalue/fmmjdr)*h+dara[m][i];
-                        fmmjdr--;
-                }
+    int fmmjdr, i, ndummy, m;
+    double h;
+    ppvalue = 0.;
+    fmmjdr = *jptr - jderiv;
+    if(fmmjdr > 0) {
+        interv(ara, iptr, xptr, &i, &ndummy);
+        h = *xptr - ara[i];
+        for(m = *jptr; m >= jderiv + 1; m--) {
+            ppvalue = (ppvalue / fmmjdr) * h + dara[m][i];
+            fmmjdr--;
         }
-        return(ppvalue);
+    }
+    return (ppvalue);
 }
 
 /*------------------------------------------------------------------*/
-int interv(ara,iptr,xptr,jptr,kptr)
-        int     *iptr, *jptr, *kptr;
-        double  *xptr, ara[];
+int interv(ara, iptr, xptr, jptr, kptr) int *iptr, *jptr, *kptr;
+double *xptr, ara[];
 
-        /*  locates a point within an increasing sequence of points  */
+/*  locates a point within an increasing sequence of points  */
 {
-        int     istep, middle, ilos;
-        *kptr = 10;
-        ihi = ilo+1;
-        if (ihi >= *iptr)
-        {
-                if (*xptr >= ara[*iptr]) *kptr = 1;
-                else
-                {
-                        if (*iptr <= 1) *kptr = -1;
-                        else
-                        {
-                                ilo = *iptr-1;
-                                ihi = *iptr;
-                        }
-                }
+    int istep, middle, ilos;
+    *kptr = 10;
+    ihi = ilo + 1;
+    if(ihi >= *iptr) {
+        if(*xptr >= ara[*iptr])
+            *kptr = 1;
+        else {
+            if(*iptr <= 1)
+                *kptr = -1;
+            else {
+                ilo = *iptr - 1;
+                ihi = *iptr;
+            }
         }
-        if (*kptr == 10)
-        {
-                if (*xptr < ara[ihi])
-                {
-                        if (*xptr >= ara[ilo]) *kptr = 0;
-                        else
-                        {
-                                istep = 1;
-                                while (ilo > 1 && *xptr < ara[ilo])
-                                {
-                                        ihi = ilo;
-                                        ilo = ihi-istep;
-                                        istep *= 2;
-                                }
-                                if (ilo <= 1)
-                                {
-                                        ilo = 1;
-                                        if (*xptr < ara[1]) *kptr = -1;
-                                }
-                        }
+    }
+    if(*kptr == 10) {
+        if(*xptr < ara[ihi]) {
+            if(*xptr >= ara[ilo])
+                *kptr = 0;
+            else {
+                istep = 1;
+                while(ilo > 1 && *xptr < ara[ilo]) {
+                    ihi = ilo;
+                    ilo = ihi - istep;
+                    istep *= 2;
                 }
-                else
-                {
-                        istep = 1;
-                        while (ihi < *iptr && *xptr > ara[ihi])
-                        {
-                                ilo = ihi;
-                                ihi = ilo+istep;
-                                istep *= 2;
-                        }
-                        if (ihi >= *iptr)
-                        {
-                                ihi = *iptr;
-                                if (*xptr > ara[*iptr]) *kptr = 1;
-                        }
+                if(ilo <= 1) {
+                    ilo = 1;
+                    if(*xptr < ara[1])
+                        *kptr = -1;
                 }
-                if (*kptr == 10)
-                {
-                        do
-                        {
-                                middle = (ilo+ihi)/2;
-                                if (*xptr >= ara[middle])
-                                {
-                                        ilos = ilo;
-                                        ilo = middle;
-                                }
-                                else ihi = middle;
-                        }
-                        while (middle != ilos);
-                }
+            }
+        } else {
+            istep = 1;
+            while(ihi<*iptr && * xptr> ara[ihi]) {
+                ilo = ihi;
+                ihi = ilo + istep;
+                istep *= 2;
+            }
+            if(ihi >= *iptr) {
+                ihi = *iptr;
+                if(*xptr > ara[*iptr])
+                    *kptr = 1;
+            }
         }
-        if (*kptr == -1) *jptr = 1;
-        else
-        {
-                if (*kptr == 1) *jptr = *iptr;
-                else
-                {
-                        *kptr = 0;
-                        *jptr = ilo;
-                }
+        if(*kptr == 10) {
+            do {
+                middle = (ilo + ihi) / 2;
+                if(*xptr >= ara[middle]) {
+                    ilos = ilo;
+                    ilo = middle;
+                } else
+                    ihi = middle;
+            } while(middle != ilos);
         }
+    }
+    if(*kptr == -1)
+        *jptr = 1;
+    else {
+        if(*kptr == 1)
+            *jptr = *iptr;
+        else {
+            *kptr = 0;
+            *jptr = ilo;
+        }
+    }
 }
 
 /*------------------------------------------------------------------*/
-double zbrent(x1,x2,ind,value)
-        int     ind;
-        double  x1, x2, value;
+double zbrent(x1, x2, ind, value) int ind;
+double x1, x2, value;
 
-        /* using Brent's method, find the root of a function known to lie
+/* using Brent's method, find the root of a function known to lie
          * between x1 and x2; the root returned as x3, will be refined until
          * its accuracy is smaller than 1e-8 times f(x1) or f(x2), depending
          * which one is largest;
          */
 {
-        double  y1, y2, y, a, b, fa, fb, x3, fc, c, d, e, tol1, xm, s, p,
-                q, r, eps;
-        eps = 1e-8;
-        a = x1;
-        b = x2;
-        x3 = 0;
-        fa = ppvalu(brek,coef,&l,&k,&a,ind)-value;
-        fb = ppvalu(brek,coef,&l,&k,&b,ind)-value;
-        fc = fb;
-        y1 = fabs(a);
-        y2 = fabs(b);
-        if (y1 > y2) y = y1;
-        else y = y2;
-        tol1 = 2*eps*y;
-        while (x3 == 0)
-        {
-                if (fb*fc > 0)
-                {
-                        c = a;
-                        fc = fa;
-                        d = b-a;
-                        e = d;
-                }
-                if (fabs(fc) < fabs(fb))
-                {
-                        a = b;
-                        b = c;
-                        c = a;
-                        fa = fb;
-                        fb = fc;
-                        fc = fa;
-                }
-                xm = .5*(c-b);
-                if (fabs(xm) <= tol1 || fb == 0) x3 = b;
-                else
-                {
-                        if (fabs(e) >= tol1 && fabs(fa) > fabs(fb))
-                        {
-                                s = fb/fa;
-                                if (a == c)
-                                {
-                                        p = 2*xm*s;
-                                        q = 1-s;
-                                }
-                                else
-                                {
-                                        q = fa/fc;
-                                        r = fb/fc;
-                                        p = s*(2*xm*q*(q-r)-(b-a)*(r-1));
-                                        q = (q-1)*(r-1)*(s-1);
-                                }
-                                if (p > 0) q *= -1;
-                                p = fabs(p);
-                                y1 = 3*xm*q-fabs(tol1*q);
-                                y2 = fabs(e*q);
-                                if (y1 < y2) y = y1;
-                                else y = y2;
-                                if (2*p < y)
-                                {
-                                        e = d;
-                                        d = p/q;
-                                }
-                                else
-                                {
-                                        d = xm;
-                                        e = d;
-                                }
-                        }
-                        else
-                        {
-                                d = xm;
-                                e = d;
-                        }
-                        a = b;
-                        fa = fb;
-                        if (fabs(d) > tol1) b += d;
-                        else
-                        {
-                                if (xm >= 0) y = tol1;
-                                else y = -1*tol1;
-                                b += y;
-                        }
-                        fb = ppvalu(brek,coef,&l,&k,&b,ind)-value;
-                }
+    double y1, y2, y, a, b, fa, fb, x3, fc, c, d, e, tol1, xm, s, p, q, r, eps;
+    eps = 1e-8;
+    a = x1;
+    b = x2;
+    x3 = 0;
+    fa = ppvalu(brek, coef, &l, &k, &a, ind) - value;
+    fb = ppvalu(brek, coef, &l, &k, &b, ind) - value;
+    fc = fb;
+    y1 = fabs(a);
+    y2 = fabs(b);
+    if(y1 > y2)
+        y = y1;
+    else
+        y = y2;
+    tol1 = 2 * eps * y;
+    while(x3 == 0) {
+        if(fb * fc > 0) {
+            c = a;
+            fc = fa;
+            d = b - a;
+            e = d;
         }
-        return(x3);
+        if(fabs(fc) < fabs(fb)) {
+            a = b;
+            b = c;
+            c = a;
+            fa = fb;
+            fb = fc;
+            fc = fa;
+        }
+        xm = .5 * (c - b);
+        if(fabs(xm) <= tol1 || fb == 0)
+            x3 = b;
+        else {
+            if(fabs(e) >= tol1 && fabs(fa) > fabs(fb)) {
+                s = fb / fa;
+                if(a == c) {
+                    p = 2 * xm * s;
+                    q = 1 - s;
+                } else {
+                    q = fa / fc;
+                    r = fb / fc;
+                    p = s * (2 * xm * q * (q - r) - (b - a) * (r - 1));
+                    q = (q - 1) * (r - 1) * (s - 1);
+                }
+                if(p > 0)
+                    q *= -1;
+                p = fabs(p);
+                y1 = 3 * xm * q - fabs(tol1 * q);
+                y2 = fabs(e * q);
+                if(y1 < y2)
+                    y = y1;
+                else
+                    y = y2;
+                if(2 * p < y) {
+                    e = d;
+                    d = p / q;
+                } else {
+                    d = xm;
+                    e = d;
+                }
+            } else {
+                d = xm;
+                e = d;
+            }
+            a = b;
+            fa = fb;
+            if(fabs(d) > tol1)
+                b += d;
+            else {
+                if(xm >= 0)
+                    y = tol1;
+                else
+                    y = -1 * tol1;
+                b += y;
+            }
+            fb = ppvalu(brek, coef, &l, &k, &b, ind) - value;
+        }
+    }
+    return (x3);
 }
 9.8 20040 895.321
 663 18880 869.022
@@ -1821,12 +1781,12 @@ tion.
  *           dws for the suggested fits are tabulated and you may choose one of
  *           them (or in fact any other if you like). Typing "s" at this
  *           point selects the best "suggested" spline. You'll get as many
- *           opportunities to try an l value as you need.
- *           Note that when you request a spline-fit with l < lrev,
- *           you always get "optimized" breakpoint locations. If l >= lrev,
- *           you get regular "equispaced" breakpoint locations. Hence, by 
- *           using the option -o 1 on the command line, you can make sure 
- *           that every spline is "equispaced"; by using -o 200 (or so), you
+ *           opportunities to try
+    an l value as you need.*Note that when you request a spline - fit with l < lrev,
+        *you always get "optimized" breakpoint locations.If l >= lrev,
+        *you get regular "equispaced" breakpoint locations.Hence,
+        by *using the option - o 1 on the command line,
+        you can make sure *that every spline is "equispaced"; by using -o 200 (or so), you
  *           can make sure that every spline is (in a way) "optimized".
  *        7) Finally, if you think you're satisfied, you can inform the spline
  *           wizard that you are done with her assistance, and the program
@@ -1984,16 +1944,17 @@ tion.
 #define NMAX 10000      /* Maximum number of data points */
 #define LMAX 2001       /* Maximum number of intervals */
 #define KMAX 24         /* Maximum spline order */
-#define RMAX 2000       /* Maximum number of intermediate results */  
+#define RMAX 2000       /* Maximum number of intermediate results */
 #define REJLEV 0.05     /* Rejection level of statistical tests (5%) */
-#define UPFACTOR  1.1   /* Increment factor for l */
+#define UPFACTOR 1.1    /* Increment factor for l */
 #define DOWNFACTOR 0.95 /* Decrement factor for l */
-#define UPMARGIN 1e-7   /* Calculated (double) values of l this close 
+#define UPMARGIN                                                                         \
+    1e-7 /* Calculated (double) values of l this close 
                            under an integer are rounded upward instead
                            of truncated downward (v. 5.02) */
 
 /* ---DEFINES (MACROS)--- */
-#define TRUNC_SPEC(i,d) (((double)((i)+1)-(d)) < UPMARGIN ? ((i)+1) : (i))
+#define TRUNC_SPEC(i, d) (((double)((i) + 1) - (d)) < UPMARGIN ? ((i) + 1) : (i))
 
 /* ---ANNOUNCE FUNCTIONS---  */
 int     l2sub(),
@@ -2011,649 +1972,694 @@ int     l2sub(),
         gcf(),
         graer(),
         grasp();
-double  ppvalu(),
-        chitest(),
-        betai(),
-        betacf();
-
+double ppvalu(), chitest(), betai(), betacf();
 
 
 /*----GLOBAL VARIABLES----*/
-int    km1,             /* degree of polynomials */
-       k,               /* order of polynomials */
-       ntau,            /* number of datapoints */
-       l, lnew,         /* number of intervals */
-       ibeg,            /* starting index of knot optimization */
-       n,               /* order of spline-approximation = k+l-1 */
-       freed,           /* degrees of freedom left */
-       nsing,           /* number of singularities */
-       ihi, ilo = 1,    /* flags for function interv() */
-       nl2sub,          /* index of highest-l non-optimized approximation */  
-       il2sub,          /* counter of and number of approximations */
-       isug,            /* index of suggested approximation */
-       logtrans,        /* flag for log10-transformation of x-scale */
-       silent,          /* flag for the -q option */
-       jbsp,            /* counter for function bsplvb() */
-       iresul[RMAX][3], /* l and freed for all approximations */
-       lend, lbeg,      /* endpoints of interval for sigma determination */
-       lfin,            /* final (?) choice */
-       left,            /* counter for function newknt() */
-       wind,            /* flag for warning status */
-       sigma,           /* if =0: sigmas specified in input-file, otherwise =1*/
-       fullon,          /* flag, =1 if full output is required */
-       fix,             /* flag, =1 if sigma is fixed */
-       rel,             /* flag, =1 if sigma is relative to y */
-       done,            /* flag, =1 if Done? has been answered by yes */
-       njan;            /* durbin-watson distance index */
-double ppvalue,         /* return value of program ppvalu() */
-       rmsmin, rmsmax,  /* minimum and maximum rms-value */
-       taumin, taumax,  /* minimum and maximum y-value of datapoints */
-       dermax,          /* maximum absolute value of the spline derivative */
-       totalw,          /* sum of weight factors */
-       rms,             /* root mean square error */
-       dws,             /* durbin-watson statistic(s) */
-       ctest, ltest,    /* percentage points of various distributions */
-       utest, test,
-       fixval,          /* (if positive) value at which sigma is fixed */
-       nonsig,          /* value of first nonsignificant digit range */
-       tau[NMAX],       /* x-values of input data */
-       gtau[NMAX],      /* y-values of input data */
-       weight[NMAX],    /* weight factors of input data */
-       maxweight,       /* largest weight (only used for negative fixval) */
-       ftau[NMAX],      /* spline approximation data S(x) at input x-values */
-       q[NMAX],         /* normalized errors */
-       deriv[NMAX],     /* first derivative of spline approximation */
-       brek[LMAX],      /* breakpoints */
-       bcoef[LMAX+KMAX],/* b-coefficients */
-       coef[KMAX][LMAX],/* pp-representation */
-       resul[RMAX][6],  /* test statistics for all splines */
-       deltal[KMAX],    /* used in function bsplvb() */
-       deltar[KMAX];    /* used in function bsplvb() */
-char   Accept,          /* indicator if final result is satisfying */
-       line[200],       /* line read from input */
-       rmsversion[80];  /* scaling mode of "rms" variable */
-FILE   *fpd, *fpr, *fpp, *fps;
+int km1,                 /* degree of polynomials */
+    k,                   /* order of polynomials */
+    ntau,                /* number of datapoints */
+    l, lnew,             /* number of intervals */
+    ibeg,                /* starting index of knot optimization */
+    n,                   /* order of spline-approximation = k+l-1 */
+    freed,               /* degrees of freedom left */
+    nsing,               /* number of singularities */
+    ihi, ilo = 1,        /* flags for function interv() */
+    nl2sub,              /* index of highest-l non-optimized approximation */
+    il2sub,              /* counter of and number of approximations */
+    isug,                /* index of suggested approximation */
+    logtrans,            /* flag for log10-transformation of x-scale */
+    silent,              /* flag for the -q option */
+    jbsp,                /* counter for function bsplvb() */
+    iresul[RMAX][3],     /* l and freed for all approximations */
+    lend, lbeg,          /* endpoints of interval for sigma determination */
+    lfin,                /* final (?) choice */
+    left,                /* counter for function newknt() */
+    wind,                /* flag for warning status */
+    sigma,               /* if =0: sigmas specified in input-file, otherwise =1*/
+    fullon,              /* flag, =1 if full output is required */
+    fix,                 /* flag, =1 if sigma is fixed */
+    rel,                 /* flag, =1 if sigma is relative to y */
+    done,                /* flag, =1 if Done? has been answered by yes */
+    njan;                /* durbin-watson distance index */
+double ppvalue,          /* return value of program ppvalu() */
+    rmsmin, rmsmax,      /* minimum and maximum rms-value */
+    taumin, taumax,      /* minimum and maximum y-value of datapoints */
+    dermax,              /* maximum absolute value of the spline derivative */
+    totalw,              /* sum of weight factors */
+    rms,                 /* root mean square error */
+    dws,                 /* durbin-watson statistic(s) */
+    ctest, ltest,        /* percentage points of various distributions */
+    utest, test, fixval, /* (if positive) value at which sigma is fixed */
+    nonsig,              /* value of first nonsignificant digit range */
+    tau[NMAX],           /* x-values of input data */
+    gtau[NMAX],          /* y-values of input data */
+    weight[NMAX],        /* weight factors of input data */
+    maxweight,           /* largest weight (only used for negative fixval) */
+    ftau[NMAX],          /* spline approximation data S(x) at input x-values */
+    q[NMAX],             /* normalized errors */
+    deriv[NMAX],         /* first derivative of spline approximation */
+    brek[LMAX],          /* breakpoints */
+    bcoef[LMAX + KMAX],  /* b-coefficients */
+    coef[KMAX][LMAX],    /* pp-representation */
+    resul[RMAX][6],      /* test statistics for all splines */
+    deltal[KMAX],        /* used in function bsplvb() */
+    deltar[KMAX];        /* used in function bsplvb() */
+char Accept,             /* indicator if final result is satisfying */
+    line[200],           /* line read from input */
+    rmsversion[80];      /* scaling mode of "rms" variable */
+FILE *fpd, *fpr, *fpp, *fps;
 
 /* ---MAIN--- */
-main(argc,argv)  int argc; char *argv[];
-        {
-        /* ---DECLARATIONS (note: auto-arrays can't be initialized)--- */
-        register int i, j;
-        int          grend, xflag, Xflag, nn, m, ln, lind, lopt, lmax; 
-        int          ldone; /* v5.0 */
-        double       a, xbegin, xend, Xbegin, Xend, rmmin, dummy;
-        char         dum, gragain, lstr[6], str[100];
+main(argc, argv) int argc;
+char *argv[];
+{
+    /* ---DECLARATIONS (note: auto-arrays can't be initialized)--- */
+    register int i, j;
+    int grend, xflag, Xflag, nn, m, ln, lind, lopt, lmax;
+    int ldone; /* v5.0 */
+    double a, xbegin, xend, Xbegin, Xend, rmmin, dummy;
+    char dum, gragain, lstr[6], str[100];
 
-        /* ---INITIALIZATION---*/
-        fpd = stdin;
-        Xflag = fullon = xflag = lind = silent = 0;
-        fix = rel = done = 0;
-        sigma = njan = 1;
-        k = 4;
- 
-        /* ---SHOW OPTIONS--- */
-        if (argc == 1)
-            {
-printf("====================================================================\n");
-printf(".............spline2 version 5.02 (14 may 1997)...............\n");
-printf("Usage: 'spline2 [datafile] [options]'\n");
-printf("       [options] are:\n");
-printf("[-x xbeg xend] Approximate only data between these x-values\n");
-printf("[-X xbeg xend] Ignore data between these x-values\n");
-printf("[-a val]       'Absolute': freeze std.dev. of y-errors (chi2-test)\n");
-printf("                 val>0: sigma=val, val=-n: n sign. dig., val=0: 3rd col\n");
-printf("[-r val]       'Relative': freeze std.dev. of y-errors (chi2-test)\n");
-printf("                 val>0: sigma=val*|y|, val<0: sigma=|val|*sqrt(|y|)\n");
-printf("[-n spacing]   Let dws measure correlation in data spaced >1 apart\n");
-printf("[-o lrev]      Force knot improvement to start at l=lrev\n");
-printf("[-k order]     Use splines of order other than 4\n");
-printf("[-F]           Full output file collection instead of just 'splrep'\n");
-printf("[-q]           Quick (=only suggested spline). Pipe output to 'evalsp'\n");
-printf("[-l]           First take 10log of x\n");
-printf("====================================================================\n");
-            exit(1);
-            }
+    /* ---INITIALIZATION---*/
+    fpd = stdin;
+    Xflag = fullon = xflag = lind = silent = 0;
+    fix = rel = done = 0;
+    sigma = njan = 1;
+    k = 4;
 
-        /* ---GET RUN TIME OPTIONS---*/
-        if (argc > 1)
-        {
-            for (m=1; m<argc; m++)
-            {
-                switch( *argv[m] )
-                {
-                case '-':
-                    switch( *(argv[m]+1) )
-                    {
-                    case 's' : /* dummy */
-                               break;
-                    case 'X' : Xbegin = atof(argv[++m]);
-                               Xend = atof(argv[++m]);
-                               Xflag = 1;
-                               break;
-                    case 'x' : xbegin = atof(argv[++m]);
-                               xend = atof(argv[++m]);
-                               xflag = 1;
-                               break;
-                    case 'l' : logtrans = 1;
-                               break;
-                    case 'n' : njan = atoi(argv[++m]);
-                               break;
-                    case 'k' : k = atoi(argv[++m]);
-                               if (k > KMAX) k = KMAX;
-                               if (k < 1) k = 1;
-                               break;
-                    case 'r' : rel = 1;
-                    case 'f' : ;
-                    case 'a' : fix = 1;
-                               fixval = atof(argv[++m]);
-                               break;
-                    case 'o' : lopt = atoi(argv[++m]);
-                               lind = 1;
-                               break;
-                    case 'q' : silent = 1;
-                               break;
-                    case 'F' : fullon = 1;
-                               break;
-                    default :  break;
-                    }
+    /* ---SHOW OPTIONS--- */
+    if(argc == 1) {
+        printf("====================================================================\n");
+        printf(".............spline2 version 5.02 (14 may 1997)...............\n");
+        printf("Usage: 'spline2 [datafile] [options]'\n");
+        printf("       [options] are:\n");
+        printf("[-x xbeg xend] Approximate only data between these x-values\n");
+        printf("[-X xbeg xend] Ignore data between these x-values\n");
+        printf("[-a val]       'Absolute': freeze std.dev. of y-errors (chi2-test)\n");
+        printf(
+            "                 val>0: sigma=val, val=-n: n sign. dig., val=0: 3rd col\n");
+        printf("[-r val]       'Relative': freeze std.dev. of y-errors (chi2-test)\n");
+        printf("                 val>0: sigma=val*|y|, val<0: sigma=|val|*sqrt(|y|)\n");
+        printf("[-n spacing]   Let dws measure correlation in data spaced >1 apart\n");
+        printf("[-o lrev]      Force knot improvement to start at l=lrev\n");
+        printf("[-k order]     Use splines of order other than 4\n");
+        printf("[-F]           Full output file collection instead of just 'splrep'\n");
+        printf(
+            "[-q]           Quick (=only suggested spline). Pipe output to 'evalsp'\n");
+        printf("[-l]           First take 10log of x\n");
+        printf("====================================================================\n");
+        exit(1);
+    }
+
+    /* ---GET RUN TIME OPTIONS---*/
+    if(argc > 1) {
+        for(m = 1; m < argc; m++) {
+            switch(*argv[m]) {
+            case '-':
+                switch(*(argv[m] + 1)) {
+                case 's': /* dummy */
                     break;
-                default : strcpy(str,argv[m]);
-                          if ((fpd = fopen(str,"r")) == NULL)
-                          {
-                                printf("Cannot open %s\n", str);
-                                exit(1);
-                          }
+                case 'X':
+                    Xbegin = atof(argv[++m]);
+                    Xend = atof(argv[++m]);
+                    Xflag = 1;
+                    break;
+                case 'x':
+                    xbegin = atof(argv[++m]);
+                    xend = atof(argv[++m]);
+                    xflag = 1;
+                    break;
+                case 'l':
+                    logtrans = 1;
+                    break;
+                case 'n':
+                    njan = atoi(argv[++m]);
+                    break;
+                case 'k':
+                    k = atoi(argv[++m]);
+                    if(k > KMAX)
+                        k = KMAX;
+                    if(k < 1)
+                        k = 1;
+                    break;
+                case 'r':
+                    rel = 1;
+                case 'f':;
+                case 'a':
+                    fix = 1;
+                    fixval = atof(argv[++m]);
+                    break;
+                case 'o':
+                    lopt = atoi(argv[++m]);
+                    lind = 1;
+                    break;
+                case 'q':
+                    silent = 1;
+                    break;
+                case 'F':
+                    fullon = 1;
+                    break;
+                default:
+                    break;
+                }
+                break;
+            default:
+                strcpy(str, argv[m]);
+                if((fpd = fopen(str, "r")) == NULL) {
+                    printf("Cannot open %s\n", str);
+                    exit(1);
                 }
             }
         }
+    }
 
-        /* ---OPEN FILES FOR WRITING---*/
-        if (fullon)
-        if ((fpr = fopen("splstat","w")) == NULL)
-                {printf("....Cannot open file splstat....\n");}
-        if ((fps = fopen("splrep","w")) == NULL)
-                {printf("....Cannot open file splrep....\n");}
-        if (fullon)
-        if ((fpp = fopen("splres","w")) == NULL)
-                {printf("....Cannot open file splres....\n");}
+    /* ---OPEN FILES FOR WRITING---*/
+    if(fullon)
+        if((fpr = fopen("splstat", "w")) == NULL) {
+            printf("....Cannot open file splstat....\n");
+        }
+    if((fps = fopen("splrep", "w")) == NULL) {
+        printf("....Cannot open file splrep....\n");
+    }
+    if(fullon)
+        if((fpp = fopen("splres", "w")) == NULL) {
+            printf("....Cannot open file splres....\n");
+        }
 
-        /* ---READ DATA--- */
-        maxweight = -99.99;
-        i = 1;
-        while (fgets(line,200,fpd)!=NULL) {
-                j = sscanf(line,"%lf %lf %lf %lf", tau+i, gtau+i, weight+i, &a);
-                if (j<2) {
-                        fprintf(stderr,
-                        "Line %d has less than two numbers: skipped\n", i);
-                        continue;
-                        }
-                if (i==1) {
-                        /* determine # input columns */
-                        if (j==3) sigma = 0;
-                        else if (j==4 || j<2)
-                           {fprintf(stderr,"Wrong data format\n"); exit(1);}
-                        }
-                if (i>=NMAX-1) {fprintf(stderr,"Too many data\n"); exit(1);}
-                if (sigma==0) {
-                        /* sigmas are supposed to be in file */
-                        if (j==2) weight[i] = weight[i-1];
-                        if (j==3) {
-                                if (weight[i]<=0.0) 
-                                  {fprintf(stderr,"Zero or negative sigma\n"); 
-                                  exit(1);}
-                                weight[i] = 1.0/weight[i]/weight[i];
-                                }
-                        }
-                if (sigma==1) {
-                        /* sigmas are not supposed to be in file */
-                        weight[i] = 1.0;
-                        }
-                if (fix==1) {
-                        /* sigmas freezed: override assignments */
-                        if (rel==0) {
-                                /* absolute sigma freezed */
-                                if (fixval>0.0) weight[i] = 1.0/fixval/fixval;
-                             /* if (fixval==0.0) weight was already assigned */
-                                if (fixval<0.0) {
-                                        if (gtau[i]==0.0)
-                                          /* temporary value: */
-                                          weight[i]= -999.999;
-                                        else {
-                                          nonsig = log10(fabs(gtau[i]));
-                                          /* repaired 26-2-1996 */
-                                          /*nonsig = floor(nonsig)+fixval;*/
-                                          nonsig = floor(nonsig)+fixval+1.0;
-                                          nonsig = exp(2.302585*nonsig);
-                                          nonsig /= 3.464102;
-                                          weight[i] = 1.0/nonsig/nonsig;
-                                          if (weight[i]>maxweight)
-                                              maxweight=weight[i];
-                                          }
-                                        }
-                                }
-                        if (rel==1) {
-                                /* relative sigma freezed */
-                                if (fixval>0.0) {
-                                        weight[i] = fixval*fabs(gtau[i]);
-                                        weight[i] = 1.0/weight[i]/weight[i];
-                                        }
-                                if (fixval<0.0) {
-                                        weight[i] = -fixval*sqrt(fabs(gtau[i]));
-                                        weight[i] = 1.0/weight[i]/weight[i];
-                                        }
-                                }
-                        }
-                /* weight assigned; accept point for fit? */
-                a = tau[i];
-                if ((xflag==0 && Xflag==0) ||
-                    (xflag==1 && Xflag==0 && a>=xbegin && a<=xend) ||
-                    (xflag==0 && Xflag==1 && (a>Xend || a<Xbegin)) ||
-                    (xflag==1 && Xflag==1 && 
-                    ((a>=xbegin && a<Xbegin) || (a>Xend && a<=xend))))
-                    i++;
-                } /* end of read loop */
+    /* ---READ DATA--- */
+    maxweight = -99.99;
+    i = 1;
+    while(fgets(line, 200, fpd) != NULL) {
+        j = sscanf(line, "%lf %lf %lf %lf", tau + i, gtau + i, weight + i, &a);
+        if(j < 2) {
+            fprintf(stderr, "Line %d has less than two numbers: skipped\n", i);
+            continue;
+        }
+        if(i == 1) {
+            /* determine # input columns */
+            if(j == 3)
+                sigma = 0;
+            else if(j == 4 || j < 2) {
+                fprintf(stderr, "Wrong data format\n");
+                exit(1);
+            }
+        }
+        if(i >= NMAX - 1) {
+            fprintf(stderr, "Too many data\n");
+            exit(1);
+        }
+        if(sigma == 0) {
+            /* sigmas are supposed to be in file */
+            if(j == 2)
+                weight[i] = weight[i - 1];
+            if(j == 3) {
+                if(weight[i] <= 0.0) {
+                    fprintf(stderr, "Zero or negative sigma\n");
+                    exit(1);
+                }
+                weight[i] = 1.0 / weight[i] / weight[i];
+            }
+        }
+        if(sigma == 1) {
+            /* sigmas are not supposed to be in file */
+            weight[i] = 1.0;
+        }
+        if(fix == 1) {
+            /* sigmas freezed: override assignments */
+            if(rel == 0) {
+                /* absolute sigma freezed */
+                if(fixval > 0.0)
+                    weight[i] = 1.0 / fixval / fixval;
+                /* if (fixval==0.0) weight was already assigned */
+                if(fixval < 0.0) {
+                    if(gtau[i] == 0.0)
+                        /* temporary value: */
+                        weight[i] = -999.999;
+                    else {
+                        nonsig = log10(fabs(gtau[i]));
+                        /* repaired 26-2-1996 */
+                        /*nonsig = floor(nonsig)+fixval;*/
+                        nonsig = floor(nonsig) + fixval + 1.0;
+                        nonsig = exp(2.302585 * nonsig);
+                        nonsig /= 3.464102;
+                        weight[i] = 1.0 / nonsig / nonsig;
+                        if(weight[i] > maxweight)
+                            maxweight = weight[i];
+                    }
+                }
+            }
+            if(rel == 1) {
+                /* relative sigma freezed */
+                if(fixval > 0.0) {
+                    weight[i] = fixval * fabs(gtau[i]);
+                    weight[i] = 1.0 / weight[i] / weight[i];
+                }
+                if(fixval < 0.0) {
+                    weight[i] = -fixval * sqrt(fabs(gtau[i]));
+                    weight[i] = 1.0 / weight[i] / weight[i];
+                }
+            }
+        }
+        /* weight assigned; accept point for fit? */
+        a = tau[i];
+        if((xflag == 0 && Xflag == 0) ||
+           (xflag == 1 && Xflag == 0 && a >= xbegin && a <= xend) ||
+           (xflag == 0 && Xflag == 1 && (a > Xend || a < Xbegin)) ||
+           (xflag == 1 && Xflag == 1 &&
+            ((a >= xbegin && a < Xbegin) || (a > Xend && a <= xend))))
+            i++;
+    } /* end of read loop */
 
-        ntau = i-1;
+    ntau = i - 1;
 
-        /* If data have certain number of significant digits, assign
+    /* If data have certain number of significant digits, assign
            largest weight to the data value(s) zero */
-        if (fix==1 && rel==0 && fixval<0.0) {
-                for (i=1; i<=ntau; i++) {
-                        if (weight[i]== -999.999) weight[i]=maxweight;
-                        }
-                }
-
-        if (lopt >= .8*ntau || lind == 0) lopt = .8*ntau-1;
-        km1 = k-1;
-        lmax = ntau-km1-1;
-        if (lmax < lopt) lopt = lmax;
-        for (i = 1; i <= ntau; i++) totalw += weight[i];
-        taumax = taumin = gtau[1];
-        for (i = 2; i <= ntau; i++)
-        {
-                if (gtau[i] < taumin) taumin = gtau[i];
-                if (gtau[i] > taumax) taumax = gtau[i];
+    if(fix == 1 && rel == 0 && fixval < 0.0) {
+        for(i = 1; i <= ntau; i++) {
+            if(weight[i] == -999.999)
+                weight[i] = maxweight;
         }
-        if (logtrans != 0) for(i = 1; i <= ntau; i++) tau[i] = log10(tau[i]);
+    }
 
-        /* reading done */
+    if(lopt >= .8 * ntau || lind == 0)
+        lopt = .8 * ntau - 1;
+    km1 = k - 1;
+    lmax = ntau - km1 - 1;
+    if(lmax < lopt)
+        lopt = lmax;
+    for(i = 1; i <= ntau; i++)
+        totalw += weight[i];
+    taumax = taumin = gtau[1];
+    for(i = 2; i <= ntau; i++) {
+        if(gtau[i] < taumin)
+            taumin = gtau[i];
+        if(gtau[i] > taumax)
+            taumax = gtau[i];
+    }
+    if(logtrans != 0)
+        for(i = 1; i <= ntau; i++)
+            tau[i] = log10(tau[i]);
 
-        /* ---CLOSE READFILE--- */
-        if (fpd != stdin) fclose(fpd);
+    /* reading done */
 
-        /* ---MESSAGES--- */
-        if (!silent) {
+    /* ---CLOSE READFILE--- */
+    if(fpd != stdin)
+        fclose(fpd);
+
+    /* ---MESSAGES--- */
+    if(!silent) {
         printf(".........spline2 version 5.02 (14 may 1997)...........\n");
-        if (fpd == stdin) strcpy(str,"STDIN");
+        if(fpd == stdin)
+            strcpy(str, "STDIN");
         printf("Name of data file: %s\n", str);
-        if (sigma==1) printf("Format: x y\n");
-        if (sigma==0) printf("Format: x y sigma\n");
-        if (logtrans==1) printf("x -> log10(x)\n");
-        if (xflag==1) printf("X-range limited to (%g, %g)\n", xbegin, xend);
-        if (Xflag==1) printf("X-range (%g, %g) cut out\n", Xbegin, Xend);
+        if(sigma == 1)
+            printf("Format: x y\n");
+        if(sigma == 0)
+            printf("Format: x y sigma\n");
+        if(logtrans == 1)
+            printf("x -> log10(x)\n");
+        if(xflag == 1)
+            printf("X-range limited to (%g, %g)\n", xbegin, xend);
+        if(Xflag == 1)
+            printf("X-range (%g, %g) cut out\n", Xbegin, Xend);
         printf("Number of datapoints participating in spline-fit = %d\n", ntau);
-        if (fullon==1) printf("Full output to files splstat and splres\n");
-        if (lind == 1) printf("Search-reversal point set at l=%d\n", lopt);
-        printf("Degree of spline = %d\n", k-1);
-        if (fix==1) {
-                printf("Uncertainties in y frozen at ");
-                if (rel==0) {
-                        if (fixval==0.0) printf("values specified in input\n");
-                        if (fixval>0.0) printf("%g\n", fixval);
-                        if (fixval<0.0) printf("%g-th digit\n", -fixval+1);
-                        }
-                if (rel==1) {
-                        if (fixval>0.0) printf("%g*|y|\n", fixval);
-                        if (fixval<0.0) printf("%g*sqrt(|y|)\n", -fixval);
-                        }
-                }
+        if(fullon == 1)
+            printf("Full output to files splstat and splres\n");
+        if(lind == 1)
+            printf("Search-reversal point set at l=%d\n", lopt);
+        printf("Degree of spline = %d\n", k - 1);
+        if(fix == 1) {
+            printf("Uncertainties in y frozen at ");
+            if(rel == 0) {
+                if(fixval == 0.0)
+                    printf("values specified in input\n");
+                if(fixval > 0.0)
+                    printf("%g\n", fixval);
+                if(fixval < 0.0)
+                    printf("%g-th digit\n", -fixval + 1);
+            }
+            if(rel == 1) {
+                if(fixval > 0.0)
+                    printf("%g*|y|\n", fixval);
+                if(fixval < 0.0)
+                    printf("%g*sqrt(|y|)\n", -fixval);
+            }
+        }
         printf("Spline approximations are tested according to the ");
-        if (fix==0) printf("Durbin-Watson test\n");
-        else        printf("Chi-square test\n");
-        if (fix==0 && njan!=1)
-                printf("Correlation test spacing = %d datapoints\n", njan);
+        if(fix == 0)
+            printf("Durbin-Watson test\n");
+        else
+            printf("Chi-square test\n");
+        if(fix == 0 && njan != 1)
+            printf("Correlation test spacing = %d datapoints\n", njan);
         printf("...........................................................\n");
+    }
+
+    /* begin step 1: equal-information splines, increasing l */
+
+    lnew = 1;
+
+/* v5.0: return point for hyperspline extension */
+lbegin1:
+    test = 0.0;
+    while(test < REJLEV && lnew <= lopt) {
+        l2sub(&lnew, 0, 1);
+        ln = dummy = UPFACTOR * lnew;
+        ln = TRUNC_SPEC(ln, dummy);
+        if(ln > lopt && lnew < lopt)
+            ln = lopt;
+        if(ln == lnew)
+            lnew += 1;
+        else
+            lnew = ln;
+        if(lind == 1)
+            test = 0.0;
+        else
+            test = (fix == 0) ? ltest : ctest;
+    }
+    nl2sub = il2sub;
+    lbeg = iresul[nl2sub][1];
+
+    /* begin step 2: knot-optimized splines, decreasing l */
+
+    lnew = dummy = DOWNFACTOR * lbeg;
+    lnew = TRUNC_SPEC(lnew, dummy);
+    while(lnew > 1) {
+        l2sub(&lnew, 1, 1);
+        lnew = dummy = DOWNFACTOR * lnew;
+        lnew = TRUNC_SPEC(lnew, dummy);
+    }
+    if(lbeg > 1) {
+        il2sub++;
+        for(j = 1; j <= 2; j++)
+            iresul[il2sub][j] = iresul[1][j];
+        for(j = 1; j <= 5; j++)
+            resul[il2sub][j] = resul[1][j];
+    }
+
+    /* end step 2 */
+
+    Accept = 'n';
+    gragain = 'y';
+    grend = 0;
+    while(Accept == 'n') {
+        /*  error plot  */
+        if(!silent) {
+            if(gragain == 'y')
+                graer(grend);
         }
 
-        /* begin step 1: equal-information splines, increasing l */
+        grend = 1;
 
-        lnew = 1;
+        /* begin step 4 */
 
-        /* v5.0: return point for hyperspline extension */
-        lbegin1:
-        test = 0.0;
-        while (test < REJLEV && lnew <= lopt)
-                {
-                l2sub(&lnew,0,1);
-                ln = dummy = UPFACTOR*lnew;
-                ln = TRUNC_SPEC(ln,dummy);
-                if (ln > lopt && lnew < lopt) ln = lopt;
-                if (ln == lnew) lnew += 1; else lnew = ln;
-                if (lind == 1) test = 0.0;
-                else test = (fix == 0) ? ltest : ctest;
-                }
-        nl2sub = il2sub;
-        lbeg = iresul[nl2sub][1];
+        if(!silent && !done) {
+            printf("'rms' means: Fit-estimated y-uncertainty");
+            if(fix == 0) {
+                if(sigma == 1)
+                    sprintf(rmsversion, ".");
+                if(sigma == 0)
+                    sprintf(rmsversion, " / uncertainty given in input file.");
+            }
+            if(fix == 1) {
+                if(rel == 0 && fixval > 0.0)
+                    sprintf(rmsversion, " / %g.", fixval);
+                else if(rel == 0 && fixval == 0.0)
+                    sprintf(rmsversion, " / uncertainty given in input file.");
+                else
+                    sprintf(rmsversion, " / uncertainty via command line.");
+            }
+            printf("%s\n", rmsversion);
+            printf("...........................................................\n");
+            printf("Suggestion(s) for a good spline-fit:\n");
+        }
 
-        /* begin step 2: knot-optimized splines, decreasing l */
-
-        lnew = dummy = DOWNFACTOR*lbeg;
-        lnew = TRUNC_SPEC(lnew,dummy);
-        while (lnew > 1) 
-                {
-                l2sub(&lnew,1,1);
-                lnew = dummy = DOWNFACTOR*lnew;
-                lnew = TRUNC_SPEC(lnew,dummy);
-                }
-        if (lbeg > 1)
-                {
-                il2sub++;
-                for (j = 1; j <= 2; j++) iresul[il2sub][j] = iresul[1][j];
-                for (j = 1; j <= 5; j++) resul[il2sub][j] = resul[1][j];
-                }
-
-        /* end step 2 */
-
-        Accept = 'n';
-        gragain = 'y';
-        grend = 0; 
-        while (Accept == 'n')
-                {
-                /*  error plot  */
-                if (!silent) { if (gragain == 'y') graer(grend); }
-
-                grend = 1;
-
-                /* begin step 4 */
-
-                if (!silent && !done) 
-                  {
-                  printf("'rms' means: Fit-estimated y-uncertainty");
-                  if (fix==0) 
-                    {
-                    if (sigma==1) sprintf(rmsversion,".");
-                    if (sigma==0) 
-                    sprintf(rmsversion," / uncertainty given in input file.");
-                    }
-                  if (fix==1) 
-                    {
-                    if (rel==0 && fixval>0.0)
-                      sprintf(rmsversion," / %g.", fixval);
-                    else 
-                      if (rel==0 && fixval==0.0)
-                      sprintf(rmsversion," / uncertainty given in input file.");
-                      else
-                      sprintf(rmsversion," / uncertainty via command line.");
-                    }
-                  printf("%s\n", rmsversion);
-        printf("...........................................................\n");
-                  printf("Suggestion(s) for a good spline-fit:\n");
-                  }
-
-                wind = nn = 0;
-                if (fix == 0)
-                        {
-                        /* check results so far, first from the conservative
+        wind = nn = 0;
+        if(fix == 0) {
+            /* check results so far, first from the conservative
                            viewpoint (j=5), and if no acceptable spline
                            can be found, also from the liberal viewpoint
                            (j=4).
                         */
-                        for (j = 5; j >= 4 && nn == 0; j--)
-                                {
-                                if (j == 4) wind = 1;
-                                /* only the most recent decreasing-l series */
-                                for (i = nl2sub; i < il2sub; i++)
-                                    {
-                                    /* suggest spline i when
+            for(j = 5; j >= 4 && nn == 0; j--) {
+                if(j == 4)
+                    wind = 1;
+                /* only the most recent decreasing-l series */
+                for(i = nl2sub; i < il2sub; i++) {
+                    /* suggest spline i when
                                        no singularities were found AND
                                        spline i is acceptable AND
                                        spline i+1 is not acceptable
                                     */
-                                    if (resul[i][1] > 0.0 && 
-                                        resul[i][j] > REJLEV && 
-                                        resul[i+1][j] < REJLEV)
-                                        {
-                                        if (!silent && !done) 
-                                           printf("rms = %g, dws = %g: l=%d\n", 
-                                           resul[i][1], resul[i][3], 
-                                           iresul[i][1]);
-                                        isug = i;
-                                        nn++;
-                                        }
-                                    }
-                                if (nl2sub == 1 && resul[i][j] > REJLEV)
-                                    {
-                                    if (!silent && !done)
-                                      printf("rms = %g, dws = %g: l=1\n", 
-                                      resul[il2sub][1], resul[il2sub][3]);
-                                    isug = il2sub;
-                                    nn++;
-                                    }
-                                }
-                        }
-                else /* fix == 1 */
-                        {
-                        for (i = nl2sub; i < il2sub; i++)
-                            {
-                            if (resul[i][1] > 0.0 && 
-                                resul[i][2] > REJLEV && 
-                                resul[i+1][2] < REJLEV)
-                                {
-                                if (!silent && !done)
-                                    printf("rms = %g, dws = %g: l=%d\n", 
-                                    resul[i][1], resul[i][3], iresul[i][1]);
-                                isug = i;
-                                nn++;
-                                }
-                            }
-                        if (nl2sub == 1)
-                            {
-                            if (!silent && !done)
-                                printf("rms = %g, dws = %g: l=1\n", 
-                                resul[il2sub][1], resul[il2sub][3]);
-                            isug = il2sub;
-                            nn++;
-                            }
-                        }
-
-                if (nn == 0)
-                        {
-                        if (!silent && !done) 
-                            {
-                            printf("No really good spline can be found...");
-                            printf(" You'll have to live with this one:\n");
-                            }
-                        rmmin = resul[nl2sub][1];
-                        j = nl2sub;
-                        for (i = nl2sub; i <= il2sub; i++)
-                            {
-                            if (resul[i][1] < rmmin)
-                                {
-                                rmmin = resul[i][1];
-                                j = i;
-                                }
-                            }
-                        if (!silent && !done)
-                            printf("rms = %g, dws = %g: l=%d\n", resul[j][1],
-                            resul[j][3], iresul[j][1]);
-                        isug = j;
-                        }
-
-                if (wind == 1 && !done) 
-                    {
-                    if (!silent)
-printf("Mild warning: all suggested fits are in the indecisive D-W area\n");
-                    /* v5.0: hyperspline extension starts here */
-                    if (lind != 1) 
-                        {
-                        lopt = dummy = UPFACTOR*lbeg;
-                        lopt = TRUNC_SPEC(lopt,dummy);
-                        if (lopt==lbeg) lopt++;
-                        if (!silent)
-printf("Little success: now increasing lrev from %d to %d\n", lbeg, lopt);
-                        lnew = lopt;
-                        goto lbegin1;
-                        }
+                    if(resul[i][1] > 0.0 && resul[i][j] > REJLEV &&
+                       resul[i + 1][j] < REJLEV) {
+                        if(!silent && !done)
+                            printf(
+                                "rms = %g, dws = %g: l=%d\n",
+                                resul[i][1],
+                                resul[i][3],
+                                iresul[i][1]);
+                        isug = i;
+                        nn++;
                     }
+                }
+                if(nl2sub == 1 && resul[i][j] > REJLEV) {
+                    if(!silent && !done)
+                        printf(
+                            "rms = %g, dws = %g: l=1\n",
+                            resul[il2sub][1],
+                            resul[il2sub][3]);
+                    isug = il2sub;
+                    nn++;
+                }
+            }
+        } else /* fix == 1 */
+        {
+            for(i = nl2sub; i < il2sub; i++) {
+                if(resul[i][1] > 0.0 && resul[i][2] > REJLEV &&
+                   resul[i + 1][2] < REJLEV) {
+                    if(!silent && !done)
+                        printf(
+                            "rms = %g, dws = %g: l=%d\n",
+                            resul[i][1],
+                            resul[i][3],
+                            iresul[i][1]);
+                    isug = i;
+                    nn++;
+                }
+            }
+            if(nl2sub == 1) {
+                if(!silent && !done)
+                    printf(
+                        "rms = %g, dws = %g: l=1\n", resul[il2sub][1], resul[il2sub][3]);
+                isug = il2sub;
+                nn++;
+            }
+        }
 
-                if (!silent) 
-                        {
-                        if (!done)
-printf("Non-optimized breakpoints will be used for l=%d and above\n", lbeg);
-printf("Choose the number of intervals for the spline \
+        if(nn == 0) {
+            if(!silent && !done) {
+                printf("No really good spline can be found...");
+                printf(" You'll have to live with this one:\n");
+            }
+            rmmin = resul[nl2sub][1];
+            j = nl2sub;
+            for(i = nl2sub; i <= il2sub; i++) {
+                if(resul[i][1] < rmmin) {
+                    rmmin = resul[i][1];
+                    j = i;
+                }
+            }
+            if(!silent && !done)
+                printf(
+                    "rms = %g, dws = %g: l=%d\n", resul[j][1], resul[j][3], iresul[j][1]);
+            isug = j;
+        }
+
+        if(wind == 1 && !done) {
+            if(!silent)
+                printf(
+                    "Mild warning: all suggested fits are in the indecisive D-W area\n");
+            /* v5.0: hyperspline extension starts here */
+            if(lind != 1) {
+                lopt = dummy = UPFACTOR * lbeg;
+                lopt = TRUNC_SPEC(lopt, dummy);
+                if(lopt == lbeg)
+                    lopt++;
+                if(!silent)
+                    printf(
+                        "Little success: now increasing lrev from %d to %d\n",
+                        lbeg,
+                        lopt);
+                lnew = lopt;
+                goto lbegin1;
+            }
+        }
+
+        if(!silent) {
+            if(!done)
+                printf(
+                    "Non-optimized breakpoints will be used for l=%d and above\n", lbeg);
+            printf(
+                "Choose the number of intervals for the spline \
 ('s' for suggested)? l=");
-                        if (scanf("%d", &lfin)==0) lfin=iresul[isug][1];
-                        }
-                else 
-                        {
-                        lfin = iresul[isug][1];
-                        fprintf(stderr,"Spline-fit: rms=%g, dws=%g, l=%d (%s) ",
-                        resul[isug][1], resul[isug][3], iresul[isug][1],
-                        (iresul[isug][1]>=lbeg) ? "eqd" : "opt");
-                        if (nn == 0) fprintf(stderr,"(no good fit) ");
-                        if (wind == 1) fprintf(stderr,"(DW indecisive) ");
-                        fprintf(stderr,"\n");
-                        }
+            if(scanf("%d", &lfin) == 0)
+                lfin = iresul[isug][1];
+        } else {
+            lfin = iresul[isug][1];
+            fprintf(
+                stderr,
+                "Spline-fit: rms=%g, dws=%g, l=%d (%s) ",
+                resul[isug][1],
+                resul[isug][3],
+                iresul[isug][1],
+                (iresul[isug][1] >= lbeg) ? "eqd" : "opt");
+            if(nn == 0)
+                fprintf(stderr, "(no good fit) ");
+            if(wind == 1)
+                fprintf(stderr, "(DW indecisive) ");
+            fprintf(stderr, "\n");
+        }
 
-                /* end step 4, begin step 5 */
+        /* end step 4, begin step 5 */
 
-                if (lfin > lbeg) 
-                        l2sub(&lfin,0,0);
-                else
-                        {
-                        l2sub(&lbeg,0,0);
-                        lnew = dummy = DOWNFACTOR*lbeg;
-                        lnew = TRUNC_SPEC(lnew,dummy);
-                        while (lnew >= lfin) 
-                                {
-                                l2sub(&lnew,1,0);
-                                lnew = dummy = DOWNFACTOR*lnew;
-                                lnew = TRUNC_SPEC(lnew,dummy);
-                                }
-                        if (l > lfin) l2sub(&lfin,1,0);
-                        }
+        if(lfin > lbeg)
+            l2sub(&lfin, 0, 0);
+        else {
+            l2sub(&lbeg, 0, 0);
+            lnew = dummy = DOWNFACTOR * lbeg;
+            lnew = TRUNC_SPEC(lnew, dummy);
+            while(lnew >= lfin) {
+                l2sub(&lnew, 1, 0);
+                lnew = dummy = DOWNFACTOR * lnew;
+                lnew = TRUNC_SPEC(lnew, dummy);
+            }
+            if(l > lfin)
+                l2sub(&lfin, 1, 0);
+        }
 
-                if (!silent) grasp();
+        if(!silent)
+            grasp();
 
-                /* end step 5, begin step 6 */
+        /* end step 5, begin step 6 */
 
-                if (!silent) 
-                        {
-                        scanf("%c", &dum);
-                        if (Accept == 'n') 
-                            {
+        if(!silent) {
+            scanf("%c", &dum);
+            if(Accept == 'n') {
                 /*
                 printf("\n\n...Do you want to see the rms-plot again (y/n) ? ");
                 scanf("%c", &gragain);
                 */
-                            }
-                        }
-                else 
-                        {
-                        Accept = 'y';
-                        gragain = 'n';
-                        }
-                }
-        
-        /*---WRITE TO OUTPUT FILE(S)---*/
-        l2err(1,0);
-        fprintf(fps, "%d %d\n", k, l); 
-        for (i = 1; i <= l+1; i++) fprintf(fps, "%g\n", brek[i]);
-        for (i = 1; i <= l+km1; i++) fprintf(fps, "%g\n", bcoef[i]);
-
-        if (silent) 
-            {
-            fprintf(stdout, "%d %d\n", k, l); 
-            for (i = 1; i <= l+1; i++) fprintf(stdout, "%g\n", brek[i]);
-            for (i = 1; i <= l+km1; i++) fprintf(stdout, "%g\n", bcoef[i]);
             }
+        } else {
+            Accept = 'y';
+            gragain = 'n';
+        }
+    }
 
-        /* v5.0 try to write spline statistics to file in a more or
+    /*---WRITE TO OUTPUT FILE(S)---*/
+    l2err(1, 0);
+    fprintf(fps, "%d %d\n", k, l);
+    for(i = 1; i <= l + 1; i++)
+        fprintf(fps, "%g\n", brek[i]);
+    for(i = 1; i <= l + km1; i++)
+        fprintf(fps, "%g\n", bcoef[i]);
+
+    if(silent) {
+        fprintf(stdout, "%d %d\n", k, l);
+        for(i = 1; i <= l + 1; i++)
+            fprintf(stdout, "%g\n", brek[i]);
+        for(i = 1; i <= l + km1; i++)
+            fprintf(stdout, "%g\n", bcoef[i]);
+    }
+
+    /* v5.0 try to write spline statistics to file in a more or
            less organized way, so that plotting becomes simple.
            (suspected bug: maybe this does not work so nicely when the
            user searches 'manually')
         */
-        if (fullon) 
-            {
-            ldone = 0;
-            /* 1st pass to splstat: 
+    if(fullon) {
+        ldone = 0;
+        /* 1st pass to splstat: 
             only equi-information splines (increasing l) */
-            for (i = 1; i <= il2sub; i++)
-                {
-                if (iresul[i][1] > ldone) 
-                         {
-                         fprintf(fpr, " %d %d %g", 
-                                iresul[i][1], iresul[i][2], resul[i][1]);
-                         if (fix == 1) fprintf(fpr, " %g", resul[i][2]);
-                         fprintf(fpr, " %g %g %g\n", 
-                                resul[i][3], resul[i][4], resul[i][5]);
-                         ldone = iresul[i][1];
-                         /* mark all but the highest of a series */
-                         if (i<il2sub && iresul[i+1][1] > iresul[i][1])
-                                iresul[i][1] = 0; 
-                         }
-                }
-            /* 2nd pass to splstat: all newnot splines (decreasing l) */
-            for (i = 1; i <= il2sub; i++)
-                {
-                if (iresul[i][1] != 0) 
-                        {
-                        fprintf(fpr, " %d %d %g", 
-                                iresul[i][1], iresul[i][2], resul[i][1]);
-                        if (fix == 1) fprintf(fpr, " %g", resul[i][2]);
-                        fprintf(fpr, " %g %g %g\n", 
-                                resul[i][3], resul[i][4], resul[i][5]);
-                        }
-                }
-            /* 3rd pass to splstat: final spline */
-            fprintf(fpr, " %d -999 %g", lfin, rms);
-            if (fix == 1) fprintf(fpr, " -999");
-            fprintf(fpr, " %g -999 -999\n", dws);
+        for(i = 1; i <= il2sub; i++) {
+            if(iresul[i][1] > ldone) {
+                fprintf(fpr, " %d %d %g", iresul[i][1], iresul[i][2], resul[i][1]);
+                if(fix == 1)
+                    fprintf(fpr, " %g", resul[i][2]);
+                fprintf(fpr, " %g %g %g\n", resul[i][3], resul[i][4], resul[i][5]);
+                ldone = iresul[i][1];
+                /* mark all but the highest of a series */
+                if(i < il2sub && iresul[i + 1][1] > iresul[i][1])
+                    iresul[i][1] = 0;
             }
+        }
+        /* 2nd pass to splstat: all newnot splines (decreasing l) */
+        for(i = 1; i <= il2sub; i++) {
+            if(iresul[i][1] != 0) {
+                fprintf(fpr, " %d %d %g", iresul[i][1], iresul[i][2], resul[i][1]);
+                if(fix == 1)
+                    fprintf(fpr, " %g", resul[i][2]);
+                fprintf(fpr, " %g %g %g\n", resul[i][3], resul[i][4], resul[i][5]);
+            }
+        }
+        /* 3rd pass to splstat: final spline */
+        fprintf(fpr, " %d -999 %g", lfin, rms);
+        if(fix == 1)
+            fprintf(fpr, " -999");
+        fprintf(fpr, " %g -999 -999\n", dws);
+    }
 
 
-        /* ---EXIT--- */
-        fclose(fps);
-        if (fullon) {fclose(fpr); fclose(fpp);}
-        if (!silent) 
-                {
-printf("=====================================================================\n");
-printf("Contents of output file(s):\n");
-printf("'splrep' : order(k), #intvls(l), l+1 brkpnts, l+k-1 spline coefficients\n");
-                if (fullon) {
-printf("'splstat': l, deg.free, rms [, P(rms)], dws, Plow(dws), Pup(dws)\n");
-                if (!logtrans)
-printf("'splres' : x, y, S(x), d, sigma^-2, S'(x), S''(x)\n");
-                else
-printf("'splres' : log(x), y, S(x), d, sigma^-2, S'(x), S''(x)\n");
-                }
-printf("=====================================================================\n");
-printf("To use the spline S(x), run   'evalsp splrep [options...]'\n");
-printf("                               -> file 'evlres': x, S(x), S'(x), S''(x)\n");
-printf("                               By default: in 250 equidist. x-values\n");
-printf("options: [-x xbeg xend xstep]              in these equidist. x-values\n");
-printf("         [-f xfile]                        in x-values listed in xfile\n");
-printf("         [-e]                  Show maxima and minima of S(x)\n");
-printf("         [-i]                  Show inflection points of S(x)\n");
-printf("         [-v val]              Show x-value at which S(x)=value\n");
-printf("         [-a]                  Show integral of S(x)\n");
-printf("         [-h [-b val]]         Show points at half-height of peak\n");
-printf("                               (-b forces the background at val)\n");
-printf("         [-F sbeg send sstep]  Fourier transform of S(x)\n");
-printf("                               -> file 'evlfour': s, Re(FT), Im(FT)\n");
-printf("=====================================================================\n");
-                }
+    /* ---EXIT--- */
+    fclose(fps);
+    if(fullon) {
+        fclose(fpr);
+        fclose(fpp);
+    }
+    if(!silent) {
+        printf("=====================================================================\n");
+        printf("Contents of output file(s):\n");
+        printf(
+            "'splrep' : order(k), #intvls(l), l+1 brkpnts, l+k-1 spline coefficients\n");
+        if(fullon) {
+            printf("'splstat': l, deg.free, rms [, P(rms)], dws, Plow(dws), Pup(dws)\n");
+            if(!logtrans)
+                printf("'splres' : x, y, S(x), d, sigma^-2, S'(x), S''(x)\n");
+            else
+                printf("'splres' : log(x), y, S(x), d, sigma^-2, S'(x), S''(x)\n");
+        }
+        printf("=====================================================================\n");
+        printf("To use the spline S(x), run   'evalsp splrep [options...]'\n");
+        printf(
+            "                               -> file 'evlres': x, S(x), S'(x), S''(x)\n");
+        printf("                               By default: in 250 equidist. x-values\n");
+        printf(
+            "options: [-x xbeg xend xstep]              in these equidist. x-values\n");
+        printf(
+            "         [-f xfile]                        in x-values listed in xfile\n");
+        printf("         [-e]                  Show maxima and minima of S(x)\n");
+        printf("         [-i]                  Show inflection points of S(x)\n");
+        printf("         [-v val]              Show x-value at which S(x)=value\n");
+        printf("         [-a]                  Show integral of S(x)\n");
+        printf("         [-h [-b val]]         Show points at half-height of peak\n");
+        printf("                               (-b forces the background at val)\n");
+        printf("         [-F sbeg send sstep]  Fourier transform of S(x)\n");
+        printf("                               -> file 'evlfour': s, Re(FT), Im(FT)\n");
+        printf("=====================================================================\n");
+    }
 
-        exit(0);
+    exit(0);
 
-        } /* --end main-- */
+} /* --end main-- */
 
 /*---------------------------------------------------------------------------*/
 /*                              Functions                                    */
 /*---------------------------------------------------------------------------*/
-int l2sub(iptr,iopt,wr) int *iptr, iopt, wr;
-         
-        /*      Calculates spline approximation to the data.
+int l2sub(iptr, iopt, wr) int *iptr, iopt, wr;
+
+/*      Calculates spline approximation to the data.
          *
          *      input:
          *         *iptr   = number of intervals;
@@ -2680,398 +2686,366 @@ int l2sub(iptr,iopt,wr) int *iptr, iopt, wr;
          *         q = normalized errors at the data points.
          */
 {
-        int     ip;
-        double  coefg[3][LMAX], p[KMAX][KMAX+LMAX], scrtch[LMAX+KMAX],
-                t[LMAX+KMAX], chi;                              
-        ip = *iptr;
-        if (iopt == 0) ip = -ip;
-        newknt(brek,coef,&l,&k,scrtch,&ip,coefg);
-        l2knts(scrtch,&ip,&k,t,&n);
-        l2appr(t,&n,&k,p,scrtch,bcoef);
-        bsplpp(t,bcoef,&n,&k,p,brek,coef,&l);
-        l2err(0,1);
-        dwtest(dws,&ltest,&utest);
-        if (fix == 1)
-        {
-                chi = rms*rms*freed;
-                ctest = chitest(chi,freed);
+    int ip;
+    double coefg[3][LMAX], p[KMAX][KMAX + LMAX], scrtch[LMAX + KMAX], t[LMAX + KMAX], chi;
+    ip = *iptr;
+    if(iopt == 0)
+        ip = -ip;
+    newknt(brek, coef, &l, &k, scrtch, &ip, coefg);
+    l2knts(scrtch, &ip, &k, t, &n);
+    l2appr(t, &n, &k, p, scrtch, bcoef);
+    bsplpp(t, bcoef, &n, &k, p, brek, coef, &l);
+    l2err(0, 1);
+    dwtest(dws, &ltest, &utest);
+    if(fix == 1) {
+        chi = rms * rms * freed;
+        ctest = chitest(chi, freed);
+    }
+    if(wr == 1) {
+        il2sub++;
+        iresul[il2sub][1] = ip;
+        iresul[il2sub][2] = freed;
+        if(il2sub == 1) {
+            if(fix == 0)
+                rmsmin = rms;
+            else {
+                rmsmin = 1.;
+                rmsmax = 5.;
+            }
         }
-        if (wr == 1)
-        {
-                il2sub++;
-                iresul[il2sub][1] = ip;
-                iresul[il2sub][2] = freed;
-                if (il2sub == 1) 
-                {
-                        if (fix == 0) rmsmin = rms;
-                        else
-                        {
-                                rmsmin = 1.;
-                                rmsmax = 5.;
-                        }
-                }
-                if (rms < rmsmin) rmsmin = rms;
-                if (rms > rmsmax) rmsmax = rms;
-                if (nsing > 0) rms *= -1;
-                resul[il2sub][1] = rms;
-                if (fix == 1) resul[il2sub][2] = ctest;
-                else resul[il2sub][2] = 0;
-                resul[il2sub][3] = dws;
-                resul[il2sub][4] = ltest;
-                resul[il2sub][5] = utest;
-        }
+        if(rms < rmsmin)
+            rmsmin = rms;
+        if(rms > rmsmax)
+            rmsmax = rms;
+        if(nsing > 0)
+            rms *= -1;
+        resul[il2sub][1] = rms;
+        if(fix == 1)
+            resul[il2sub][2] = ctest;
+        else
+            resul[il2sub][2] = 0;
+        resul[il2sub][3] = dws;
+        resul[il2sub][4] = ltest;
+        resul[il2sub][5] = utest;
+    }
 }
 
 /*---------------------------------------------------------------------------*/
-int newknt(ara,dara,iptr,jptr,arb,kptr,darb)
-        double  ara[], arb[], dara[][LMAX], darb[][LMAX];
-        int     *iptr, *jptr, *kptr;
+int newknt(ara, dara, iptr, jptr, arb, kptr, darb) double ara[], arb[], dara[][LMAX],
+    darb[][LMAX];
+int *iptr, *jptr, *kptr;
 
-        /*  calculates new ("best") set of breakpoints, no intervals with
+/*  calculates new ("best") set of breakpoints, no intervals with
          *  less then two data-points will be made
          */
 {
-        int     ip, jp, kp, i, ii, j, lleft, mflag, iend, idif;
-        double  a, oneovk, dif, difprv, step, stepi;            
-        ip = *iptr;
-        jp = *jptr;
-        kp = *kptr;
+    int ip, jp, kp, i, ii, j, lleft, mflag, iend, idif;
+    double a, oneovk, dif, difprv, step, stepi;
+    ip = *iptr;
+    jp = *jptr;
+    kp = *kptr;
 
-        arb[1] = tau[1];
-        arb[abs(kp)+1] = tau[ntau];
-        if(kp < 0)
-        {
-                kp = -1*kp;
-                /*$dir no_recurrence*/
-                for (i = 2; i <= kp; i++)
-                {
-                        a = ((double)(i-1))*(ntau-1)/kp+1;
-                        ii = a;
-                        arb[i] = tau[ii]+(a-ii)*(tau[ii+1]-tau[ii]);
-                }
-                *kptr = kp;
+    arb[1] = tau[1];
+    arb[abs(kp) + 1] = tau[ntau];
+    if(kp < 0) {
+        kp = -1 * kp;
+        /*$dir no_recurrence*/
+        for(i = 2; i <= kp; i++) {
+            a = ((double)(i - 1)) * (ntau - 1) / kp + 1;
+            ii = a;
+            arb[i] = tau[ii] + (a - ii) * (tau[ii + 1] - tau[ii]);
         }
-        else
-        {
-                oneovk = 1./jp;
-                darb[1][1] = 0.;
-                difprv = fabs((dara[jp][2]-dara[jp][1])/(ara[3]-ara[1]));
-                for (i = 2; i <= ip; i++)
-                {
-        dif = fabs((dara[jp][i]-dara[jp][i-1])/(ara[i+1]-ara[i-1]));
-                        darb[2][i-1] = pow((dif+difprv),oneovk);
-                darb[1][i] = darb[1][i-1]+darb[2][i-1]*(ara[i]-ara[i-1]);
-                        difprv = dif;
-                }
-                darb[2][ip] = pow((2*difprv),oneovk);
-step = (darb[1][ip]+darb[2][ip]*(ara[ip+1]-ara[ip]))/kp;
-                if (step > 0.)
-                {
-                        j = 1;
-                        for (i = 2; i <= kp; i++)
-                        {
-                                stepi = (i-1)*step;
-                                while (j != ip && stepi > darb[1][j+1]) j++;
-                                if (darb[2][j] != 0)
-                                {
-                                arb[i] = ara[j]+(stepi-darb[1][j])/darb[2][j];
-                                }
-                                else arb[i] = (ara[j]+ara[j+1])/2;
-                        }
-                }
-                else
-                {
-                        step = (tau[ntau]-tau[1])/kp;
-                        /*$dir no_recurrence*/
-                        for (i = 2; i <= kp; i++)
-                        {
-                                arb[i] = tau[i]+(i-1)*step;
-                        }
-                }
-                lleft = 1;
-                iend = idif = 0;
-                for (i = 2; i <= kp+1; i++)
-                {
-                        interv(tau,&ntau,&arb[i],&left,&mflag);
-                        if (left-lleft > 0) lleft = left;
-                        else
-                        {
-                                lleft += 1;
-                                if (lleft < ntau) 
-                                {
-                                        arb[i] = (tau[lleft]+tau[lleft+1])/2.;
-                                }
-                                else
-                                {
-                                        iend++;
-                                        arb[i] = tau[ntau];
-                                }
-                        }
-                }
-                if (iend != 0)
-                {
-                        i = 1;
-                        lleft = ntau-1;
-                        while (idif < 1)
-                        {
-                        interv(tau,&ntau,&arb[kp+1-i],&left,&mflag);
-                                idif = lleft-left;
-                                if (idif < 1)
-                                {
-                                        lleft -= 1;
-                                arb[kp+1-i] = (tau[lleft]+tau[lleft+1])/2.;
-                                        i++;
-                                }
-                        }
-                }
-        }
-} 
-
-/*---------------------------------------------------------------------------*/
-int l2knts(ara,iptr,jptr,arb,kptr)
-        int     *iptr, *jptr, *kptr;
-        double  *ara, *arb;  
-
-        /*  breakpoints to knots  */
-{
-        int     ip, jp, kp, i, kk;
-        kk = km1;
-        /*$dir no_recurrence*/
-        for (i = 1; i <= kk; i++) arb[i] = ara[1];
-        ip = *iptr;
-        jp = *jptr;
-        /*$dir no_recurrence*/
-        for (i = 1; i <= ip; i++) arb[km1+i] = ara[i];
-        kp = km1+ip;
-        /*$dir no_recurrence*/
-        for (i = 1; i <= jp; i++) arb[kp+i] = ara[ip+1];
         *kptr = kp;
-}
-
-/*---------------------------------------------------------------------------*/
-int l2appr(ara,iptr,jptr,dara,arb,arc)
-        int     *iptr, *jptr;
-        double  ara[], arb[], arc[], dara[][LMAX+KMAX];
-
-        /*  calculates spline approximation to given data (tau,gtau)  */
-{
-        int     ip, jp, j, i, ll, mm, jj;
-        double  dw, biatx[KMAX];
-        ip = *iptr;
-        jp = *jptr;
-        ll = jp;
-        for (j = 1; j <= ip; j++)
-        {
-                arc[j] = 0.;
-                for (i = 1; i <= ll; i++) dara[i][j] = 0.;
+    } else {
+        oneovk = 1. / jp;
+        darb[1][1] = 0.;
+        difprv = fabs((dara[jp][2] - dara[jp][1]) / (ara[3] - ara[1]));
+        for(i = 2; i <= ip; i++) {
+            dif = fabs((dara[jp][i] - dara[jp][i - 1]) / (ara[i + 1] - ara[i - 1]));
+            darb[2][i - 1] = pow((dif + difprv), oneovk);
+            darb[1][i] = darb[1][i - 1] + darb[2][i - 1] * (ara[i] - ara[i - 1]);
+            difprv = dif;
         }
-        left = jp;
-        for (ll = 1; ll <= ntau; ll++)
-        {
-                while (left != ip && tau[ll] >= ara[left+1]) left++;
-                bsplvb(ara,jp,1,&tau[ll],&left,biatx);
-                for(mm = 1; mm <= jp; mm++)
-                {
-                        dw = biatx[mm]*weight[ll];
-                        j = left-jp+mm;
-                        arc[j] += dw*gtau[ll];
-                        i = 1;
-                        for (jj = mm; jj <= jp; jj++)
-                        {
-                                dara[i][j] += biatx[jj]*dw;
-                                i++;
-                        }
+        darb[2][ip] = pow((2 * difprv), oneovk);
+        step = (darb[1][ip] + darb[2][ip] * (ara[ip + 1] - ara[ip])) / kp;
+        if(step > 0.) {
+            j = 1;
+            for(i = 2; i <= kp; i++) {
+                stepi = (i - 1) * step;
+                while(j != ip && stepi > darb[1][j + 1])
+                    j++;
+                if(darb[2][j] != 0) {
+                    arb[i] = ara[j] + (stepi - darb[1][j]) / darb[2][j];
+                } else
+                    arb[i] = (ara[j] + ara[j + 1]) / 2;
+            }
+        } else {
+            step = (tau[ntau] - tau[1]) / kp;
+            /*$dir no_recurrence*/
+            for(i = 2; i <= kp; i++) {
+                arb[i] = tau[i] + (i - 1) * step;
+            }
+        }
+        lleft = 1;
+        iend = idif = 0;
+        for(i = 2; i <= kp + 1; i++) {
+            interv(tau, &ntau, &arb[i], &left, &mflag);
+            if(left - lleft > 0)
+                lleft = left;
+            else {
+                lleft += 1;
+                if(lleft < ntau) {
+                    arb[i] = (tau[lleft] + tau[lleft + 1]) / 2.;
+                } else {
+                    iend++;
+                    arb[i] = tau[ntau];
                 }
+            }
         }
-        bchfac(dara,&jp,&ip,arb);
-        bchslv(dara,&jp,&ip,arc);
-}
-
-/*---------------------------------------------------------------------------*/
-int bchfac(dara,iptr,jptr,ara)
-        int     *iptr, *jptr;
-        double  ara[], dara[][LMAX+KMAX];
-
-        /*  constructs cholesky factorization  */
-{
-        int     ip, jp, i, j, imax, jmax, ii;
-        double  ratio;
-        ip = *iptr;
-        jp = *jptr;
-        nsing = 0;
-        if (jp <= 1 && dara[1][1] > 0) dara[1][1] = 1/dara[1][1];
-        else
-        {
-                /*$dir no_recurrence*/
-                for (ii = 1; ii <= jp; ii++) ara[ii] = dara[1][ii];
-                for (ii = 1; ii <= jp; ii++)
-                {
-                        if (dara[1][ii]+ara[ii] <= ara[ii])
-                        {
-                                nsing++;
-                                for(j = 1; j <= ip; j++) dara[j][ii] = 0.;
-                        }
-                        else
-                        {
-                                dara[1][ii] = 1/dara[1][ii];
-                                if (ip-1 < jp-ii) imax = ip-1;
-                                else imax = jp-ii;
-                                if (imax > 0)
-                                {
-                                        jmax = imax;
-                                        for(i = 1; i <= imax; i++)
-                                        {
-                                        ratio = dara[i+1][ii]*dara[1][ii];
-                                                /*$dir no_recurrence*/
-                                                for(j = 1; j <= jmax; j++)
-                                                {
-                                        dara[j][ii+i] -= dara[j+i][ii]*ratio;
-                                                }
-                                                jmax--;
-                                                dara[i+1][ii] = ratio;
-                                        }
-                                }
-                        }
+        if(iend != 0) {
+            i = 1;
+            lleft = ntau - 1;
+            while(idif < 1) {
+                interv(tau, &ntau, &arb[kp + 1 - i], &left, &mflag);
+                idif = lleft - left;
+                if(idif < 1) {
+                    lleft -= 1;
+                    arb[kp + 1 - i] = (tau[lleft] + tau[lleft + 1]) / 2.;
+                    i++;
                 }
+            }
         }
+    }
 }
 
 /*---------------------------------------------------------------------------*/
-int bchslv(dara,iptr,jptr,ara)
-        int *iptr, *jptr;
-        double  ara[], dara[][LMAX+KMAX];
+int l2knts(ara, iptr, jptr, arb, kptr) int *iptr, *jptr, *kptr;
+double *ara, *arb;
 
-        /* solves a banded positive definite set of equations */
+/*  breakpoints to knots  */
 {
-        int     ip, jp, kk, jmax, j, ii;
-        double  nbndm1;
-        ip = *iptr;
-        jp = *jptr;
-        if (jp <= 1) ara[1] *= dara[1][1];
-        else
-        {
-                nbndm1 = ip-1;
-                kk = jp;
-                for(ii = 1; ii <= kk; ii++)
-                {
-                        if (nbndm1 < jp-ii) jmax = nbndm1;
-                        else jmax = jp-ii;
+    int ip, jp, kp, i, kk;
+    kk = km1;
+    /*$dir no_recurrence*/
+    for(i = 1; i <= kk; i++)
+        arb[i] = ara[1];
+    ip = *iptr;
+    jp = *jptr;
+    /*$dir no_recurrence*/
+    for(i = 1; i <= ip; i++)
+        arb[km1 + i] = ara[i];
+    kp = km1 + ip;
+    /*$dir no_recurrence*/
+    for(i = 1; i <= jp; i++)
+        arb[kp + i] = ara[ip + 1];
+    *kptr = kp;
+}
+
+/*---------------------------------------------------------------------------*/
+int l2appr(ara, iptr, jptr, dara, arb, arc) int *iptr, *jptr;
+double ara[], arb[], arc[], dara[][LMAX + KMAX];
+
+/*  calculates spline approximation to given data (tau,gtau)  */
+{
+    int ip, jp, j, i, ll, mm, jj;
+    double dw, biatx[KMAX];
+    ip = *iptr;
+    jp = *jptr;
+    ll = jp;
+    for(j = 1; j <= ip; j++) {
+        arc[j] = 0.;
+        for(i = 1; i <= ll; i++)
+            dara[i][j] = 0.;
+    }
+    left = jp;
+    for(ll = 1; ll <= ntau; ll++) {
+        while(left != ip && tau[ll] >= ara[left + 1])
+            left++;
+        bsplvb(ara, jp, 1, &tau[ll], &left, biatx);
+        for(mm = 1; mm <= jp; mm++) {
+            dw = biatx[mm] * weight[ll];
+            j = left - jp + mm;
+            arc[j] += dw * gtau[ll];
+            i = 1;
+            for(jj = mm; jj <= jp; jj++) {
+                dara[i][j] += biatx[jj] * dw;
+                i++;
+            }
+        }
+    }
+    bchfac(dara, &jp, &ip, arb);
+    bchslv(dara, &jp, &ip, arc);
+}
+
+/*---------------------------------------------------------------------------*/
+int bchfac(dara, iptr, jptr, ara) int *iptr, *jptr;
+double ara[], dara[][LMAX + KMAX];
+
+/*  constructs cholesky factorization  */
+{
+    int ip, jp, i, j, imax, jmax, ii;
+    double ratio;
+    ip = *iptr;
+    jp = *jptr;
+    nsing = 0;
+    if(jp <= 1 && dara[1][1] > 0)
+        dara[1][1] = 1 / dara[1][1];
+    else {
+        /*$dir no_recurrence*/
+        for(ii = 1; ii <= jp; ii++)
+            ara[ii] = dara[1][ii];
+        for(ii = 1; ii <= jp; ii++) {
+            if(dara[1][ii] + ara[ii] <= ara[ii]) {
+                nsing++;
+                for(j = 1; j <= ip; j++)
+                    dara[j][ii] = 0.;
+            } else {
+                dara[1][ii] = 1 / dara[1][ii];
+                if(ip - 1 < jp - ii)
+                    imax = ip - 1;
+                else
+                    imax = jp - ii;
+                if(imax > 0) {
+                    jmax = imax;
+                    for(i = 1; i <= imax; i++) {
+                        ratio = dara[i + 1][ii] * dara[1][ii];
                         /*$dir no_recurrence*/
-                        if (jmax > 0) for (j = 1; j <= jmax; j++) 
-                        {
-                                ara[j+ii] -= dara[j+1][ii]*ara[ii];
+                        for(j = 1; j <= jmax; j++) {
+                            dara[j][ii + i] -= dara[j + i][ii] * ratio;
                         }
+                        jmax--;
+                        dara[i + 1][ii] = ratio;
+                    }
                 }
-                for (ii = jp; ii >= 1; ii--)
-                {
-                        ara[ii] *= dara[1][ii];
-                        if (nbndm1 < jp-ii) jmax = nbndm1;
-                        else jmax = jp-ii;
-                        if (jmax > 0) for (j = 1; j <= jmax; j++)
-                        {
-                                ara[ii] -= dara[j+1][ii]*ara[j+ii];
-                        }
-                }
+            }
         }
+    }
 }
 
 /*---------------------------------------------------------------------------*/
-int bsplpp(ara,arb,iptr,jptr,dara,arc,darb,kptr)
-        int     *iptr, *jptr, *kptr;
-        double  ara[], arb[], arc[], dara[][KMAX], darb[][LMAX];
+int bchslv(dara, iptr, jptr, ara) int *iptr, *jptr;
+double ara[], dara[][LMAX + KMAX];
 
-        /*  converts spline to piecewise polynomial representation  */
+/* solves a banded positive definite set of equations */
 {
-        int     ip, jp, lsofar, j, i, jp1, kmj;
-        double  diff, sum, biatx[KMAX];
-        ip = *iptr;
-        jp = *jptr;
-        arc[1] = ara[jp];
-        lsofar = 0;
-        for (left = jp; left <= ip; left++)
-        {
-                if(ara[left+1] != ara[left])
-                {
-                        lsofar++;
-                        arc[lsofar+1] = ara[left+1];
-                        if (jp <= 1) darb[1][lsofar] = arb[left];
-                        else
-                        {
-                                /*$dir no_recurrence*/
-                                for (i = 1; i <= jp; i++)
-                                {
-                                        dara[i][1] = arb[left-jp+i];
-                                }
-                                for (jp1 = 2; jp1 <= jp; jp1++)
-                                {
-                                        j = jp1-1;
-                                        kmj = k-j;
-                                        /*$dir no_recurrence*/
-                                        for(i = 1; i <= kmj; i++)
-                                        {
-                                        diff = ara[left+i]-ara[left+i-kmj];
-                                                if (diff > 0.)
-                                                {
-                        dara[i][jp1] = ((dara[i+1][j]-dara[i][j])/diff)*kmj;
-                                                }
-                                        }
-                                }
-                                bsplvb(ara,1,1,&ara[left],&left,biatx);
-                                darb[jp][lsofar] = dara[1][jp];
-                                for(jp1 = 2; jp1 <= jp; jp1++)
-                                {
-                                bsplvb(ara,jp1,2,&ara[left],&left,biatx);
-                                        kmj = k+1-jp1;
-                                        sum = 0.;
-                                        for(i = 1; i <=jp1; i++)
-                                        {
-                                                sum += biatx[i]*dara[i][kmj];
-                                                darb[kmj][lsofar] = sum;
-                                        }
-                                }
-                        }
+    int ip, jp, kk, jmax, j, ii;
+    double nbndm1;
+    ip = *iptr;
+    jp = *jptr;
+    if(jp <= 1)
+        ara[1] *= dara[1][1];
+    else {
+        nbndm1 = ip - 1;
+        kk = jp;
+        for(ii = 1; ii <= kk; ii++) {
+            if(nbndm1 < jp - ii)
+                jmax = nbndm1;
+            else
+                jmax = jp - ii;
+            /*$dir no_recurrence*/
+            if(jmax > 0)
+                for(j = 1; j <= jmax; j++) {
+                    ara[j + ii] -= dara[j + 1][ii] * ara[ii];
                 }
         }
-        *kptr = lsofar;
+        for(ii = jp; ii >= 1; ii--) {
+            ara[ii] *= dara[1][ii];
+            if(nbndm1 < jp - ii)
+                jmax = nbndm1;
+            else
+                jmax = jp - ii;
+            if(jmax > 0)
+                for(j = 1; j <= jmax; j++) {
+                    ara[ii] -= dara[j + 1][ii] * ara[j + ii];
+                }
+        }
+    }
 }
 
 /*---------------------------------------------------------------------------*/
-int bsplvb(ara,jhigh,index,xptr,iptr,arb)
-        int     jhigh, index, *iptr;
-        double  ara[], arb[], *xptr;
+int bsplpp(ara, arb, iptr, jptr, dara, arc, darb, kptr) int *iptr, *jptr, *kptr;
+double ara[], arb[], arc[], dara[][KMAX], darb[][LMAX];
 
-        /*  calculates all nonzero beta-splines at *xptr  */
+/*  converts spline to piecewise polynomial representation  */
 {
-        int     ip, jp1, i;
-        double  xp, saved, term;
-        ip = *iptr;
-        xp = *xptr;
-        if (index == 1)
-        {
-                jbsp = 1;
-                arb[1] = 1.;
-        }
-        while (jbsp < jhigh)
-        {
-                jp1 = jbsp+1;
-                deltar[jbsp] = ara[ip+jbsp]-xp;
-                deltal[jbsp] = xp-ara[ip+1-jbsp];
-                saved = 0.;
-                for (i = 1; i <= jbsp; i++)
-                {
-                        term = arb[i]/(deltar[i]+deltal[jp1-i]);
-                        arb[i] = saved+deltar[i]*term;
-                        saved = deltal[jp1-i]*term;
+    int ip, jp, lsofar, j, i, jp1, kmj;
+    double diff, sum, biatx[KMAX];
+    ip = *iptr;
+    jp = *jptr;
+    arc[1] = ara[jp];
+    lsofar = 0;
+    for(left = jp; left <= ip; left++) {
+        if(ara[left + 1] != ara[left]) {
+            lsofar++;
+            arc[lsofar + 1] = ara[left + 1];
+            if(jp <= 1)
+                darb[1][lsofar] = arb[left];
+            else {
+                /*$dir no_recurrence*/
+                for(i = 1; i <= jp; i++) {
+                    dara[i][1] = arb[left - jp + i];
                 }
-                arb[jp1] = saved;
-                jbsp++;
+                for(jp1 = 2; jp1 <= jp; jp1++) {
+                    j = jp1 - 1;
+                    kmj = k - j;
+                    /*$dir no_recurrence*/
+                    for(i = 1; i <= kmj; i++) {
+                        diff = ara[left + i] - ara[left + i - kmj];
+                        if(diff > 0.) {
+                            dara[i][jp1] = ((dara[i + 1][j] - dara[i][j]) / diff) * kmj;
+                        }
+                    }
+                }
+                bsplvb(ara, 1, 1, &ara[left], &left, biatx);
+                darb[jp][lsofar] = dara[1][jp];
+                for(jp1 = 2; jp1 <= jp; jp1++) {
+                    bsplvb(ara, jp1, 2, &ara[left], &left, biatx);
+                    kmj = k + 1 - jp1;
+                    sum = 0.;
+                    for(i = 1; i <= jp1; i++) {
+                        sum += biatx[i] * dara[i][kmj];
+                        darb[kmj][lsofar] = sum;
+                    }
+                }
+            }
         }
+    }
+    *kptr = lsofar;
 }
 
 /*---------------------------------------------------------------------------*/
-int l2err(prfun,grfun)  int prfun, grfun;
+int bsplvb(ara, jhigh, index, xptr, iptr, arb) int jhigh, index, *iptr;
+double ara[], arb[], *xptr;
 
-        /*  calculates and prints details of spline fit;  
+/*  calculates all nonzero beta-splines at *xptr  */
+{
+    int ip, jp1, i;
+    double xp, saved, term;
+    ip = *iptr;
+    xp = *xptr;
+    if(index == 1) {
+        jbsp = 1;
+        arb[1] = 1.;
+    }
+    while(jbsp < jhigh) {
+        jp1 = jbsp + 1;
+        deltar[jbsp] = ara[ip + jbsp] - xp;
+        deltal[jbsp] = xp - ara[ip + 1 - jbsp];
+        saved = 0.;
+        for(i = 1; i <= jbsp; i++) {
+            term = arb[i] / (deltar[i] + deltal[jp1 - i]);
+            arb[i] = saved + deltar[i] * term;
+            saved = deltal[jp1 - i] * term;
+        }
+        arb[jp1] = saved;
+        jbsp++;
+    }
+}
+
+/*---------------------------------------------------------------------------*/
+int l2err(prfun, grfun) int prfun, grfun;
+
+/*  calculates and prints details of spline fit;  
          *
          *  input:
          *     prfun = 0: no final results written to splres,
@@ -3080,323 +3054,315 @@ int l2err(prfun,grfun)  int prfun, grfun;
          *           = 1: first derivative calculated for plot.
          */
 {
-        int     ll; 
-        double  err, errl2, errdw, a, dtau, ddtau;
-        errl2 = errdw = dermax =  0.;
-        for (ll = 1; ll <= ntau; ll++)
-        {
-                ftau[ll] = ppvalu(brek,coef,&l,&k,&tau[ll],0);
-                q[ll] = (ftau[ll]-gtau[ll])*sqrt(weight[ll]);
-                if (grfun == 1 && k != 1) 
-                {
-                        deriv[ll] = ppvalu(brek,coef,&l,&k,&tau[ll],1);
-                        if (fabs(deriv[ll]) > dermax) dermax = fabs(deriv[ll]);
-                }
-                err = q[ll];
-                errl2 += err*err;
-                if (ll > njan) errdw += (err-q[ll-njan])*(err-q[ll-njan]);
+    int ll;
+    double err, errl2, errdw, a, dtau, ddtau;
+    errl2 = errdw = dermax = 0.;
+    for(ll = 1; ll <= ntau; ll++) {
+        ftau[ll] = ppvalu(brek, coef, &l, &k, &tau[ll], 0);
+        q[ll] = (ftau[ll] - gtau[ll]) * sqrt(weight[ll]);
+        if(grfun == 1 && k != 1) {
+            deriv[ll] = ppvalu(brek, coef, &l, &k, &tau[ll], 1);
+            if(fabs(deriv[ll]) > dermax)
+                dermax = fabs(deriv[ll]);
         }
-        freed = ntau-km1-l;
-        rms = sqrt((errl2/freed));
-        /* new, 9 jan 1996: scale up errdw when njan > 1, to compensate
+        err = q[ll];
+        errl2 += err * err;
+        if(ll > njan)
+            errdw += (err - q[ll - njan]) * (err - q[ll - njan]);
+    }
+    freed = ntau - km1 - l;
+    rms = sqrt((errl2 / freed));
+    /* new, 9 jan 1996: scale up errdw when njan > 1, to compensate
            for fewer terms in the sum than ntau-1 */
-        /* dws = errdw/errl2; */
-        dws = errdw/errl2 * (ntau-1.0)/(ntau-njan);
-        if (prfun == 1)
-        {
-                for (ll = 1; ll <= ntau; ll++)
-                {
-                        a = ntau*weight[ll]/totalw; /* why this variable? */
-                        dtau = ppvalu(brek,coef,&l,&k,&tau[ll],1);
-                        ddtau = ppvalu(brek,coef,&l,&k,&tau[ll],2);
-                        if (fullon) {
-        /* fprintf(fpp, " %g %g %g %g %g %g %g\n",
+    /* dws = errdw/errl2; */
+    dws = errdw / errl2 * (ntau - 1.0) / (ntau - njan);
+    if(prfun == 1) {
+        for(ll = 1; ll <= ntau; ll++) {
+            a = ntau * weight[ll] / totalw; /* why this variable? */
+            dtau = ppvalu(brek, coef, &l, &k, &tau[ll], 1);
+            ddtau = ppvalu(brek, coef, &l, &k, &tau[ll], 2);
+            if(fullon) {
+                /* fprintf(fpp, " %g %g %g %g %g %g %g\n",
                 tau[ll], gtau[ll], ftau[ll], q[ll], a, dtau, ddtau); */
-        /* 22-6-1996: */
-        fprintf(fpp, " %g %g %g %g %g %g %g\n", tau[ll], gtau[ll], ftau[ll], q[ll], weight[ll], dtau, ddtau); 
+                /* 22-6-1996: */
+                fprintf(
+                    fpp,
+                    " %g %g %g %g %g %g %g\n",
+                    tau[ll],
+                    gtau[ll],
+                    ftau[ll],
+                    q[ll],
+                    weight[ll],
+                    dtau,
+                    ddtau);
+            }
         }
-                }
-        }
+    }
 }
 
 /*---------------------------------------------------------------------------*/
-double ppvalu(ara,dara,iptr,jptr,xptr,jderiv)
-        int     *iptr, *jptr, jderiv;
-        double  *xptr, ara[], dara[][LMAX];
+double ppvalu(ara, dara, iptr, jptr, xptr, jderiv) int *iptr, *jptr, jderiv;
+double *xptr, ara[], dara[][LMAX];
 
-        /*  evaluates the jderiv-th derivative of a pp-function  */
+/*  evaluates the jderiv-th derivative of a pp-function  */
 {
-        int     ip, jp, fmmjdr, i, ndummy, m;
-        double  xp, h;
-        ip = *iptr;
-        jp = *jptr;
-        xp = *xptr;
-        ppvalue = 0.;
-        fmmjdr = jp-jderiv;
-        if (fmmjdr > 0)
-        {
-                interv(ara,&ip,&xp,&i,&ndummy);
-                h = xp-ara[i];
-                for (m = jp; m >= jderiv+1; m--)
-                {
-                        ppvalue = (ppvalue/fmmjdr)*h+dara[m][i];
-                        fmmjdr--;
-                }
+    int ip, jp, fmmjdr, i, ndummy, m;
+    double xp, h;
+    ip = *iptr;
+    jp = *jptr;
+    xp = *xptr;
+    ppvalue = 0.;
+    fmmjdr = jp - jderiv;
+    if(fmmjdr > 0) {
+        interv(ara, &ip, &xp, &i, &ndummy);
+        h = xp - ara[i];
+        for(m = jp; m >= jderiv + 1; m--) {
+            ppvalue = (ppvalue / fmmjdr) * h + dara[m][i];
+            fmmjdr--;
         }
-        return(ppvalue);
+    }
+    return (ppvalue);
 }
 
 /*---------------------------------------------------------------------------*/
-int interv(ara,iptr,xptr,jptr,kptr)
-        int     *iptr, *jptr, *kptr;
-        double  *xptr, ara[];
+int interv(ara, iptr, xptr, jptr, kptr) int *iptr, *jptr, *kptr;
+double *xptr, ara[];
 
-        /*  locates a point within an increasing sequence of points  */
+/*  locates a point within an increasing sequence of points  */
 {
-        int     ip, jp, kp, istep, middle, ilos;
-        double  xp;
-        ip = *iptr;
-        xp = *xptr;
-        kp = 10;
-        ihi = ilo+1;
-        if (ihi >= ip)
-        {
-                if (xp >= ara[ip]) kp = 1;
-                else
-                {
-                        if (ip <= 1) kp = -1;
-                        else
-                        {
-                                ilo = ip-1;
-                                ihi = ip;
-                        }
-                }
+    int ip, jp, kp, istep, middle, ilos;
+    double xp;
+    ip = *iptr;
+    xp = *xptr;
+    kp = 10;
+    ihi = ilo + 1;
+    if(ihi >= ip) {
+        if(xp >= ara[ip])
+            kp = 1;
+        else {
+            if(ip <= 1)
+                kp = -1;
+            else {
+                ilo = ip - 1;
+                ihi = ip;
+            }
         }
-        if (kp == 10)
-        {
-                if (xp < ara[ihi])
-                {
-                        if (xp >= ara[ilo]) kp = 0;
-                        else
-                        {
-                                istep = 1;
-                                while (ilo > 1 && xp < ara[ilo])
-                                {
-                                        ihi = ilo;
-                                        ilo = ihi-istep;
-                                        istep *= 2;
-                                }
-                                if (ilo <= 1)
-                                {
-                                        ilo = 1;
-                                        if (xp < ara[1]) kp = -1;
-                                }
-                        }
+    }
+    if(kp == 10) {
+        if(xp < ara[ihi]) {
+            if(xp >= ara[ilo])
+                kp = 0;
+            else {
+                istep = 1;
+                while(ilo > 1 && xp < ara[ilo]) {
+                    ihi = ilo;
+                    ilo = ihi - istep;
+                    istep *= 2;
                 }
-                else
-                {
-                        istep = 1;
-                        while (ihi < ip && xp > ara[ihi])
-                        {
-                                ilo = ihi;
-                                ihi = ilo+istep;
-                                istep *= 2;
-                        }
-                        if (ihi >= ip)
-                        {
-                                ihi = ip;
-                                if (xp > ara[ip]) kp = 1;
-                        }
+                if(ilo <= 1) {
+                    ilo = 1;
+                    if(xp < ara[1])
+                        kp = -1;
                 }
-                if (kp == 10)
-                {
-                        do
-                        {
-                                middle = (ilo+ihi)/2;
-                                if (xp >= ara[middle])
-                                {
-                                        ilos = ilo;
-                                        ilo = middle;
-                                }
-                                else ihi = middle;
-                        }
-                        while (middle != ilos);
-                }
+            }
+        } else {
+            istep = 1;
+            while(ihi < ip && xp > ara[ihi]) {
+                ilo = ihi;
+                ihi = ilo + istep;
+                istep *= 2;
+            }
+            if(ihi >= ip) {
+                ihi = ip;
+                if(xp > ara[ip])
+                    kp = 1;
+            }
         }
-        if (kp == -1) jp = 1;
-        else
-        {
-                if (kp == 1) jp = ip;
-                else
-                {
-                        kp = 0;
-                        jp = ilo;
-                }
+        if(kp == 10) {
+            do {
+                middle = (ilo + ihi) / 2;
+                if(xp >= ara[middle]) {
+                    ilos = ilo;
+                    ilo = middle;
+                } else
+                    ihi = middle;
+            } while(middle != ilos);
         }
-        *jptr = jp;
-        *kptr = kp;
+    }
+    if(kp == -1)
+        jp = 1;
+    else {
+        if(kp == 1)
+            jp = ip;
+        else {
+            kp = 0;
+            jp = ilo;
+        }
+    }
+    *jptr = jp;
+    *kptr = kp;
 }
 
 /*---------------------------------------------------------------------------*/
-int dwtest(x,xptr,yptr) double  x, *xptr, *yptr;
+int dwtest(x, xptr, yptr) double x, *xptr, *yptr;
 
-        /* calculates percentages of lower (*xptr) and upper (*yptr) 
+/* calculates percentages of lower (*xptr) and upper (*yptr) 
          * percentages of x
          */
 {
-        int     i;
-        double  y, pin, ci, sc, scc, aa, pl, pu, xp, yp;
-        pin = 4*atan(1.)/ntau;
-        sc = scc = 0;
-        for (i = 1; i < ntau-freed; i++)
-        {
-                ci = cos(pin*i);
-                sc += ci;
-                scc += ci*ci;
-        }
-        sc = sc/freed;
-        aa = (double) freed*(freed+2)*(1-sc*sc)/(ntau-2-2*scc-2*freed*sc*sc)-1;
-        pl = aa*(1-sc)/2;
-        pu = aa*(1+sc)/2;
-        y = x/4;
-        xp = betai(pl,pu,y);
-        yp = betai(pu,pl,y);
-        *xptr = xp;
-        *yptr = yp;
+    int i;
+    double y, pin, ci, sc, scc, aa, pl, pu, xp, yp;
+    pin = 4 * atan(1.) / ntau;
+    sc = scc = 0;
+    for(i = 1; i < ntau - freed; i++) {
+        ci = cos(pin * i);
+        sc += ci;
+        scc += ci * ci;
+    }
+    sc = sc / freed;
+    aa = (double)freed * (freed + 2) * (1 - sc * sc) /
+             (ntau - 2 - 2 * scc - 2 * freed * sc * sc) -
+         1;
+    pl = aa * (1 - sc) / 2;
+    pu = aa * (1 + sc) / 2;
+    y = x / 4;
+    xp = betai(pl, pu, y);
+    yp = betai(pu, pl, y);
+    *xptr = xp;
+    *yptr = yp;
 }
 
 /*---------------------------------------------------------------------------*/
-double betai(a,b,x)     double a, b, x;
+double betai(a, b, x) double a, b, x;
 
-        /* calculates Ix(a,b)   */
+/* calculates Ix(a,b)   */
 {
-        double  bt, betai;
-        if (x == 0 || x == 1) bt = 0;
-        else bt = exp(lgamma(a+b)-lgamma(a)-lgamma(b)+a*log(x)+b*log(1-x));
-        if (x < (a+1)/(a+b+2)) betai = bt*betacf(a,b,x)/a;
-        else betai = 1-bt*betacf(b,a,1-x)/b;
-        return(betai);
+    double bt, betai;
+    if(x == 0 || x == 1)
+        bt = 0;
+    else
+        bt = exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * log(x) + b * log(1 - x));
+    if(x < (a + 1) / (a + b + 2))
+        betai = bt * betacf(a, b, x) / a;
+    else
+        betai = 1 - bt * betacf(b, a, 1 - x) / b;
+    return (betai);
 }
-        
-/*---------------------------------------------------------------------------*/
-double betacf(a,b,x)    double  a, b, x;
 
-        /* continued fraction for Ix(a,b) */
+/*---------------------------------------------------------------------------*/
+double betacf(a, b, x) double a, b, x;
+
+/* continued fraction for Ix(a,b) */
 {
-        int     em, tem;
-        double  aold, am, bm, az, qab, qap, qam, bz, d, ap, bp, app, bpp;
-        aold = 0;
-        em = 0;
-        am = bm = az = 1;
-        qab = a+b;
-        qap = a+1;
-        qam = a-1;
-        bz = 1-qab*x/qap;
-        while (fabs(az-aold) > 1e-7*fabs(az))
-        {
-                em++;
-                tem = em+em;
-                d = em*(b-em)*x/(qam+tem)/(a+tem);
-                ap = az+d*am;
-                bp = bz+d*bm;
-                d = -(a+em)*(qab+em)*x/(a+tem)/(qap+tem);
-                app = ap+d*az;
-                bpp = bp+d*bz;
-                aold = az;
-                am = ap/bpp;
-                bm = bp/bpp;
-                az = app/bpp;
-                bz = 1;
-        }
-        return(az);
+    int em, tem;
+    double aold, am, bm, az, qab, qap, qam, bz, d, ap, bp, app, bpp;
+    aold = 0;
+    em = 0;
+    am = bm = az = 1;
+    qab = a + b;
+    qap = a + 1;
+    qam = a - 1;
+    bz = 1 - qab * x / qap;
+    while(fabs(az - aold) > 1e-7 * fabs(az)) {
+        em++;
+        tem = em + em;
+        d = em * (b - em) * x / (qam + tem) / (a + tem);
+        ap = az + d * am;
+        bp = bz + d * bm;
+        d = -(a + em) * (qab + em) * x / (a + tem) / (qap + tem);
+        app = ap + d * az;
+        bpp = bp + d * bz;
+        aold = az;
+        am = ap / bpp;
+        bm = bp / bpp;
+        az = app / bpp;
+        bz = 1;
+    }
+    return (az);
 }
 
 /*---------------------------------------------------------------------------*/
-double chitest(chi,fr)
-        int     fr;
-        double  chi;
-                
-        /* calculates upper percentage points of chisquare of x with a degrees
+double chitest(chi, fr) int fr;
+double chi;
+
+/* calculates upper percentage points of chisquare of x with a degrees
            of freedom
          */
 {
-        double  a, x, gamser, gln, gammcf;
-        a = (double) fr/2.;
-        x = chi/2;
-        if (x < a+1) 
-        {
-                gser(&gamser,a,x,&gln);
-                gammcf = 1-gamser;
-        }
-        else gcf(&gammcf,a,x,&gln);
-        return(gammcf);
+    double a, x, gamser, gln, gammcf;
+    a = (double)fr / 2.;
+    x = chi / 2;
+    if(x < a + 1) {
+        gser(&gamser, a, x, &gln);
+        gammcf = 1 - gamser;
+    } else
+        gcf(&gammcf, a, x, &gln);
+    return (gammcf);
 }
 
 /*---------------------------------------------------------------------------*/
-int gser(xptr,a,x,yptr) double  *xptr, a, x, *yptr;
+int gser(xptr, a, x, yptr) double *xptr, a, x, *yptr;
 
-        /* returns the incomplete gamma function p(a,x) evaluated by its
+/* returns the incomplete gamma function p(a,x) evaluated by its
            series representation as *xptr; also returns ln(gamma(a)) as 
            *yptr
          */
 {
-        double  xp, yp, ap, sum, del;
-        yp = lgamma(a);
-        ap = a;
-        sum = 1/a;
-        del = sum;
-        while (fabs(del) > fabs(sum)*1e-7)
-        {
-                ap++;
-                del *= x/ap;
-                sum += del;
-        }
-        xp = sum*exp(-x+a*log(x)-yp);
-        *xptr = xp;
-        *yptr = yp;
+    double xp, yp, ap, sum, del;
+    yp = lgamma(a);
+    ap = a;
+    sum = 1 / a;
+    del = sum;
+    while(fabs(del) > fabs(sum) * 1e-7) {
+        ap++;
+        del *= x / ap;
+        sum += del;
+    }
+    xp = sum * exp(-x + a * log(x) - yp);
+    *xptr = xp;
+    *yptr = yp;
 }
 
 /*---------------------------------------------------------------------------*/
-int gcf(xptr,a,x,yptr)  double  *xptr, a, x, *yptr;
+int gcf(xptr, a, x, yptr) double *xptr, a, x, *yptr;
 
-        /* returns the incomplete gamma function q(a,x) evaluated by its 
+/* returns the incomplete gamma function q(a,x) evaluated by its 
            continued fraction representation as *xptr; also returns ln(gamma(a))
            as *yptr
          */
 {
-        int     n;
-        double  xp, yp, gold, b0, g, a0, b1, fac, a1, ana, anf;
-        yp = lgamma(a);
-        gold = b0 = 0.;
-        a0 = b1 = fac = g = 1.;
-        a1 = x;
-        n = 1;
-        while (fabs((g-gold)/g) > 1e-7)
-        {
-                if (a1 != 0 && n != 1) gold = g;
-                ana = n-a;
-                a0 = (a1+a0*ana)*fac;
-                b0 = (b1+b0*ana)*fac;
-                anf = n*fac;
-                a1 = x*a0+anf*a1;
-                b1 = x*b0+anf*b1;
-                if (a1 != 0)
-                {
-                        fac = 1/a1;
-                        g = b1*fac;
-                }
-                n++;
+    int n;
+    double xp, yp, gold, b0, g, a0, b1, fac, a1, ana, anf;
+    yp = lgamma(a);
+    gold = b0 = 0.;
+    a0 = b1 = fac = g = 1.;
+    a1 = x;
+    n = 1;
+    while(fabs((g - gold) / g) > 1e-7) {
+        if(a1 != 0 && n != 1)
+            gold = g;
+        ana = n - a;
+        a0 = (a1 + a0 * ana) * fac;
+        b0 = (b1 + b0 * ana) * fac;
+        anf = n * fac;
+        a1 = x * a0 + anf * a1;
+        b1 = x * b0 + anf * b1;
+        if(a1 != 0) {
+            fac = 1 / a1;
+            g = b1 * fac;
         }
-        xp = exp(-x+a*log(x)-yp)*g;
-        *xptr = xp;
-        *yptr = yp;
+        n++;
+    }
+    xp = exp(-x + a * log(x) - yp) * g;
+    *xptr = xp;
+    *yptr = yp;
 }
 
 /*---------------------------------------------------------------------------*/
-int graer(ind)  int     ind;
-        /*   constructs log(rms) vs log(l) plot  */
+int graer(ind) int ind;
+/*   constructs log(rms) vs log(l) plot  */
 {
-/*
+    /*
         int     i, j, xplot, yplot, ixmax, ymax, ymin;
         double  xmax, xmin, xrange, yrange;
         char    dum1, s, st[2], testtitle[50], xtitle[80], ytitle[80];
@@ -3479,16 +3445,16 @@ int graer(ind)  int     ind;
 /*---------------------------------------------------------------------------*/
 int grasp()
 
-        /*
+/*
          * constructs plot of spline, first derivatives, breakpoints 
          * and weighted errors
          *
          */
 {
-        int     xplot, yplot, xpl[NMAX], i, xpr, ypr, xd, yd, dist;
-        double  xbegin, xend, xrange, ybegin, yend, yrange, aa;
-        char    dum;
-/*
+    int xplot, yplot, xpl[NMAX], i, xpr, ypr, xd, yd, dist;
+    double xbegin, xend, xrange, ybegin, yend, yrange, aa;
+    char dum;
+    /*
         openpl();
         erase();
         space(0,0,1000,1000);
@@ -3549,21 +3515,22 @@ int grasp()
         move (0,180);
         closepl();
 */
-        printf("rms = %g", rms);
-        printf(", dws = %g.", dws);
-        if (fix == 0) test = ltest;
-        else test = ctest;
-        if (test < REJLEV) printf(" <-- WARNING: not ok. ");
-        else
-        {
-                if (fix == 0 && utest < REJLEV)
-                {
-                printf(" <-- Mild warning: indecisive. ");
-                }
+    printf("rms = %g", rms);
+    printf(", dws = %g.", dws);
+    if(fix == 0)
+        test = ltest;
+    else
+        test = ctest;
+    if(test < REJLEV)
+        printf(" <-- WARNING: not ok. ");
+    else {
+        if(fix == 0 && utest < REJLEV) {
+            printf(" <-- Mild warning: indecisive. ");
         }
-        /* try out v5.0 */
-        /* Code fragment moved to exit part of main */
-        printf(" Done (y/n)? ");
-        scanf("%c%c", &dum, &Accept);  
-        done = 1;
+    }
+    /* try out v5.0 */
+    /* Code fragment moved to exit part of main */
+    printf(" Done (y/n)? ");
+    scanf("%c%c", &dum, &Accept);
+    done = 1;
 }

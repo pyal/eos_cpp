@@ -19,7 +19,7 @@ double Deby(double Dens,int k1) //k1 1-2
       double dr=Dens*StndErr;
       double Pc=EvalSpl(*G_in1,0,k1,*G_S[k1-1],Dens);
       double C2=(EvalSpl(*G_in1,0,k1,*G_S[k1-1],Dens+dr)-Pc)/dr;
-      return pow(Dens,1./3)*sqrt(max(C2-2*Pc/(3*Dens),StndErr));
+      return pow(Dens,1./3)*sqrt(max<double>(C2-2*Pc/(3*Dens),StndErr));
   };
 double MetCoef,H2_Deby;
 double EqDebyExpr(double x)

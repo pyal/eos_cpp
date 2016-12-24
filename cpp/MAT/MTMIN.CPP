@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "mtmin.h"
 /* E04ABE.f -- translated by f2c (version 19970805).
    You must link the resulting object file with the libraries:
@@ -7,7 +7,7 @@
 
     
 
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 #ifdef __cplusplus
 extern "C" {

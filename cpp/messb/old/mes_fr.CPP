@@ -405,7 +405,7 @@ void GenerateInt(CMatrCl &Ham3,CMatrCl &Rot3Rgt,
                  CMatrCl &Ham1,CMatrCl &Rot1Lft,
                  double t0,double t1,double MaxNorm,my_comp *&res,double &Tstp,int &Nit)
  {
-  double M=max(MatrNorm(Ham3),MatrNorm(Ham1));
+  double M=max<double>(MatrNorm(Ham3),MatrNorm(Ham1));
   CMatrCl Uni3(4),Uni1(2);Uni3=Uni3*0+1;Uni1=Uni1*0+1;
 
   Nit=int((t1-t0)*M/MaxNorm)+1;

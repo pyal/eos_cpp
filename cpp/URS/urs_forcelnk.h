@@ -2,7 +2,8 @@
 #pragma once
 
 #include "fre_bus.h"
-#include "mat\spl_fac.h"
+#include "mat/spl_fac.h"
+
 
 // VarFunction_category - category
 // Used in Fre_Bus only
@@ -18,7 +19,7 @@ extern ForceLinkVoid<HeatCapacityE_SigmaT> Dummy_HeatCapacityE_SigmaT;
 extern ForceLinkVoid<GammaE_SigmaT> Dummy_GammaE_SigmaT;
 
 // OneVarFunction
-#include "mat\OneVarCurves.h"
+#include "mat/OneVarCurves.h"
 extern ForceLinkVoid<Cold_Vinet> Dummy_Cold_Vinet;
 //extern ForceLinkVoid<Cold_VinetE> Dummy_Cold_VinetE;
 extern ForceLinkVoid<Cold_TF_Kalitkin_P> Dummy_Cold_TF_Kalitkin_P;
@@ -27,13 +28,12 @@ extern ForceLinkVoid<PolynomFunc> Dummy_PolynomFunc;
 extern ForceLinkVoid<NoiseWavelet> Dummy_NoiseWavelet;
 
 
-
 // ManyVarFunction
 extern ForceLinkVoid<Spl2DGenerator> Dummy_Spl2DGenerator;
 extern ForceLinkVoid<NoiseRemoval> Dummy_NoiseRemoval;
 
 // OneVarFunction
-#include "mat\OpacityClc.h"
+#include "mat/OpacityClc.h"
 extern ForceLinkVoid<BrigtnesTemp> Dummy_BrigtnesTemp;
 extern ForceLinkVoid<ColorTemp> Dummy_ColorTemp;
 extern ForceLinkVoid<PlancEmission> Dummy_PlancEmission;
@@ -46,8 +46,7 @@ extern ForceLinkVoid<CurveSpline> Dummy_CurveSpline;
 extern ForceLinkVoid<ExtendedRegridSpline> Dummy_ExtendedRegridSpline;
 
 
-
-#include "mat\spline\spl_inc.h"
+#include "mat/spline/spl_inc.h"
 extern ForceLinkVoid<TExpConverter> Dummy_TExpConverter;
 extern ForceLinkVoid<TAutoExpConverter> Dummy_TAutoExpConverter;
 extern ForceLinkVoid<TEncodedSplineCalculator> Dummy_TEncodedSplineCalculator;
@@ -58,11 +57,10 @@ extern ForceLinkVoid<TSpline1DCalculator> Dummy_TSpline1DCalculator;
 extern ForceLinkVoid<TSpline1DGenerator> Dummy_TSpline1DGenerator;
 
 
-
 // MatterFreeE_category
 extern ForceLinkVoid<FreeEBushman> Dummy_FreeEBushman;
 
-#include "urs\fre_ros.h"
+#include "urs/fre_ros.h"
 
 extern ForceLinkVoid<FreeEPureRoss> Dummy_FreeEPureRoss;
 extern ForceLinkVoid<FreeERossN2> Dummy_FreeERossN2;
@@ -71,7 +69,6 @@ extern ForceLinkVoid<FreeERossH2_DisLim0> Dummy_FreeERossH2_DisLim0;
 extern ForceLinkVoid<FreeERossH2_Minim> Dummy_FreeERossH2_Minim;
 extern ForceLinkVoid<FreeERossXe> Dummy_FreeERossXe;
 extern ForceLinkVoid<FreeERossBin> Dummy_FreeERossBin;
-
 
 
 #include "fre_url.h"
@@ -92,11 +89,6 @@ extern ForceLinkVoid<FreeEEmpiLiquid> Dummy_FreeEEmpiLiquid;
 extern ForceLinkVoid<FreeEEmpiSolid> Dummy_FreeEEmpiSolid;
 extern ForceLinkVoid<FreeEMetHCold> Dummy_FreeEMetHCold;
 extern ForceLinkVoid<FreeEElectron> Dummy_FreeEElectron;
-
-#include "util/code_gen/calculator/calc_prg_types.h" // for FreeEFormula
-extern ForceLinkVoid<StdClcDouble> Dummy_StdClcDouble;
-extern ForceLinkVoid<StdClcUndefined> Dummy_StdClcUndefined;
-extern ForceLinkVoid<StdClcString> Dummy_StdClcString;
 
 #include "fre_multi.h"
 extern ForceLinkVoid<FreeESumMatter> Dummy_FreeESumMatter;
@@ -141,13 +133,17 @@ extern ForceLinkVoid<ClcMixture::FreeEMixture> Dummy_FreeEMixture;
 //extern ForceLinkVoid<RosLowering> Dummy_RosLowering;
 extern ForceLinkVoid<ClcIonisation::FreeEIonSimple> Dummy_ClcIonisation_FreeEIonSimple;
 extern ForceLinkVoid<ClcIonisation::FreeEIonGrig> Dummy_ClcIonisation_FreeEIonGrig;
-extern ForceLinkVoid<ClcIonisation::OneVarRosLowering> Dummy_ClcIonisation_OneVarRosLowering;
-extern ForceLinkVoid<ClcIonisation::FreeEIonLowVolDepend> Dummy_ClcIonisation_FreeEIonLowVolDepend;
+extern ForceLinkVoid<ClcIonisation::OneVarRosLowering>
+    Dummy_ClcIonisation_OneVarRosLowering;
+extern ForceLinkVoid<ClcIonisation::FreeEIonLowVolDepend>
+    Dummy_ClcIonisation_FreeEIonLowVolDepend;
 extern ForceLinkVoid<ClcIonisation::FreeEIonDeby> Dummy_ClcIonisation_FreeEIonDeby;
-extern ForceLinkVoid<ClcIonisation::FreeEIonDebyHuckel> Dummy_ClcIonisation_FreeEIonDebyHuckel;
-extern ForceLinkVoid<ClcIonisation::FreeEIonDebyAnisimov> Dummy_ClcIonisation_FreeEIonDebyAnisimov;
-extern ForceLinkVoid<ClcIonisation::AnisimovLoweringCurve> Dummy_ClcIonisation_AnisimovLoweringCurve;
-
+extern ForceLinkVoid<ClcIonisation::FreeEIonDebyHuckel>
+    Dummy_ClcIonisation_FreeEIonDebyHuckel;
+extern ForceLinkVoid<ClcIonisation::FreeEIonDebyAnisimov>
+    Dummy_ClcIonisation_FreeEIonDebyAnisimov;
+extern ForceLinkVoid<ClcIonisation::AnisimovLoweringCurve>
+    Dummy_ClcIonisation_AnisimovLoweringCurve;
 
 
 //#include "fre_anis_deby.h"
@@ -156,12 +152,10 @@ extern ForceLinkVoid<ClcIonisation::AnisimovLoweringCurve> Dummy_ClcIonisation_A
 //#include "clc_anis_deby.h"
 
 
-
 // MatterBnd_category
 #include "matt_2phase.h"
 extern ForceLinkVoid<MatterStable::TwoPhaseBoundary> Dummy_TwoPhaseBoundary;
 extern ForceLinkVoid<MatterLiqSol::LiquidSolidBnd> Dummy_LiquidSolidBnd;
-
 
 
 // Matter_category
@@ -204,11 +198,11 @@ extern ForceLinkVoid<Matter2StateProb> Dummy_Matter2StateProb;
 extern ForceLinkVoid<MatterStable> Dummy_MatterStable;
 extern ForceLinkVoid<MatterLiqSol> Dummy_MatterLiqSol;
 extern ForceLinkVoid<MatterBinodalSpinodal> Dummy_MatterBinodalSpinodal;
-//#ifdef InternalPointsUrs 
+//#ifdef InternalPointsUrs
 //#endif
 extern ForceLinkVoid<FreeELiqSol> Dummy_FreeELiqSol;
 
-#include "mat\fun_fac.h"
+#include "mat/fun_fac.h"
 extern ForceLinkVoid<OneVarFormula> Dummy_OneVarFormula;
 
 
@@ -216,7 +210,7 @@ extern ForceLinkVoid<OneVarFormula> Dummy_OneVarFormula;
 extern ForceLinkVoid<FreeEElectronStrict> Dummy_FreeEElectronStrict;
 
 //
-//#include "urs\test\urs_curve.h"
+//#include "urs/test/urs_curve.h"
 //extern ForceLinkVoid<URS_Curve> Dummy_URS_Curve;
 //extern ForceLinkVoid<URS_Curve::Output> Dummy_URS_Curve_Output;
 //extern ForceLinkVoid<URS_Curve::ClcVar> Dummy_URS_Curve_ClcVar;
@@ -231,7 +225,7 @@ extern ForceLinkVoid<FreeEElectronStrict> Dummy_FreeEElectronStrict;
 //extern ForceLinkVoid<UrsCurve_Output2Store> Dummy_UrsCurve_Output2Store;
 //
 //
-//#include "urs\test\urs_curve_calculator.h"
+//#include "urs/test/urs_curve_calculator.h"
 //extern ForceLinkVoid<UrsCurve_Calculator> Dummy_UrsCurve_Calculator;
 //
 ////Tmp
@@ -241,10 +235,6 @@ extern ForceLinkVoid<FreeEElectronStrict> Dummy_FreeEElectronStrict;
 //
 //extern ForceLinkVoid<EOS_Savable> Dummy_EOS_Savable;
 //
-//#include "urs\test\urs_2phase.h"
+//#include "urs/test/urs_2phase.h"
 //extern ForceLinkVoid<UrsCurve_PT_Bnd_Constructor> Dummy_UrsCurve_PT_Bnd_Constructor;
 //extern ForceLinkVoid<UrsCurve_PT_Bnd_Binary> Dummy_UrsCurve_PT_Bnd_Binary;
-
-
-
-

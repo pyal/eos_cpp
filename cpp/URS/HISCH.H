@@ -2,8 +2,8 @@
 #define __HISCH_H
 
 #include "matt_cfg.h"
-#include "lib\std\deffunc.h"
-//#include "lib\std\interfac.h"
+#include "lib/std/deffunc.h"
+//#include "lib/std/interfac.h"
 //#include <alloc.h>
 
 struct HischConst{  

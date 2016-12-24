@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int qpsrt_(integer *limit, integer *last, integer *maxerr, 
 	real *ermax, real *elist, integer *iord, integer *nrmax)

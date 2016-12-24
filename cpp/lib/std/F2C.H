@@ -10,9 +10,14 @@
 //#include "util.h"
 
 //#define MSDOS
-#define NON_UNIX_STDIO
+//#define NON_UNIX_STDIO
 //#include <iostream.h>
-
+//#define MAC
+#ifdef MAC
+	#pragma GCC diagnostic ignored "-Wlogical-op-parentheses"
+	#pragma GCC diagnostic ignored "-Wincompatible-library-redeclaration"
+	#define DBL_RADIX FLT_RADIX
+#endif
 typedef long int integer;
 typedef unsigned long uinteger;
 typedef char *address;

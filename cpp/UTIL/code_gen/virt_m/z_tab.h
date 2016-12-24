@@ -38,11 +38,10 @@
 #define UNARYMINUS 285
 #define NOT 286
 
-typedef union
-{
-   SYMBOL *sym;
-   INST   *inst;
-   int     narg;
+typedef union {
+    SYMBOL *sym;
+    INST *inst;
+    int narg;
 } ZUBR_STYPE;
 
 extern ZUBR_STYPE zubr_lval;

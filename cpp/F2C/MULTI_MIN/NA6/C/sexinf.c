@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int sexinf_(integer *numfun, real *gamma, real *c__, integer 
 	*key, integer *n, real *t, real *ct, integer *update, integer *emax, 

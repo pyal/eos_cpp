@@ -1,4 +1,4 @@
-#include <lib\precompiled\Messb.h>
+#include <lib/precompiled/Messb.h>
 #include "messb.h"
 //#include <malloc.h>
 //
@@ -345,7 +345,7 @@ CMatrCl Solver_Blume_Nax_poly::MakeAmpMatrLR(int Left)
   if (Left)
   {
     VecCl p(Nham);
-    for (k=1;k<=Nham;k++) p[k]=1/max(fabs(Times[k]),MathZer);
+    for (k=1;k<=Nham;k++) p[k]=1/max<double>(fabs(Times[k]),MathZer);
     p=p/(p*(p*0+1));
     for ( k=1;k<=Nham;k++) Mul(k,k)=p[k];
   }
@@ -1676,7 +1676,7 @@ void RInt(CMatrCl &Mat,CVecCl &AmpL,CMatrCl &AmpR,double *x,double *y,double Wid
 ////   for (int k=1;k<=n;k++) {p[k]=fabs(Time[k]);s+=p[k];}
 //   //if (s>MathZer) {s=1/s;for ( k=1;k<=n;k++) p[k]*=s;}
 //   //else {s=1./n;for ( k=1;k<=n;k++) p[k]=s;}
-//   for (int k=1;k<=n;k++) p[k]=1/max(fabs(Time[k]),MathZer);
+//   for (int k=1;k<=n;k++) p[k]=1/max<double>(fabs(Time[k]),MathZer);
 //   p=p/(p*(p*0+1));
 //   CMatrCl H(8,3);H=R0HQsAmpVec_();
 //   CMatrCl Mul(n);Mul=Mul*0;

@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 doublereal dqwgts_(doublereal *x, doublereal *a, doublereal *b, doublereal *
 	alfa, doublereal *beta, integer *integr)

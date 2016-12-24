@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "uralgol.h"
 
 
@@ -159,7 +159,7 @@ int URtql2(double *Diag,double *DiagPl,MatrCl &Conv)
 
 
 
-long double URinnerpod(int l,int s,int u,long double c,VecCl &a,VecCl &b)
+long double URinnerpod(int l,int s,int u,long double c,const VecCl &a,const VecCl &b)
   {
    long double sum=c;
    for (int k=l;k<=u;k+=s) sum+=(long double)a[k]*(long double)b[k];
@@ -197,7 +197,7 @@ int URunsymdet(MatrCl &a,double eps,double &d1,int &d2,int *rear)
         }
       rear[k]=l;
       d1*=a(k,k);
-      if (x<8*eps) {delete tmp;return 0;}
+      if (x<8*eps) {delete []tmp;return 0;}
     l1:
 //cout<<" d1= "<<d1<<"\n";
       if (fabs(d1)>=1)  {  d1*=0.0625;d2+=4;goto l1; }
@@ -208,7 +208,7 @@ int URunsymdet(MatrCl &a,double eps,double &d1,int &d2,int *rear)
       for (j=k+1;j<=N;j++)
          a(k,j)=x*URinnerpod(1,1,k-1,-a(k,j),MatrCl::GetRow(a,k),MatrCl::GetCol(a,j));
      }
-   delete tmp;
+   delete []tmp;
    return 1;
   };   
 
@@ -276,7 +276,7 @@ int SolveAxb(MatrCl &a,VecCl &b,VecCl &x,double Tol)
    VecCl Mis(N);
    int d2,*rear=new int[N+1];rear[0]=N;
    int ret=URunsymdet(LU,Tol,d1,d2,rear);
-   if (!ret) {delete rear;return ret;}
+   if (!ret) {delete []rear;return ret;}
 //cout<<" Matrics \n"<<a<<" Det= "<<d1*pow(2,d2)<<" LU decompose \n"<<LU;
 //MatrCl L=LU,U=LU;for (int k=1;k<=N;k++) 
 //{for (int k1=1;k1<k;k1++) {U(k,k1)=0;L(k1,k)=0;} L(k,k)=LU(k,k);U(k,k)=1;}
@@ -285,7 +285,7 @@ int SolveAxb(MatrCl &a,VecCl &b,VecCl &x,double Tol)
 //cout<<" Iter done "<<l<<" Error "<<ret<<" Input vector \n"<<b
 //    <<" Result vector \n"<<x <<" Misfit \n"<<Mis<<" Delta\n"<<a*x-b
 //    <<" Matrics a\n"<<a;
-   delete rear;
+   delete []rear;
    return ret;
   };
 
@@ -301,7 +301,7 @@ int SolveAxb(MatrCl &a,VecCl &b,VecCl &x,double Tol)
 // ======================================================
 
 
-my_comp URCinnerpod(int l,int s,int u,my_comp c,CVecCl &a,CVecCl &b)
+my_comp URCinnerpod(int l,int s,int u,my_comp c,const CVecCl &a,const CVecCl &b)
   {
    long double re=my_real(c),im=my_imag(c);
    my_comp tmp;
@@ -343,7 +343,7 @@ int URCunsymdet(CMatrCl &a,double eps,my_comp &d1,int &d2,int *rear)
       rear[k]=l;
       d1*=a(k,k);
       if (xd<8*eps) 
-        {delete tmp;cout<<"Det=0. Cannot complete LU decomposion\n";return 0;}
+        {delete []tmp;cout<<"Det=0. Cannot complete LU decomposion\n";return 0;}
     l1:
 //cout<<" d1= "<<d1<<"\n";
       if (fabs(d1)>=1)  {  d1*=0.0625;d2+=4;goto l1; }
@@ -354,7 +354,7 @@ int URCunsymdet(CMatrCl &a,double eps,my_comp &d1,int &d2,int *rear)
       for (j=k+1;j<=N;j++)
          a(k,j)=x*URCinnerpod(1,1,k-1,-a(k,j),CMatrCl::GetRow(a,k),CMatrCl::GetCol(a,j));
      }
-   delete tmp;
+   delete []tmp;
    return 1;
   };   
 
@@ -422,7 +422,7 @@ int CSolveAxb(CMatrCl &a,CVecCl &b,CVecCl &x,double Tol)
    CVecCl Mis(N);
    int d2,*rear=new int[N+1];rear[0]=N;
    int ret=URCunsymdet(LU,Tol,d1,d2,rear);
-   if (!ret) {delete rear;return ret;}
+   if (!ret) {delete []rear;return ret;}
 //cout<<" Matrics \n"<<a<<" Det= "<<d1*pow(2,d2)<<" LU decompose \n"<<LU;
 //CMatrCl L=LU,U=LU;for (int k=1;k<=N;k++) {for (int k1=1;k1<k;k1++) 
 //{U(k,k1)=0;L(k1,k)=0;} L(k,k)=LU(k,k);U(k,k)=my_comp(1,0);}
@@ -431,7 +431,7 @@ int CSolveAxb(CMatrCl &a,CVecCl &b,CVecCl &x,double Tol)
 //cout<<" Iter done "<<l<<" Error "<<ret<<" Input vector \n"<<b
 //    <<" Result vector \n"<<x <<" Misfit \n"<<Mis<<" Delta\n"<<a*x-b
 //    <<" Matrics a\n"<<a;
-   delete rear;
+   delete []rear;
    return ret;
   };
 
@@ -451,7 +451,7 @@ int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
    for (it=1;it<=35;it++)
      {
       if (mark) goto done;
-// критерий сходимости 
+// критерий сходимости
       tau=0;
       for (k=1;k<=N;k++) 
         {
@@ -590,7 +590,7 @@ int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
      }
  done:
 //cout<<Contr-Lft*a*Rgt;
-   delete en;
+   delete []en;
    return 1;
   }                  
 

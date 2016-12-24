@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 doublereal fprati_(real *p1, real *f1, real *p2, real *f2, real *p3, real *f3)
 {

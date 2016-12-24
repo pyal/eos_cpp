@@ -11,7 +11,11 @@
 #define MaxCharInLine 2048     //2048
 
 #ifndef LINUX
+#ifndef MAC
 extern unsigned _stklen=60000;
+#else
+//extern unsigned _stklen(60000);
+#endif
 #endif
 struct srt {double v;int n;};
 struct FileArr
@@ -70,7 +74,7 @@ FileArr::FileArr(char *name,int DelEnd,int OnlyPnt)
    delete in;in=new fstream(name,ios::in);
    while ( (!seek_eof(*in)) && (NumR>CurRow) )
      {
-      if (CurCol=EnterStr(*in,&pnt[0],MaxCol))
+      if ((CurCol=EnterStr(*in,&pnt[0],MaxCol)))
         {
          CurRow++;
          if (Fst) for (k=0;k<=CurCol-1;k++)
@@ -101,7 +105,7 @@ double FileArr::Yval(double x)
                                         (ar[0][k]-ar[0][k1]);
   };
 void FileArr::SetIterYval()
-  { int k;while (k=NextCol()) CurPos[k]=RowPlus(0);};
+  { int k;while ((k=NextCol())) CurPos[k]=RowPlus(0);};
 double FileArr::IterYval(double x)
   {
    int k=CurPos[CurCol],k1;
@@ -138,7 +142,7 @@ void FormStp(FileArr &ar,fstream &out,double &stp,double &x)
 void SetNames(int argc,char *argv[],
               char *file_names[MaxSumFiles],int &num_files)
   {
-   char* name=GetCmd("/f",argc,argv) ;
+   char* name=GetCmd((char*)"/f",argc,argv) ;
    if ( NULL==name )
      {for (int k=1;k<=num_files;k++) file_names[k]=strdup(argv[k]); }
    else
@@ -180,7 +184,7 @@ double *SetOneRow(FileArrPtr &ar,int num_files,int OnlyPnt)
    return tmp;
   };
 */
-void main(int argc,char *argv[])
+int main(int argc,char *argv[])
   {
    argc--;
    char *file_names[MaxSumFiles];
@@ -250,4 +254,5 @@ void main(int argc,char *argv[])
      }
    out.close();
 //   delete FirstRow;
+    return 0;
   };

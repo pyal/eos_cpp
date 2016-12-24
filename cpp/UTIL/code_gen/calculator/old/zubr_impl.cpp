@@ -2,16 +2,23 @@
 #include "zubr_impl.h"
 
 //enum {SIN,COS,EXP} Func;//,TETA,RND,INT,ABS} Func;
-void *BuildInFunc::FPtr[]={(double(*)(double))&sin,
-                           (double(*)(double))&cos,
-                           (double(*)(double))&exp };
+void *BuildInFunc::FPtr[] = {(double (*)(double)) & sin,
+                             (double (*)(double)) & cos,
+                             (double (*)(double)) & exp};
 
 
-const char *Symbol::type_names[]={"Number","Var","Bltin","Undef","String","BadType"};
-const char *Symbol::GetTypeName(int t){
-	int Decode[512];Decode[NUMBER]=0;Decode[VAR]=1;Decode[BLTIN]=2;Decode[UNDEF]=3;Decode[STRING]=4;
-	if (t<0 || t>4) type_names[5];
-	return type_names[Decode[t]];
+const char *Symbol::type_names[] =
+    {"Number", "Var", "Bltin", "Undef", "String", "BadType"};
+const char *Symbol::GetTypeName(int t) {
+    int Decode[512];
+    Decode[NUMBER] = 0;
+    Decode[VAR] = 1;
+    Decode[BLTIN] = 2;
+    Decode[UNDEF] = 3;
+    Decode[STRING] = 4;
+    if(t < 0 || t > 4)
+        type_names[5];
+    return type_names[Decode[t]];
 }
 //extern int zubr_calculator_zubr_parse(void); // - not to redefine
 //extern int zubr_calculator_zubr_lex(void);
@@ -19,50 +26,55 @@ const char *Symbol::GetTypeName(int t){
 //typedef union{   SYMBOL *sym;   INST   *inst;} ZUBR_CALCULATOR_ZUBR_STYPE;
 //extern ZUBR_CALCULATOR_ZUBR_STYPE zubr_calculator_zubr_lval;
 
-int zubr_calculator_zubr_lex(){
+int zubr_calculator_zubr_lex() {
     Lex_Result *res = CalculatorProgam::GetCurPtr()->lex->Analyse();
-	if (!res) 
-		return 0;
-	if (res->res_type==Lex_Result::Error)
-		throw info_except(" Lexema extraction error: %s\n",res->res_str.c_str());
-    if (res->res_type==Lex_Result::NumberDouble){
-        zubr_calculator_zubr_lval=CalculatorProgam::GetCurPtr()->vars.AddConst(NUMBER,res->res_val,0);
+    if(!res)
+        return 0;
+    if(res->res_type == Lex_Result::Error)
+        throw info_except(" Lexema extraction error: %s\n", res->res_str.c_str());
+    if(res->res_type == Lex_Result::NumberDouble) {
+        zubr_calculator_zubr_lval =
+            CalculatorProgam::GetCurPtr()->vars.AddConst(NUMBER, res->res_val, 0);
         return NUMBER;
     }
-    if (res->res_type==Lex_Result::NumberInt){
-        zubr_calculator_zubr_lval=CalculatorProgam::GetCurPtr()->vars.AddConst(NUMBER,res->res_int,0);
+    if(res->res_type == Lex_Result::NumberInt) {
+        zubr_calculator_zubr_lval =
+            CalculatorProgam::GetCurPtr()->vars.AddConst(NUMBER, res->res_int, 0);
         return NUMBER;
     }
-    if (res->res_type==Lex_Result::Identifier){
-        if (!CalculatorProgam::GetCurPtr()->vars.GetVar(res->res_str.c_str(),zubr_calculator_zubr_lval) )
-		    zubr_calculator_zubr_lval=CalculatorProgam::GetCurPtr()->vars.AddVar(res->res_str.c_str(),UNDEF,0,0,0,0);
+    if(res->res_type == Lex_Result::Identifier) {
+        if(!CalculatorProgam::GetCurPtr()->vars.GetVar(
+               res->res_str.c_str(), zubr_calculator_zubr_lval))
+            zubr_calculator_zubr_lval = CalculatorProgam::GetCurPtr()->vars.AddVar(
+                res->res_str.c_str(), UNDEF, 0, 0, 0, 0);
         return VAR;
     }
-    if (res->res_type==Lex_Result::Token){
-        if (res->res_int<1500)
+    if(res->res_type == Lex_Result::Token) {
+        if(res->res_int < 1500)
             return res->res_int;
-        zubr_calculator_zubr_lval=CalculatorProgam::GetCurPtr()->vars.AddVar(res->res_str.c_str(),BLTIN,0,0,BuildInFunc::FPtr[res->res_int-1500],0);
+        zubr_calculator_zubr_lval = CalculatorProgam::GetCurPtr()->vars.AddVar(
+            res->res_str.c_str(), BLTIN, 0, 0, BuildInFunc::FPtr[res->res_int - 1500], 0);
         return BLTIN;
-
     }
-    if (res->res_type==Lex_Result::String){
-        zubr_calculator_zubr_lval=CalculatorProgam::GetCurPtr()->vars.AddConst(STRING,0,res->res_str.c_str());
+    if(res->res_type == Lex_Result::String) {
+        zubr_calculator_zubr_lval =
+            CalculatorProgam::GetCurPtr()->vars.AddConst(STRING, 0, res->res_str.c_str());
         return STRING;
     }
-    if (res->res_type==Lex_Result::End)
+    if(res->res_type == Lex_Result::End)
         return 0;
     zubr_calculator_zubr_error("Do not understand token");
     return 0;
-}   
-
-void zubr_calculator_zubr_error(char*er){
-    int Line, Pos;
-    CalculatorProgam::GetCurPtr()->lex->GetBuferReadingPos(Line,Pos);
-    cout<<" Error occured in Line:"<<Line<<" Pos "<<Pos<<"\n";
-    if (er)  cout<<" Error is : "<<er<<"\n";
-    exit(1);
 }
 
+void zubr_calculator_zubr_error(char *er) {
+    int Line, Pos;
+    CalculatorProgam::GetCurPtr()->lex->GetBuferReadingPos(Line, Pos);
+    cout << " Error occured in Line:" << Line << " Pos " << Pos << "\n";
+    if(er)
+        cout << " Error is : " << er << "\n";
+    exit(1);
+}
 
 
 //
@@ -92,26 +104,23 @@ void zubr_calculator_zubr_error(char*er){
 //private:
 //    static CalculatorProgam* Ptr,*Ptr_Old;
 //};
-CalculatorProgam *CalculatorProgam::Ptr,*CalculatorProgam::Ptr_Old;
+CalculatorProgam *CalculatorProgam::Ptr, *CalculatorProgam::Ptr_Old;
 
 
-
-
-
-CalculatorProgam &CalculatorProgam::Execute(){
+CalculatorProgam &CalculatorProgam::Execute() {
     Ptr = this;
     data_stack.Release();
     //fp     = frame;
     returning = 0;
-    execute( (INST*)progr );
+    execute((INST *)progr);
     return *this;
 };
-CalculatorProgam &CalculatorProgam::Read(){
+CalculatorProgam &CalculatorProgam::Read() {
     Ptr = this;
-    while (lex->IsGood())
-		zubr_calculator_zubr_parse();
+    while(lex->IsGood())
+        zubr_calculator_zubr_parse();
     code(STOP);
-//    lex->ResetStream(NULL);
+    //    lex->ResetStream(NULL);
     return *this;
 }
 
@@ -131,13 +140,13 @@ CalculatorProgam &CalculatorProgam::Read(){
 //FRAME  frame[NFRAME];
 //FRAME *fp;             /* ptr to domain of stack */
 
-void warning(const char *fst, const char *sec){
-    cout<<" Warning: "<<fst;
-    if (sec) cout<<" | "<<sec;
-    cout<<":\n";
+void warning(const char *fst, const char *sec) {
+    cout << " Warning: " << fst;
+    if(sec)
+        cout << " | " << sec;
+    cout << ":\n";
 }
-void initcode( void )
-{
+void initcode(void) {
     CalculatorProgam *Ptr = CalculatorProgam::GetCurPtr();
     Ptr->progr.Release();
     Ptr->data_stack.Release();
@@ -145,249 +154,225 @@ void initcode( void )
     Ptr->returning = 0;
 }
 
-void push( Datum d )
-{
+void push(Datum d) {
     CalculatorProgam *Ptr = CalculatorProgam::GetCurPtr();
     Ptr->data_stack.push(d);
 }
 
-Datum pop( void )
-{
+Datum pop(void) {
     CalculatorProgam *Ptr = CalculatorProgam::GetCurPtr();
-    if( Ptr->data_stack.empty() )
-      throw info_except( "stack underflow" );
+    if(Ptr->data_stack.empty())
+        throw info_except("stack underflow");
     Datum ret = Ptr->data_stack.top();
     Ptr->data_stack.pop();
     return ret;
 }
 
-INST *code( INST f )
-{
+INST *code(INST f) {
     CalculatorProgam *Ptr = CalculatorProgam::GetCurPtr();
     INST *opprog = &Ptr->progr.top();
     Ptr->progr.push(f);
     return opprog;
 }
 
-void execute( INST *p )
-{
+void execute(INST *p) {
     CalculatorProgam *Ptr = CalculatorProgam::GetCurPtr();
-    for( Ptr->progr_counter = p; 
-        *(Ptr->progr_counter) != STOP && !Ptr->returning; )  
+    for(Ptr->progr_counter = p; *(Ptr->progr_counter) != STOP && !Ptr->returning;)
         (*(*(Ptr->progr_counter++)))();
-	Ptr->progr_counter++;
-	if (*(Ptr->progr_counter)!=STOP){
-//		printf("Next instr\n");
-		execute(Ptr->progr_counter);
-	}
+    Ptr->progr_counter++;
+    if(*(Ptr->progr_counter) != STOP) {
+        //		printf("Next instr\n");
+        execute(Ptr->progr_counter);
+    }
 }
 
-void constpush( void ){
+void constpush(void) {
     Datum d;
- //   CalculatorProgam *Ptr = CalculatorProgam::GetCurPtr();
- //   d.val = ((Symbol *) *(Ptr->progr_counter))->u.val;
-	//Ptr->progr_counter++;
+    //   CalculatorProgam *Ptr = CalculatorProgam::GetCurPtr();
+    //   d.val = ((Symbol *) *(Ptr->progr_counter))->u.val;
+    //Ptr->progr_counter++;
     d.val = CalculatorProgam::ExtractSmbFromPc()->u.val;
-    push( d );
+    push(d);
 }
 
-void varpush( void ){
+void varpush(void) {
     Datum d;
     d.sym = CalculatorProgam::ExtractSmbFromPc();
-    push( d );
+    push(d);
 }
 
 /* DATUM pop (void) not load to stack: error type-check in execute() OS/2 */
-void void_pop( void ){ pop(); }
-
-
-
-void Yadd( void )
-{
-   Datum d1, d2;
-   d2 = pop();
-   d1 = pop();
-   d1.val += d2.val;
-   push( d1 );
+void void_pop(void) {
+    pop();
 }
 
-void Ysub( void )
-{
-   Datum d1, d2;
-   d2 = pop();
-   d1 = pop();
-   d1.val -= d2.val;
-   push( d1 );
+
+void Yadd(void) {
+    Datum d1, d2;
+    d2 = pop();
+    d1 = pop();
+    d1.val += d2.val;
+    push(d1);
 }
 
-void Ymul( void )
-{
-   Datum d1, d2;
-   d2 = pop();
-   d1 = pop();
-   d1.val *= d2.val;
-   push( d1 );
+void Ysub(void) {
+    Datum d1, d2;
+    d2 = pop();
+    d1 = pop();
+    d1.val -= d2.val;
+    push(d1);
 }
 
-void Ydiv( void )
-{
-   Datum d1, d2;
-   d2 = pop();
-   if( d2.val == 0.0 ) warning( "division by zero", (char *)0 );
-   d1 = pop();
-   d1.val /= d2.val;
-   push( d1 );
+void Ymul(void) {
+    Datum d1, d2;
+    d2 = pop();
+    d1 = pop();
+    d1.val *= d2.val;
+    push(d1);
 }
 
-void power( void )
-{
-   Datum d1, d2;
-   d2 = pop();
-   d1 = pop();
-//   d1.val = ZPow( d1.val, d2.val );
-   d1.val = pow( d1.val, d2.val );
-   push( d1 );
+void Ydiv(void) {
+    Datum d1, d2;
+    d2 = pop();
+    if(d2.val == 0.0)
+        warning("division by zero", (char *)0);
+    d1 = pop();
+    d1.val /= d2.val;
+    push(d1);
 }
 
-void negate( void )
-{
-   Datum d;
-   d = pop();
-   d.val = -d.val;
-   push( d );
+void power(void) {
+    Datum d1, d2;
+    d2 = pop();
+    d1 = pop();
+    //   d1.val = ZPow( d1.val, d2.val );
+    d1.val = pow(d1.val, d2.val);
+    push(d1);
 }
 
-void eval( void )
-{
-   Datum d;
-   d = pop();
-   if( d.sym->type == UNDEF )
-	   warning( "undefined variable - ", d.sym->name.c_str() );
-   d.val = d.sym->u.val;
-   push( d );
+void negate(void) {
+    Datum d;
+    d = pop();
+    d.val = -d.val;
+    push(d);
 }
 
-void assign( void )
-{
-   Datum d1, d2;
-   d1 = pop();
-   d2 = pop();
-   if( d1.sym->type != VAR && d1.sym->type != UNDEF )
-	   warning( "assignment to non-variable", d1.sym->name.c_str() );
-   d1.sym->u.val = d2.val;
-   d1.sym->type  = VAR;
-   push( d2 );
-}
-void print( void )
-{
-   Datum d;
-   d = pop();
-   printf( "\t%25.17e\n", d.val );
+void eval(void) {
+    Datum d;
+    d = pop();
+    if(d.sym->type == UNDEF)
+        warning("undefined variable - ", d.sym->name.c_str());
+    d.val = d.sym->u.val;
+    push(d);
 }
 
+void assign(void) {
+    Datum d1, d2;
+    d1 = pop();
+    d2 = pop();
+    if(d1.sym->type != VAR && d1.sym->type != UNDEF)
+        warning("assignment to non-variable", d1.sym->name.c_str());
+    d1.sym->u.val = d2.val;
+    d1.sym->type = VAR;
+    push(d2);
+}
+void print(void) {
+    Datum d;
+    d = pop();
+    printf("\t%25.17e\n", d.val);
+}
 
 
 //void negate    ( void );
-void prexpr( void )
-{
-   Datum d;
-   d = pop();
-   printf( "\t%25.17e", d.val );
+void prexpr(void) {
+    Datum d;
+    d = pop();
+    printf("\t%25.17e", d.val);
 }
 
-void prstr( void )
-{
-    printf( "%s", CalculatorProgam::ExtractSmbFromPc()->u.str.c_str() );
+void prstr(void) {
+    printf("%s", CalculatorProgam::ExtractSmbFromPc()->u.str.c_str());
 }
-void bltin( void )
-{
-   Datum d;
-   d = pop();
-   d.val = (*(double (*) (double))
-       CalculatorProgam::ExtractSmbFromPc()->u.ptr)( d.val );
-   push( d );
+void bltin(void) {
+    Datum d;
+    d = pop();
+    d.val = (*(double (*)(double))CalculatorProgam::ExtractSmbFromPc()->u.ptr)(d.val);
+    push(d);
 }
 
-void bltin2( void )
-{
-   Datum d1, d2;
-   d2 = pop();
-   d1 = pop();
-   d1.val = (*(double (*) (double,double))
-       CalculatorProgam::ExtractSmbFromPc()->u.ptr)( d1.val, d2.val );
-//   d1.val = (*(double (*) ())(*pc++))( d1.val, d2.val );
-   push (d1);
+void bltin2(void) {
+    Datum d1, d2;
+    d2 = pop();
+    d1 = pop();
+    d1.val = (*(double (*)(double, double))CalculatorProgam::ExtractSmbFromPc()->u.ptr)(
+        d1.val, d2.val);
+    //   d1.val = (*(double (*) ())(*pc++))( d1.val, d2.val );
+    push(d1);
 }
 
-void varread( void )
-{
-   Datum d;
-   FILE *f = stdin;
-   Symbol *var = CalculatorProgam::ExtractSmbFromPc();
+void varread(void) {
+    Datum d;
+    FILE *f = stdin;
+    Symbol *var = CalculatorProgam::ExtractSmbFromPc();
 
-   fprintf( stderr, "type number: %s = ", var->name.c_str() );
-   switch( fscanf( f, "%lf", &var->u.val) )
-   {
-      case EOF:
-         d.val = var->u.val = 0.0;
-         break;
-      case 0:
-          warning( "non-number read into", var->name.c_str() );
-         break;
-      default:
-         d.val = 1.0;
-         break;
-   }
-   var->type = VAR;
-   push( d );
+    fprintf(stderr, "type number: %s = ", var->name.c_str());
+    switch(fscanf(f, "%lf", &var->u.val)) {
+    case EOF:
+        d.val = var->u.val = 0.0;
+        break;
+    case 0:
+        warning("non-number read into", var->name.c_str());
+        break;
+    default:
+        d.val = 1.0;
+        break;
+    }
+    var->type = VAR;
+    push(d);
 }
 
-void Yaddeq( void )
-{
-   Datum d1, d2;
-   d1 = pop();
-   d2 = pop();
-   if( d1.sym->type != VAR && d1.sym->type != UNDEF )
-       warning( "assignment to non-variable", d1.sym->name.c_str() );
-   d1.sym->u.val += d2.val;
-   d1.sym->type   = VAR;
-   push( d2 );
+void Yaddeq(void) {
+    Datum d1, d2;
+    d1 = pop();
+    d2 = pop();
+    if(d1.sym->type != VAR && d1.sym->type != UNDEF)
+        warning("assignment to non-variable", d1.sym->name.c_str());
+    d1.sym->u.val += d2.val;
+    d1.sym->type = VAR;
+    push(d2);
 }
 
-void Ysubeq( void )
-{
-   Datum d1, d2;
-   d1 = pop();
-   d2 = pop();
-   if( d1.sym->type != VAR && d1.sym->type != UNDEF )
-       warning( "assignment to non-variable", d1.sym->name.c_str() );
-   d1.sym->u.val -= d2.val;
-   d1.sym->type   = VAR;
-   push( d2 );
+void Ysubeq(void) {
+    Datum d1, d2;
+    d1 = pop();
+    d2 = pop();
+    if(d1.sym->type != VAR && d1.sym->type != UNDEF)
+        warning("assignment to non-variable", d1.sym->name.c_str());
+    d1.sym->u.val -= d2.val;
+    d1.sym->type = VAR;
+    push(d2);
 }
 
-void Ymuleq( void )
-{
-   Datum d1, d2;
-   d1 = pop();
-   d2 = pop();
-   if( d1.sym->type != VAR && d1.sym->type != UNDEF )
-       warning("assignment to non-variable", d1.sym->name.c_str() );
-   d1.sym->u.val *= d2.val;
-   d1.sym->type   = VAR;
-   push( d2 );
+void Ymuleq(void) {
+    Datum d1, d2;
+    d1 = pop();
+    d2 = pop();
+    if(d1.sym->type != VAR && d1.sym->type != UNDEF)
+        warning("assignment to non-variable", d1.sym->name.c_str());
+    d1.sym->u.val *= d2.val;
+    d1.sym->type = VAR;
+    push(d2);
 }
 
-void Ydiveq( void )
-{
-   Datum d1, d2;
-   d1 = pop();
-   d2 = pop();
-   if( d1.sym->type != VAR && d1.sym->type != UNDEF )
-       warning( "assignment to non-variable", d1.sym->name.c_str() );
-   d1.sym->u.val /= d2.val;
-   d1.sym->type   = VAR;
-   push( d2 );
+void Ydiveq(void) {
+    Datum d1, d2;
+    d1 = pop();
+    d2 = pop();
+    if(d1.sym->type != VAR && d1.sym->type != UNDEF)
+        warning("assignment to non-variable", d1.sym->name.c_str());
+    d1.sym->u.val /= d2.val;
+    d1.sym->type = VAR;
+    push(d2);
 }
 
 
@@ -485,7 +470,6 @@ void Ydiveq( void )
 //
 //
 ///*************************************************/
-
 
 
 //void print( void )

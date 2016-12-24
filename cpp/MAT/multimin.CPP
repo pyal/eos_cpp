@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "multimin.h"
 
 extern int NumGradCalls;
@@ -168,7 +168,7 @@ void DerivMatrClc(VecCl &x,VecCl &deriv,MatrCl &deriv2)//,VecCl &GradStp,double 
     {CP->y_setted=1;CP->y_cur=CP->FuncClc(&x.Ptr[1],Dim);}
    MatrCl ResM(Dim);
    VecCl x_plus;
-   double CurHi=CP->y_cur,CurVal=CurHi;
+   double CurHi=CP->y_cur;//,CurVal=CurHi;
    for (k=1;k<=Dim;k++) {x_plus=x;x_plus[k]+=Stp[k];Fun[k]=CP->FuncClc(&x_plus.Ptr[1],Dim);}
    for (k=1;k<=Dim;k++)
      {

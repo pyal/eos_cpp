@@ -6,17 +6,17 @@
 using namespace std;
 
 
-extern "C" 
+extern "C"
 #include "util\code_gen\virt_m\symtab.h"
 
-ostream& operator<<(ostream &out,symbol &sym)
-{
-	return out<<" Symbol: name"<<setw(15)<<sym.name<<" type: "<<sym.type<<" val: "<<sym.u.val<<"\n";
+    ostream &
+    operator<<(ostream &out, symbol &sym) {
+    return out << " Symbol: name" << setw(15) << sym.name << " type: " << sym.type
+               << " val: " << sym.u.val << "\n";
 };
 
-struct symbol_io :symbol
-{
-//	friend ostream& operator<<(ostream &out,symbol_io &symIO){return out;};
+struct symbol_io : symbol {
+    //	friend ostream& operator<<(ostream &out,symbol_io &symIO){return out;};
 };
 
 //struct symbol

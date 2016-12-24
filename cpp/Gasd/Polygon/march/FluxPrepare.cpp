@@ -4,10 +4,4 @@
 #include "FluxPrepare.h"
 
 
-
-
-namespace NPolygon {
-
-
-};// namespace NPolygon {
-  
+namespace NPolygon {};   // namespace NPolygon {

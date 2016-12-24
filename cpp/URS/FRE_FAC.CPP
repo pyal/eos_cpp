@@ -1,8 +1,8 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 
 #include "fre_fac.h"
 
-#include "mat\NdimMin.h"
+#include "mat/NdimMin.h"
 
 static ClassDesc MatterFreeE_ClassDesc(typeid(MatterFreeE),"MatterFreeE",1,"Matter_category",create<MatterFreeE>);
 
@@ -67,7 +67,7 @@ void MatterFreeE::Pressure(double *P,double *Dencity,double *Energy,int Num)
    double *T=new double[Num+1];
    Temperature(T,Dencity,Energy,Num);
    FreeEPtr->Pressure(P,Dencity,T,Num);
-   delete T;
+   delete []T;
   };
 void MatterFreeE::Sound(double *S,double *Dencity,double *Energy,int Num)
 {
@@ -81,13 +81,13 @@ void MatterFreeE::Sound(double *S,double *Dencity,double *Energy,int Num)
      Dplus[k]=Dencity[k];
      if (Dencity[k]<MathZer) { cout<<"MatterFreeEIO::Sound; Dencity<MathZer :"
                                 <<Dencity<<"\n";Tplus[k]=0;continue;}
-     double dE=max(Eplus[k]-Energy[k],MathZer);
-     double dr=Dencity[k]+dE*sqr(Dencity[k])/max(1e-4,P.Ptr[k]);
+     double dE=max<double>(Eplus[k]-Energy[k],MathZer);
+     double dr=Dencity[k]+dE*sqr(Dencity[k])/max<double>(1e-4,P.Ptr[k]);
      if (fabs(dr)<MathZer) {Tplus[k]=0;continue;}
      Dplus[k]=Dplus[k]+dr;
     }
    FreeEPtr->Pressure(Pplus.Ptr,Dplus.Ptr,Tplus.Ptr,Num);
-   for (int k=1;k<=Num;k++)   S[k]=sqrt( max(0,Pplus[k]-P[k])/(Dplus[k]-Dencity[k]) );
+   for (int k=1;k<=Num;k++)   S[k]=sqrt( max<double>(0,Pplus[k]-P[k])/(Dplus[k]-Dencity[k]) );
   }; 
 
 double MatterFreeE::TemperatureFind(double En,double Den,double Low,double Up,
@@ -163,8 +163,8 @@ void MatterFreeE::Temperature(double *T,double *Dencity,double *Energy,int Num) 
             continue;
         }
 //      T0=TemperatureFind(Energy[k],Dencity[k],50,1e6,T0,StndErr*0.1,100);
-        T0=TemperatureFind(Energy[k], Dencity[k], max(AbsoluteMinTemperature, MinimTmin), MinimTmax,T0,StndErr*0.1,100);
-//cout<<Dencity[k]<< " " << Energy[k] << " " << T0 << " " << max(AbsoluteMinTemperature, MinimTmin) << " " << MinimTmax << "\n";
+        T0=TemperatureFind(Energy[k], Dencity[k], max<double>(AbsoluteMinTemperature, MinimTmin), MinimTmax,T0,StndErr*0.1,100);
+//cout<<Dencity[k]<< " " << Energy[k] << " " << T0 << " " << max<double>(AbsoluteMinTemperature, MinimTmin) << " " << MinimTmax << "\n";
 //      T0=TemperatureFind(Energy[k],Dencity[k],100,1e6,T0,StndErr*0.1,100);
         L_D=Dencity[k];
         L_E=Energy[k];
@@ -195,15 +195,15 @@ double MatterFreeE::Sound(double Dencity,double Energy)
    double dT = T * MinimT2EstpCoef + MinimT2EstpMin;//*StndErr;
    double P=FreeEPtr->Pressure(r,T);
    double E=FreeEPtr->Energy(r,T);
-   double dE=max(FreeEPtr->Energy(r,T+dT)-E,MathZer);
-   double dr=dE*sqr(Dencity)/max(1e-4,P);
+   double dE=max<double>(FreeEPtr->Energy(r,T+dT)-E,MathZer);
+   double dr=dE*sqr(Dencity)/max<double>(1e-4,P);
    if (fabs(dr)<MathZer) return 0;
    double Pp=FreeEPtr->Pressure(r+dr,T+dT)-P;
    if (Pp<0)
      {
 //       cout<<" MatterIO::Sound;  deriv is negative: " <<Pp<<" Sqrt from negative value          \n";
      }
-   double S=sqrt( max(0,Pp)/dr );
+   double S=sqrt( max<double>(0,Pp)/dr );
    return S;
 
   }; 
@@ -297,11 +297,12 @@ double FreeEIdeal::FreeE(double Denc,double T){
      double kt=M_Rconst/MolVeight*T;
 	 double Xrot=Trot/T,Erot=0,Evib=0;
 	 if (Trot>StndErr) Erot=log(Xrot);//-Xrot/3-sqr(Xrot)/90;
-	 if (Tvib>StndErr) 
-		 if (T>20*Tvib)
-			Evib=log(Tvib/T);
-		 else 
-			Evib=log(1-exp(-Tvib/T));
+	 if (Tvib>StndErr) {
+         if (T > 20 * Tvib)
+             Evib = log(Tvib / T);
+         else
+             Evib = log(1 - exp(-Tvib / T));
+     }
 	 double Evol=log(Denc);
 	 double F=Zero+kt*(Evol+Erot+Evib-CvId*log(T)+HiT);
      return F;
@@ -340,7 +341,7 @@ double FreeEIdealElectron::ClcAddHiT(double molveight){
 // ===============================================================
 // =============      FreeEVirial        =========================
 // ===============================================================
-//  Second virial is calculated in the ƒ¥«ìèä¥«ì¤¥à ( ƒ¨«ìèä¥«ì¤¥à )
+//  Second virial is calculated in the ï¿½ï¿½ï¿½ï¿½ï¿½ä¥«ì¤¥ï¿½ ( ï¿½ï¿½ï¿½ï¿½ï¿½ä¥«ì¤¥ï¿½ )
 //                                                        B
 //  F=  Zero - R*T*ln(V) - R*T*C *ln(T) - HiT*R*T + R*T* ---
 //                -k            v                         V
@@ -356,7 +357,7 @@ double FreeEVirial::FreeE(double Denc,double T)
         double x=tau/(100+1.8*tau);
         add=-0.2823762*x+0.0810073*sqr(x)-4.1242084*pow(x,6);
        }
-     double F=Zero-(M_Rconst/MolVeight*T)*(log(max(1/Denc,MathZer))+CvId*log(T)+HiT-
+     double F=Zero-(M_Rconst/MolVeight*T)*(log(max<double>(1/Denc,MathZer))+CvId*log(T)+HiT-
                     (s+add)*V0*Denc);
      return F;
     };
@@ -391,7 +392,7 @@ double FreeEVanDerVals::FreeE(double Denc,double T)
      if ((T<MathZer) || (Denc<MathZer)) 
        { cout<<"FreeE Bad. Denc "<<Denc<<" T "<<T<<"\n";return 0;}
      double F=-A*Denc-Zero-(M_Rconst/MolVeight*T)*
-               (log(max(1/Denc-B,MathZer))+CvId*log(T)+HiT);
+               (log(max<double>(1/Denc-B,MathZer))+CvId*log(T)+HiT);
      return F;
     };
 void FreeEVanDerVals::ReadSubstancePar(istream &in)
@@ -431,7 +432,7 @@ if ((T<MathZer) || (Denc<MathZer)) { cout<<"FreeE Bad. Denc "<<Denc<<" T "<<T<<"
 	  F+=(a*G+4*(b*G14-c/G14)+d*log(G)-e+sige*10.85 )*kT;//10.85 - t=10000 - 11 - good dis
   }
   if (AddDeb) 
-    {double TD=max((Denc-DebDenc0)*DebKoef,100);
+    {double TD=max<double>((Denc-DebDenc0)*DebKoef,100);
 //cout<<" D "<<Denc<<" T "<<T<<" TD "<<TD<<"\n";
      F+=kT*(3*log(1-exp(-TD/T))-DebyFunc(TD/T));
     }; 
@@ -482,7 +483,7 @@ double FreeERoss::FreeE(double Denc,double T)
 cout<<" F "<<NiuL<<"\n";
    double F=Zero+PY_add-S_Temp*
 //   double F=Zero-PY_add-S_Temp*
-            (log(max(1/Denc,MathZer))+CvId*log(T)+HiT+log(1-exp(-Tvib/T)));
+            (log(max<double>(1/Denc,MathZer))+CvId*log(T)+HiT+log(1-exp(-Tvib/T)));
    return F;
   }; 
 void FreeERoss::ReadSubstancePar(fstream &in)

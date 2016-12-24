@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "matt_fac.h"
 
 static ClassDesc MatterABu_ClassDesc(typeid(MatterABu),"MatterABu",1,"Matter_category",create<MatterABu>);
@@ -13,7 +13,7 @@ double MatterIO::Sound(double Dencity,double Energy) {
    if (r<MathZer) { cout << "MatterIO::Sound; Dencity<MathZer :" << Dencity << "\n";return 0;}
    double P=Pressure(r,Energy);
    double Pp = Pressure(r+dr,Energy+P*dr/(r*r));Pp -= P;
-   double S = sqrt( max(0.1, Pp)/dr );
+   double S = sqrt( max<double>(0.1, Pp)/dr );
    return S;
   };
 
@@ -124,14 +124,14 @@ int InterfaceFindSubstanceIO::GetMatter(){
         if (seek_eof(in))
             return 0;
         in>>tmp;
-        if (stricmp(tmp,Substance.c_str())!=0) 
+        if (Stricmp(tmp,Substance.c_str())!=0)
             in.getline(tmp,256);
         else 
             break;
     }
     ReadSubstancePar(in); 
 	if (!in) 
-		throw info_except("Could not read params for Substance:%s in file:%s\n",Substance,FileName);
+		throw info_except("Could not read params for Substance:%s in file:%s\n",~Substance,~FileName);
 	in.close();
     return 1;
 };
@@ -151,7 +151,7 @@ double MatterABu::Pressure(double Dencity,double Energy) // P(x,e)
 //   if (1-B*X<MathZer) return MathInf;
    double Ph=Denc*sqr(A)*X/sqr(1-B*X);
 #ifdef Pc_ABU_ZERO
-Ph=max(-1e-4,Ph);
+Ph=max<double>(-1e-4,Ph);
 #endif
    double Eh=0.5*Ph*X/Denc;
 // Grun0*Ro0= Grun*Ro; (dP/dE)v=Grun*Ro
@@ -198,7 +198,7 @@ void MatterABu::Pressure(double *P,double *Dencity,double *Energy,int Num){
 		else {
 			X=1-Denc/Dencity[k]; Ph=C*X/sqr(1-B*X);  
 #ifdef Pc_ABU_ZERO
-Ph=max(-1e-4,Ph);
+Ph=max<double>(-1e-4,Ph);
 #endif
 			Eh=Ph*X*V1;
 			P[k]=Ph+G*(Energy[k]-Eh);  // Grun0*Ro0= Grun*Ro; (dP/dE)v=Grun*Ro
@@ -240,7 +240,7 @@ int URRegister(fstream &in,MatterABu *&Urs)
    char name[256]; in>>name;
    MatterABu *Func;
    int ret=1;
-   if (!stricmp(name,"D_Uappr")) {Func=(MatterABu*)new MatterABu;}
+   if (!Stricmp(name,"D_Uappr")) {Func=(MatterABu*)new MatterABu;}
      else ret=0;
    if (!ret)  { cout<<" There is no such urs "<<name<<"\n";  }
    else
@@ -270,7 +270,7 @@ int FreeStp(Thermo Par,double dU,double &Lft,double &Rgt)
 		 }
    else
 	 	{
-     Xstp=max(Par.X,1/m.Bconst-Par.X);//Par.X/1000;
+     Xstp=max<double>(Par.X,1/m.Bconst-Par.X);//Par.X/1000;
      X-=Xstp;
 		 int k=0,max=500;
      while ((FreeMisfit(Par,X,dU)>0) && (k<max)) 

@@ -17,7 +17,7 @@
 #include "mat\eigen_ma.h"
 #include "mat\myappr.h"
 #include "mat\matrics.h"
-#include "lib\ref\class.h"
+#include "lib/ref/class.h"
 #include "mat\ndimmin.h"
 
 

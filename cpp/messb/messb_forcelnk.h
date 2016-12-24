@@ -6,13 +6,12 @@
 #include "famessb.h"
 #include "famessb_test_func.h"
 //#include "class.h"
-#include "lib\ref\class_sav.h"
-#include "lib\ref\ref.h"
+#include "lib/ref/class_sav.h"
+#include "lib/ref/ref.h"
 //#include "described.h"
 #include "lib\gasd_min\gasd_min.h"
 
 // To include test function descriptions in the output
-
 
 
 // FAZer - category
@@ -50,16 +49,4 @@ ForceLinkVoid<FAZerQsH> Dummy_FAZerQsH;
 //ForceLinkVoid<FAZerHQs_Eiler> Dummy_FAZerHQs_Eiler;
 
 
-
-
-
-
-
-
-
-
-
 #endif
-
-
-

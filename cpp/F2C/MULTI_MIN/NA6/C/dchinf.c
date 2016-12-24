@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int dchinf_(integer *numfun, U_fp funsub, doublereal *period,
 	 doublereal *gamma, doublereal *a, doublereal *b, integer *minpts, 

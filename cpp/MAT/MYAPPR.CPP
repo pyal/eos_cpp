@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "myappr.h"
 // ===================================================================
 // ========================= Begin ===================================
@@ -244,7 +244,7 @@ void MAPIter1(VecCl &Par,VecCl &MaxStep,MatrCl &DirMat,double &CurHi)
       if (fabs(MaxStep[k])>MathZer)
         {
 		 Stat_Par=Par;Stat_StpDir=GetCol(DirMat,k);
-//		 double stp=MinFunc(-fabs(MaxStep[k]*3),fabs(MaxStep[k]*3),MAPMinFun,StndErr*max(1,fabs(MaxStep[k]*6)));
+//		 double stp=MinFunc(-fabs(MaxStep[k]*3),fabs(MaxStep[k]*3),MAPMinFun,StndErr*max<double>(1,fabs(MaxStep[k]*6)));
 //double NAGMin(X_func F,double relat_err,double abs_err,double MinB,
 //              double MaxB,int MaxCal,double F_res,int Fail);
 		 int fail;

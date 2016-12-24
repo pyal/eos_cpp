@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Table of constant values */
 
@@ -25,7 +25,7 @@ static integer c__25 = 25;
 /*   integrals, the estimated errors, the number of function evaluations */
 /*   and IFAIL. */
 
-/* Main program */ MAIN__()
+int/* Main program */ MAIN__()
 {
     /* Format strings */
     static char fmt_10[] = "(\002 \002,3e22.14)";
@@ -48,7 +48,8 @@ static integer c__25 = 25;
 	    integer *, logical *, doublereal *, integer *);
     doublereal epsabs, abserr[3], period, epsrel;
     integer restar;
-    extern /* Subroutine */ int funsub_(...);
+    extern /* Subroutine */ int funsub_(doublereal *x, integer *numfun, integer *np,
+                                        doublereal *funvls);
     integer minpts, maxpts;
     doublereal result[3];
 

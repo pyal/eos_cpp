@@ -184,7 +184,7 @@ void      dr_int(data_to_item data,int high=-1)
   {
    char buf [256];
    int *a=(int*)data.ptr;
-   itoa(*a,buf,10);
+   Itoa(*a,buf,10);
    stpjust(buf,buf,' ',data.ed_dim.w,JUST_LEFT);
 
    wncurmov(data.h_loc.row,data.h_loc.col);

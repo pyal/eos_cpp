@@ -369,7 +369,7 @@ void ConstructFlux(VecFreeCl<ENOVarStruct> &u,
 //cout<<" ConstructFlux , Lam,x_p.x_m "<<LambdaMax<<fk0_p<<" "<<fk0_m<<"\n";
   Vec_ENO( fk0_p,ENO_Vec(fk0_p)*Rgt );Vec_ENO( fk0_m,ENO_Vec(fk0_m)*Rgt );
 //  Vec_ENO( fk0_p,Rgt*ENO_Vec(fk0_p) );Vec_ENO( fk0_m,Rgt*ENO_Vec(fk0_m) );
-//  for (k=1;k<=ENO_U_Dim;k++) LambdaMaxNew(k,k)=max(LambdaMaxNew(k,k),fabs(Eig(k,k)));
+//  for (k=1;k<=ENO_U_Dim;k++) LambdaMaxNew(k,k)=max<double>(LambdaMaxNew(k,k),fabs(Eig(k,k)));
   for (k=1;k<=ENO_U_Dim;k++) 
    if (fabs(LambdaMaxNew(k,k))<fabs(Eig(k,k))) LambdaMaxNew(k,k)=Eig(k,k);
 //cout<<" Eig "<<Eig<<" LambdaMaxNew "<<LambdaMaxNew;
@@ -396,7 +396,7 @@ void SetFluxK(VecFreeCl<ENOVarStruct> &u,
   par.LambdaNew=LambdaMax;
 // New CFL calculation
   double max_lambda=0,dx=min(u[Cent].pos-u[Cent-1].pos,u[Cent+1].pos-u[Cent].pos);
-  for (int k=1;k<=ENO_U_Dim;k++) max_lambda=max(max_lambda,fabs(Eig(k,k)));
+  for (int k=1;k<=ENO_U_Dim;k++) max_lambda=max<double>(max_lambda,fabs(Eig(k,k)));
   par.CFL_number=min(par.CFL_number,dx/max_lambda);
  };  
 void ClcFluxDif(VecFreeCl<ENOVarStruct> &f_plus,VecFreeCl<ENOVarStruct> &f_minus,
@@ -681,8 +681,8 @@ void CalcTStpVisc(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeSt
 //  Next TimeStep Clc
    for (k=1;k<Num-1;k++) if (!F_[k]) 
     {
-     tmp[k]=max(fabs(Sound[k]),fabs(U_[k]-U_[k+1]));
-     tmp[k]=max(tmp[k],fabs(U_[k-1]-U_[k]));
+     tmp[k]=max<double>(fabs(Sound[k]),fabs(U_[k]-U_[k+1]));
+     tmp[k]=max<double>(tmp[k],fabs(U_[k-1]-U_[k]));
      L[k]=min(R_[k]-R_[k-1],R_[k+1]-R_[k]);
      if ( (L[k]<MathZer) || (R_[k]<0) ){ 
       cout<<" Wrong cell size, negative.\n";}//exit(0);}
@@ -702,7 +702,7 @@ void CalcTStpVisc(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeSt
          double du=U_[k+1]-U_[k];
 double r0=R_[Num-1]-R_[Num-2],rc=R_[k]-R_[k-1];
 if ((k<2) || (k>Num-1)) rc=r0;
-tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*max(1,fabs(du)));
+tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*max<double>(1,fabs(du)));
          P_[k]-=Ro_[k]*du*tmp[k]*1e5;
         } 
    delete Sound;delete L;delete tmp;
@@ -787,8 +787,8 @@ void CalcTStpVisc(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeSt
 //  Next TimeStep Clc
    for (k=1;k<Num-1;k++) if (!F_[k]) 
     {
-     tmp[k]=max(fabs(Sound[k]),fabs(U_[k]-U_[k+1]));
-     tmp[k]=max(tmp[k],fabs(U_[k-1]-U_[k]));
+     tmp[k]=max<double>(fabs(Sound[k]),fabs(U_[k]-U_[k+1]));
+     tmp[k]=max<double>(tmp[k],fabs(U_[k-1]-U_[k]));
      L[k]=min(R_[k]-R_[k-1],R_[k+1]-R_[k]);
      if ( (L[k]<MathZer) || (R_[k]<0) ){ 
       cout<<" Wrong cell size, negative.\n";}//exit(0);}
@@ -808,7 +808,7 @@ void CalcTStpVisc(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeSt
          double du=U_[k+1]-U_[k];
 double r0=R_[Num-1]-R_[Num-2],rc=R_[k]-R_[k-1];
 if ((k<2) || (k>Num-1)) rc=r0;
-tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*max(1,fabs(du)));
+tmp[k]=Sound[k]*(1+WorkBody.Viscouse2*max<double>(1,fabs(du)));
          P_[k]-=Ro_[k]*du*tmp[k]*1e5;
         } 
    delete Sound;delete L;delete tmp;

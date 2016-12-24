@@ -4,7 +4,7 @@
 #define FMT "      "<<setw(13)<<setprecision(6)
 #define FM  setw(13)<<setprecision(9)
 
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 #include "old\inc\grlib.h"
 //#include "memf.h"
 #define ESC 27

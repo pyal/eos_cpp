@@ -2,14 +2,14 @@
 #define __FRE_FAC_H 
 
 
-#include "lib\std\util.h"
-#include "lib\std\stdexception.h"
+#include "lib/std/util.h"
+#include "lib/std/stdexception.h"
 #include "matt_fac.h"
 #include "h2_liqui.h"
 #include "empi_equ.h"
-#include "mat\mtzero.h"
-#include "mat\Quad.h"
-#include "mat\matrics.h"
+#include "mat/mtzero.h"
+#include "mat/Quad.h"
+#include "mat/matrics.h"
 #include "vector"
 #include "matt_tools.h"
 #include "util/code_gen/calculator/calculator_std.h"
@@ -76,6 +76,7 @@ struct InterfaceFreeEIO : FreeFuncClc {
 		throw info_except("%s",OutNames.c_str());
 		return 0;
 	}
+    using FreeFuncClc::OutputValClc;
 	virtual double OutputValClc(double Dencity,double Temperature, const Stroka &Output){
 		if (Output=="Pressure")
 			return Pressure(Dencity,Temperature);
@@ -108,7 +109,7 @@ struct FreeEIO : InterfaceFreeEIO
              (FreeE(Dencity+dr*0.5,Temperature)-FreeE(Dencity-dr*0.5,Temperature));
       return P;};
    double Energy(double Dencity,double Temperature)
-     {double dr=max(0.005*Temperature,10);
+     {double dr=max<double>(0.005*Temperature,10);
       double E=-sqr(Temperature)/dr*
              (FreeE(Dencity,Temperature+dr)/(Temperature+dr)-
                 FreeE(Dencity,Temperature)/Temperature);
@@ -421,9 +422,9 @@ struct FreeEEmpiLiquid:FreeEEmpiLiquidPres{
   }; 
 struct FreeEMetHCold:FreeEIOFind{
     FreeEMetHCold():FreeEIOFind("material.cfg","FreeEMetHColdTransl"),
-        AddEG(1),AddLDA(1),AddOCP(1),AddDeb(1),DebDenc0(0.09),DebKoef(2190),AddTransl(1){};
-   double DebDenc0,DebKoef;
+        AddEG(1),AddLDA(1),AddOCP(1),AddDeb(1),AddTransl(1),DebDenc0(0.09),DebKoef(2190){};
    int AddEG,AddLDA,AddOCP,AddDeb,AddTransl;
+    double DebDenc0,DebKoef;
    double FreeE(double Denc,double T);
    double DencityCold() {return StndErr;};
    double DencityMax()  {return 1e5;};
@@ -473,9 +474,9 @@ struct FreeEElectron:FreeEIOFind {
 // Pc*b+R*Tc=sqrt(3*Pc*a)
 // (Pc*b+R*Tc)/(3*Pc)=Vc
 // Landau crit point
-// Tªà=(8/27*A/B)     /R?
-// Vªà=3B
-// Pªà=A/(27*B*B)
+// Tï¿½ï¿½=(8/27*A/B)     /R?
+// Vï¿½ï¿½=3B
+// Pï¿½ï¿½=A/(27*B*B)
 
 /*
 #include "fre_ros.h"

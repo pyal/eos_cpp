@@ -3,13 +3,13 @@
 #define __MATT_ADI_H
 
 
-#include "lib\std\util.h"
-#include "mat\zero.h"
-#include "lib\std\ex_out.h"
-#include "mat\mtrung.h"
+#include "lib/std/util.h"
+#include "mat/zero.h"
+#include "lib/std/ex_out.h"
+#include "mat/mtrung.h"
 #include "matt_fac.h"
 //#include "matt_reg.h"
-#include "mat\Quad.h"
+#include "mat/Quad.h"
 #define MaxDencity 100
 //#define NEWTON_HUGONIO_SEARCH
 #define FZERO_HUGONIO_SEARCH

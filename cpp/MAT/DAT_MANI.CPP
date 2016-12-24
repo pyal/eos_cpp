@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "dat_mani.h"
 
 void ConstructSpl(TData<double> &XY,int X,int Y,TData<double> *&S)

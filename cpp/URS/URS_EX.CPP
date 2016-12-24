@@ -40,7 +40,7 @@ void ClcU_G(double u,double &d,double &t,double &g,double &c,double &s,int Set_s
   {
 //cout<<" u "<<u;
    d=EvalSpl(*data,0,2,*Shock,u);
-   double Stp=max(fabs(u*StndErr),MathZer);
+   double Stp=max<double>(fabs(u*StndErr),MathZer);
    double d1=EvalSpl(*data,0,2,*Shock,u+Stp);d1=(d1-d)/Stp;
    t=EvalSpl(*data,0,4,*Temp,u);
    double t1=EvalSpl(*data,0,4,*Temp,u+Stp);t1=(t1-t)/Stp;
@@ -165,7 +165,7 @@ double MisfitPres(double d)
      {cout<<" Bad MisfitPres in ZeroNewtonIt.\n";}//ChRead();}
    UBefore=UBeg;
    double DBeg=EvalSpl(*data,0,2,*Shock,UBeg);
-   double Stp=max(fabs(UBeg*StndErr),MathZer);
+   double Stp=max<double>(fabs(UBeg*StndErr),MathZer);
    double D1Beg=EvalSpl(*data,0,2,*Shock,UBeg+Stp);D1Beg=(D1Beg-DBeg)/Stp;
    double PHugI=DencBeg*DBeg*UBeg;
    double EHugI=sqr(UBeg)/2;

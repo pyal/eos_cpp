@@ -8,40 +8,29 @@
 //  =============  No phi dependence so it is fixed =======
 //  =======================================================
 
-struct FAZerHQs_Gamma:FAZerBase
-  {
-   FAZerHQs_Gamma();
-   void   ClcBase(double *par,double *Xval,double *Res);
-  };
+struct FAZerHQs_Gamma : FAZerBase {
+    FAZerHQs_Gamma();
+    void ClcBase(double *par, double *Xval, double *Res);
+};
 
 //  =======================================================
 //  === Polycristall case  Teta_Phi  angles of H rotation==
 //  =============  in QS bases                      =======
 //  =======================================================
-struct FAZerQsH:FAZerBase
-  {
-   FAZerQsH();
-   void   ClcBase(double *par,double *Xval,double *Res);
-  };
+struct FAZerQsH : FAZerBase {
+    FAZerQsH();
+    void ClcBase(double *par, double *Xval, double *Res);
+};
 
 
 //  ================================================
 //  ================ Average HQs  case    ==========
 //  ================================================
 //  Monocristal in the external field
-struct FAZerHQsAver:FAZerBase
-  {
-   FAZerHQsAver();
-   void   ClcBase(double *par,double *Xval,double *Res);
-  };
-
-
-
-
-
-
-
-
+struct FAZerHQsAver : FAZerBase {
+    FAZerHQsAver();
+    void ClcBase(double *par, double *Xval, double *Res);
+};
 
 
 #endif

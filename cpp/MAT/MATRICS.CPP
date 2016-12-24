@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 
 
 #include "matrics.h"
@@ -78,7 +78,7 @@ VecCl VecCl::MakeStepVector(int Num,double low,double up,int centered)
   int N=Num ;
   double stp=up-low,start=low;
   if (centered) { stp/=N;start+=0.5*stp; }
-  else stp/=max(N-1,1);
+  else stp/=max<int>(N-1,1);
   VecCl vec(N);
   for (int k=1;k<=N;k++) {vec[k]=start;start+=stp;}
   return vec;
@@ -99,7 +99,8 @@ void MatrCl::DeleteMatr()
    };
 
 double& MatrCl::operator()(int i,int j) {return Addr[i-1][j-1];};
-MatrCl  operator*(MatrCl &mat1,MatrCl &mat2)
+double MatrCl::operator()(int i,int j) const {return Addr[i-1][j-1];};
+MatrCl  operator*(const MatrCl &mat1,const MatrCl &mat2)
   {
    int X=mat1.DimX,Y=mat1.DimY,X1=mat2.DimX,Y1=mat2.DimY;
    MatrCl Tmp(X,Y1); 
@@ -117,7 +118,7 @@ MatrCl  operator*(MatrCl &mat1,MatrCl &mat2)
    return Tmp;
   };           
 
-MatrCl  operator*(MatrCl &matr,const double Const)
+MatrCl  operator*(const MatrCl &matr, double Const)
   {
    int X=matr.DimX,Y=matr.DimY,i,j;
    MatrCl Tmp(X,Y);
@@ -128,7 +129,7 @@ MatrCl  operator*(MatrCl &matr,const double Const)
      { for (i=0;i<X;i++) {for (j=0;j<Y;j++) t[i][j]=Const*a[i][j]; }}
    return Tmp;
   };
-VecCl operator*(MatrCl &mat1,VecCl &vec)
+VecCl operator*(const MatrCl &mat1,const VecCl &vec)
   {
    int X=mat1.DimX,Y=mat1.DimY,i,j;
    double **a=mat1.Addr,s;
@@ -147,7 +148,7 @@ VecCl operator*(MatrCl &mat1,VecCl &vec)
    return Tmp;
   };
     
-VecCl operator*(VecCl &vec,MatrCl &mat1)
+VecCl operator*(const VecCl &vec,const MatrCl &mat1)
   {
    int X=mat1.DimX,Y=mat1.DimY,i,j;
    double **a=mat1.Addr,s;
@@ -176,7 +177,7 @@ double* operator*(MatrCl &matr,const double *Vector)
    return Tmp;
   };           
 */
-MatrCl operator+(MatrCl& mat1,const double Const)
+MatrCl operator+(const MatrCl& mat1, double Const)
   {
    MatrCl Tmp=mat1;
    if (mat1.DimX!=mat1.DimY) 
@@ -185,7 +186,7 @@ MatrCl operator+(MatrCl& mat1,const double Const)
    for (int i=0;i<mat1.DimX;i++)  a[i][i]+=Const;
    return Tmp;
   };           
-MatrCl operator-(MatrCl& mat1,double Const)
+MatrCl operator-(const MatrCl& mat1,double Const)
   {
    MatrCl Tmp=mat1;
    double **a=Tmp.Addr;
@@ -194,7 +195,7 @@ MatrCl operator-(MatrCl& mat1,double Const)
    for (int i=0;i<mat1.DimX;i++)  a[i][i]-=Const;
    return Tmp;
   };
-MatrCl operator+(MatrCl &mat1,MatrCl &mat2)
+MatrCl operator+(const MatrCl &mat1,const MatrCl &mat2)
   {
    MatrCl Tmp=mat1;
    double **a=Tmp.Addr,**a1=mat2.Addr;
@@ -206,7 +207,7 @@ MatrCl operator+(MatrCl &mat1,MatrCl &mat2)
    return Tmp;
   };
    
-MatrCl operator-(MatrCl &mat1,MatrCl &mat2)
+MatrCl operator-(const MatrCl &mat1,const MatrCl &mat2)
   {
    MatrCl Tmp=mat1;
    double **a=Tmp.Addr,**a1=mat2.Addr;
@@ -255,7 +256,7 @@ istream& operator>>(istream &input,MatrCl& mat)
      }
    return input;
   };
-VecCl MatrCl::GetRow(MatrCl &Mat,int i)
+VecCl MatrCl::GetRow(const MatrCl &Mat,int i)
   {
    i--;
    int N=Mat.DimY;
@@ -263,7 +264,7 @@ VecCl MatrCl::GetRow(MatrCl &Mat,int i)
    MemoryMove(Mat.Addr[i],&Tmp[1],sizeof(double)*N);
    return Tmp;
   };    
-VecCl MatrCl::GetCol(MatrCl &Mat,int i)
+VecCl MatrCl::GetCol(const MatrCl &Mat,int i)
   {
    i--;
    int N=Mat.DimX;
@@ -273,11 +274,14 @@ VecCl MatrCl::GetCol(MatrCl &Mat,int i)
    return Tmp;
   };    
 
-void    MatrCl::SetRow(MatrCl &Mat,int i,VecCl& row)
-  { MemoryMove(&row[1],Mat.Addr[i-1],sizeof(double)*Mat.DimY);};
-void    MatrCl::SetCol(MatrCl &Mat,int i,VecCl& col)
+void    MatrCl::SetRow(MatrCl &Mat,int i, const VecCl& row)
+  { //MemoryMove(&row[1],Mat.Addr[i-1],sizeof(double)*Mat.DimY);
+      double **a=Mat.Addr;i--;
+      for (int j=0;j<Mat.DimY;j++) a[i][j]= row[j+1];
+       };
+void    MatrCl::SetCol(MatrCl &Mat,int i, const VecCl& col)
   { double **a=Mat.Addr;i--;for (int j=0;j<Mat.DimX;j++) a[j][i]=col[j+1]; };    
-double  Trace(MatrCl &Mat)
+double  Trace(const MatrCl &Mat)
   { double ret=0,**a=Mat.Addr;
     int N=Mat.DimX;
     if (N!=Mat.DimY) { cout<<" Trace Matr not diagonal\n";return 0;}
@@ -307,7 +311,7 @@ int Inverse(MatrCl &Mat)
     }
   return Good;
  };
-MatrCl Transpon(MatrCl &Mat)
+MatrCl Transpon(const MatrCl &Mat)
   {
    int X=Mat.DimX,Y=Mat.DimY;
    MatrCl Ret(Y,X);
@@ -317,7 +321,7 @@ MatrCl Transpon(MatrCl &Mat)
    return Ret;
   };
 
-double MatrNorm(MatrCl &Mat)
+double MatrNorm(const MatrCl &Mat)
  {
   double max=0,val;
   for (int x=1;x<=Mat.DimX;x++)
@@ -330,7 +334,7 @@ double MatrNorm(MatrCl &Mat)
   return max;
  };
 
-MatrCl DirectMultiplyOfMat(MatrCl &Fst,MatrCl &Sec)
+MatrCl DirectMultiplyOfMat(const MatrCl &Fst,const MatrCl &Sec)
  {
   MatrCl ret(Fst.DimX*Sec.DimX,Fst.DimY*Sec.DimY);
   int Nx=Fst.DimX,Ny=Fst.DimY;

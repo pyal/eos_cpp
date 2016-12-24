@@ -26,7 +26,7 @@ struct MatterH2Liq:MatterH2
      {return Eliquid(Dencity/DencityCold(),Temperature);}
     
    double Pressure(double Dencity,double Energy)
-     { return max(1e-4,PressureL(Dencity,Energy));}
+     { return max<double>(1e-4,PressureL(Dencity,Energy));}
    double Temperature(double Dencity,double Energy)
      { return TemperatureL(Dencity,Energy); }
    double Sound(double Dencity,double Energy)
@@ -40,7 +40,7 @@ struct MatterH2Liq:MatterH2
        {
    //       cout<<" MatterIO::Sound;  deriv is negative: " <<Pp<<" Sqrt from negative value          \n";
        }
-     return sqrt( max(0,Pp)/dr );
+     return sqrt( max<double>(0,Pp)/dr );
 //     return S;
     };
   };
@@ -49,8 +49,8 @@ struct MatterH2Sol:MatterH2
 
    double Pressure(double Dencity,double Energy)
      { 
-       return max(1e-4,PressureS(Dencity,Energy));
-//       return max(1e-4,PNull(Dencity/ColdParam.Denc));
+       return max<double>(1e-4,PressureS(Dencity,Energy));
+//       return max<double>(1e-4,PNull(Dencity/ColdParam.Denc));
      }
 // do not work
    double Temperature(double Dencity,double Energy)

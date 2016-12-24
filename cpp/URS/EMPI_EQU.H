@@ -1,15 +1,15 @@
-//  É‡®£Æ‡Ï•¢, äÆ‡¨•‡ Üùíî í 65, ÇÎØ. 2 (8)  1975, ·‚‡ 743
+//  ÔøΩ‡®£ÔøΩÔøΩÏ•¢, ÔøΩÔøΩ‡¨•ÔøΩ ÔøΩÔøΩÔøΩÔøΩ ÔøΩ 65, ÔøΩÔøΩ. 2 (8)  1975, ÔøΩÔøΩÔøΩ 743
 
 #ifndef __EMPI_EQU_H
 #define __EMPI_EQU_H 
 
-#include "mat\mtquad.h"
-#include "mat\zero.h"
+#include "mat/mtquad.h"
+#include "mat/zero.h"
 //#include "matlib.h"
-#include "mat\mtmin.h"
-#include "mat\dat_mani.h"
-#include "mat\mtfunc.h"
-#include "lib\ref\stroka.h"
+#include "mat/mtmin.h"
+#include "mat/dat_mani.h"
+#include "mat/mtfunc.h"
+#include "lib/ref/stroka.h"
 //   x = r/r0
 //
 //  units for pressure : (gram*km^2)/(cm^3*c^2)  GPa
@@ -29,17 +29,19 @@ double EmpiZparam(double x,double T);
 
 
 struct EmpiParamStruct
-  {int Nparam;
-   double coef[7],Denc,DencH,GrunN,Teta0,Rconst; 
-   double B0c,Mconst,Nconst,Edist;
-   int NTeta;
-   double TetaPar[7],TetaV,TetaZ0; // TetaZ0=sqr(Teta0)/sqr(SoundCold(x=1))
-   double VibTeta,VibZCoef,DisEnergy,PressureMet,DencityMet;
-   double Aconst,Bconst,Cconst,RLconst,Lconst,Denc0const,T0const,T_Turn;
-   double IncludeTurnE,IncludeNullE,IncludeTurnP,IncludeNullP,IncludeZeroE;
-   double SingleCold,IncludeVibration,BushmanMelt,IncludeDis,IncludeDisPres;
-   TData<double> *Dis_Sp,*Dis_Pnt;
-   Stroka DataName;
+  {
+    Stroka DataName;
+    TData<double> *Dis_Sp,*Dis_Pnt;
+    double SingleCold,IncludeVibration,BushmanMelt,IncludeDis,IncludeDisPres;
+    double IncludeTurnE,IncludeNullE,IncludeTurnP,IncludeNullP,IncludeZeroE;
+    double Aconst,Bconst,Cconst,RLconst,Lconst,Denc0const,T0const,T_Turn;
+    double VibTeta,VibZCoef,DisEnergy,PressureMet,DencityMet;
+    double TetaPar[7],TetaV,TetaZ0; // TetaZ0=sqr(Teta0)/sqr(SoundCold(x=1))
+    int NTeta;
+    double B0c,Mconst,Nconst,Edist;
+    double coef[7],Denc,DencH,GrunN,Teta0,Rconst;
+    int Nparam;
+
    EmpiParamStruct():DataName("##tmp.test.data"),
 		SingleCold(0),IncludeVibration(0),BushmanMelt(0),IncludeDis(0),IncludeDisPres(0),
 		IncludeTurnE(0),IncludeNullE(0),IncludeTurnP(0),IncludeNullP(0),IncludeZeroE(0),

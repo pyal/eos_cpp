@@ -68,7 +68,7 @@ void FAZerIO::Input(istream &input);
    for (int k=1;k<=NumPar;k++)
      {
       input>>tmp>>tmp;
-      if (!stricmp(tmp,"f")) Stp[k]=0;
+      if (!Stricmp(tmp,"f")) Stp[k]=0;
       else                   Stp[k]=1;
       input>>Par[k];
      }
@@ -81,14 +81,14 @@ int Register(char *name,FAZerIO &Func)
   {
    FAZerIO *tmp;
    int ret=1;
-   if (!stricmp(name,"exponent")) {tmp=new FAZerIOExp;}
+   if (!Stricmp(name,"exponent")) {tmp=new FAZerIOExp;}
    else
-     if (!stricmp(name,"lorents")) {tmp=new FAZerIOLor;}
-     else if (!stricmp(name,"polynom")) {tmp=new FAZerIOPoly;}
-          else if (!stricmp(name,"sum_func"))
+     if (!Stricmp(name,"lorents")) {tmp=new FAZerIOLor;}
+     else if (!Stricmp(name,"polynom")) {tmp=new FAZerIOPoly;}
+          else if (!Stricmp(name,"sum_func"))
                  {tmp=new FAArrAdd;}
                else
-                 if (!stricmp(name,"set_func")) {tmp=new FAArrSet;}
+                 if (!Stricmp(name,"set_func")) {tmp=new FAArrSet;}
                        else ret=0;
    return ret;
    if (!ret)
@@ -507,7 +507,7 @@ void FuncSumCellSet::Input(istream &input)
    for (int k=1;k<NumFunc;k++) 
      { 
       input>>tmp>>tmp>>Bnd[k];
-      if (stricmp(tmp,"f")==0) BndStp[k]=0;
+      if (Stricmp(tmp,"f")==0) BndStp[k]=0;
       else                     BndStp[k]=1;
      }
    input>>tmp>>NumCor;

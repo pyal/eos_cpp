@@ -137,7 +137,7 @@ void ChangeFile(char *inname,char *outname,int LoadColumn,int LoadFileNames,
    fstream in("##intmp",ios::in);
    fstream in_new(inname,ios::out);
 //   in.getline(tmp,511);in_new<<tmp<<"\n";
-   while ( (stricmp(tmp,"GeneralBegin")!=0) && (!seek_eof(in)) )
+   while ( (Stricmp(tmp,"GeneralBegin")!=0) && (!seek_eof(in)) )
      { in>>tmp;in_new<<tmp<<"   ";if (seek_eoln(in)) in_new<<"\n";}
    if (!LoadFileNames)
      {in>>tmp>>tmp1;in_new<<tmp<<"     "<<tmp1<<"\n";par>>tmp>>tmp;}
@@ -148,7 +148,7 @@ void ChangeFile(char *inname,char *outname,int LoadColumn,int LoadFileNames,
    while ( !(seek_eof(in)) )
      {
       strcpy(tmp,"copy ");
-      while ( (stricmp(tmp,"SetBegin")!=0) && (!seek_eof(in)) )
+      while ( (Stricmp(tmp,"SetBegin")!=0) && (!seek_eof(in)) )
         { in>>tmp;in_new<<tmp<<"   ";if (seek_eoln(in)) in_new<<"\n";}
       if (seek_eof(in)) break;
 //                Analize SetBegin String
@@ -294,8 +294,8 @@ cout<<" Full work time "<<time_full<<"\n";
      if (!CopyFile (argv[1],tmp1)) exit(1);
      ChangeFile(tmp1,outpar_name,0,0,1);
    }
-//  if (stricmp(outpar_name,argv[2])!=0) 
-   if (stricmp(outpar_name,"##!tmp.par")==0) unlink(outpar_name);
+//  if (Stricmp(outpar_name,argv[2])!=0)
+   if (Stricmp(outpar_name,"##!tmp.par")==0) unlink(outpar_name);
 //   double *testLeak=new double[10];
    }
    CATCHMAINEXCEPTION(" famessb failed ");

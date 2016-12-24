@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int fpgrre_(integer *ifsx, integer *ifsy, integer *ifbx, 
 	integer *ifby, real *x, integer *mx, real *y, integer *my, real *z__, 

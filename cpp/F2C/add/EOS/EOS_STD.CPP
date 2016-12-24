@@ -15,7 +15,7 @@ int ReadStd(FILE *hand,void **IntPar,int NumPar,int Skip)
    while ((!feof(hand1)) && (!ret))
      {
       fscanf(hand1,"%s ",&tmp);
-      if (stricmp(tmp,NameSubst)!=0) fgets(tmp,256,hand1);
+      if (Stricmp(tmp,NameSubst)!=0) fgets(tmp,256,hand1);
       else 
 		{
 		 double *d=new double[NumPar+1];
@@ -35,7 +35,7 @@ double SoundStd(double Dencity,double Energy,void *IntPar,PointFunc Pressure)
    double P=Pressure(r,Energy,IntPar);
    double Pp=Pressure(r+dr,Energy+P*dr/(r*r),IntPar);Pp-=P;
    if (Pp<0) {     }
-   double S=sqrt( max(0,Pp)/dr );
+   double S=sqrt( max<double>(0,Pp)/dr );
    return S;
   };
 /*

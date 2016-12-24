@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include <math.h>
 #include "cmatrics.h"
 //#define FMT "   ("<<setw(13)<<setprecision(4)
@@ -15,13 +15,14 @@ CVecCl& CVecCl::operator=(const CMatrCl &mat)
    return (*this);
   };
 
-CVecCl operator*(CVecCl &vec,my_comp coef)
+CVecCl operator*(const CVecCl &vec, double coef) {return vec*my_comp(coef);}
+CVecCl operator*(const CVecCl &vec,const my_comp coef)
   { CVecCl ret=vec;
     if (fabs(coef)>MathZer)
       {for (int k=1;k<=my_real(ret.Ptr[0]);k++) ret.Ptr[k]*=coef;}
     else  { for (int k=1;k<=my_real(ret.Ptr[0]);k++) ret.Ptr[k]=my_comp(0,0);}
     return ret; };
-CVecCl operator/(CVecCl &vec,my_comp coef)
+CVecCl operator/(const CVecCl &vec,const  my_comp coef)
   { CVecCl ret=vec;
     if (fabs(coef)>MathZer)
       {for (int k=1;k<=my_real(ret.Ptr[0]);k++) ret.Ptr[k]/=coef;}
@@ -29,24 +30,24 @@ CVecCl operator/(CVecCl &vec,my_comp coef)
       { for (int k=1;k<=my_real(ret.Ptr[0]);k++) ret.Ptr[k]=my_comp(MathInf,MathInf);
         cout<<"Error......... Zero Division in CVecCl/n";}
     return ret; };
-CVecCl operator+(CVecCl &vec,my_comp cons)
+CVecCl operator+(const CVecCl &vec,const my_comp cons)
   { CVecCl ret=vec;for (int k=1;k<=my_real(ret.Ptr[0]);k++) ret.Ptr[k]+=cons;
     return ret;};
-my_comp operator*(CVecCl &vec,CVecCl &vec1)
+my_comp operator*(const CVecCl &vec,const CVecCl &vec1)
   { my_comp s=my_comp(0,0);
     for (int k=1;k<=my_real(vec.Ptr[0]);k++) s+=vec.Ptr[k]*vec1.Ptr[k];
     return s; };
-CVecCl operator+(CVecCl &vec,CVecCl &vec1)
+CVecCl operator+(const CVecCl &vec,const CVecCl &vec1)
   { CVecCl ret=vec;for (int k=1;k<=my_real(ret.Ptr[0]);k++) ret.Ptr[k]+=vec1.Ptr[k];
     return ret;};
-CVecCl operator-(CVecCl &vec,CVecCl &vec1)
+CVecCl operator-(const CVecCl &vec,const CVecCl &vec1)
   { CVecCl ret=vec;for (int k=1;k<=my_real(ret.Ptr[0]);k++) ret.Ptr[k]-=vec1.Ptr[k];
     return ret;};
-ostream& operator<<(ostream &output,CVecCl &vec)
+ostream& operator<<(ostream &output,const CVecCl &vec)
   { for (int k=1;k<=my_real(vec.Ptr[0]);k++) output<<vec.Ptr[k]<<"   ";
    output<<"\n";
    return output;};
-istream& operator>>(istream &input,CVecCl &vec)
+istream& operator>>(istream &input,const CVecCl &vec)
   { for (int k=1;k<=my_real(vec.Ptr[0]);k++) input>>vec.Ptr[k];
    return input;};
 
@@ -54,7 +55,7 @@ istream& operator>>(istream &input,CVecCl &vec)
 double CVecCl::ModMax(CVecCl &Vec,double NewMax){   // ModMax - fabs( Max(Vec[k]) )
 	double OldMax = ModMax(Vec);
 	double Coef = OldMax<=MathZer?1:OldMax;
-	Vec = Vec*NewMax/Coef;
+	Vec = Vec*my_comp(NewMax/Coef);
 	return OldMax*NewMax/Coef;
   };
 double CVecCl::ModMax(const CVecCl &Vec){   // ModMax - fabs( Max(Vec[k]) )
@@ -79,7 +80,7 @@ double CVecCl::ModMax(const CVecCl &Vec){   // ModMax - fabs( Max(Vec[k]) )
 //     }
 //   return s;
 //  };
-double Mod2(CVecCl &Vec)
+double Mod2(const CVecCl &Vec)
   {
    my_comp *pnt=Vec.Ptr;
    double sum=0;
@@ -87,7 +88,7 @@ double Mod2(CVecCl &Vec)
    for (int k=1;k<=N;k++) sum+=norm(pnt[k]);
    return sum;
   };
-CVecCl Conj(CVecCl &Vec)
+CVecCl Conj(const CVecCl &Vec)
   {CVecCl ret=Vec;for (int k=1;k<=my_real(ret.Ptr[0]);k++) 
          ret.Ptr[k]=conj(ret.Ptr[k]);
      return ret;}
@@ -108,7 +109,7 @@ void CMatrCl::DeleteMatr()
 my_comp& CMatrCl::operator()(int i,int j) {return Addr[i-1][j-1];};
 my_comp CMatrCl::operator()(int i,int j) const {return Addr[i-1][j-1];};
  
-CMatrCl  operator*(CMatrCl &mat1,CMatrCl &mat2)
+CMatrCl  operator*(const CMatrCl &mat1,const CMatrCl &mat2)
   {
    int X=mat1.DimX,Y=mat1.DimY,X1=mat2.DimX,Y1=mat2.DimY;
    CMatrCl Tmp(X,Y1); 
@@ -125,9 +126,10 @@ CMatrCl  operator*(CMatrCl &mat1,CMatrCl &mat2)
         };
      };
    return Tmp;
-  };           
+  };
 
-CMatrCl  operator*(CMatrCl &matr,my_comp Const)
+CMatrCl  operator*(const CMatrCl &matr, double Const) {return matr * my_comp(Const);}
+CMatrCl  operator*(const CMatrCl &matr,const my_comp Const)
   {
    int X=matr.DimX,Y=matr.DimY,i,j;
    CMatrCl Tmp(X,Y);
@@ -138,7 +140,7 @@ CMatrCl  operator*(CMatrCl &matr,my_comp Const)
      { for (i=0;i<X;i++) {for (j=0;j<Y;j++) t[i][j]=Const*a[i][j]; }}
    return Tmp;
   };
-CVecCl operator*(CMatrCl &mat1,CVecCl &vec)
+CVecCl operator*(const CMatrCl &mat1,const CVecCl &vec)
   {
    int X=mat1.DimX,Y=mat1.DimY,i,j;
    my_comp **a=mat1.Addr,zer=my_comp(0,0),s;
@@ -153,10 +155,10 @@ CVecCl operator*(CMatrCl &mat1,CVecCl &vec)
    return Tmp;
   };
 
-CVecCl operator*(CVecCl &vec,CMatrCl &mat1)
+CVecCl operator*(const CVecCl &vec,const CMatrCl &mat1)
   {
    int X=mat1.DimX,Y=mat1.DimY,i,j;
-   my_comp **a=mat1.Addr,zer=my_comp(0,0),s;
+   my_comp **a=mat1.Addr,s;
    CVecCl Tmp(Y);
    if (my_real(vec[0])!=X) { cout<<" Dif Dim in Vec*Mat ";Tmp=vec;return Tmp;}
    for (i=0;i<Y;i++) 
@@ -182,7 +184,8 @@ my_comp* operator*(CMatrCl &matr,const my_comp *Vector)
    return Tmp;
   };
 */
-CMatrCl operator+(CMatrCl& mat1,my_comp Const)
+CMatrCl operator+(const CMatrCl& mat1,double Const) {return mat1 + my_comp(Const);}
+CMatrCl operator+(const CMatrCl& mat1,const my_comp Const)
   {
    CMatrCl Tmp=mat1;
    if (mat1.DimX!=mat1.DimY) 
@@ -191,7 +194,7 @@ CMatrCl operator+(CMatrCl& mat1,my_comp Const)
    for (int i=0;i<mat1.DimX;i++)  a[i][i]+=Const;
    return Tmp;
   };           
-CMatrCl operator-(CMatrCl& mat1,my_comp Const)
+CMatrCl operator-(const CMatrCl& mat1,const my_comp Const)
   {
    CMatrCl Tmp=mat1;
    if (mat1.DimX!=mat1.DimY) 
@@ -200,7 +203,7 @@ CMatrCl operator-(CMatrCl& mat1,my_comp Const)
    for (int i=0;i<mat1.DimX;i++)  a[i][i]-=Const;
    return Tmp;
   };           
-CMatrCl operator+(CMatrCl& mat1,CMatrCl& mat2)
+CMatrCl operator+(const CMatrCl& mat1,const CMatrCl& mat2)
   {
    CMatrCl Tmp=mat1;
    my_comp **a=Tmp.Addr,**a1=mat2.Addr;
@@ -211,7 +214,7 @@ CMatrCl operator+(CMatrCl& mat1,CMatrCl& mat2)
      {for (int i1=0;i1<mat1.DimY;i1++) a[i][i1]+=a1[i][i1];}
    return Tmp;
   };
-CMatrCl operator-(CMatrCl& mat1,CMatrCl& mat2)
+CMatrCl operator-(const CMatrCl& mat1,const CMatrCl& mat2)
   {
    CMatrCl Tmp=mat1;
    my_comp **a=Tmp.Addr,**a1=mat2.Addr;
@@ -232,7 +235,7 @@ CMatrCl& CMatrCl::operator=(const CMatrCl &mat)
    for (int i=0;i<mat.DimX;i++) MemoryMove(a[i],Addr[i],s);
    return *this;
   };
-CMatrCl& CMatrCl::operator=(CVecCl& vec)
+CMatrCl& CMatrCl::operator=(const CVecCl& vec)
   {
    int Dimen=my_real(vec[0]);SetMatr(Dimen);
    (*this)=(*this)*my_comp(0,0);
@@ -266,7 +269,7 @@ istream& operator>>(istream &input,CMatrCl& matr)
      }
    return input;
   };
-CVecCl CMatrCl::GetRow(CMatrCl &Mat,int i)
+CVecCl CMatrCl::GetRow(const CMatrCl &Mat,int i)
   {
    i--;
    int N=Mat.DimY;
@@ -274,7 +277,7 @@ CVecCl CMatrCl::GetRow(CMatrCl &Mat,int i)
    MemoryMove(Mat.Addr[i],&Tmp[1],sizeof(my_comp)*N);
    return Tmp;
   };    
-CVecCl CMatrCl::GetCol(CMatrCl &Mat,int i)
+CVecCl CMatrCl::GetCol(const CMatrCl &Mat,int i)
   {
    i--;
    int N=Mat.DimX;
@@ -288,12 +291,12 @@ void    CMatrCl::SetRow(CMatrCl &Mat,int i,CVecCl& row)
   { MemoryMove(&row[1],Mat.Addr[i-1],sizeof(my_comp)*Mat.DimY);};
 void    CMatrCl::SetCol(CMatrCl &Mat,int i,CVecCl& col)
   { my_comp **a=Mat.Addr;i--;for (int j=0;j<Mat.DimX;j++) a[j][i]=col[j+1]; };    
-my_comp  Trace(CMatrCl &Mat)
+my_comp  Trace(const CMatrCl &Mat)
   { my_comp ret=my_comp(0,0),**a=Mat.Addr;
     int N=Mat.DimX;
     if (N!=Mat.DimY) { cout<<" Trace Matr not diagonal/n";return 0;}
     for (int j=0;j<N;j++) ret+=a[j][j];return ret; };
-CMatrCl Transpon(CMatrCl &Mat)
+CMatrCl Transpon(const CMatrCl &Mat)
   {
    int X=Mat.DimX,Y=Mat.DimY;
    CMatrCl Ret(Y,X);
@@ -303,7 +306,7 @@ CMatrCl Transpon(CMatrCl &Mat)
    return Ret;
   };
 
-CMatrCl Conj(CMatrCl &Mat)
+CMatrCl Conj(const CMatrCl &Mat)
   {
    int X=Mat.DimX,Y=Mat.DimY;
    CMatrCl Ret(X,Y);
@@ -337,7 +340,7 @@ int Inverse(CMatrCl &Mat)
   return Good;
  };
 
-MatrCl ErmitMReal(CMatrCl &Mat)
+MatrCl ErmitMReal(const CMatrCl &Mat)
   {
    int Dimen=Mat.Dim();
    MatrCl Ret(Dimen*2);
@@ -355,7 +358,7 @@ MatrCl ErmitMReal(CMatrCl &Mat)
    return Ret;
   };
 
-CVecCl RealVComp(VecCl &In)
+CVecCl RealVComp(const VecCl &In)
   {
    int N=In.Dim()/2;
    CVecCl Ret(N);
@@ -364,7 +367,7 @@ CVecCl RealVComp(VecCl &In)
   };
 
 
-double MatrNorm(CMatrCl &Mat)
+double MatrNorm(const CMatrCl &Mat)
  {
   double max=0;
   for (int x=1;x<=Mat.DimX;x++)
@@ -380,7 +383,7 @@ double MatrNorm(CMatrCl &Mat)
  };
 
 
-CMatrCl DirectMultiplyOfMat(CMatrCl &Fst,CMatrCl &Sec)
+CMatrCl DirectMultiplyOfMat(const CMatrCl &Fst,const CMatrCl &Sec)
  {
   CMatrCl ret(Fst.DimX*Sec.DimX,Fst.DimY*Sec.DimY);
   int Nx=Fst.DimX,Ny=Fst.DimY;

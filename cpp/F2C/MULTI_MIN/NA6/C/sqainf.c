@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int sqainf_(integer *numfun, U_fp funsub, real *period, real 
 	*gamma, real *a, real *b, integer *wrksub, integer *emax, integer *

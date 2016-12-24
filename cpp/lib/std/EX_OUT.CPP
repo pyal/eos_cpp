@@ -1,4 +1,4 @@
-#include <lib\precompiled\Std.h>
+#include <lib/precompiled/std.h>
 
 
 #include "ex_out.h"

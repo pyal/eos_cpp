@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int bispev_(real *tx, integer *nx, real *ty, integer *ny, 
 	real *c__, integer *kx, integer *ky, real *x, integer *mx, real *y, 

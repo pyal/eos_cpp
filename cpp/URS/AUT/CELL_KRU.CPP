@@ -57,7 +57,7 @@ void CellFixed(RegionIO &Reg,double &PresDeriv)
 			PresDeriv=0;
    for (k=1;k<Reg.NumMatter;k++)
       PresDeriv+=fabs(P_l[Reg.BndMatter[k]-2]-P_l[Reg.BndMatter[k]+1]);
-			PresDeriv=max(log(max(1,PresDeriv))-8,0);
+			PresDeriv=max<double>(log(max<double>(1,PresDeriv))-8,0);
   };
 void ClcMass(RegionIO &Reg)
   {
@@ -239,7 +239,7 @@ cout<<" Coreleft "<<Coreleft()<<"\n";
 			               CurTime,TimeStp,TimeWrite,PresDerivCoef,EndTime); 
 //	my_file->close();};/*
 
-   if (argc>2) CoefUp=max(1,atoi(argv[3]));else CoefUp=1;
+   if (argc>2) CoefUp=max<double>(1,atoi(argv[3]));else CoefUp=1;
 //cout<<" Coreleft "<<coreleft()<<"\n";
 //			OutHead(*my_file,*Reg,CurTime,TimeStp,TimeWrite,PresDerivCoef,EndTime);
    ClcMass(*Reg);

@@ -5,14 +5,15 @@
 #include "ex_out.h"
 #include "..\Alg_clc\std_alg.h"
 
-#define HEAD(variable) "\n========================================\n============"<<variable<<"=============\n===========================================\n"
+#define HEAD(variable)                                                                   \
+    "\n========================================\n============"                           \
+        << variable << "=============\n===========================================\n"
 
 #include "NamedObject.h"
 
 
-void main(int argc,char **argv)
- {
-/*
+void main(int argc, char **argv) {
+    /*
 SetLeakTest();
   FilterTextIn *in_ptr;
   FilterTextOut *out_ptr;
@@ -33,13 +34,14 @@ SetLeakTest();
   clc_ptr=NULL;time_ptr=NULL;
 LeakTest();
 */
-///*
-SetLeakTest();
-  Algorithm_MainAction_Gasd act;
-  if (act.SetParam(argc,argv)) act.WriteRes();
-  act.Delete();
-LeakTest();
-//_CrtDumpMemoryLeaks( );
+    ///*
+    SetLeakTest();
+    Algorithm_MainAction_Gasd act;
+    if(act.SetParam(argc, argv))
+        act.WriteRes();
+    act.Delete();
+    LeakTest();
+    //_CrtDumpMemoryLeaks( );
 
-//*/
- };
+    //*/
+};

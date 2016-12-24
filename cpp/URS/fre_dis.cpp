@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 
 
 #include "fre_dis.h"
@@ -17,19 +17,18 @@
 //static ClassDesc PureDis_Minim1Pres_ClassDesc(typeid(PureDis_Minim1Pres),"PureDis_Minim1Pres",1,"PureDis_MinimPres_category",create<PureDis_Minim1Pres>);
 
 
-
-
 //FreeESumMatter::FreeESumMatter()
 //	:FreeEIOFind("material.cfg","MatterSumH2Met"){FreeCoef.push_back(1);FreeVect.push_back(new FreeEIdeal);}
 
 
 FreeEDis::FreeEDis()
-	:FreeEIOFind("material.cfg","MatterChemH2Met"),FreeMinim(new DisFindMinimE()){
-	SubstMap[Stroka("M1")]=NamedSubst("M1",new FreeEIdeal(),1,0,1,1);
-	SubstMap[Stroka("M2")]=NamedSubst("M2",new FreeEIdeal(),2,1,1,1);
-	ChemEq eq(Stroka("M1"),-2);eq.AddSubst(Stroka("M2"),1);
-	ChemEqs.push_back(eq);
-	ClcStartParams();
+    : FreeEIOFind("material.cfg", "MatterChemH2Met"), FreeMinim(new DisFindMinimE()) {
+    SubstMap[Stroka("M1")] = NamedSubst("M1", new FreeEIdeal(), 1, 0, 1, 1);
+    SubstMap[Stroka("M2")] = NamedSubst("M2", new FreeEIdeal(), 2, 1, 1, 1);
+    ChemEq eq(Stroka("M1"), -2);
+    eq.AddSubst(Stroka("M2"), 1);
+    ChemEqs.push_back(eq);
+    ClcStartParams();
 }
 
 Dis_RelatNum_MinimFunc_Single *Dis_RelatNum_MinimFunc_Single::StaticPtr = NULL;
@@ -37,4 +36,3 @@ DisSamePresFinder *DisSamePresFinder::CurPtr = NULL;
 
 PureDis_MinimNum *PureDis_MinimNum::StaticPtr = NULL;
 PureDis_Minim1Pres *PureDis_Minim1Pres::StaticPtr = NULL;
-

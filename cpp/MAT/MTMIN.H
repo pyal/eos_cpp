@@ -1,7 +1,7 @@
 #ifndef __MTMIN_H
 #define __MTMIN_H
 
-#include "lib\std\deffunc.h"
+#include "lib/std/deffunc.h"
 
 
 int NAGMin(X_func F,double relat_err,double abs_err,double MinB,

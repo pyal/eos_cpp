@@ -30,10 +30,10 @@ namespace NPolygon {
     //extern ForceLinkVoid<TSimpleContructor> Dummy_TSimpleContructor;
     //extern ForceLinkVoid<TSimpleContructor::TRegData> Dummy_TSimpleContructor_TRegData;
     extern ForceLinkVoid<TGridMaskSimple> Dummy_TGridMaskSimple;
-    extern ForceLinkVoid<TGridVar<double> > Dummy_TGridVar_Double;
+    extern ForceLinkVoid<TGridVar<double>> Dummy_TGridVar_Double;
     extern ForceLinkVoid<TPolyMarchTestZero> Dummy_TPolyMarchTestZero;
     extern ForceLinkVoid<TPolyMarchBody> Dummy_TPolyMarchBody;
-    
+
     extern ForceLinkVoid<TPolyMarchTestU2> Dummy_TPolyMarchTestU2;
     extern ForceLinkVoid<TPolyMarchU2> Dummy_TPolyMarchU2;
     extern ForceLinkVoid<TPolyMarchDriver> Dummy_TPolyMarchDriver;
@@ -42,14 +42,11 @@ namespace NPolygon {
     extern ForceLinkVoid<TRegBoundaryCircle> Dummy_TRegBoundaryCircle;
     extern ForceLinkVoid<TRegBoundaryCircleX> Dummy_TRegBoundaryCircleX;
 
-    extern ForceLinkVoid<TPolyMarchDriverFluxGasdWilkins> Dummy_TPolyMarchDriverFluxGasdWilkins;
+    extern ForceLinkVoid<TPolyMarchDriverFluxGasdWilkins>
+        Dummy_TPolyMarchDriverFluxGasdWilkins;
     extern ForceLinkVoid<TMarchWilkins> Dummy_TMarchWilkins;
     extern ForceLinkVoid<TPolyMarchPlusE> Dummy_TPolyMarchPlusE;
-	extern ForceLinkVoid<TPolyMarchPlusGase> Dummy_TPolyMarchPlusGase;
+    extern ForceLinkVoid<TPolyMarchPlusGase> Dummy_TPolyMarchPlusGase;
     //extern ForceLinkVoid<> Dummy_;
     //extern ForceLinkVoid<> Dummy_;
-
-
-
 };
-

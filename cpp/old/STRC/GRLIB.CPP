@@ -475,10 +475,10 @@ Rect GrScr::MaxGrDim()
    while (LST_PL!=NULL)
     {
      cur=LST->CellConv::SetGr();
-     ret.dn.x=min(cur.dn.x,ret.dn.x);
-     ret.dn.y=min(cur.dn.y,ret.dn.y);
-     ret.up.x=max(cur.up.x,ret.up.x);
-     ret.up.y=max(cur.up.y,ret.up.y);
+     ret.dn.x=min<double>(cur.dn.x,ret.dn.x);
+     ret.dn.y=min<double>(cur.dn.y,ret.dn.y);
+     ret.up.x=max<double>(cur.up.x,ret.up.x);
+     ret.up.y=max<double>(cur.up.y,ret.up.y);
     }
    LST_MI;
    return ret;
@@ -545,7 +545,7 @@ void InitGrph()
      movmem(ax,*wax,sizeof(double)*num);
     }
   gr_abs::~gr_abs (){ delete wax;}
-  double gr_abs::max() 
+  double gr_abs::max<double>()
     {
      double m=MachInf;
      for (int k=0; k<=num;k++ ) { m=MAX(m,*wax[k]) }
@@ -565,7 +565,7 @@ void InitGrph()
     {
        void blow(double maxv,minv;)
          {
-          double maxc=max(),minc=min(),del;
+          double maxc=max<double>(),minc=min(),del;
           if ((del=maxc-minc)>MachZer) 
             { 
              del=(maxv-minv)/del;
@@ -573,7 +573,7 @@ void InitGrph()
             }
          }
       blow(maxv,minv);
-      moveax((maxv+minv-max()-min())/2);
+      moveax((maxv+minv-max<double>()-min())/2);
      }
    void gr_abs::limax(double maxv,minv;)
     {
@@ -596,7 +596,7 @@ void drawstr::setgr(int num;double xar[],yar[];double xl,yl,xh,yh);
   {
    gr_abs *ax=new gr_abs(num,xar[]);
    gr_abs *ay=new gr_abs(num,yar[]);
-   double xma=*ax.max(),xmi=*ax.min(),yma=*ay.max(),ymi=*ay.min();
+   double xma=*ax.max<double>(),xmi=*ax.min(),yma=*ay.max<double>(),ymi=*ay.min();
    double dx=*xma-xmi,dy=yma-ymi;
    grxl=xmi-dx*xl;grxh=xma-dx*xh;
    gryl=ymi-dy*yl;gryl=ymi-dy*xl;

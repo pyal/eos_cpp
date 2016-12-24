@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int sgtsl_(integer *n, real *c__, real *d__, real *e, real *
 	b, integer *info)

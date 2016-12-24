@@ -5,20 +5,20 @@
 #include "lib/ref/ref.h"
 #include "lib/ref/class_sav.h"
 class X : public RefCount {
-  private:
+private:
     int x;
-  public:
+
+public:
     static int nx;
     X();
     ~X();
 };
 
-class Y: public X {
-  private:
+class Y : public X {
+private:
     int y;
-  public:
+
+public:
     Y();
     ~Y();
 };
-
-

@@ -1,3 +1,4 @@
+DEPRICATED!!!!!!!!!
 //#include <alloc.h>
 
 #include "lib/precompiled/ivl_cvt.h"
@@ -17,7 +18,7 @@ double StndErr=1e-6;
 //extern unsigned _stklen=60000;
 
 
-void Tab_cvt(fstream &scfg,char *tab_file,char *res_file)
+void Tab_cvt(fstream &scfg,const char *tab_file,const char *res_file)
   {
    char tmp[256];
    TTable<real> dat;
@@ -45,14 +46,14 @@ void Tab_cvt(fstream &scfg,char *tab_file,char *res_file)
 //cout<<"\n";
       for (k1=0;k1<N1;k1++) {dat.D[2][N1*k0+k1]=log(D1[N1-k1-1]+AddZ);}
      } 
-   delete D1;
+   delete []D1;
    out<<" AddZ "<<AddZ<<"\n";
    DataStore(out,(TData<real>*)&dat);out.close();in1.close();
 //   DataStore(out,(TData<real>*)&res);out.close();
   };
 
 
-void Const_spl(fstream &scfg,char *dat_file,char *spl_file,char *cmp_file,int Two=0)
+void Const_spl(fstream &scfg,const char *dat_file,const char *spl_file,const char *cmp_file,int Two=0)
   {
    char tmp[256];
 cout<<" coreleft "<<Coreleft()<<"\n";
@@ -192,10 +193,10 @@ void FormLimits(TData<real> *dat,SplineXYIO *se,real *&Tmin,real &Tu,int Dcol)
          n++;
         }
      }
-   delete Emin;delete Emax;
+   delete []Emin;delete []Emax;
   }; 
 
-void Constr_Pre(fstream &scfg,char *e_spl,char *p_spl,char *spl_Pfile,char *spl_Tfile,TData<real>  *datP)
+void Constr_Pre(fstream &scfg,const char *e_spl,const char *p_spl,const char *spl_Pfile,const char *spl_Tfile,TData<real>  *datP)
   {
    char tmp[256];
    int DoIt;
@@ -225,7 +226,7 @@ outT<<" AddE "<<AddE<<" AddP "<<AddP<<"\n";
 cout<<" coreleft "<<Coreleft()<<"\n";
   }; 
 
-void main( int argc, char *argv[] )
+int main( int argc, char *argv[] )
   {
 // 1 - cfg 2 - energy 3 - pressure  4 - res_spl 5 - res_t_spl
 // cfg format: for e,p
@@ -236,16 +237,16 @@ void main( int argc, char *argv[] )
 // 
 cout<<" coreleft "<<Coreleft()<<"\n";
    fstream scfg(argv[1],ios::in);
-   char *e_dat="#tmp_e.dat";
-   char *p_dat="#tmp_p.dat";
-   char *e_spl="#tmp_e.spl";
-   char *p_spl="#tmp_p.spl";
-   char *e_cmp="#tmp_e.cmp";
-   char *p_cmp="#tmp_p.cmp";
-   char *res_Pdat="#tmp_rep.dat";
-   char *res_Tdat="#tmp_ret.dat";
-   char *res_Pcmp="#tmp_rep.cmp";
-   char *res_Tcmp="#tmp_ret.cmp";
+   const char *e_dat="#tmp_e.dat";
+   const char *p_dat="#tmp_p.dat";
+    const char *e_spl="#tmp_e.spl";
+    const char *p_spl="#tmp_p.spl";
+    const char *e_cmp="#tmp_e.cmp";
+    const char *p_cmp="#tmp_p.cmp";
+    const char *res_Pdat="#tmp_rep.dat";
+    const char *res_Tdat="#tmp_ret.dat";
+    const char *res_Pcmp="#tmp_rep.cmp";
+    const char *res_Tcmp="#tmp_ret.cmp";
    Tab_cvt(scfg,argv[2],e_dat);Tab_cvt(scfg,argv[3],p_dat);
    Const_spl(scfg,e_dat,e_spl,e_cmp);Const_spl(scfg,p_dat,p_spl,p_cmp);
    TData<real> *dat=NULL;
@@ -261,5 +262,5 @@ cout<<" Dat Spl Reg \n";
    Const_spl(scfg,res_Tdat,argv[5],res_Tcmp,1);
    scfg.close();
 cout<<" coreleft "<<Coreleft()<<"\n";
-
+return 0;
   }; 

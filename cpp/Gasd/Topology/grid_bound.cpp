@@ -2,40 +2,63 @@
 
 #include "Grid_bound.h"
 
-DescribedClass* create_GridBound_cd(){return new GridBound;}
-static ClassDesc GridBound_cd(typeid(GridBound),"GridBound",1,"Grid",&create_GridBound_cd);
+DescribedClass *create_GridBound_cd() {
+    return new GridBound;
+}
+static ClassDesc GridBound_cd(
+    typeid(GridBound),
+    "GridBound",
+    1,
+    "Grid",
+    &create_GridBound_cd);
 
-DescribedClass* create_GridVarBoundInd_cd(){return new GridVarBoundInd;}
-static ClassDesc GridVarBoundInd_cd(typeid(GridVarBoundInd),"GridVarBoundInd",1,"Grid",&create_GridVarBoundInd_cd);
+DescribedClass *create_GridVarBoundInd_cd() {
+    return new GridVarBoundInd;
+}
+static ClassDesc GridVarBoundInd_cd(
+    typeid(GridVarBoundInd),
+    "GridVarBoundInd",
+    1,
+    "Grid",
+    &create_GridVarBoundInd_cd);
 //static ClassDesc Grid_GridBoundPnt_cd(typeid(Grid<GridBoundPnt>),"Grid_GridBoundPnt",1,"Grid");//,&create_GridVarBoundInd_cd);
 //GridBoundManipulator
 
-DescribedClass* create_GridBoundManipulator_cd(){return new GridBoundManipulator;}
-static ClassDesc GridBoundManipulator_cd(typeid(GridBoundManipulator),"GridBoundManipulator",1,"Grid",&create_GridBoundManipulator_cd);
+DescribedClass *create_GridBoundManipulator_cd() {
+    return new GridBoundManipulator;
+}
+static ClassDesc GridBoundManipulator_cd(
+    typeid(GridBoundManipulator),
+    "GridBoundManipulator",
+    1,
+    "Grid",
+    &create_GridBoundManipulator_cd);
 
 // =====================================================================
 // =================           GridBound           =====================
 // =====================================================================
-GridBound::GridBound(GridVarBoundInd *center):Grid<GridBoundPnt>(),
-                                              centerind_ptr(center)
- {}//SetRefMask(SingleFileStorage);};
+GridBound::GridBound(GridVarBoundInd *center)
+    : Grid<GridBoundPnt>(), centerind_ptr(center) {}   //SetRefMask(SingleFileStorage);};
 
-GridVarBoundInd* GridBound::SetCenterGrid(GridVarBoundInd *center)
-  {
-   if (center==NULL) return centerind_ptr;
-   if (centerind_ptr!=NULL) 
-     {ExEnv::err()<<" Cannot change GridVarBoundInd object. Something wrong in GridBound::SetCenterGrid"<< endl;abort();}
-   centerind_ptr=center;
-   return centerind_ptr;
-  };
-int GridBound::read_data_state (FilterIn &si)
-  {
-   Grid<GridBoundPnt>::read_data_state(si);
-   SavableClass* tmp;
-   si>>StdKey>>tmp;  
-   centerind_ptr=dynamic_cast<GridVarBoundInd*>(tmp);
-   return 1;
-  };
+GridVarBoundInd *GridBound::SetCenterGrid(GridVarBoundInd *center) {
+    if(center == NULL)
+        return centerind_ptr;
+    if(centerind_ptr != NULL) {
+        ExEnv::err()
+            << " Cannot change GridVarBoundInd object. Something wrong in GridBound::SetCenterGrid"
+            << endl;
+        abort();
+    }
+    centerind_ptr = center;
+    return centerind_ptr;
+};
+int GridBound::read_data_state(FilterIn &si) {
+    Grid<GridBoundPnt>::read_data_state(si);
+    SavableClass *tmp;
+    si >> StdKey >> tmp;
+    centerind_ptr = dynamic_cast<GridVarBoundInd *>(tmp);
+    return 1;
+};
 
 // =====================================================================
 // =================          GridVarBoundInd      =====================
@@ -52,167 +75,195 @@ struct GridVarBoundInd : public GridField<GridBoundIndPnt>
    Ref<GridBound> gridbound_ptr;
 */
 
-void GridVarBoundInd::DeleteOldBoundary(GridIndex k,int kpos)
- {
-  if (k<0) return;
-  GridIndex old=data[k][kpos],k1;
-  if (old<0) return;
-  int k1pos;
-  GridBoundPnt bnd=gridbound_ptr->GetPnt(old);
-  k=bnd.First;kpos=bnd.FirstPos;
-  k1=bnd.Second;k1pos=bnd.SecondPos;
-  if (k>=0) data[k][kpos]=-2;if (k1>=0) data[k1][k1pos]=-2;
-  gridbound_ptr->DelPnt(old);
- }
-void GridVarBoundInd::ResizeIndPnt(GridIndex k,int NewDim)
- {
-  int OldDim=data[k].SetDim();
-  if (NewDim==OldDim) return;
-  data[k].Resize(NewDim);
-  if (NewDim>OldDim) for (int k1=OldDim;k1<NewDim;k1++) data[k][k1]=-2;
- };
-  
-void GridVarBoundInd::AddNewBoundary(GridIndex k,int kpos)
- {
-  if (k<0) return;
-  GridManipulator *Center_manip=GetGridManip();
-  DataVector<GridIndex, CopyStructSlow<GridIndex> > neib_new=Center_manip->GetNeibous(k);
-  int k1pos,Nnew=neib_new.SetDim();
-  if ((kpos>=Nnew) || (kpos<0)) {ExEnv::err()<<" Error AddNewBoundary: Nnew "<<Nnew<<" kpos "<<kpos<<endl;abort();}
+void GridVarBoundInd::DeleteOldBoundary(GridIndex k, int kpos) {
+    if(k < 0)
+        return;
+    GridIndex old = data[k][kpos], k1;
+    if(old < 0)
+        return;
+    int k1pos;
+    GridBoundPnt bnd = gridbound_ptr->GetPnt(old);
+    k = bnd.First;
+    kpos = bnd.FirstPos;
+    k1 = bnd.Second;
+    k1pos = bnd.SecondPos;
+    if(k >= 0)
+        data[k][kpos] = -2;
+    if(k1 >= 0)
+        data[k1][k1pos] = -2;
+    gridbound_ptr->DelPnt(old);
+}
+void GridVarBoundInd::ResizeIndPnt(GridIndex k, int NewDim) {
+    int OldDim = data[k].SetDim();
+    if(NewDim == OldDim)
+        return;
+    data[k].Resize(NewDim);
+    if(NewDim > OldDim)
+        for(int k1 = OldDim; k1 < NewDim; k1++)
+            data[k][k1] = -2;
+};
 
-  GridIndex emp=Center_manip->NextEmptyIndex(-1),k1;
-  GridBoundPnt bnd;Center_manip->GetPntBound(k,kpos,bnd);
-bnd.Center.SetClassStored(0);bnd.NormalDir.SetClassStored(0);
-//  k=bnd.First;kpos=bnd.FirstPos;
-  k1=bnd.Second;k1pos=bnd.SecondPos;
-  ResizeIndPnt(k,Nnew);data[k][kpos]=emp;
-  if (k1>=0) {ResizeIndPnt(k1,Center_manip->GetNeibous(k1).SetDim());data[k1][k1pos]=emp;}
-  gridbound_ptr->AddPnt(emp,bnd);
- }
+void GridVarBoundInd::AddNewBoundary(GridIndex k, int kpos) {
+    if(k < 0)
+        return;
+    GridManipulator *Center_manip = GetGridManip();
+    DataVector<GridIndex, CopyStructSlow<GridIndex>> neib_new =
+        Center_manip->GetNeibous(k);
+    int k1pos, Nnew = neib_new.SetDim();
+    if((kpos >= Nnew) || (kpos < 0)) {
+        ExEnv::err() << " Error AddNewBoundary: Nnew " << Nnew << " kpos " << kpos
+                     << endl;
+        abort();
+    }
 
-DataVector<GridIndex> GridVarBoundInd::GetCurNeib(GridIndex k)
- {
-  DataVector<GridIndex> ret=data[k];
-  GridIndex emp;
-  for (int kpos=0;kpos<ret.SetDim();kpos++) 
-   {
-    emp=data[k][kpos];
-    if (emp<0) 
-     { 
-//       ExEnv::err()<<" GetCurNeib strange, below zero "<<endl;
-       ret[kpos]=-2;continue;}
-      ret[kpos]=(gridbound_ptr->GetPnt(emp)).GetNeib(k);
-   }
-  return ret;
- };
-  
-void GridVarBoundInd::ResetOldPointGeometry(GridIndex k)
- {
-  if (k<0) return;
-//  GridManipulator *Center_manip=SetStore();
-//  GridBoundPnt bnd=gridbound_ptr->GetPnt(old);
-//  GridIndex k=bnd.GetNeib(old);
+    GridIndex emp = Center_manip->NextEmptyIndex(-1), k1;
+    GridBoundPnt bnd;
+    Center_manip->GetPntBound(k, kpos, bnd);
+    bnd.Center.SetClassStored(0);
+    bnd.NormalDir.SetClassStored(0);
+    //  k=bnd.First;kpos=bnd.FirstPos;
+    k1 = bnd.Second;
+    k1pos = bnd.SecondPos;
+    ResizeIndPnt(k, Nnew);
+    data[k][kpos] = emp;
+    if(k1 >= 0) {
+        ResizeIndPnt(k1, Center_manip->GetNeibous(k1).SetDim());
+        data[k1][k1pos] = emp;
+    }
+    gridbound_ptr->AddPnt(emp, bnd);
+}
 
-  DataVector<GridIndex, CopyStructSlow<GridIndex> > neib_new=GetGridManip()->GetNeibous(k);
-  DataVector<GridIndex, CopyStructSlow<GridIndex> > neib_old=GetCurNeib(k);
-  int kpos,Nnew=neib_new.SetDim(),Nold=neib_old.SetDim();
+DataVector<GridIndex> GridVarBoundInd::GetCurNeib(GridIndex k) {
+    DataVector<GridIndex> ret = data[k];
+    GridIndex emp;
+    for(int kpos = 0; kpos < ret.SetDim(); kpos++) {
+        emp = data[k][kpos];
+        if(emp < 0) {
+            //       ExEnv::err()<<" GetCurNeib strange, below zero "<<endl;
+            ret[kpos] = -2;
+            continue;
+        }
+        ret[kpos] = (gridbound_ptr->GetPnt(emp)).GetNeib(k);
+    }
+    return ret;
+};
 
-  for (kpos=0;kpos<Nold;kpos++)  
-   {
-    if ((kpos<Nnew) && (neib_old[kpos]==neib_new[kpos])) continue;
-// Different neibous, delete old neibous
-    DeleteOldBoundary(k,kpos);
-   }
- };  
-  
-void GridVarBoundInd::ResetNewPointGeomtry(GridIndex k)
- {
-  if (k==-1) return;
-//  GridManipulator *Center_manip=SetStore();
-  DataVector<GridIndex, CopyStructSlow<GridIndex> > neib_new=GetGridManip()->GetNeibous(k);
-  DataVector<GridIndex, CopyStructSlow<GridIndex> > neib_old=GetCurNeib(k);
-  int kpos,Nnew=neib_new.SetDim(),Nold=neib_old.SetDim();
-  for (kpos=0;kpos<Nnew;kpos++)  
-   {
-    if ((kpos<Nold) && (neib_old[kpos]==neib_new[kpos])) continue;
-// Different neibous, add new neibous
-    AddNewBoundary(k,kpos);
-   }
-//neib_old=GetCurNeib(k);for (kpos=0;kpos<Nnew;kpos++)  
-//if (neib_old[kpos]!=neib_new[kpos]) fcout<<"They are not the same: "<<data[k]<<"\n";fcout.flush();
- };  
-void GridVarBoundInd::ResetPointNeibGeometry(GridIndex k,int PntExist)
- {
-  GridManipulator *Center_manip=GetGridManip();
-//  GridIndex gridnewpnt=Bound_manip->StartEmptyIndex(),gridoldpnt,curNeib,emp=gridbound_ptr->StartEmptyIndex();
-  DataVector<GridIndex, CopyStructSlow<GridIndex> > neib_new;
-  DataVector<GridIndex, CopyStructSlow<GridIndex> > neib_old=GetCurNeib(k);
-  int kpos,Nnew=0,Nold=neib_old.SetDim();
-  if (PntExist) {neib_new=Center_manip->GetNeibous(k);Nnew=neib_new.SetDim();}
-// First - deleting old not matching boundaries 
-  for (kpos=0;kpos<Nold;kpos++)  
-   {
-    if (neib_old[kpos]==-1) 
-     {if ((kpos>=Nnew) || (neib_new[kpos]!=-1)) DeleteOldBoundary(k,kpos);}
-    else ResetOldPointGeometry(neib_old[kpos]);
-   }
-// Second - adding new not matching boundaries 
-   
-  for (kpos=0;kpos<Nnew;kpos++)  
-   {
-    if (neib_new[kpos]==-1) 
-     {if ((kpos>=Nold) || (neib_old[kpos]!=-1)) AddNewBoundary(k,kpos);}
-    else ResetNewPointGeomtry(neib_new[kpos]);
-   }
- };
+void GridVarBoundInd::ResetOldPointGeometry(GridIndex k) {
+    if(k < 0)
+        return;
+    //  GridManipulator *Center_manip=SetStore();
+    //  GridBoundPnt bnd=gridbound_ptr->GetPnt(old);
+    //  GridIndex k=bnd.GetNeib(old);
 
-void GridVarBoundInd::ResetPointBounds(GridIndex k)
- {
-  GridManipulator *Center_manip=GetGridManip();
-  int kpos,N=data[k].SetDim();
-// First - deleting old not matching boundaries 
-  
-  for (kpos=0;kpos<N;kpos++)  
-   {
-    GridBoundPnt bnd;Center_manip->GetPntBound(k,kpos,bnd);
-    gridbound_ptr->ModifyPnt(data[k][kpos],bnd);
-   }
- };
+    DataVector<GridIndex, CopyStructSlow<GridIndex>> neib_new =
+        GetGridManip()->GetNeibous(k);
+    DataVector<GridIndex, CopyStructSlow<GridIndex>> neib_old = GetCurNeib(k);
+    int kpos, Nnew = neib_new.SetDim(), Nold = neib_old.SetDim();
 
-void GridVarBoundInd::AddPnt(GridIndex k,int ResetNeib)
- { ResetPointNeibGeometry(k,1); };
-    
+    for(kpos = 0; kpos < Nold; kpos++) {
+        if((kpos < Nnew) && (neib_old[kpos] == neib_new[kpos]))
+            continue;
+        // Different neibous, delete old neibous
+        DeleteOldBoundary(k, kpos);
+    }
+};
 
-void GridVarBoundInd::DelPnt(GridIndex k)
- {  ResetPointNeibGeometry(k,0); data[k].SetDim(0); };
+void GridVarBoundInd::ResetNewPointGeomtry(GridIndex k) {
+    if(k == -1)
+        return;
+    //  GridManipulator *Center_manip=SetStore();
+    DataVector<GridIndex, CopyStructSlow<GridIndex>> neib_new =
+        GetGridManip()->GetNeibous(k);
+    DataVector<GridIndex, CopyStructSlow<GridIndex>> neib_old = GetCurNeib(k);
+    int kpos, Nnew = neib_new.SetDim(), Nold = neib_old.SetDim();
+    for(kpos = 0; kpos < Nnew; kpos++) {
+        if((kpos < Nold) && (neib_old[kpos] == neib_new[kpos]))
+            continue;
+        // Different neibous, add new neibous
+        AddNewBoundary(k, kpos);
+    }
+    //neib_old=GetCurNeib(k);for (kpos=0;kpos<Nnew;kpos++)
+    //if (neib_old[kpos]!=neib_new[kpos]) fcout<<"They are not the same: "<<data[k]<<"\n";fcout.flush();
+};
+void GridVarBoundInd::ResetPointNeibGeometry(GridIndex k, int PntExist) {
+    GridManipulator *Center_manip = GetGridManip();
+    //  GridIndex gridnewpnt=Bound_manip->StartEmptyIndex(),gridoldpnt,curNeib,emp=gridbound_ptr->StartEmptyIndex();
+    DataVector<GridIndex, CopyStructSlow<GridIndex>> neib_new;
+    DataVector<GridIndex, CopyStructSlow<GridIndex>> neib_old = GetCurNeib(k);
+    int kpos, Nnew = 0, Nold = neib_old.SetDim();
+    if(PntExist) {
+        neib_new = Center_manip->GetNeibous(k);
+        Nnew = neib_new.SetDim();
+    }
+    // First - deleting old not matching boundaries
+    for(kpos = 0; kpos < Nold; kpos++) {
+        if(neib_old[kpos] == -1) {
+            if((kpos >= Nnew) || (neib_new[kpos] != -1))
+                DeleteOldBoundary(k, kpos);
+        } else
+            ResetOldPointGeometry(neib_old[kpos]);
+    }
+    // Second - adding new not matching boundaries
+
+    for(kpos = 0; kpos < Nnew; kpos++) {
+        if(neib_new[kpos] == -1) {
+            if((kpos >= Nold) || (neib_old[kpos] != -1))
+                AddNewBoundary(k, kpos);
+        } else
+            ResetNewPointGeomtry(neib_new[kpos]);
+    }
+};
+
+void GridVarBoundInd::ResetPointBounds(GridIndex k) {
+    GridManipulator *Center_manip = GetGridManip();
+    int kpos, N = data[k].SetDim();
+    // First - deleting old not matching boundaries
+
+    for(kpos = 0; kpos < N; kpos++) {
+        GridBoundPnt bnd;
+        Center_manip->GetPntBound(k, kpos, bnd);
+        gridbound_ptr->ModifyPnt(data[k][kpos], bnd);
+    }
+};
+
+void GridVarBoundInd::AddPnt(GridIndex k, int ResetNeib) {
+    ResetPointNeibGeometry(k, 1);
+};
 
 
-void GridVarBoundInd::ModifyPnt(GridIndex k)
- {  ResetPointNeibGeometry(k,1);ResetPointBounds(k); };
+void GridVarBoundInd::DelPnt(GridIndex k) {
+    ResetPointNeibGeometry(k, 0);
+    data[k].SetDim(0);
+};
 
-void GridVarBoundInd::MovePnt(GridIndex From,GridIndex To)
- {
-  int N=data[From].SetDim();
-  for (int k=0;k<N;k++)
-   {
-    gridbound_ptr->GetPnt(data[From][k]).ChangeNeib(From,To);
-   }
-  data[To]=data[From];
- };
 
-    
-void GridVarBoundInd::CreateGridData()
- {
-  GridManipulator *Center_manip=GetGridManip();
-  if (!Center_manip) return;
-  GridIndex k=Center_manip->StartPnt();
-  for (k;k>=0;k=Center_manip->NextPnt(k)) AddPnt(k,0);
-//   { fcout<<(*Center_manip)<<endl;AddPnt(k,0);fcout<<(*Center_manip)<<endl;}
- };
+void GridVarBoundInd::ModifyPnt(GridIndex k) {
+    ResetPointNeibGeometry(k, 1);
+    ResetPointBounds(k);
+};
+
+void GridVarBoundInd::MovePnt(GridIndex From, GridIndex To) {
+    int N = data[From].SetDim();
+    for(int k = 0; k < N; k++) {
+        gridbound_ptr->GetPnt(data[From][k]).ChangeNeib(From, To);
+    }
+    data[To] = data[From];
+};
+
+
+void GridVarBoundInd::CreateGridData() {
+    GridManipulator *Center_manip = GetGridManip();
+    if(!Center_manip)
+        return;
+    GridIndex k = Center_manip->StartPnt();
+    for(k; k >= 0; k = Center_manip->NextPnt(k))
+        AddPnt(k, 0);
+    //   { fcout<<(*Center_manip)<<endl;AddPnt(k,0);fcout<<(*Center_manip)<<endl;}
+};
 
 
 //void GridVarBoundInd::ResetNeibous(int TopologyChanged)
- // Not to react on any command, just to reset afterwards
+// Not to react on any command, just to reset afterwards
 //int  GridVarBoundInd::SetFrozen(int froze)
 
 
@@ -221,64 +272,85 @@ void GridVarBoundInd::CreateGridData()
 // =====================================================================
 
 
+DataVector<GridIndex, CopyStructSlow<GridIndex>> GridBoundManipulator::GetNeibous(
+    GridIndex k)   //{return store->GetPnt(k).Neibous;}
+{
+    GridBoundPnt pnt = grid->GetPnt(k);
+    GridBoundIndPnt fst, lst;
+    DataVector<GridIndex, CopyStructSlow<GridIndex>> ret(2);
+    int Nfst, i;   //,Nlst
+    if(pnt.First < 0)
+        ret[0] = -1;
+    else {
+        fst = grid->centerind_ptr->GetPnt(pnt.First);
+        Nfst = fst.SetDim();
+        for(i = 0; i < Nfst; i++)
+            if(fst[i] == k)
+                if(i / 2. == i) {
+                    if(i == Nfst - 1) {
+                        fcout << " Very bad in GridBoundManipulator::GetNeibous\n";
+                        abort();
+                    } else
+                        ret[0] = fst[i + 1];
+                    break;
+                } else {
+                    if(i == 0) {
+                        fcout << " Very bad in GridBoundManipulator::GetNeibous\n";
+                        abort();
+                    } else
+                        ret[0] = fst[i - 1];
+                    break;
+                }
+    }
+    if(pnt.Second < 0)
+        ret[1] = -1;
+    else {
+        fst = grid->centerind_ptr->GetPnt(pnt.Second);
+        Nfst = fst.SetDim();
+        for(i = 0; i < Nfst; i++)
+            if(fst[i] == k)
+                if(i / 2. == i) {
+                    if(i == Nfst - 1) {
+                        fcout << " Very bad in GridBoundManipulator::GetNeibous\n";
+                        abort();
+                    } else
+                        ret[1] = fst[i + 1];
+                    break;
+                } else {
+                    if(i == 0) {
+                        fcout << " Very bad in GridBoundManipulator::GetNeibous\n";
+                        abort();
+                    } else
+                        ret[1] = fst[i - 1];
+                    break;
+                }
+    }
 
-DataVector<GridIndex, CopyStructSlow<GridIndex> > GridBoundManipulator::GetNeibous(GridIndex k)//{return store->GetPnt(k).Neibous;}
- {
-  GridBoundPnt pnt=grid->GetPnt(k);
-  GridBoundIndPnt fst,lst;
-  DataVector<GridIndex, CopyStructSlow<GridIndex> > ret(2);
-  int Nfst,i;//,Nlst
-  if (pnt.First<0) ret[0]=-1;
-  else 
-   {fst=grid->centerind_ptr->GetPnt(pnt.First);Nfst=fst.SetDim();
-    for (i=0;i<Nfst;i++) if (fst[i]==k) if (i/2.==i) 
-       {
-        if (i==Nfst-1) {fcout<<" Very bad in GridBoundManipulator::GetNeibous\n";abort();} else 
-        ret[0]=fst[i+1];break;
-       }
-       else 
-       {
-        if (i==0) {fcout<<" Very bad in GridBoundManipulator::GetNeibous\n";abort();} else 
-        ret[0]=fst[i-1];break;
-       }
-   }
-  if (pnt.Second<0) ret[1]=-1;
-  else 
-   {fst=grid->centerind_ptr->GetPnt(pnt.Second);Nfst=fst.SetDim();
-    for (i=0;i<Nfst;i++) if (fst[i]==k) if (i/2.==i) 
-       {
-        if (i==Nfst-1) {fcout<<" Very bad in GridBoundManipulator::GetNeibous\n";abort();} else 
-        ret[1]=fst[i+1];break;
-       }
-       else 
-       {
-        if (i==0) {fcout<<" Very bad in GridBoundManipulator::GetNeibous\n";abort();} else 
-        ret[1]=fst[i-1];break;
-       }
-   }
-    
-  return ret;
- };
+    return ret;
+};
 
-DataVector<SpacePoint,CopyStructSlow<SpacePoint> > GridBoundManipulator::
-                       GetGridMaskedPnt(DataVector<GridIndex> &mask)
- { 
-  DataVector<GridBoundPnt> pnt;pnt=grid->GetMaskedPnt(mask);
-  int k,N=pnt.SetDim();
-  DataVector<SpacePoint,CopyStructSlow<SpacePoint> > ret(N);
-  for (k=0;k<N;k++) ret[k]=pnt[k].Center;
-  return ret;
- };
-  
-void GridBoundManipulator::
-     SetGridMaskedPnt(DataVector<SpacePoint,CopyStructSlow<SpacePoint> > &data,DataVector<GridIndex> &mask)
- { 
-  DataVector<GridBoundPnt,CopyStructSlow<GridBoundPnt> > pnt;pnt=grid->GetMaskedPnt(mask);
-  int k,N=pnt.SetDim();
-  DataVector<SpacePoint,CopyStructSlow<SpacePoint> > ret(N);
-  for (k=0;k<N;k++) pnt[k].Center=data[k];
-  grid->SetMaskedPnt(pnt,mask);
- };
+DataVector<SpacePoint, CopyStructSlow<SpacePoint>> GridBoundManipulator::GetGridMaskedPnt(
+    DataVector<GridIndex> &mask) {
+    DataVector<GridBoundPnt> pnt;
+    pnt = grid->GetMaskedPnt(mask);
+    int k, N = pnt.SetDim();
+    DataVector<SpacePoint, CopyStructSlow<SpacePoint>> ret(N);
+    for(k = 0; k < N; k++)
+        ret[k] = pnt[k].Center;
+    return ret;
+};
+
+void GridBoundManipulator::SetGridMaskedPnt(
+    DataVector<SpacePoint, CopyStructSlow<SpacePoint>> &data,
+    DataVector<GridIndex> &mask) {
+    DataVector<GridBoundPnt, CopyStructSlow<GridBoundPnt>> pnt;
+    pnt = grid->GetMaskedPnt(mask);
+    int k, N = pnt.SetDim();
+    DataVector<SpacePoint, CopyStructSlow<SpacePoint>> ret(N);
+    for(k = 0; k < N; k++)
+        pnt[k].Center = data[k];
+    grid->SetMaskedPnt(pnt, mask);
+};
 
 
 // ====================================================================

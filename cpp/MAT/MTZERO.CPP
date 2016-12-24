@@ -1,4 +1,4 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 
 /* C05AZE.f -- translated by f2c (version 19970805).
    You must link the resulting object file with the libraries:
@@ -8,12 +8,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Table of constant values */
 
 static double c_b13 = 1.;
-static double c_b16 = 0.;
+//static double c_b16 = 0.;
 double r_sign1(double *a,double *b)
 {
  double x;
@@ -299,7 +299,7 @@ L640:
 /*     .. */
     /* Parameter adjustments */
     --c__;
-	int count=0;
+//	int count=0;
 //LBeg:
 //	count++;if (count>MaxCount) {*ifail=10;return 1;}
 

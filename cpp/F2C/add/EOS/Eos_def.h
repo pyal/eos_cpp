@@ -7,9 +7,9 @@
 extern double StndErr;
 
 
-typedef double (*PointFunc)   (double x,double y,void *IntPar);
-typedef int    (*ReadFunc)    (FILE *hand,void **IntPar);
-typedef void   (*VoidFunc)    (void **IntPar);
+typedef double (*PointFunc)(double x, double y, void *IntPar);
+typedef int (*ReadFunc)(FILE *hand, void **IntPar);
+typedef void (*VoidFunc)(void **IntPar);
 
 
 #endif

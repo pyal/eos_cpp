@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Table of constant values */
 
@@ -18,7 +18,7 @@ static integer c__1 = 1;
 /* MAIN PROGRAM TO MINIMIZE A FUNCTION (REPRESENTED BY THE ROUTINE SFUN) */
 /* SUBJECT TO BOUNDS ON THE VARIABLES X - CUSTOMIZED VERSION */
 
-/* Main program */ MAIN__()
+int/* Main program */ MAIN__()
 {
     /* Format strings */
     static char fmt_800[] = "(//,\002 ERROR CODE =\002,i3,/)";
@@ -35,7 +35,7 @@ static integer c__1 = 1;
     /* Subroutine */ int s_stop(char *, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int sfun_(...);
+    extern /* Subroutine */ int sfun_(integer*, doublereal *, doublereal *, doublereal *);
     doublereal xtol, f, g[50];
     integer i__, n;
     doublereal w[700], x[50];

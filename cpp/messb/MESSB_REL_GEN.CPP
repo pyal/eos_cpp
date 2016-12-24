@@ -1,4 +1,4 @@
-#include <lib\precompiled\Messb.h>
+#include <lib/precompiled/Messb.h>
 
 #include "messb_rel_gen.h"
 
@@ -28,8 +28,8 @@ struct RelaxAngleWalkParam
 
 		RndGaus timeStp(Time,SigTime),angleStp(Ang,SigAng);
 		RndBoltsmanSinPower anis(Anis,AnisPower);
-		timeStp.Init(max(0,Time-4*SigTime),Time+4*SigTime,100,1e-5);
-		if (!Jump) angleStp.Init(max(0,Ang-4*SigAng),Ang+4*SigAng,100,1e-5);
+		timeStp.Init(max<double>(0,Time-4*SigTime),Time+4*SigTime,100,1e-5);
+		if (!Jump) angleStp.Init(max<double>(0,Ang-4*SigAng),Ang+4*SigAng,100,1e-5);
     if (AnisPower>0) anis.Init(-90,90,800,1e-5);
 		else anis.Init(-180,180,800,1e-5);
 		double CurT=TimeFrom,CurAngle;//=anis.Rnd();
@@ -52,7 +52,7 @@ struct RelaxAngleWalkParam
 				double p1=anis.Clc(a1),p2=anis.Clc(a2);
 //				double rnd=(double(rand())/RAND_MAX);
 				double rnd=RandomClass::Rnd(1);
-				if (rnd<p1/max(MathZer,p1+p2)) CurAngle-=stp;else CurAngle+=stp;
+				if (rnd<p1/max<double>(MathZer,p1+p2)) CurAngle-=stp;else CurAngle+=stp;
 			}
 		}
 		i++;
@@ -208,7 +208,7 @@ int StatUp=0;
 StatUp+=LstDir;
     if (i>=NumTimesEst) break;
    };
-cout<<" Stat "<<StatUp<<" from "<<i<<" coef "<<(i-StatUp)/max(StatUp,StndErr)<<" HaveToBe "<<p1/p2<<"\n";
+cout<<" Stat "<<StatUp<<" from "<<i<<" coef "<<(i-StatUp)/max<double>(StatUp,StndErr)<<" HaveToBe "<<p1/p2<<"\n";
 
   Phi[0]=i;Times[0]=i;ph=Phi;time=Times;
  };
@@ -240,7 +240,7 @@ int StatUp=0;
 StatUp+=LstDir;
     if (i>=NumTimesEst) break;
    };
-cout<<" Stat "<<StatUp<<" from "<<i<<" coef "<<(i-StatUp)/max(StatUp,StndErr)<<" HaveToBe "<<p1/p2<<"\n";
+cout<<" Stat "<<StatUp<<" from "<<i<<" coef "<<(i-StatUp)/max<double>(StatUp,StndErr)<<" HaveToBe "<<p1/p2<<"\n";
 
   Phi[0]=i;Times[0]=i;ph=Phi;time=Times;
  };

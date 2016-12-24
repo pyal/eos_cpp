@@ -4,7 +4,7 @@
 
 struct TurnSpinors
 {
-  static CMatrCl InverseOper(CMatrCl &mat){return Conj(Transpon(mat));}
+  static CMatrCl InverseOper(const CMatrCl &mat){return Conj(Transpon(mat));}
 
   static CMatrCl Turn4Mat(double Teta,double Phi);
   static CMatrCl Turn2Mat(double Teta,double Phi);
@@ -49,10 +49,10 @@ struct V3D_XYZ
   double z()const{return vec[3];}
   friend ostream& operator<<(ostream &out,V3D_XYZ &ang)
   {out<<ang.vec;return out;}
-  friend V3D_XYZ operator+(V3D_XYZ &ang1,V3D_XYZ &ang2){V3D_XYZ ret;ret.vec=ang1.vec+ang2.vec;return ret;}
-  friend V3D_XYZ operator-(V3D_XYZ &ang1,V3D_XYZ &ang2){V3D_XYZ ret;ret.vec=ang1.vec-ang2.vec;return ret;}
-  friend V3D_XYZ operator*(V3D_XYZ &ang1,double d){V3D_XYZ ret;ret.vec=ang1.vec*d;return ret;}
-  friend double operator*(V3D_XYZ &ang1,V3D_XYZ &ang2){return (ang1.vec*ang2.vec);}
+  friend V3D_XYZ operator+(const V3D_XYZ &ang1,const V3D_XYZ &ang2){V3D_XYZ ret;ret.vec=ang1.vec+ang2.vec;return ret;}
+  friend V3D_XYZ operator-(const V3D_XYZ &ang1,const V3D_XYZ &ang2){V3D_XYZ ret;ret.vec=ang1.vec-ang2.vec;return ret;}
+  friend V3D_XYZ operator*(const V3D_XYZ &ang1,double d){V3D_XYZ ret;ret.vec=ang1.vec*d;return ret;}
+  friend double operator*(const V3D_XYZ &ang1,const V3D_XYZ &ang2){return (ang1.vec*ang2.vec);}
 };
 // R - length, Teta, Phi
 struct V3D_Angles 
@@ -71,10 +71,16 @@ struct V3D_Angles
   double r() const  {return vec[1];}
   double teta()const{return vec[2];}
   double phi()const {return vec[3];}
-  friend ostream& operator<<(ostream &out,V3D_Angles &ang)  {out<<ang.vec;return out;}
-  friend V3D_Angles operator+(V3D_Angles &ang1,V3D_Angles &ang2){return V3D_Angles(V3D_XYZ(ang1)+V3D_XYZ(ang2));}
-  friend V3D_Angles operator*(V3D_Angles &ang1,double d){V3D_Angles ret(ang1);ang1.r()*=d;return ret;}
-  friend double operator*(V3D_Angles &ang1,V3D_Angles &ang2){return V3D_XYZ(ang1)*V3D_XYZ(ang2);}
+  friend ostream& operator<<(ostream &out,const V3D_Angles &ang)  {out<<ang.vec;return out;}
+  friend V3D_Angles operator+(const V3D_Angles &ang1,const V3D_Angles &ang2){
+    return V3D_Angles(V3D_XYZ(ang1)+V3D_XYZ(ang2));
+  }
+  friend V3D_Angles operator*(const V3D_Angles &ang1,double d){
+    V3D_Angles ret(ang1);
+    ret.r()*=d;
+    return ret;
+  }
+  friend double operator*(const V3D_Angles &ang1,const V3D_Angles &ang2){return V3D_XYZ(ang1)*V3D_XYZ(ang2);}
 };
 
 struct Turn3D
@@ -84,8 +90,8 @@ struct Turn3D
   static MatrCl TurnMatrAxis(int ax,double Angle);
   static MatrCl TurnMatr(V3D_Angles &rotate);
   static MatrCl ITurnMatr(V3D_Angles &rotate);
-  static V3D_XYZ TurnXYZ(V3D_XYZ &pnt,MatrCl &rotate);
-  static V3D_Angles TurnAngles(V3D_Angles &pnt,MatrCl &rotate);
+  static V3D_XYZ TurnXYZ(const V3D_XYZ &pnt,const MatrCl &rotate);
+  static V3D_Angles TurnAngles(const V3D_Angles &pnt,const MatrCl &rotate);
   //static V3D_Angles XYZ2Angles( V3D_XYZ &pnt);
   //static V3D_XYZ Angles2XYZ( V3D_Angles &pnt);
 };

@@ -3,11 +3,11 @@
 #pragma once
 
 //#include "fre_bus.h"
-//#include "mat\spl_fac.h"
+//#include "mat/spl_fac.h"
 
 #include "urs_forcelnk.h"
 
-#include "urs\test\urs_curve.h"
+#include "urs/test/urs_curve.h"
 extern ForceLinkVoid<URS_Curve> Dummy_URS_Curve;
 extern ForceLinkVoid<URS_Curve::Output> Dummy_URS_Curve_Output;
 extern ForceLinkVoid<URS_Curve::ClcVar> Dummy_URS_Curve_ClcVar;
@@ -26,12 +26,10 @@ extern ForceLinkVoid<UrsCurve_OneVarFunction> Dummy_UrsCurve_OneVarFunction;
 extern ForceLinkVoid<UrsCurve_NamedOneVarFunction> Dummy_UrsCurve_NamedOneVarFunction;
 
 
-
-
-#include "urs\test\urs_curve_calculator.h"
+#include "urs/test/urs_curve_calculator.h"
 extern ForceLinkVoid<UrsCurve_Calculator> Dummy_UrsCurve_Calculator;
 
-#include "urs\urs_opac_curve.h"
+#include "urs/urs_opac_curve.h"
 extern ForceLinkVoid<UrsCurve_BrightTempClc> Dummy_UrsCurve_BrightTempClc;
 
 
@@ -42,14 +40,10 @@ extern ForceLinkVoid<UrsCurve_SplConstr> Dummy_UrsCurve_SplConstr;
 
 extern ForceLinkVoid<EOS_Savable> Dummy_EOS_Savable;
 
-#include "urs\test\urs_2phase.h"
+#include "urs/test/urs_2phase.h"
 extern ForceLinkVoid<UrsCurve_PT_Bnd_Constructor> Dummy_UrsCurve_PT_Bnd_Constructor;
 extern ForceLinkVoid<UrsCurve_PT_Bnd_Binary> Dummy_UrsCurve_PT_Bnd_Binary;
 extern ForceLinkVoid<UrsCurve_PT_UnstBnd_Clc> Dummy_UrsCurve_PT_UnstBnd_Clc;
 extern ForceLinkVoid<UrsCurve_PT_UnstBnd_Binary> Dummy_UrsCurve_PT_UnstBnd_Binary;
 
 extern ForceLinkVoid<UrsCurve_PT_clc> Dummy_UrsCurve_PT_clc;
-
-
-
-

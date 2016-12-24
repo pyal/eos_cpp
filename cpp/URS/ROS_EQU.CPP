@@ -1,8 +1,8 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 
 #include "ros_equ.h"
 
-#include "mat\Quad.h"
+#include "mat/Quad.h"
 
 
 
@@ -26,7 +26,7 @@ double Exp6Param::Pow6ClcDeriv(double r, const Exp6Param &par){
 
 }
 double Exp6Param::Pow6ClcDeriv2(double r){
-    double Epsilon=Current->Epsilon;
+//    double Epsilon=Current->Epsilon;
     double Alpha  =Current->Alpha;
     double Radius =Current->Radius0;
 // This is simplified deriv only
@@ -193,7 +193,9 @@ double IntPow6Inf_Cut(double x0){return 1/pow(x0,5);}
 double IntNC_Cut(){double n=CE->Niu;return 24*n*(1-1.5*n+0.5*pow(n,3))/pow(n-1,4);}
 void MainIntegral_Cut()
 {
- double X=CE->X,Cut=0,Ec0=CE->Ec0,Ec1=CE->Ec1,P6=CE->P6,E0=CE->E0,E1=CE->E1;
+ double X=CE->X,
+//         Cut=0,
+         Ec0=CE->Ec0,Ec1=CE->Ec1,P6=CE->P6,E0=CE->E0,E1=CE->E1;
  X=(X<1)?1:X;
  CE->Amp[0]=0;CE->Freq[0]=1;CE->Amp[1]=0;CE->Freq[1]=X;//CE->Freq[3]=1;
 	if (X>1) {CE->Amp[0]=IntExpInf_Cut(Ec1,1)*Ec0;CE->Amp[1]=-IntExpInf_Cut(Ec1,X)*Ec0;}
@@ -260,89 +262,18 @@ double NCfunc(double q)
               4*(q*(q2-6)*sq+6)));
    return q/(1-nc);
 };
-/*
-#define EXP_PRE_FACTOR 1e-5
-double SinIntegralVal(double q)
-{
-   double niu=CE->Niu;
-   double q2=sqr(q),q5=sqr(q2)*q,niu3=sqr(niu)*niu,sq=1;//sin(q),;
-//   sq=exp(-EXP_PRE_FACTOR*q);//*sin(q);
-   double ret=sq*niu*(1152*niu*sqr(0.49999999999999967+niu)+q2*(-24+144*niu-120*niu3))/
-              (q5*sqr(sqr(niu-1)));
-   return ret;
-}
-double CosIntegralVal(double q)
-{
-   double niu=CE->Niu;
-   double q2=sqr(q),q4=sqr(q2),cq=1;//cos(q)
-//   cq=exp(-EXP_PRE_FACTOR*q);//*cos(q);
-//   cq=1/q;
-   double ret=cq*niu*(1152*niu*sqr(0.49999999999999967+niu)-
-              504*q2*niu*(-0.32037724101704074+niu)*(0.89180581244561208+niu)+
-              12*q4*sqr(-1+niu)*(2+niu))/(q4*q2*sqr(sqr(niu-1)));
-//cout<<q<<" "<<ret<<"\n";
-   return ret;
-}
-double ConIntegralVal(double q)
-{
-   double niu=CE->Niu;
-   double q2=sqr(q),q6=sqr(q2)*q2,niu2=sqr(niu);
-   double ret=niu2*(-1152*sqr(0.49999999999999967+niu)-
-              72*q2*sqr(1.9999999999999987+niu))/(q6*sqr(sqr(niu-1)));
-   return ret;
-}
 
-double DoubleSinIntegral(double q)
-{
-	double d=MainIntegral(q),r=NCfunc(q),s=SinIntegralVal(q);
-	double ret=d*r*s;
-//ret=r*s;
- return ret;
-};
-double DoubleCosIntegral(double q)
-{
-	double d=MainIntegral(q),r=NCfunc(q),c=CosIntegralVal(q);
-	double ret=d*r*c;
-//ret=r*c;
-//cout<<q<<" "<<d<<" "<<r<<" "<<c<<" "<<ret<<"\n";
- return ret;
-};
-double DoubleCosIntegral_Cut(double q)
-{
-	double d=MainIntegral(q),r=NCfunc(q),c=CosIntegralVal(q);
- double d1=-(CE->Amp[0]*cos(CE->Freq[0]*q)+CE->Amp[1]*cos(CE->Freq[1]*q))/q;
- double d_=MainIntegral_Cutted(q);
- double r1=CE->Amp[2]/q;
-	double ret=d*r*c;
- ret=(d-d1)*(r*c-r1);
-//cout<<d-d1<<d_<<"\n";
-//cout<<q<<" "<<d<<" "<<d1<<" "<<r*c<<" "<<r1<<" "<<c<<" "<<ret<<"\n";
- return ret;
-};
-double DoubleCosIntegral_CutSum(double q)
-{
-	double d=MainIntegral(q),r=NCfunc(q),c=CosIntegralVal(q);
- double d1=-(CE->Amp[0]*cos(CE->Freq[0]*q)+CE->Amp[1]*cos(CE->Freq[1]*q))/q;
- double r1=CE->Amp[2]/q;
-	double ret=d*r*c;
-// ret=(d-d1)*(r*c-r1);
-//cout<<q<<" "<<d<<" "<<d1<<" "<<r*c<<" "<<r1<<" "<<c<<" "<<ret<<"\n";
-// double deltaD=d-d1,deltaR=r*c-r1;
- ret=(d-d1)*r*c+d*(r*c-r1)+(d-d1)*(r*c-r1);
-//ret*=exp(-q*EXP_PRE_FACTOR);
- return ret;
-};
-double DoubleCosIntegral_CutSum_Plus(double q)
- { return DoubleCosIntegral_CutSum(q)*cos(q);}
 
-double DoubleConIntegral(double q)
-{
-	double d=MainIntegral(q),r=NCfunc(q),c=ConIntegralVal(q);
- double ret=d*r*c;
-//ret=r*c;
- return ret;
-};
-*/
+
+
+
+
+
+
+
+
+
+
 double IntCosQCosQX(double st,double x)
  {
   double xm=x-1,xp=x+1;
@@ -631,14 +562,14 @@ double IonizeEnergy(double E1,double E2,double MolVeight,double T,
 double S_EInterval,S_ClcT,S_WorkMiu,S_DegenGr,S_DegenUp,S_IntLim;
 double IntFuncPartElectron(double e)
 {
-	double N=S_DegenGr*sqrt(max(0,-e))+
-		     S_DegenUp*sqrt(max(0,e));
+	double N=S_DegenGr*sqrt(max<double>(0,-e))+
+		     S_DegenUp*sqrt(max<double>(0,e));
     if (e>=0) return N/(exp((e+S_EInterval-S_WorkMiu)/S_ClcT)+1);
 	return N/(exp((fabs(e)+S_WorkMiu)/S_ClcT)+1);
 };
 double IntFuncPartElectron1(double e)
 {
-  double N=S_DegenGr*sqrt(max(0,-e))+S_DegenUp*sqrt(max(0,e));
+  double N=S_DegenGr*sqrt(max<double>(0,-e))+S_DegenUp*sqrt(max<double>(0,e));
   double E;
   if (e>0) E=((-e-S_EInterval+S_WorkMiu)/S_ClcT);
   else     E=((fabs(e)+S_WorkMiu)/S_ClcT);
@@ -662,7 +593,7 @@ double FindFuncMiu(double miu)
     return res1-res2;
 };
 // return DensOfFreeE to add
-#include "mat\mtquad.h"
+#include "mat/mtquad.h"
 double FreeESemiConductor(double ZoneWidth,double LowDegener,double UpDegener, // in eV
 						  double MolVeight,double Dens,double T)
 {
@@ -843,7 +774,7 @@ double FreeSSVT(RossParam *par,double Denc,double T)
       cout<<" Did not find RP->NiuL. Try old version\n";}
    PY_add=PY_Min(RP->NiuL);
    double F=RP->Zero+PY_add-RP->S_Temp*
-            (log(max(1/Denc,MathZer))+RP->CvId*log(T)+RP->HiT+
+            (log(max<double>(1/Denc,MathZer))+RP->CvId*log(T)+RP->HiT+
                  log(1-exp(-RP->Tvib/T)));
    return F;
   }; 

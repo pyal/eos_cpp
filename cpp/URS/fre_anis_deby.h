@@ -7,7 +7,6 @@
 #include "clc_anis_deby.h"
 
 
-
 // ===========================================================================================================
 // =============================        FreeEIonisation       ================================================
 // ===========================================================================================================
@@ -16,7 +15,7 @@
 //    FreeEIonClc() : FreeEIOFind(), IonAddition(new ClcSimpleIon), MatFreeE(new FreeEIdeal) {};
 //
 //    double FreeE(double Denc, double T) {
-//        if ((T<MathZer) || (Denc<MathZer)) { 
+//        if ((T<MathZer) || (Denc<MathZer)) {
 //            cout<<"FreeE Bad. Denc "<<Denc<<" T "<<T<<"\n";return 0;
 //        }
 //        return IonAddition->ClcFreeE(Denc, T) + MatFreeE->FreeE(Denc, T);
@@ -58,7 +57,7 @@
 //
 //    Stroka MakeHelp(){
 //        Stroka res = FreeEIOFind::MakeHelp() + "\nClass for calculation of FreeE of matter plus ionisation .\n";
-//        
+//
 //        return res;
 //    }
 //
@@ -81,7 +80,7 @@
 //    Ref<ClcIonisationBase> IonAddition;
 //    Ref<InterfaceFreeEIO> MatFreeE;
 //
-//    
+//
 //};
 
 
@@ -90,29 +89,16 @@
 // ===========================================================================================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "fre_ion.h"
 
 struct FreeEIonAnisimov : ClcIonisation::FreeEIonStdIO {
     FreeEIonAnisimov();
-    double FreeEMol(double Denc,double T) {
-         if ((T<MathZer) || (Denc<MathZer)) { 
-             cout<<"FreeE Bad. Denc "<<Denc<<" T "<<T<<"\n";
-             return 0;
-         }
-         return IonClc.ClcFreeE(Denc, T);
+    double FreeEMol(double Denc, double T) {
+        if((T < MathZer) || (Denc < MathZer)) {
+            cout << "FreeE Bad. Denc " << Denc << " T " << T << "\n";
+            return 0;
+        }
+        return IonClc.ClcFreeE(Denc, T);
     }
     vector<int> L_num, N_num;
     int CalcMethod;
@@ -120,48 +106,58 @@ struct FreeEIonAnisimov : ClcIonisation::FreeEIonStdIO {
         FreeEIonStdIO::ReadSubstancePar(in);
         char tmp[256];
         SavableClass *ptrEl, *ptrMat;
-        in>>tmp>>ptrEl>>tmp>>ptrMat;//>>tmp>>ZeroTemp>>tmp>>ElDencErr>>tmp>>DeltaMulCoef;
-        if (!in || !(ElFreeE<<ptrEl) || !(MatFreeE<<ptrMat))
+        in >> tmp >> ptrEl >> tmp >>
+            ptrMat;   //>>tmp>>ZeroTemp>>tmp>>ElDencErr>>tmp>>DeltaMulCoef;
+        if(!in || !(ElFreeE << ptrEl) || !(MatFreeE << ptrMat))
             throw info_except("Could not read matter...\n");
-        in>>tmp>>CalcMethod;
-        in>>tmp;
-        N_num.clear();L_num.clear();
+        in >> tmp >> CalcMethod;
+        in >> tmp;
+        N_num.clear();
+        L_num.clear();
         TestNextWord(in, "{");
-        while(!TestNextChar(in,'}',1) && !(!in) ){
-            double n,l;
-            in>>tmp>>n>>tmp>>l;
+        while(!TestNextChar(in, '}', 1) && !(!in)) {
+            double n, l;
+            in >> tmp >> n >> tmp >> l;
             N_num.push_back(n);
             L_num.push_back(l);
         }
-        if (N_num.size()!=IonPot.size())
-            throw info_except("Sizes of IonLevel<%i> and N_num<%i> arrays are different\n", IonPot.size(), N_num.size());
+        if(N_num.size() != IonPot.size())
+            throw info_except(
+                "Sizes of IonLevel<%i> and N_num<%i> arrays are different\n",
+                IonPot.size(),
+                N_num.size());
 
         Electron = new ClcIonisation::ElectronStub;
         Electron->Init(ElFreeE, MolVeight);
-        IonClc.Init(IonPot, Gfactor, N_num, L_num, Electron.pointer(), CalcMethod, MolVeight);
+        IonClc.Init(
+            IonPot, Gfactor, N_num, L_num, Electron.pointer(), CalcMethod, MolVeight);
     }
     void SaveSubstancePar(ostream &out) {
         FreeEIonStdIO::SaveSubstancePar(out);
-        out<<" ElectronFreeE "<<ElFreeE<<" MatterFreeE "<<MatFreeE;
-        out<< "CalcMethod "<<CalcMethod;
-        out<<" N_L_numbers2Levels { ";
-        for(size_t k=0;k<N_num.size();k++)
-            out<<" N_num("<<k<<") "<<N_num[k]<<" L_num "<<Gfactor[k];
-        out<<" } ";
+        out << " ElectronFreeE " << ElFreeE << " MatterFreeE " << MatFreeE;
+        out << "CalcMethod " << CalcMethod;
+        out << " N_L_numbers2Levels { ";
+        for(size_t k = 0; k < N_num.size(); k++)
+            out << " N_num(" << k << ") " << N_num[k] << " L_num " << Gfactor[k];
+        out << " } ";
 
         //<<" ZeroTemp "<<ZeroTemp<<" ElDencErr "<<ElDencErr<<" DeltaMulCoef_crack "<<DeltaMulCoef;
     }
 
 
-    Stroka MakeHelp(){
-        Stroka res = FreeEIonStdIO::MakeHelp() + "Calc FreeE taking into account ions. Aprox - interaction part for ions - the same. Uses EOS of Mat, Electrons... There are 3 modes : DebyAnis Deby NoDeby [0,1,2] - Deby correction + anisimov lowering of potentials; DebyCorrection; FixedIonPot\n";
+    Stroka MakeHelp() {
+        Stroka res =
+            FreeEIonStdIO::MakeHelp() +
+            "Calc FreeE taking into account ions. Aprox - interaction part for ions - the same. Uses EOS of Mat, Electrons... There are 3 modes : DebyAnis Deby NoDeby [0,1,2] - Deby correction + anisimov lowering of potentials; DebyCorrection; FixedIonPot\n";
         return res;
     }
+
 protected:
-    vector<double> GetIonNums(double Denc, double T){
-        IonClc.ClcFreeE(Denc/MolVeight, T);
+    vector<double> GetIonNums(double Denc, double T) {
+        IonClc.ClcFreeE(Denc / MolVeight, T);
         return IonClc.ClcIonNum();
     }
+
 private:
     Ref<ClcIonisation::ElectronStub> Electron;
     ClcIonisation::MathAnisIon IonClc;
@@ -173,15 +169,9 @@ private:
 };
 
 
-
-
-
-
-
-
 //struct FreeEIonOneMat : FreeEIonAdd{
 //    double FreeE(double Denc,double T) {
-//     if ((T<MathZer) || (Denc<MathZer)) 
+//     if ((T<MathZer) || (Denc<MathZer))
 //        { cout<<"FreeE Bad. Denc "<<Denc<<" T "<<T<<"\n";return 0;}
 //     ClcDataStruct FixData = MakeStartData(Denc, T);
 //     double ElDenc = ClcElDenc(FixData);
@@ -321,27 +311,13 @@ private:
 //        for(int k=1;k<=int(lev.size());k++){
 //             if (l[k]/FixDat.FixMatT<200)
 //                 ret[k]=Degeneration[k-1]*exp(-l[k]/FixDat.FixMatT);
-//             else 
+//             else
 //                 ret[k] = Degeneration[k-1]*exp(-200.);
 //        }
 //        ret = ret/(ret*(ret*0+1));
 //        return ret;
 //    }
 //
-//    
+//
 //};
 //
-
-
-
-
-
-
-
-
-
-
-
-
-
-

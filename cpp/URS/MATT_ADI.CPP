@@ -1,6 +1,6 @@
-#include <lib\precompiled\madiex.h>
-#include <lib\precompiled\cell_kru.h>
-#include <lib\precompiled\adi_dou.h>
+#include <lib/precompiled/madiex.h>
+#include <lib/precompiled/cell_kru.h>
+#include <lib/precompiled/adi_dou.h>
 
 #include "matt_adi.h"
 //#include "empi_equ.h"
@@ -20,7 +20,7 @@ double Sound(double r,double e)
   {
    double P=(*PressurePtr)(r,e);
    double dr=StndErr;
-   double S=sqrt( max(0,((*PressurePtr)(r+dr,e+P*dr/(r*r))-P))/dr );
+   double S=sqrt( max<double>(0,((*PressurePtr)(r+dr,e+P*dr/(r*r))-P))/dr );
    return S;
   };
 */
@@ -33,8 +33,8 @@ void SetIntPar(double r,double e)
 double PressurePorous(double r,double e)
   {
    SetIntPar(r,e);
-   double P=MatterAdiabat->Pressure(r,e);
-   return max(MatterAdiabat->Pressure(r,e),Pcritical);
+//   double P=MatterAdiabat->Pressure(r,e);
+   return max<double>(MatterAdiabat->Pressure(r,e),Pcritical);
 //   return MatterAdiabat->Pressure(r,e);
   };
 double SoundPorous(double r,double e)
@@ -92,7 +92,7 @@ void HugDenc(double u1,double r1,double p1,double e1,
    p2=-(Stat_p0+Stat_coef*de);//p2=PressurePorous(r2,e2);
 cout<<" Hugonio!!!! ";p2=PressurePorous(r2,e2);
 cout<<" Hugonio Discrep "<<p2+(Stat_p0+Stat_coef*de)<<"\n";
-   double tmp=sqrt(max(0,-(p2-p1)/(1/r2-1/r1)));
+   double tmp=sqrt(max<double>(0,-(p2-p1)/(1/r2-1/r1)));
    D=u1-tmp/r1;u2=tmp/r2+D;
   };
    
@@ -133,7 +133,7 @@ int HugPres(double u1,double r1,double p1,double e1,
 #endif
 //   dv=-dv;
    r2=1/(Stat_v1+dv);e2=e1+Stat_coef*dv;
-   double tmp=sqrt(max(0,-(p2-p1)/(1/r2-Stat_v1)));
+   double tmp=sqrt(max<double>(0,-(p2-p1)/(1/r2-Stat_v1)));
    D=u1-tmp/r1;u2=tmp/r2+D;
    return ret;
   }; 
@@ -170,11 +170,11 @@ public:
     do {  FromDenc=NextDenc;FromEnergy=NextEnergy;}
     while (NextPressure(NextDenc,NextEnergy,Pres,ToPres,Stp)&&(++Num<MaxNum));
 //cout<<"\n";
-    double Err=1e-6;
+//    double Err=1e-6;
     ResDenc=0.5*(NextDenc+FromDenc);ResEnergy=0.5*(NextEnergy+FromEnergy);
     if (Num>=MaxNum) return 0;
     Denc=FromDenc;Energy=FromEnergy;Pressure=ToPres;
-    int ret=Fzero(PresMisf,FromDenc,NextDenc,ResDenc,Err,Err,MaxNum);
+//    int ret=Fzero(PresMisf,FromDenc,NextDenc,ResDenc,Err,Err,MaxNum);
     ResEnergy=IsentropeEnergy(ResDenc);
     return 1;
   }
@@ -199,7 +199,7 @@ private:
   IsentropeIntegralClass *OldPtr;
   double IsentropeEnergy(double denc)
   {
-    double ResDenc,ResEnergy,Stp=max(1e-2*fabs(Denc-denc),1e-4);
+    double ResDenc,ResEnergy,Stp=max<double>(1e-2*fabs(Denc-denc),1e-4);
     int res;
     if ((res=NotRungCurt(IsoentropeDeriv,Denc,Energy,denc,ResDenc,ResEnergy,Stp))!=0)
 		{ cout<<" Bad in  NotRungCurt "<<res<<" FromDenc= "<<Denc<<" FromEnergy "
@@ -212,7 +212,7 @@ private:
   static double IntegUFunc(double x)
   {double E=CurPtr->IsentropeEnergy(x);
    CurPtr->Denc=x;CurPtr->Energy=E;
-   double ret=max(CurPtr->Mat->Sound(x,E),1e-1)/x;
+   double ret=max<double>(CurPtr->Mat->Sound(x,E),1e-1)/x;
 //cout<<" Denc "<<x<<" s/x "<<ret<<"\n";cout.flush();
    return ret;
   }
@@ -295,14 +295,14 @@ IsentropeIntegralClass* IsentropeIntegralClass::CurPtr;
 ////cout<<" Fzero \n"<<flush;
 //   e2=E_found;D=SoundPorous(r2,e2);
 //
-//   u2=u1+Qags_IntSubInt(IsentDU,min(r1,r2),max(r1,r2),StndErr,StndErr,1000,ResErr,Err);
+//   u2=u1+Qags_IntSubInt(IsentDU,min(r1,r2),max<double>(r1,r2),StndErr,StndErr,1000,ResErr,Err);
 //  }; 
 void IsentropePres(double u1,double r1,double p1,double e1,
              double &u2,double &r2,double p2,double &e2,
              double &D)
   {
    if (fabs(PressurePorous(r1,e1)-p2)<StndErr*10) {u2=u1;r2=r1;e2=e1;D=SoundPorous(r1,e1);return ;}
-   //p2=max(p2,1e-4);
+   //p2=max<double>(p2,1e-4);
 // (p1+p2)/2*dV=-de; de*3*Denc=dp
 //cout<<" u1 "<<u1<<" r1 "<<r1<<" p1 "<<p1<<" p2 "<<p2;
    if (!HugPres(u1,r1, p1,e1,u2,r2,p2,e2,D)) return;
@@ -314,7 +314,7 @@ void IsentropePres(double u1,double r1,double p1,double e1,
    if (p2<Zero) du=-(Zero-p2)/Zero*10000;
    u2=u1-du;
 //cout<<" u2 "<<u2<<" r2 "<<r2<<"\n";
-   //u2=u1+Qags_IntSubInt(IsentDU,min(r1,r2),max(r1,r2),StndErr,StndErr,1000,ResErr,Err);
+   //u2=u1+Qags_IntSubInt(IsentDU,min(r1,r2),max<double>(r1,r2),StndErr,StndErr,1000,ResErr,Err);
   }; 
 // ========================================================
 // =========   End Hugoniot calculations  =================
@@ -464,26 +464,26 @@ cout<<" E "<<E<<"\n";
 void ShowIsoEntrope(fstream &in)
   {
    char buf[256];
-   double T,P,E,E0,s=1e-3;//x,x_c,
+   double T,P,E,E0;//,s=1e-3;//x,x_c,
 //			int res;
    MatterIO *M;M=MatterAdiabat;
 //   if (!MatterRegister(in,M)) { cout<<"Could not register. Exit.\n";exit(0);}
    //IsoM=M;
-   double min,max,stp,Rconst=M->DencityCold(),Cur_U=0;
+   double min,Max,stp,Cur_U=0; //Rconst=M->DencityCold(),
    IsentropeIntegralClass Isent(MatterAdiabat);
-   if (InputPar(in,E0,min,max,stp,buf))
+   if (InputPar(in,E0,min,Max,stp,buf))
      {
       fstream out(buf,ios::out);
 //     Rcritical=Rconst*Bconst/(fabs(Bconst-1)+StndErr);
 out<<" Isoentrope\n";
 out<<"        Dencity          Pressure          Temperature         Energy       dU\n";
       double Ecur=E0,Rcur=min;
-//      for (double k=min(min,max);k<=max(max,min);k+=max(min(fabs(stp),(max(max,min)-k)*(1+2*M_Eps)),2*k*M_Eps) ) 
-      stp=max(fabs(stp),2*min*M_Eps);(min>max)?stp=-stp:stp=stp;
+//      for (double k=min(min,Max);k<=Max<double>(Max,min);k+=Max<double>(min(fabs(stp),(Max<double>(Max,min)-k)*(1+2*M_Eps)),2*k*M_Eps) )
+      stp=max<double>(fabs(stp),2*min*M_Eps);(min>Max)?stp=-stp: stp;
       double k=min-stp;
-      while (In_Lim(k=k+stp,min,max,1))
+      while (In_Lim(k=k+stp,min,Max,1))
       //{
-      //for (double k=min;k<=max;k+=max(fabs(stp),2*k*M_Eps))  
+      //for (double k=min;k<=Max;k+=Max<double>(fabs(stp),2*k*M_Eps))
         {
 //         x=k/Rconst;
 //         E=Eliquid(x,T0);  // T0 is Temperature
@@ -500,8 +500,8 @@ out<<"        Dencity          Pressure          Temperature         Energy     
          E=Isent.IsentropeEnergy(Rcur,Ecur,k);
          T=M->Temperature(k,E);
          P=M->Pressure(k,E);
-//         Cur_U+=Isent.IsentropeDU(min(Rcur,k),max(Rcur,k));
-         //if (k==min(min,max)) Cur_U=-Cur_U;
+//         Cur_U+=Isent.IsentropeDU(min(Rcur,k),Max<double>(Rcur,k));
+         //if (k==min(min,Max)) Cur_U=-Cur_U;
          Cur_U+=Isent.IsentropeDU(Rcur,Ecur,k);
 //         double ResDenc,ResEnergy;
 //         Isent.IsentropePres(min,E0,P,ResDenc,ResEnergy);
@@ -810,7 +810,7 @@ if (misfit>10*StndErr) cout<<" mis "<<misfit<<" r2 "<<r2<<"\n";//ChRead();
 
 double MisfitHug(double x)
   {
-   double porous=ConstPar[0],v1=ConstPar[1],p1=ConstPar[2];
+   double v1=ConstPar[1],p1=ConstPar[2]; //porous=ConstPar[0],
    double e1=ConstPar[3],du=ConstPar[4];
 	  
 //   if (x>-MathZer) { cout<<" Wrong Sound x = "<<x<<"\n";exit(0);}
@@ -857,9 +857,9 @@ void SetHugPar(double &v1,double &x,double &du,
 			ConstPar[1]=v1;ConstPar[2]=p1; ConstPar[3]=e1;  ConstPar[4]=du;
 //cout<<" du "<<du<<"\n";
 //   double PEderiv=( PressurePorous(r1,e1+StndErr)-p1 )/StndErr;
-//cout<<" PE "<<PEderiv<<" ";PEderiv=max(PEderiv,1);
+//cout<<" PE "<<PEderiv<<" ";PEderiv=max<double>(PEderiv,1);
    double Sound=SoundPorous(r1,e1);
-   double s0=Sound;
+//   double s0=Sound;
 
    xstp=-2.*du;x=Sound+xstp;
    double x0=x,Mis=MathInf;

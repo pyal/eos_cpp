@@ -5,76 +5,61 @@
 #include <vector>
 
 
-
-
 #include "mat\turnmat.h"
 #include "messb.h"
 #include "messb_av.h"
-struct TestCase_Famessb_Internal:TestCase_Std//TestCase_Buffered
+struct TestCase_Famessb_Internal : TestCase_Std   //TestCase_Buffered
 {
-  TestCase_Famessb_Internal(){};//:manip(NULL),in(NULL),buf(NULL){};
-	~TestCase_Famessb_Internal(){Finish();}
-	TestSuite* CreateTest()
-	{ 
-		TestSuite_Std* suite=new TestSuite_Std(class_name());
-		suite->AddTest(Test_Turn_Matr,"Test_Turn_Matr");
-		suite->AddTest(Test_ZTurnedQsG_QsG,"Test_ZTurnedQsG_QsG");
-        suite->AddTest(Test_Qs_Gamma_Eiler,"Test_Qs_Gamma_Eiler");
-        suite->AddTest(Test_Turn_Angles,"Test_Turn_Angles");
-    //suite->AddTest(Test_Rnd_Angles_Generators,"Test_Rnd_Angles_Generators");
+    TestCase_Famessb_Internal(){};   //:manip(NULL),in(NULL),buf(NULL){};
+    ~TestCase_Famessb_Internal() {
+        Finish();
+    }
+    TestSuite *CreateTest() {
+        TestSuite_Std *suite = new TestSuite_Std(class_name());
+        suite->AddTest(Test_Turn_Matr, "Test_Turn_Matr");
+        suite->AddTest(Test_ZTurnedQsG_QsG, "Test_ZTurnedQsG_QsG");
+        suite->AddTest(Test_Qs_Gamma_Eiler, "Test_Qs_Gamma_Eiler");
+        suite->AddTest(Test_Turn_Angles, "Test_Turn_Angles");
+        //suite->AddTest(Test_Rnd_Angles_Generators,"Test_Rnd_Angles_Generators");
 
-		return suite;
-	}
-	static TestCase_Famessb_Internal* Restore(DescribedClass *ptr)
-	{
-		TestCase_Famessb_Internal *cur=dynamic_cast<TestCase_Famessb_Internal*>(ptr);
-		if (!cur) throw(info_except("ptr is not TestCase_Famessb_Internal"));
-		return cur;
-	}
-	void Init()	{		Finish();	}
-  void Finish()	{};
-  static double MakeParamsFit(double(*mis)(VecCl par) ,VecCl &BestPar,double *low,double *up,double *num,int Dims);
+        return suite;
+    }
+    static TestCase_Famessb_Internal *Restore(DescribedClass *ptr) {
+        TestCase_Famessb_Internal *cur = dynamic_cast<TestCase_Famessb_Internal *>(ptr);
+        if(!cur)
+            throw(info_except("ptr is not TestCase_Famessb_Internal"));
+        return cur;
+    }
+    void Init() {
+        Finish();
+    }
+    void Finish(){};
+    static double MakeParamsFit(
+        double (*mis)(VecCl par),
+        VecCl &BestPar,
+        double *low,
+        double *up,
+        double *num,
+        int Dims);
 
-  static void Test_Turn_Matr(TestCase *ptr);
+    static void Test_Turn_Matr(TestCase *ptr);
 
-  static CMatrCl *BaseMisMatr;
-  static Ham_Qs_Gamma *MisHam;
-  static double FitMisf(VecCl par)
-  {MisHam->Gamma=par[1];MisHam->Phi=par[2];return MatrNorm(*BaseMisMatr-MisHam->Make4Ham());}
+    static CMatrCl *BaseMisMatr;
+    static Ham_Qs_Gamma *MisHam;
+    static double FitMisf(VecCl par) {
+        MisHam->Gamma = par[1];
+        MisHam->Phi = par[2];
+        return MatrNorm(*BaseMisMatr - MisHam->Make4Ham());
+    }
 
-	static void Test_ZTurnedQsG_QsG(TestCase *ptr);
-  static void Test_Qs_Gamma_Eiler(TestCase *ptr);
-  static void Test_Turn_Angles(TestCase *ptr);
-  static void Test_Rnd_Angles_Generators(TestCase *ptr);
-	//istream *in;
-	//char *buf;
-	//StreamManip_Base *manip;
-
+    static void Test_ZTurnedQsG_QsG(TestCase *ptr);
+    static void Test_Qs_Gamma_Eiler(TestCase *ptr);
+    static void Test_Turn_Angles(TestCase *ptr);
+    static void Test_Rnd_Angles_Generators(TestCase *ptr);
+    //istream *in;
+    //char *buf;
+    //StreamManip_Base *manip;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //struct TestCase_Lex_Analyser:TestCase_Buffered
@@ -82,7 +67,7 @@ struct TestCase_Famessb_Internal:TestCase_Std//TestCase_Buffered
 //	TestCase_Lex_Analyser():lex_an(NULL),in(NULL),buf(NULL){};
 //	~TestCase_Lex_Analyser(){Finish();}
 //	TestSuite* CreateTest()
-//	{ 
+//	{
 //		TestSuite_Std* suite=new TestSuite_Std(class_name());
 //		suite->AddTest(Test_String,"Test_String");
 //		suite->AddTest(Test_Number,"Test_Number");
@@ -110,7 +95,7 @@ struct TestCase_Famessb_Internal:TestCase_Std//TestCase_Buffered
 //	}
 //	static void CheckRes(Lex_Result *fst,Lex_Result *sec)
 //	{
-//		if (Lex_Result::Equals(fst,sec)) 
+//		if (Lex_Result::Equals(fst,sec))
 ////			throw(TestExeption("OK"));
 //		return;
 //		if (fst==NULL) throw(TestExeption(string("Lex result returned NULL and have to return \n").append(sec->ToString()).c_str()));
@@ -118,7 +103,7 @@ struct TestCase_Famessb_Internal:TestCase_Std//TestCase_Buffered
 //		throw(TestExeption(string("Lex result returned ").append(fst->ToString()).append(" and have to return  ").append(sec->ToString()).c_str()));
 //	};
 //	static void Test_String(TestCase *ptr)
-//	{ 
+//	{
 //		TestCase_Lex_Analyser *cur=Start(ptr,"\"Start\"\t\"Another\034\" \t\'\035\'\t\n\
 //\"aa\
 //a\naa\"");
@@ -135,7 +120,7 @@ struct TestCase_Famessb_Internal:TestCase_Std//TestCase_Buffered
 //		CheckRes(res,NULL);
 //	}
 //	static void Test_Number(TestCase *ptr)
-//	{ 
+//	{
 //		TestCase_Lex_Analyser *cur=Start(ptr,"123 0x3a 022 022.\t1e-1 1.\n 1e23 1.e1 1e 1.e");
 //		Lex_Result *res,tobe;
 //		res=cur->lex_an->Analyse();
@@ -166,7 +151,7 @@ struct TestCase_Famessb_Internal:TestCase_Std//TestCase_Buffered
 //		CheckRes(res,NULL);
 //	}
 //	static void Test_Token(TestCase *ptr)
-//	{ 
+//	{
 //		TestCase_Lex_Analyser *cur=Start(ptr,"+ - word wor\t word + word +");
 //		Lex_Result *res,tobe;
 //		cur->lex_an->PushTokenLevel();

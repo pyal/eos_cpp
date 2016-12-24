@@ -20,10 +20,9 @@
 #define READ 267
 #define UNARYMINUS 268
 
-typedef union
-{
-   SYMBOL sym;
-   INST   *inst;
+typedef union {
+    SYMBOL sym;
+    INST *inst;
 } ZUBR_CALCULATOR_ZUBR_STYPE;
 
 extern ZUBR_CALCULATOR_ZUBR_STYPE zubr_calculator_zubr_lval;

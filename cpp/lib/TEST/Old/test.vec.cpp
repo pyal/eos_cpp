@@ -105,78 +105,92 @@ void TestRef()
 */
 #include "test.vec.h"
 
-DescribedClass* create_TestX_cd(){return new TestX;}
-DescribedClass* create_TestY_cd(){return new TestY;}
+DescribedClass *create_TestX_cd() {
+    return new TestX;
+}
+DescribedClass *create_TestY_cd() {
+    return new TestY;
+}
 
-static ClassDesc TestX_cd(typeid(TestX),"TestX",1,"Test",&create_TestX_cd);
-static ClassDesc TestY_cd(typeid(TestY),"TestY",1,"Test",&create_TestY_cd);
-TestX::TestX(TestY *ptr) {SetRefMask(SingleFileStorage);y=ptr;  if (y)     y->x=this; }
-TestY::TestY(TestX *ptr) {x=ptr;  if (x)     x->y=this; }
-TestX::~TestX() { if (y)     y->x=NULL; }
-TestY::~TestY() { if (x)     x->y=NULL; }
-int TestY::save_data_state (FilterOut &so)  
- {
-//  Ref<TestX> X=x;
-//  so<<KeyDesc("RefX")<<X;
-  so<<KeyDesc("RefX")<<x;//(SavableClass *)x;
-//  so.refmask=wasMask;
-  return 1;
- };
-int TestY::read_data_state (FilterIn &si)  
- {
-//  int wasMask=si.refmask;si.refmask=SavableClass::SingleFileStorage;
-//  Ref<TestX> X;
-//  si>>StdKey>>X;
-//  x=X;X.unmanage();
-  si>>StdKey;
-  SavableClass *sc;
-  si>>sc;x=(TestX*)sc;
-//  si.refmask=wasMask;
-  return 1;
- };
-int TestX::save_data_state (FilterOut &so)  
- {
-//  int wasMask=so.refmask;so.refmask=SavableClass::SingleFileStorage;
-  so<<KeyDesc("RefY")<<y;//(SavableClass *)y;
-//  so.refmask=wasMask;
-  return 1;
- };
-int TestX::read_data_state (FilterIn &si)  
- {
-//  int wasMask=si.refmask;si.refmask=SavableClass::SingleFileStorage;
-  si>>StdKey;
-//  SavableClass *sc;
-  si>>y;//sc;y=(TestY*)sc;
-//  si.refmask=wasMask;
-  return 1;
- };
-
-
-  
-void TestStorage()
- {
-  Ref<TestX> t=new TestX(),tx=new TestX(new TestY(NULL));
-//  fcout.refmask=SavableClass::SingleFileStorage;
-  fcout.SetRefMask(SavableClass::SingleFileStorage);
-  fcout<<*tx<<"\n\n";
-  fcout.flush();
-
-  t->SavableClass::operator=(*tx);
-//  tx=NULL;
-  fcout<<*t;
-//   <<*(t->y);
- }
-
-int test_vec(int, const char*)
-{
-//fcout<<" Test";fcout.flush();
-//  TestVector();
-//  IndRegBase reg;
-//  TestArray();
-//  TestVecRes();
-cout<<Coreleft()<<"\n";cout.flush();
-
-  TestStorage();
-cout<<Coreleft()<<"\n";cout.flush();
+static ClassDesc TestX_cd(typeid(TestX), "TestX", 1, "Test", &create_TestX_cd);
+static ClassDesc TestY_cd(typeid(TestY), "TestY", 1, "Test", &create_TestY_cd);
+TestX::TestX(TestY *ptr) {
+    SetRefMask(SingleFileStorage);
+    y = ptr;
+    if(y)
+        y->x = this;
+}
+TestY::TestY(TestX *ptr) {
+    x = ptr;
+    if(x)
+        x->y = this;
+}
+TestX::~TestX() {
+    if(y)
+        y->x = NULL;
+}
+TestY::~TestY() {
+    if(x)
+        x->y = NULL;
+}
+int TestY::save_data_state(FilterOut &so) {
+    //  Ref<TestX> X=x;
+    //  so<<KeyDesc("RefX")<<X;
+    so << KeyDesc("RefX") << x;   //(SavableClass *)x;
+                                  //  so.refmask=wasMask;
+    return 1;
+};
+int TestY::read_data_state(FilterIn &si) {
+    //  int wasMask=si.refmask;si.refmask=SavableClass::SingleFileStorage;
+    //  Ref<TestX> X;
+    //  si>>StdKey>>X;
+    //  x=X;X.unmanage();
+    si >> StdKey;
+    SavableClass *sc;
+    si >> sc;
+    x = (TestX *)sc;
+    //  si.refmask=wasMask;
+    return 1;
+};
+int TestX::save_data_state(FilterOut &so) {
+    //  int wasMask=so.refmask;so.refmask=SavableClass::SingleFileStorage;
+    so << KeyDesc("RefY") << y;   //(SavableClass *)y;
+                                  //  so.refmask=wasMask;
+    return 1;
+};
+int TestX::read_data_state(FilterIn &si) {
+    //  int wasMask=si.refmask;si.refmask=SavableClass::SingleFileStorage;
+    si >> StdKey;
+    //  SavableClass *sc;
+    si >> y;   //sc;y=(TestY*)sc;
+               //  si.refmask=wasMask;
+    return 1;
 };
 
+
+void TestStorage() {
+    Ref<TestX> t = new TestX(), tx = new TestX(new TestY(NULL));
+    //  fcout.refmask=SavableClass::SingleFileStorage;
+    fcout.SetRefMask(SavableClass::SingleFileStorage);
+    fcout << *tx << "\n\n";
+    fcout.flush();
+
+    t->SavableClass::operator=(*tx);
+    //  tx=NULL;
+    fcout << *t;
+    //   <<*(t->y);
+}
+
+int test_vec(int, const char *) {
+    //fcout<<" Test";fcout.flush();
+    //  TestVector();
+    //  IndRegBase reg;
+    //  TestArray();
+    //  TestVecRes();
+    cout << Coreleft() << "\n";
+    cout.flush();
+
+    TestStorage();
+    cout << Coreleft() << "\n";
+    cout.flush();
+};

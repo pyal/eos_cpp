@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int fpchec_(real *x, integer *m, real *t, integer *n, 
 	integer *k, integer *ier)

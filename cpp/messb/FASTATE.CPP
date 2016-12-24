@@ -1,4 +1,4 @@
-#include <lib\precompiled\Messb.h>
+#include <lib/precompiled/Messb.h>
 
 
 #include "fastate.h"
@@ -456,19 +456,19 @@ int FAStateRegister(fstream &in,FAIO *&Func,char *name)
   {
    FAZer *SFunc=NULL;
    int ret=1;
-//   if (!stricmp(name,"h2cold")) {SFunc=(FAZer*)new FAZerH2cold;}
+//   if (!Stricmp(name,"h2cold")) {SFunc=(FAZer*)new FAZerH2cold;}
 //                   else 
-//   if (!stricmp(name,"ABu_Grun")) {SFunc=(FAZer*)new FAZerABu_Grun;}
+//   if (!Stricmp(name,"ABu_Grun")) {SFunc=(FAZer*)new FAZerABu_Grun;}
 //                   else 
-   if (!stricmp(name,"ABu_H2cold")) {SFunc=(FAZer*)new FAZerABu_H2cold;}
+   if (!Stricmp(name,"ABu_H2cold")) {SFunc=(FAZer*)new FAZerABu_H2cold;}
                    else 
-   if (!stricmp(name,"ABu_Empicold")) {SFunc=(FAZer*)new FAZerABu_EmpiCold;}
+   if (!Stricmp(name,"ABu_Empicold")) {SFunc=(FAZer*)new FAZerABu_EmpiCold;}
                    else 
-   if (!stricmp(name,"ABu_EmpiMelt")) {SFunc=(FAZer*)new FAZerABu_EmpiMelt;}
+   if (!Stricmp(name,"ABu_EmpiMelt")) {SFunc=(FAZer*)new FAZerABu_EmpiMelt;}
                    else 
-   if (!stricmp(name,"ABu_EmpiABu")) {SFunc=(FAZer*)new FAZerABu_EmpiABu;}
+   if (!Stricmp(name,"ABu_EmpiABu")) {SFunc=(FAZer*)new FAZerABu_EmpiABu;}
                    else 
-//   if (!stricmp(name,"ABu_EmpiHug")) {SFunc=(FAZer*)new FAZerABu_EmpiHug;}
+//   if (!Stricmp(name,"ABu_EmpiHug")) {SFunc=(FAZer*)new FAZerABu_EmpiHug;}
 //                   else 
                    ret=0;
    if (!ret) return ret;

@@ -1,169 +1,242 @@
 #ifndef _STREAM_BUF_H_
 #define _STREAM_BUF_H_
 
-#include "lib\std\util.h"
-#include "lib\std\stdexception.h"
-#include "lib\ref\ref.h"
+#include "lib/std/util.h"
+#include "lib/std/stdexception.h"
+#include "lib/ref/ref.h"
 //#include <string>
+#undef min
+#undef max
 #include <list>
 #include <stack>
 //#pragma warning( disable : 4267 )
 
-struct StreamUngetStorage
-{
-	int ToPut;
-	int get(int &ch){int ret=(ToPut!=EOF);if (ret) ch=ToPut;ToPut=EOF;return ret;}
-	void put(int ch){if (ToPut!=EOF) cout<<"Double unget, possible eroor!!\n";ToPut=ch;};
-	int active(){return ToPut!=EOF;}
-    void clear(){ToPut = EOF;}
-	StreamUngetStorage(const StreamUngetStorage& stor):ToPut(stor.ToPut){};
-	StreamUngetStorage():ToPut(EOF){};
-	StreamUngetStorage& operator=(StreamUngetStorage &src){ToPut=src.ToPut;return *this;}
+struct StreamUngetStorage {
+    int ToPut;
+    int get(int &ch) {
+        int ret = (ToPut != EOF);
+        if(ret)
+            ch = ToPut;
+        ToPut = EOF;
+        return ret;
+    }
+    void put(int ch) {
+        if(ToPut != EOF)
+            cout << "Double unget, possible eroor!!\n";
+        ToPut = ch;
+    };
+    int active() {
+        return ToPut != EOF;
+    }
+    void clear() {
+        ToPut = EOF;
+    }
+    StreamUngetStorage(const StreamUngetStorage &stor) : ToPut(stor.ToPut){};
+    StreamUngetStorage() : ToPut(EOF){};
+    StreamUngetStorage &operator=(StreamUngetStorage &src) {
+        ToPut = src.ToPut;
+        return *this;
+    }
 };
 
 // Mark stored by StreamMemStorage
-struct StreamPosition
-{
-	list<int>::iterator it;
-	int Line,Pos,Ch;
-	StreamUngetStorage undo;
-	StreamPosition(list<int>::iterator &it_,int Line_,int Pos_,int Ch_,
-		StreamUngetStorage &undo_):it(it_),Line(Line_),Pos(Pos_),Ch(Ch_),undo(undo_){};
-	StreamPosition(const StreamPosition &src):it(src.it),Line(src.Line),Pos(src.Pos),Ch(src.Ch),undo(src.undo){};
-//	StreamPosition &operator=(StreamPosition src)	{Line=src.Line;Pos=src.Pos;undo=src.undo; return *this;}
+struct StreamPosition {
+    list<int>::iterator it;
+    int Line, Pos, Ch;
+    StreamUngetStorage undo;
+    StreamPosition(
+        list<int>::iterator &it_,
+        int Line_,
+        int Pos_,
+        int Ch_,
+        StreamUngetStorage &undo_)
+        : it(it_), Line(Line_), Pos(Pos_), Ch(Ch_), undo(undo_){};
+    StreamPosition(const StreamPosition &src)
+        : it(src.it), Line(src.Line), Pos(src.Pos), Ch(src.Ch), undo(src.undo){};
+    //	StreamPosition &operator=(StreamPosition src)	{Line=src.Line;Pos=src.Pos;undo=src.undo; return *this;}
 };
 
 // Class used for buffering read stream data
 // Can store several marks to restore reading from marked position
 // instead of read stream
-struct StreamMemStorage
-{
+struct StreamMemStorage {
 #define ITER list<int>::iterator
-	StreamMemStorage():ReadingStorage(0){};
-	void clear(){while (!pos.empty()) pos.pop();buf.erase(buf.begin(),buf.end());ReadingStorage=0;};
-// Pushes a mark to skack of restore positions
-// to return there in future
-	void PushMark(int line,int pos_,int Ch,StreamUngetStorage &undo);
-// Pops last mark from stack
-// fixing changes done to buffer, no undo in future
-	void PopMark()	;
-// Starts reading from last mark position ( undo changes )
-// Pops last mark from buffer
-	void ReturnToMark(int &line,int &pos_,int &Ch,StreamUngetStorage &undo);
-//EOF - if not reading
-	int ReadNext(int &ch);
-// Write char to storage if it is necessary, to be called each time after reading
-// the input stream
-	void Write(int ch) ;
-// Returns current reading buffer position
-	ITER GetCurrentPos();
-	friend ostream& operator<<(ostream &out,StreamMemStorage &mem);
+    StreamMemStorage() : ReadingStorage(0){};
+    void clear() {
+        while(!pos.empty())
+            pos.pop();
+        buf.erase(buf.begin(), buf.end());
+        ReadingStorage = 0;
+    };
+    // Pushes a mark to skack of restore positions
+    // to return there in future
+    void PushMark(int line, int pos_, int Ch, StreamUngetStorage &undo);
+    // Pops last mark from stack
+    // fixing changes done to buffer, no undo in future
+    void PopMark();
+    // Starts reading from last mark position ( undo changes )
+    // Pops last mark from buffer
+    void ReturnToMark(int &line, int &pos_, int &Ch, StreamUngetStorage &undo);
+    //EOF - if not reading
+    int ReadNext(int &ch);
+    // Write char to storage if it is necessary, to be called each time after reading
+    // the input stream
+    void Write(int ch);
+    // Returns current reading buffer position
+    ITER GetCurrentPos();
+    friend ostream &operator<<(ostream &out, StreamMemStorage &mem);
+
 private:
-	list<int> buf;
-	stack<StreamPosition> pos;
-	ITER ReadingPos;
-	int ReadingStorage;
-	void TestWrite(){if ((ReadingStorage) && (ReadingPos==buf.end())) {ReadingStorage=0;if (pos.empty()) clear();}}
+    list<int> buf;
+    stack<StreamPosition> pos;
+    ITER ReadingPos;
+    int ReadingStorage;
+    void TestWrite() {
+        if((ReadingStorage) && (ReadingPos == buf.end())) {
+            ReadingStorage = 0;
+            if(pos.empty())
+                clear();
+        }
+    }
 };
 // Base stream manipulation class
 // Makes it possible to undo last read char in stream
 // Return to marked stream position - so can mark position and
 // afterwards - to undo readings, or to accept them
 // Stores current line and current file position
-struct StreamManip_Base:RefCount
-{
+struct StreamManip_Base : RefCount {
 
-//	StreamManip_Base(istream &inp):in(inp){LastGetChar=-2;CurPos=1;CurLine=1;}
-	StreamManip_Base(istream *inp=NULL){ResetStream(inp);}
-    void ResetStream(istream *inp){
-        in_ptr = inp;LastGetChar=-2;CurPos=1;CurLine=1;
-        undo.clear();mem.clear();
+    //	StreamManip_Base(istream &inp):in(inp){LastGetChar=-2;CurPos=1;CurLine=1;}
+    StreamManip_Base(istream *inp = NULL) {
+        ResetStream(inp);
     }
-	int GetLine(){return CurLine;}//to be changed for frozen values
-	int GetPos(){return CurPos;}
-// Unget last read char ( return it to the stream )
-	void unget(){unget(LastChar());};
-// Get next char
-	int get(){
-		//cout<<" EOF "<<EOF<<" LastGetChar "<<LastGetChar<<"\n"<<flush;
-        if (LastGetChar!=EOF) {
+    void ResetStream(istream *inp) {
+        in_ptr = inp;
+        LastGetChar = -2;
+        CurPos = 1;
+        CurLine = 1;
+        undo.clear();
+        mem.clear();
+    }
+    int GetLine() {
+        return CurLine;
+    }   //to be changed for frozen values
+    int GetPos() {
+        return CurPos;
+    }
+    // Unget last read char ( return it to the stream )
+    void unget() {
+        unget(LastChar());
+    };
+    // Get next char
+    int get() {
+        //cout<<" EOF "<<EOF<<" LastGetChar "<<LastGetChar<<"\n"<<flush;
+        if(LastGetChar != EOF) {
             ReadStream();
             IncrementCurPos();
         }
         return LastGetChar;
     };
-//Reading from buf will return to stacked mark
-	void RestorePos(){	mem.ReturnToMark(CurLine,CurPos,LastGetChar,undo);	};
-//Stacks a mark.
-// If reading from file - stored mark = buf tail, if reading from buf - stores current buf read position
-	void FreezePos()	{	mem.PushMark(CurLine,CurPos,LastGetChar,undo);	}
-// Remove last mark
-	void UnfreezePos(){mem.PopMark();};//Skips all to current pos
-// returns last read char
-	int LastChar(){return LastGetChar;} 
-	int EndIsRead(){return LastGetChar==EOF;}
+    //Reading from buf will return to stacked mark
+    void RestorePos() {
+        mem.ReturnToMark(CurLine, CurPos, LastGetChar, undo);
+    };
+    //Stacks a mark.
+    // If reading from file - stored mark = buf tail, if reading from buf - stores current buf read position
+    void FreezePos() {
+        mem.PushMark(CurLine, CurPos, LastGetChar, undo);
+    }
+    // Remove last mark
+    void UnfreezePos() {
+        mem.PopMark();
+    };   //Skips all to current pos
+         // returns last read char
+    int LastChar() {
+        return LastGetChar;
+    }
+    int EndIsRead() {
+        return LastGetChar == EOF;
+    }
 
-//Generates from frozen part (from last stored mark)- string, Unfreezes position
-	string UnfreezeToStr();
-	int IsGood(){if (!in_ptr) return 0;return !(!(*in_ptr));}
-	friend ostream& operator<<(ostream &out,StreamManip_Base &manip) {out<<manip.mem;return out;}
+    //Generates from frozen part (from last stored mark)- string, Unfreezes position
+    string UnfreezeToStr();
+    int IsGood() {
+        if(!in_ptr)
+            return 0;
+        return !(!(*in_ptr));
+    }
+    friend ostream &operator<<(ostream &out, StreamManip_Base &manip) {
+        out << manip.mem;
+        return out;
+    }
 
-//	char Look(int pos){ return;} //looks several pos back in frozen bufer
+    //	char Look(int pos){ return;} //looks several pos back in frozen bufer
 
 private:
-// Return to stream symbol ch - UnfreezeToStr will not work correctly
-// if this symbol will not be the one, previously read
-	void unget(const int ch);
+    // Return to stream symbol ch - UnfreezeToStr will not work correctly
+    // if this symbol will not be the one, previously read
+    void unget(const int ch);
 
-// Increment current file posion counter
-	void IncrementCurPos();
-// Decrement current file posion counter
-	void DecrementCurPos(const int ch);
-// Read a char from stream, put it into LastGetChar
-	void ReadStream();
+    // Increment current file posion counter
+    void IncrementCurPos();
+    // Decrement current file posion counter
+    void DecrementCurPos(const int ch);
+    // Read a char from stream, put it into LastGetChar
+    void ReadStream();
 
-	private:
-	int CurPos,CurLine,LastPos;
-	istream *in_ptr;
-	int LastGetChar,ReadBuf,Reading;
+private:
+    int CurPos, CurLine, LastPos;
+    istream *in_ptr;
+    int LastGetChar;   //ReadBuf,,Reading
 
-	StreamUngetStorage undo;
-	StreamMemStorage mem;
+    StreamUngetStorage undo;
+    StreamMemStorage mem;
 };
 
 // Usefull procedures, to use for StreamManip_Base
-struct StreamManip:StreamManip_Base
-{
-	StreamManip(istream *inp=NULL):StreamManip_Base(inp){};
-//  return signed int value constructed from stored buf (from last mark position) 
-// Unfreeze buffer after that
-	long UnfreezeToL(int base){char *tmp_end;return strtol( UnfreezeToStr().c_str(), &tmp_end, base );}
-//  return unsigned value constructed from stored buf (from last mark position) 
-// Unfreeze buffer after that
-	unsigned long UnfreezeToUl(int base){char *tmp_end;return strtoul( UnfreezeToStr().c_str(), &tmp_end, base );}
-//  return double value constructed from stored buf (from last mark position) 
-// Unfreeze buffer after that
-	double UnfreezeToD(){char *tmp_end;return strtod( UnfreezeToStr().c_str(), &tmp_end );}
+struct StreamManip : StreamManip_Base {
+    StreamManip(istream *inp = NULL) : StreamManip_Base(inp){};
+    //  return signed int value constructed from stored buf (from last mark position)
+    // Unfreeze buffer after that
+    long UnfreezeToL(int base) {
+        char *tmp_end;
+        return strtol(UnfreezeToStr().c_str(), &tmp_end, base);
+    }
+    //  return unsigned value constructed from stored buf (from last mark position)
+    // Unfreeze buffer after that
+    unsigned long UnfreezeToUl(int base) {
+        char *tmp_end;
+        return strtoul(UnfreezeToStr().c_str(), &tmp_end, base);
+    }
+    //  return double value constructed from stored buf (from last mark position)
+    // Unfreeze buffer after that
+    double UnfreezeToD() {
+        char *tmp_end;
+        return strtod(UnfreezeToStr().c_str(), &tmp_end);
+    }
 
-// Read stream while read symbols are one of the given ones
-// Return 0 - EOF is found first
-	int ReadWhileChars(const char *ch,int len);
+    // Read stream while read symbols are one of the given ones
+    // Return 0 - EOF is found first
+    int ReadWhileChars(const char *ch, int len);
 
-// Try to find a given char in the stream
-// return 0 - if EOF is found first, 1 - char is found and read
-	int SearchChar(const char ch)
-	{	int c;while ( ( (c=get())!=ch ) && (c!=EOF) ) ;	return (c==ch);	}
-// Try to find one of given chars in the stream
-// return 0 - if EOF is found first, 1 - char is found and read
-	int SearchForChars(const char* str,int len);
-// Find a string in the stream, return 0 - EOF is found first, return 1 - string is 
-// found and read from the stream
-	int SearchString(const char* str,int len);
-// Guess that next is going a given string - if not - stream is unchanged
-	int Guess(const char* str,int len);
-// Guess that next char is one of string if not - return last char to stream
-	int GuessInChars(const char *ch,int len);
-
+    // Try to find a given char in the stream
+    // return 0 - if EOF is found first, 1 - char is found and read
+    int SearchChar(const char ch) {
+        int c;
+        while(((c = get()) != ch) && (c != EOF))
+            ;
+        return (c == ch);
+    }
+    // Try to find one of given chars in the stream
+    // return 0 - if EOF is found first, 1 - char is found and read
+    int SearchForChars(const char *str, int len);
+    // Find a string in the stream, return 0 - EOF is found first, return 1 - string is
+    // found and read from the stream
+    int SearchString(const char *str, int len);
+    // Guess that next is going a given string - if not - stream is unchanged
+    int Guess(const char *str, int len);
+    // Guess that next char is one of string if not - return last char to stream
+    int GuessInChars(const char *ch, int len);
 };
 
 #endif
@@ -307,7 +380,7 @@ struct StreamManip_Base
 		string ret="";
 		while ((upper!=mem.GetCurrentPos()) ) {ret+=(char)get();}
 		if ((was_undo.active()) && (ret!=""))
-		{undo.get(LastGetChar);unget();ret.resize(max(ret.length(),1)-1);}
+		{undo.get(LastGetChar);unget();ret.resize(max<double>(ret.length(),1)-1);}
 
 //		string ret=mem.ReadLabel(undo);	mem.PopMark();
 		return ret;
@@ -398,11 +471,3 @@ struct StreamManip:StreamManip_Base
 	Lex_Result res;
 };
 */
-
-
-
-
-
-
-
-

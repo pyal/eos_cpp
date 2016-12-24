@@ -1,48 +1,46 @@
 
 
 
-
-typedef int (*INST)();      /* command of machine */
+typedef int (*INST)(); /* command of machine */
 #define STOP (INST)0
 
-typedef  void* SYMBOL;
+typedef void *SYMBOL;
 
-extern int zubr_calculator_zubr_parse(void);// External
+extern int zubr_calculator_zubr_parse(void);   // External
 
 
 extern int zubr_calculator_zubr_lex(void);
-extern void zubr_calculator_zubr_error(char*);
+extern void zubr_calculator_zubr_error(char *);
 
 //extern void error_void    ( void );
-extern void assign    ( void );
-extern void varpush    ( void );
-extern void void_pop    ( void );
-extern void constpush    ( void );
-extern void eval    ( void );
-extern INST *code     ( INST f );
+extern void assign(void);
+extern void varpush(void);
+extern void void_pop(void);
+extern void constpush(void);
+extern void eval(void);
+extern INST *code(INST f);
 //extern void execute   ( INST *p );
 
-extern void Yadd    ( void );
-extern void Ysub    ( void );
-extern void Ymul    ( void );
-extern void Ydiv    ( void );
-extern void power   ( void );
+extern void Yadd(void);
+extern void Ysub(void);
+extern void Ymul(void);
+extern void Ydiv(void);
+extern void power(void);
 
-extern void print( void );
+extern void print(void);
 
 
-extern void negate    ( void );
-extern void prstr     ( void );
-extern void prexpr    ( void );
-extern void bltin     ( void );
-extern void bltin2    ( void );
-extern void varread   ( void );
+extern void negate(void);
+extern void prstr(void);
+extern void prexpr(void);
+extern void bltin(void);
+extern void bltin2(void);
+extern void varread(void);
 
-extern void Yaddeq    ( void );
-extern void Ysubeq    ( void );
-extern void Ymuleq    ( void );
-extern void Ydiveq    ( void );
-
+extern void Yaddeq(void);
+extern void Ysubeq(void);
+extern void Ymuleq(void);
+extern void Ydiveq(void);
 
 
 //

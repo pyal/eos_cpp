@@ -102,7 +102,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="set nodosfilewarning=yes &#x0D;&#x0A;touch $(InputDir)../../../cpp/Gasd/Polygon/poly_test.cpp"
+				CommandLine="set nodosfilewarning=yes&#x0D;&#x0A;touch $(InputDir)../../../cpp/Gasd/Polygon/poly_test.cpp&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -124,6 +124,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				WholeProgramOptimization="false"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"

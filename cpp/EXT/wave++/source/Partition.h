@@ -3,20 +3,18 @@
 #ifndef PARTITION_H
 #define PARTITION_H
 
-#include  "Interval.h"
+#include "Interval.h"
 
-class Partition
-{
- public:
-  Partition(integer dim, real a);
+class Partition {
+public:
+    Partition(integer dim, real a);
 
-  Interval s;     // scale
-  Interval du; 
-  Interval dv;
-  integer lmu, rmu;
-  real rmv;
+    Interval s;   // scale
+    Interval du;
+    Interval dv;
+    integer lmu, rmu;
+    real rmv;
 };
-
 
 
 #endif

@@ -1,13 +1,11 @@
-#ifndef QUAD_H
-#define QUAD_H
+#pragma once
 
-
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 //#include <stdlib.h>
 //#include <ostream.h>
 #include <float.h>
 #include <math.h>
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 
 #ifdef __cplusplus
@@ -19,55 +17,126 @@ extern "C" {
 //int	xerror_(char *msg, integer *len, integer *ier,integer *lvl, ftnlen len1);
 
 extern doublereal NashMin_Mach_Epsilon;
-//integer s_wsfe(cilist *a);	
+//integer s_wsfe(cilist *a);
 //integer e_wsfe(void);
 //integer do_fio(ftnint *number, char *ptr, ftnlen len);
 
 #ifdef __cplusplus
-	}
+}
 #endif
 
 
-typedef double (*X_func)     (double par);
-struct StorageFzeroFunc
-{
- StorageFzeroFunc *Prev;
- X_func ArgFunc;
+typedef double (*X_func)(double par);
+struct StorageFzeroFunc {
+    StorageFzeroFunc *Prev;
+    X_func ArgFunc;
 };
 
-enum OscillMethod{ OscillMethod_Euler,OscillMethod_EulerModif,OscillMethod_Overholt} ;
-double Qainf_OscilIntInf(X_func f,double From,double FromAssimpt,double ErrorAbs,double ErrorRel,
-                  int NumSubInt,double &ResErr,int &Err,double Omega,double Gamma,int Method);
+enum OscillMethod { OscillMethod_Euler, OscillMethod_EulerModif, OscillMethod_Overholt };
+double Qainf_OscilIntInf(
+    X_func f,
+    double From,
+    double FromAssimpt,
+    double ErrorAbs,
+    double ErrorRel,
+    int NumSubInt,
+    double &ResErr,
+    int &Err,
+    double Omega,
+    double Gamma,
+    int Method);
 
 
-double Qawf_FourierIntInf(X_func f,double From,double ErrorAbs,
-                  int NumSubInt,double &ResErr,int &Err,double Omega,int ToMulOnCos=1);
-double Qawo_FourierIntAB(X_func f,double From,double To,double ErrorAbs,double ErrorRel,
-                  int NumSubInt,double &ResErr,int &Err,double Omega,int ToMulOnCos=1);
+double Qawf_FourierIntInf(
+    X_func f,
+    double From,
+    double ErrorAbs,
+    int NumSubInt,
+    double &ResErr,
+    int &Err,
+    double Omega,
+    int ToMulOnCos = 1);
+double Qawo_FourierIntAB(
+    X_func f,
+    double From,
+    double To,
+    double ErrorAbs,
+    double ErrorRel,
+    int NumSubInt,
+    double &ResErr,
+    int &Err,
+    double Omega,
+    int ToMulOnCos = 1);
 
-double Qag_OscilInt(X_func f,double From,double To,double ErrorAbs,double ErrorRel,
-                  int NumSubInt,double &ResErr,int &Err);
+double Qag_OscilInt(
+    X_func f,
+    double From,
+    double To,
+    double ErrorAbs,
+    double ErrorRel,
+    int NumSubInt,
+    double &ResErr,
+    int &Err);
 
-double Qage_OscilInt(X_func f,double From,double To,double ErrorAbs,double ErrorRel,
-                  int NumSubInt,double &ResErr,int &Err);
+double Qage_OscilInt(
+    X_func f,
+    double From,
+    double To,
+    double ErrorAbs,
+    double ErrorRel,
+    int NumSubInt,
+    double &ResErr,
+    int &Err);
 
-double Qagi_InfinInt(X_func f,double From,int Inf,double ErrorAbs,double ErrorRel,
-                  int NumSubInt,double &ResErr,int &Err);
+double Qagi_InfinInt(
+    X_func f,
+    double From,
+    int Inf,
+    double ErrorAbs,
+    double ErrorRel,
+    int NumSubInt,
+    double &ResErr,
+    int &Err);
 
-double Qagie_InfinInt(X_func f,double From,int Inf,double ErrorAbs,double ErrorRel,
-                  int NumSubInt,double &ResErr,int &Err);
+double Qagie_InfinInt(
+    X_func f,
+    double From,
+    int Inf,
+    double ErrorAbs,
+    double ErrorRel,
+    int NumSubInt,
+    double &ResErr,
+    int &Err);
 
-double Qags_IntSubInt(X_func f,double From,double To,double ErrorAbs,double ErrorRel,
-                  int NumSubInt,double &ResErr,int &Err);
+double Qags_IntSubInt(
+    X_func f,
+    double From,
+    double To,
+    double ErrorAbs,
+    double ErrorRel,
+    int NumSubInt,
+    double &ResErr,
+    int &Err);
 
-int Fzero(X_func f,double From,double To,double &Guess,double ErrorAbs,double ErrorRel,
-                  int MaxIter);
+int Fzero(
+    X_func f,
+    double From,
+    double To,
+    double &Guess,
+    double ErrorAbs,
+    double ErrorRel,
+    int MaxIter);
 
-double Fmin(X_func f,double From,double To,double Guess,double AbsErr,double &FuncXVal);
+double Fmin(
+    X_func f,
+    double From,
+    double To,
+    double Guess,
+    double AbsErr,
+    double &FuncXVal);
 
 
-extern int NumberEvaluations; // For Fzero | Fmin ?
-
+extern int NumberEvaluations;   // For Fzero | Fmin ?
 
 //double UncMin(int &Error,int N,double *x_start,double *x_res,double est_sol,
 //              double (*FuncClc)(double *x,int n) , double *GradStp=NULL,
@@ -78,23 +147,27 @@ extern int NumberEvaluations; // For Fzero | Fmin ?
 //              void (*GradClc)(double *x,double *grad,int n,double &func) =NULL,
 //              double *BoundMin=NULL,double *BoundMax=NULL);
 ///*
-double UncMin(int &Error,int N,double *x_start,double *x_res,double est_sol,
-              double (*FuncClc)(double *x,int n) , double *GradStp=NULL,
-              void (*GradClc)(double *x,double *grad,int n,double &func)=NULL,
-              double FunAccur=1e-9,double ResErr=1e-4,int MaxFun=150,int MaxIter=5,
-              double *BoundMin=NULL,double *BoundMax=NULL,
-              double MaxLineSearchStp=10,
-              double LineSearchEta=0.25);
+double UncMin(
+    int &Error,
+    int N,
+    double *x_start,
+    double *x_res,
+    double est_sol,
+    double (*FuncClc)(double *x, int n),
+    double *GradStp = NULL,
+    void (*GradClc)(double *x, double *grad, int n, double &func) = NULL,
+    double FunAccur = 1e-9,
+    double ResErr = 1e-4,
+    int MaxFun = 150,
+    int MaxIter = 5,
+    double *BoundMin = NULL,
+    double *BoundMax = NULL,
+    double MaxLineSearchStp = 10,
+    double LineSearchEta = 0.25);
 //*/
 //extern  doublereal NashMin_Mach_Epsilon=2e-16;
 
-#endif
-
-
-
-
-
-
+//#endif
 
 
 /*

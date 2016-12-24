@@ -23,9 +23,9 @@ void Reconstruct_d1(TData<real> *d1,double &MinY,double &MaxY)
 			int k;
 			double minz=MathInf,maxz=-MathInf,cury,stpy,tmp;
 			MinY=min(d1->D[1][0],d1->D[1][d1->I[1]-1]);
-			MaxY=max(d1->D[1][0],d1->D[1][d1->I[1]-1]);
+			MaxY=max<double>(d1->D[1][0],d1->D[1][d1->I[1]-1]);
    for (k=0;k<d1->I[2];k++) 
-			  {tmp=d1->D[2][k];minz=min(minz,tmp);maxz=max(maxz,tmp);}
+			  {tmp=d1->D[2][k];minz=min(minz,tmp);maxz=max<double>(maxz,tmp);}
 			cury=minz;stpy=(maxz-minz)/(d1->I[1]-1);
    for (k=0;k<d1->I[1];k++) {d1->D[1][k]=cury;cury+=stpy;}
 		};

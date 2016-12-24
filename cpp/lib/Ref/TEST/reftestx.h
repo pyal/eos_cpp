@@ -2,23 +2,29 @@
 // reftestx.h
 //
 
-#include "ref.h"
-
+#include "lib/Ref/ref.h"
+#include "lib/std/unit_test.h"
 class X : public RefCount {
-  private:
+private:
     int x;
-  public:
+
+public:
     static int nx;
     X();
+    int get() {
+        return x;
+    }
     ~X();
 };
 
-class Y: public X {
-  private:
+class Y : public X {
+private:
     int y;
-  public:
+
+public:
     Y();
+    int get() {
+        return y;
+    }
     ~Y();
 };
-
-

@@ -1,8 +1,5 @@
-#include <lib\precompiled\urs_curve.h>
+#include <lib/precompiled/urs_curve.h>
 #include "curve_forcelnk.h"
-
-
-
 
 
 ForceLinkVoid<URS_Curve> Dummy_URS_Curve;
@@ -39,5 +36,3 @@ ForceLinkVoid<UrsCurve_PT_Bnd_Binary> Dummy_UrsCurve_PT_Bnd_Binary;
 ForceLinkVoid<UrsCurve_PT_UnstBnd_Clc> Dummy_UrsCurve_PT_UnstBnd_Clc;
 ForceLinkVoid<UrsCurve_PT_UnstBnd_Binary> Dummy_UrsCurve_PT_UnstBnd_Binary;
 ForceLinkVoid<UrsCurve_PT_clc> Dummy_UrsCurve_PT_clc;
-
-

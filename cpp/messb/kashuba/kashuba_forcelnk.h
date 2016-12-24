@@ -5,8 +5,8 @@
 #include "kashuba_export.h"
 //#include "famessb_test_func.h"
 //#include "class.h"
-#include "lib\ref\class_sav.h"
-#include "lib\ref\ref.h"
+#include "lib/ref/class_sav.h"
+#include "lib/ref/ref.h"
 //#include "described.h"
 
 ForceLinkVoid<FAZerQsHRelaxKashuba> Dummy_FAZerQsHRelaxKashuba;

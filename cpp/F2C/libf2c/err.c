@@ -153,8 +153,9 @@ f__fatal(int n, char *s)
 	if (f__curunit) {
 		fprintf(stderr,"apparent state: unit %d ",
 			(int)(f__curunit-f__units));
-		fprintf(stderr, f__curunit->ufnm ? "named %s\n" : "(unnamed)\n",
-			f__curunit->ufnm);
+		f__curunit->ufnm ? fprintf(stderr, "named %s\n",f__curunit->ufnm) : fprintf(stderr, "(unnamed)\n");
+//		fprintf(stderr, f__curunit->ufnm ? "named %s\n" : "(unnamed)\n",
+//				f__curunit->ufnm );
 		}
 	else
 		fprintf(stderr,"apparent state: internal I/O\n");

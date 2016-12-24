@@ -2,14 +2,14 @@
 #define __MATT_FAC_H
 
 #include "matt_cfg.h"
-#include "lib\std\deffunc.h"
-#include "lib\std\stdexception.h"
-#include "mat\dat_fac.h"
-#include "lib\ref\class_sav.h"
+#include "lib/std/deffunc.h"
+#include "lib/std/stdexception.h"
+#include "mat/dat_fac.h"
+#include "lib/ref/class_sav.h"
 
 #include "matt_tools.h"
 
-#include "lib\Data\VecRes.h"
+#include "lib/Data/VecRes.h"
 
 
 struct FreeFuncClc:SavableClass{
@@ -176,6 +176,7 @@ struct MatterIO : FreeFuncClc {
 		throw info_except("%s",OutNames.c_str());
 		return 0;
 	}
+	using FreeFuncClc::OutputValClc;
 	virtual double OutputValClc(double Dencity,double Energy, const Stroka &Output){
 		if (Output=="Pressure")
 			return Pressure(Dencity,Energy);
@@ -324,7 +325,7 @@ struct MatterABu:MatterIOFind {
 struct MatterGas:MatterIOFind {
 
 	double Gamma;
-	MatterGas():Gamma(1.5),MatterIOFind("material.cfg","GasOneAtom"){};
+	MatterGas():MatterIOFind("material.cfg","GasOneAtom"), Gamma(1.5) {};
 	double Pressure(double Dencity,double Energy) 
 		{return (Gamma-1)*Dencity*Energy;}
    double DencityCold()         {return MathZer*10;};
@@ -339,7 +340,7 @@ struct MatterGas:MatterIOFind {
 // Goto p.315 Kanel'. Udarno-Volnovie iavlenia v kondensirovannih sredah.
 struct MatterBornMaier:MatterIOFind {
 
-	MatterBornMaier():B0(0),B1(0),B2(0),Denc(0),Grun(0),MatterIOFind("material.cfg","not_implemented_yet"){};
+	MatterBornMaier():MatterIOFind("material.cfg","not_implemented_yet"), B0(0),B1(0),B2(0),Denc(0),Grun(0){};
 	double B0,B1,B2,Denc,Grun,k_const,zero_const;
 	double Pressure(double Dencity,double Energy) 
 		{double y=Dencity/Denc;
@@ -363,7 +364,7 @@ struct MatterBornMaier:MatterIOFind {
   };
 
 struct MatterMurnaganBerch:MatterIOFind {
-	MatterMurnaganBerch():B0(13.2),B1(6.4),Denc(1.72),Grun(2.4),MatterIOFind("material.cfg","MurnaganGeks"){};
+	MatterMurnaganBerch():MatterIOFind("material.cfg","MurnaganGeks"), B0(13.2),B1(6.4),Denc(1.72),Grun(2.4){};
 	double B0,B1,Denc,Grun,k_9,k_7,k_5;
 	double Pressure(double Dencity,double Energy){
         double y=pow(Dencity/Denc,1./3),y2=sqr(y),y4=sqr(y2);
@@ -386,7 +387,7 @@ struct MatterMurnaganBerch:MatterIOFind {
   };
 // Formulas - from Utkin.
 struct MatterZubarev:MatterIOFind{
-	MatterZubarev():Denc(1.6),k(2),Bc(0.6887743),n(2.83),D(8.05),Grun(0.3),MatterIOFind("material.cfg","ZubarevGeks"){};
+	MatterZubarev():MatterIOFind("material.cfg","ZubarevGeks"), Denc(1.6),k(2),Bc(0.6887743),n(2.83),D(8.05),Grun(0.3){};
 	double Denc,k,Bc,n,D,Grun;
 	double Q,Ph,DencH,ac,Ac;
 	double Pressure(double Dencity,double Energy) {

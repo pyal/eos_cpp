@@ -1,4 +1,4 @@
-#include <lib\precompiled\eos.h>
+#include <lib/precompiled/eos.h>
 #include "matt_spl.h"   
 #include "empi_equ.h"
 #include "matt_fac.h"
@@ -19,7 +19,7 @@ void MatterSpl::Pressure(double *P,double *Dencity,double *Energy,int Num)
    for (int k=1;k<=Num;k++) if ((d=Dencity[k])>StndErr) D[k]=log(d); else D[k]=-9;
    SPre->Evaluate(&E[1],&D[1],&P[1],Num);
    for (int k=1;k<=Num;k++) P[k]=exp(P[k])-AddP;
-   delete E;delete D;
+   delete []E;delete []D;
   }; 
 void MatterSpl::Temperature(double *T,double *Dencity,double *Energy,int Num)
   {
@@ -31,7 +31,7 @@ void MatterSpl::Temperature(double *T,double *Dencity,double *Energy,int Num)
       for (k=1;k<=Num;k++) if ((d=Dencity[k])>StndErr) D[k]=log(d); else D[k]=-9;
       SThe->Evaluate(&E[1],&D[1],&T[1],Num);
       for (k=1;k<=Num;k++) T[k]=exp(T[k]);
-      delete E;delete D;
+      delete []E;delete []D;
      } 
    else {for (k=1;k<=Num;k++) T[k]=0;}
   }; 
@@ -40,7 +40,7 @@ void MatterSpl::Temperature(double *T,double *Dencity,double *Energy,int Num)
 // ======================== Spline Generation ===================================
 // ==============================================================================
 
-void ReadData(char *name,TData<real> *&dat)
+void ReadData(const char *name,TData<real> *&dat)
   {
    fstream row(name,ios::in);
    if (!DataRegister(row,dat)) { cout<<" Could not read param.";exit(0);}
@@ -150,7 +150,7 @@ void GetPresTemp(int GetPnt,double IntPar,MatterIO *Mat,
 //      curD=dP->D[1][k];curE=dP->D[0][k]-AddE;
 //      GetPresTemp(GetPnt,IntPar,Mat,curD,curE,NumD,curP,curT);
 //      dP->D[Row][k]=curP+AddP;
-//      dT->D[Row][k]=max(curT,StndErr);
+//      dT->D[Row][k]=max<double>(curT,StndErr);
 //
 //cout<<" n1 "<<k<<" l "<<Num<<" ";
 //    }
@@ -173,7 +173,9 @@ void SetDatFunc(TData<real> &datP,TData<real> &datT,int Row,MatterIO *Mat,
       SetIntParInit(IntPar,Mat);
       DataRegister("TColumn",dP);DataRegister("TColumn",dT); 
       *dT=datP; *dP=datP;
-      int k,Num=dP->I[Row],NumIt=datP.I[1],It=0,NumD=0;
+      int k,Num=dP->I[Row],NumIt=datP.I[1],
+//              It=0,
+              NumD=0;
 
 	     InitPresTemp(GetPnt,datP,Mat);
 
@@ -184,7 +186,7 @@ void SetDatFunc(TData<real> &datP,TData<real> &datT,int Row,MatterIO *Mat,
          curD=dP->D[1][k];curE=dP->D[0][k]-AddE;
          GetPresTemp(GetPnt,IntPar,Mat,curD,curE,NumD,curP,curT);
          dP->D[Row][k]=curP+AddP;
-         dT->D[Row][k]=max(curT,StndErr);
+         dT->D[Row][k]=max<double>(curT,StndErr);
 
 cout<<" n1 "<<k<<" l "<<Num<<" ";
 //cout<<" nD "<<NumD;cout.flush();
@@ -230,7 +232,7 @@ void SetDatFunc(TData<real> &datP,TData<real> &datT,int Row,MatterIO *Mat,
          tmp=Mat->Temperature(curD,curE);
          dP->D[Row][k]=Mat->Pressure(curD,curE)+AddP;
          tmp=SetIntFuncTemp(Mat,curD,tmp);
-         dT->D[Row][k]=max(tmp,StndErr);
+         dT->D[Row][k]=max<double>(tmp,StndErr);
 cout<<" n1 "<<k<<" l "<<Num<<" ";
         }
      }
@@ -247,7 +249,7 @@ void SetDatLog(TData<real> &dat,int Row,double  lm)
   {
      for (int k=0;k<dat.I[Row];k++) 
       { if (dat.D[Row][k]<0) cout<<" Log neg !!\n";
-        dat.D[Row][k]=log(max(lm,dat.D[Row][k]));  }
+        dat.D[Row][k]=log(max<double>(lm,dat.D[Row][k]));  }
   };
       
 int GenerateMatterSpl(istream &row,MatterIO *Mat)
@@ -263,7 +265,7 @@ int GenerateMatterSpl(istream &row,MatterIO *Mat)
          tmp>>NumX>>tmp>>NumY>>tmp>>Meth>>tmp>>Misf>>tmp>>AddE>>tmp>>AddP>>
          tmp>>MinT>>tmp>>GetPnt;
     MatterFreeE::AbsoluteMinTemperature = MinT;
-	Boundary_ZeroTemperature = max(MinT,Boundary_ZeroTemperature);
+	Boundary_ZeroTemperature = max<double>(MinT,Boundary_ZeroTemperature);
 cout<<" Entered Cfg for GenerateMatterSpl\n";//ChRead();
     //SplineXYIO *sp=NULL;
 // First - Energy, Second - Dencity

@@ -1,6 +1,6 @@
 #ifndef __MAT_GAUS_H
 #define __MAT_GAUS_H
-#include "lib\std\util.h"
+#include "lib/std/util.h"
 #include "matrics.h"
 
 struct GauseSolve

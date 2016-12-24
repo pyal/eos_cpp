@@ -94,7 +94,7 @@ struct FreeEVanDerVals:InterfaceFindSubstanceIO,FreeEIO
 //                     V       V                      v
 if ((T<MathZer) || (Denc<MathZer)) { cout<<"FreeE Bad. Denc "<<Denc<<" T "<<T<<"\n";return 0;}
      double F=-A*Denc-Zero-(Rconst/MolVeight*T)*
-               (log(max(1/Denc-B,MathZer))+CvId*log(T)+HiT);
+               (log(max<double>(1/Denc-B,MathZer))+CvId*log(T)+HiT);
      return F;
     };
    double DencityCold() {return StndErr;};

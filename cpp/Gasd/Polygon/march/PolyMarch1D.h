@@ -29,7 +29,7 @@ namespace NPolygon {
     //    FluxClaculator() : SimpleFluxCalculatorBase(){
     //        SetTmpBaseName(TmpBaseName);
     //    }
-    //    FluxClaculator(int fluxType, FluxCalculatorBase *baseFlux) 
+    //    FluxClaculator(int fluxType, FluxCalculatorBase *baseFlux)
     //        : FluxCalculatorBase
     //        , FluxType(fluxType)
     //        , BaseFlux(baseFlux)(){
@@ -126,13 +126,13 @@ namespace NPolygon {
     //        InitRegion(reg, baseRvar);
     //        reg->Grid.GetMaskedData(TRegGrid::Center, 1, DQName) = reg->Grid.GetMaskedData(TRegGrid::Center, 1, baseRvar);
     //        reg->Grid.GetMaskedData(TRegGrid::Center, 1, DQName) -= reg->Grid.GetMaskedData(TRegGrid::Center, 0, baseRvar);
-    //        reg->Grid.GetMaskedData(TRegGrid::Center, 0, VarRl) = reg->Grid.GetMaskedData(TRegGrid::Center, -1, DQName) / 
+    //        reg->Grid.GetMaskedData(TRegGrid::Center, 0, VarRl) = reg->Grid.GetMaskedData(TRegGrid::Center, -1, DQName) /
     //                                                              reg->Grid.GetMaskedData(TRegGrid::Center,  0, DQName);
-    //        reg->Grid.GetMaskedData(TRegGrid::Center, 0, VarRr) = reg->Grid.GetMaskedData(TRegGrid::Center,  1, DQName) / 
+    //        reg->Grid.GetMaskedData(TRegGrid::Center, 0, VarRr) = reg->Grid.GetMaskedData(TRegGrid::Center,  1, DQName) /
     //                                                              reg->Grid.GetMaskedData(TRegGrid::Center,  0, DQName);
     //        ClcNamedLimiter(reg, VarRr, courantNumber, SUPERBEE);
     //        ClcNamedLimiter(reg, VarRl, courantNumber, SUPERBEE);
-    //        TGridMaskedData::TIterator rIt(reg->Grid.GetaskedData(varRr, TRegGrid::Center, 0)), 
+    //        TGridMaskedData::TIterator rIt(reg->Grid.GetaskedData(varRr, TRegGrid::Center, 0)),
     //                                   lIt(reg->Grid.GetMaskedData(varRl, TRegGrid::Center, 0));
     //        for( ; rIt.IsOk(); rIt.Next(), lIt.Next()) {
     //            double &r = (double*)rIt.GetElementPtr();
@@ -144,7 +144,7 @@ namespace NPolygon {
     //    void ClcNamedLimiter(TPolyRegion *reg, const Stroka &varR, double courantNumber, int limitType) {
     //        double phiG = (1 - courantNumber) / ( 1 + courantNumber );
     //        switch limitType  {
-    //            case  SUPERBEE : 
+    //            case  SUPERBEE :
     //                TGridMaskedData::TIterator varIt(reg->Grid.GetMaskedData(varR, TRegGrid::Center, 0));
     //                for( ; varIt.IsOk(); varIt.Next()) {
     //                    double &r = (double*)varIt.GetElementPtr();
@@ -163,11 +163,11 @@ namespace NPolygon {
     //};
     //struct FlicLimiterFlux : SavableClass {
     //    FlicLimiter Limiter
-    //    void ClcFlux(TPolyRegion *reg, const Stroka &fluxLow, const Stroka &fluxHigh, double courantNumber, 
+    //    void ClcFlux(TPolyRegion *reg, const Stroka &fluxLow, const Stroka &fluxHigh, double courantNumber,
     //        const Stroka &baseRvar, const Stroka &resFlux) {
     //        Limiter.ClcLimiter(reg, baseRvar, "flicLim");
-    //        reg->Grid.GetMaskedData(TRegGrid::Center, 0, resFlux) = reg->Grid.GetMaskedData(TRegGrid::Center, 0, fluxLow) + 
-    //            reg->Grid.GetMaskedData(TRegGrid::Center, 0, "flicLim") * 
+    //        reg->Grid.GetMaskedData(TRegGrid::Center, 0, resFlux) = reg->Grid.GetMaskedData(TRegGrid::Center, 0, fluxLow) +
+    //            reg->Grid.GetMaskedData(TRegGrid::Center, 0, "flicLim") *
     //            (reg->Grid.GetMaskedData(TRegGrid::Center, 0, fluxHigh) -reg->Grid.GetMaskedData(TRegGrid::Center, 0, fluxLow));
     //    }
     //};
@@ -184,9 +184,9 @@ namespace NPolygon {
             TGridMaskedData energy = reg->Grid.GetMaskedData(TRegionBounds(0, 0), "R");
             TGridMaskedData pressure = reg->Grid.GetMaskedData(TRegionBounds(0, 0), "P");
             MatterIO *mat = SavableClass::TestType<MatterIO>(reg->MapSavableVar["EOS"]);
-            double *presPtr = (double*)pressure.Start().GetElementPtr();
-            double *enerPtr = (double*)energy.Start().GetElementPtr();
-            double *dencPtr = (double*)denc.Start().GetElementPtr();
+            double *presPtr = (double *)pressure.Start().GetElementPtr();
+            double *enerPtr = (double *)energy.Start().GetElementPtr();
+            double *dencPtr = (double *)denc.Start().GetElementPtr();
             int size = denc.Start().Size();
             mat->Pressure(--presPtr, --dencPtr, --enerPtr, size);
         }
@@ -196,68 +196,74 @@ namespace NPolygon {
             //TGridMaskedData::TIterator dencIter(cur), posIter(mdata);
             //TGridVar *ptr = SavableClass::TestType<TGridVar>(mdata.Data);
             //vector<T> &tmpStor = ptr->VectorT;
-            //for( ; curIter.IsOk() && rgtIter.IsOk(); curIter.Next(), rgtIter.Next()) 
+            //for( ; curIter.IsOk() && rgtIter.IsOk(); curIter.Next(), rgtIter.Next())
             //    VectorT[curIter.GetElementInd()] = tmpStor[rgtIter.GetElementInd()];
 
 
             //MakeTimeStepTestTime(reg, timeStp);
-
         }
         void MakeTimeStepTestTime(TPolyRegion *reg, double timeStp) {
-            TGridMaskedData src = reg->Grid.GetMaskedData(TRegionBounds(0,0), "Y");
-            TGridVar<double> *srcData = SavableClass::TestType<TGridVar<double> >(src.Data);
-            if (! reg->Grid.VarExists("Tmp"))
+            TGridMaskedData src = reg->Grid.GetMaskedData(TRegionBounds(0, 0), "Y");
+            TGridVar<double> *srcData =
+                SavableClass::TestType<TGridVar<double>>(src.Data);
+            if(!reg->Grid.VarExists("Tmp"))
                 reg->Grid.AddVar("Tmp", new TGridVar<double>(*srcData));
 
-            TGridMaskedData dst = reg->Grid.GetMaskedData(TRegionBounds(0,0), "Tmp");
-            TGridVar<double> *dstData = SavableClass::TestType<TGridVar<double> >(dst.Data);
+            TGridMaskedData dst = reg->Grid.GetMaskedData(TRegionBounds(0, 0), "Tmp");
+            TGridVar<double> *dstData =
+                SavableClass::TestType<TGridVar<double>>(dst.Data);
 
             size_t numIter = (size_t)reg->GetConstantDouble("CopyNumber");
-	        Time_struct Time;
-            switch ((int)reg->GetConstantDouble("CopyType")) {
-                case 1 :
-                    cout<<" SetFast NumberTimes "<<numIter<<" NumberElements "<<dst.Mask->NumPoints()<<"\n";
-                    for(size_t i = 0; i < numIter; i++)
-                        dst = src;
-                        //dstData->Set(src.Mask, src);
-                    break;
-                case 2 :
-                    cout<<" Adding NumberTimes "<<numIter<<" NumberElements "<<dst.Mask->NumPoints()<<"\n";
-                    for(size_t i = 0; i < numIter; i++)
-                        dst += src;
-                        //dstData->Add(src.Mask, src, 1);
-                    break;
-                case 3 :
-                    cout<<" RawSet NumberTimes "<<numIter<<" NumberElements "<<dst.Mask->NumPoints()<<"\n";
-                    for(size_t i = 0; i < numIter; i++)
-                        dstData->Set(srcData);
-                    break;
-                case 4 :
-                    cout<<" SetByInternalIteration NumberTimes "<<numIter<<" NumberElements "<<dst.Mask->NumPoints()<<"\n";
-                    for(size_t i = 0; i < numIter; i++)
-                        dstData->SetByInternalIteration(src.Mask, src);
-                    break;
-                case 5 :
-                    cout<<" SetByIterator NumberTimes "<<numIter<<" NumberElements "<<dst.Mask->NumPoints()<<"\n";
-                    for(size_t i = 0; i < numIter; i++)
-                        dstData->SetByIterator(src.Mask, src);
-                    break;
-                default :
-                    throw info_except("CopyType have to be in 1..3 and is - %i\n", (int)reg->GetConstantDouble("CopyType"));
+            Time_struct Time;
+            switch((int)reg->GetConstantDouble("CopyType")) {
+            case 1:
+                cout << " SetFast NumberTimes " << numIter << " NumberElements "
+                     << dst.Mask->NumPoints() << "\n";
+                for(size_t i = 0; i < numIter; i++)
+                    dst = src;
+                //dstData->Set(src.Mask, src);
+                break;
+            case 2:
+                cout << " Adding NumberTimes " << numIter << " NumberElements "
+                     << dst.Mask->NumPoints() << "\n";
+                for(size_t i = 0; i < numIter; i++)
+                    dst += src;
+                //dstData->Add(src.Mask, src, 1);
+                break;
+            case 3:
+                cout << " RawSet NumberTimes " << numIter << " NumberElements "
+                     << dst.Mask->NumPoints() << "\n";
+                for(size_t i = 0; i < numIter; i++)
+                    dstData->Set(srcData);
+                break;
+            case 4:
+                cout << " SetByInternalIteration NumberTimes " << numIter
+                     << " NumberElements " << dst.Mask->NumPoints() << "\n";
+                for(size_t i = 0; i < numIter; i++)
+                    dstData->SetByInternalIteration(src.Mask, src);
+                break;
+            case 5:
+                cout << " SetByIterator NumberTimes " << numIter << " NumberElements "
+                     << dst.Mask->NumPoints() << "\n";
+                for(size_t i = 0; i < numIter; i++)
+                    dstData->SetByIterator(src.Mask, src);
+                break;
+            default:
+                throw info_except(
+                    "CopyType have to be in 1..3 and is - %i\n",
+                    (int)reg->GetConstantDouble("CopyType"));
             }
-	        cout<<"Done in "<<Time<<"\n";
-
-
+            cout << "Done in " << Time << "\n";
         };
         virtual void RebuildBounds(TPolyRegion *reg) {
             vector<Stroka> names = reg->ShallowStart().CurRegion()->Grid.GetVarNames();
             for(size_t i = 0; i < names.size(); i++) {
-                if (names[i] == "X")
+                if(names[i] == "X")
                     reg->FillChildBounds(&BndX, names[i]);
-                if (names[i] == "Y")
+                if(names[i] == "Y")
                     reg->FillChildBounds(&Bnd, names[i]);
             }
         };
     };
 
-}; //namespace NPolygon {
+};   //namespace NPolygon {

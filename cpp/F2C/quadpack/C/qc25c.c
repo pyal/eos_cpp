@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int qc25c_(E_fp f, real *a, real *b, real *c__, real *result,
 	 real *abserr, integer *krul, integer *neval)

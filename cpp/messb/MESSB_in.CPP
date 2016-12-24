@@ -1,6 +1,6 @@
-#include <lib\precompiled\Messb.h>
+#include <lib/precompiled/Messb.h>
 #include "messb_in.h"
-#include "lib\std\ex_out.h"
+#include "lib/std/ex_out.h"
 //#define OnlyStat
 
 
@@ -99,7 +99,7 @@ void ContiniousRelaxationStepMultiSolver::Solve(double *x,double *Res)
   {
     i++;
     if (ShiftStart>StpDat->Tto) continue;
-    double tfrom=max(StpDat->Tfrom,ShiftStart);
+    double tfrom=max<double>(StpDat->Tfrom,ShiftStart);
     double tto=min(StpDat->Tto,TotalEnd-TimeShift->GetMaxShift()+ShiftStart);
     Step->SetCurState(tfrom,tto,ShiftStart,LftAmp,RgtAmp,i-1);
     Step->Solve(x,cur.Ptr);
@@ -199,7 +199,7 @@ void ContiniousRelaxationAverageSolver_DirectMatrMul::Fourie(double *x,double *R
 //  IntegralFreq=freq;
 //  double Misf=1e-4,ResMis,MaxT=SumTime[SumTime[0]];
 //// NumInt=MaxT/2 - To make integration on intervals x..x+2 - usial period of amp - 1
-//  int MaxNumInt=10000,ResErr,NumInt=max(MaxT,2);
+//  int MaxNumInt=10000,ResErr,NumInt=max<double>(MaxT,2);
 //  VecCl IntegrTimes=VecCl::MakeStepVector(NumInt,0,MaxT,0);
 //  double ret=0;
 //  for (int k=1;k<=NumInt-1;k++)
@@ -498,7 +498,7 @@ void GenerateInt(CMatrCl &Ham3,CMatrCl &Rot3Rgt,
                  CMatrCl &Ham1,CMatrCl &Rot1Lft,
                  double t0,double t1,double MaxNorm,my_comp *&res,double &Tstp,int &Nit)
  {
-  double M=max(MatrNorm(Ham3),MatrNorm(Ham1));
+  double M=max<double>(MatrNorm(Ham3),MatrNorm(Ham1));
   CMatrCl Uni3(4),Uni1(2);Uni3=Uni3*0+1;Uni1=Uni1*0+1;
 
   Nit=int((t1-t0)*M/MaxNorm)+1;
@@ -788,8 +788,8 @@ void FormIntArr_Cur(MessRelaxClcPar *RelaxClc,MessRelaxInpPar &RelaxPar,
 //      break;
 //     }
 //    AllTheSame=0;
-//    TimeDelta[k]=max(0,t1-TimeToAver[k]);
-////    if (TimeDelta[k]>0) {IntSet=IntSet+GetRow(IntGet,k)*(TimeDelta[k]/max(dt,MathZer));}
+//    TimeDelta[k]=max<double>(0,t1-TimeToAver[k]);
+////    if (TimeDelta[k]>0) {IntSet=IntSet+GetRow(IntGet,k)*(TimeDelta[k]/max<double>(dt,MathZer));}
 //   }
 //
 ////  IntSet=IntSet/TimeToAver[0];
@@ -1113,7 +1113,7 @@ void FormIntArr_Cur(MessRelaxClcPar *RelaxClc,MessRelaxInpPar &RelaxPar,
 //#endif
 //  MemoryMove(res.Ptr,y,sizeof(double)*(y[0]+1));
 //#ifdef OnlyStat 
-////  for ( k=1;k<=SumTimes[0];k++)  cout<<FM<<k<<FMT<<SumTimes[k]/NumSumTimes<<FMT<<SumTimes[k]/NumSumTimes/log(max(k,2))<<"\n";
+////  for ( k=1;k<=SumTimes[0];k++)  cout<<FM<<k<<FMT<<SumTimes[k]/NumSumTimes<<FMT<<SumTimes[k]/NumSumTimes/log(max<double>(k,2))<<"\n";
 //#endif
 //
 //cout<<" Time "<<time<<"\n";cout.flush();

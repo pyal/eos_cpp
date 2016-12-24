@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "lib\std\f2c.h"
+#include "lib/std/f2c.h"
 
 /* Subroutine */ int splev_(real *t, integer *n, real *c__, integer *k, real *
 	x, real *y, integer *m, integer *ier)

@@ -1,5 +1,7 @@
-#include <lib\precompiled\math.h>
+#include <lib/precompiled/math.h>
 #include "dat_fac.h"
 
-int TData<double>::SortColumn=0;
-TData<double>* TData<double>::CurDat=NULL;
+template <>
+int TData<double>::SortColumn = 0;
+template <>
+TData<double> *TData<double>::CurDat = NULL;
