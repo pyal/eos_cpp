@@ -1,0 +1,96 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+rtm_mx
+rtm_q
+rtm_cmgr
+rtm_chm
+crtest
+cmgr_client
+cmgr_monitor
+q_client
+websocket_client
+websocket_server
+
+# idea
+.idea/
+*.cbp
+
+# Cmake generated files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+!at/oat/Makefile
+cmake_install.cmake
+CTestTestfile.cmake
+version.cmake
+version.h
+version.h.in
+
+# ctags
+tags
+
+# unittests
+unit_tests
+perf_tests
+Testing/
+
+# Other
+core*
+oprofile_data/
+perf-testing.result
+perf-testing.intermediary.result
+perf-testing.intermediary.result.1
+perf-testing.intermediary.result.2
+output.png
+.venv/
+useful/dummy_devportal.pyc
+ptmalloc2/
+ptmalloc3/
+
+# Dependencies
+deps/
+
+# Testrunner
+.venv
+*.pyc
+logs
+at.log
+
+# Old acceptance tests
+*#*#
+*.pyc
+*~
+.venv/
+reports/
+.hypothesis
+
+at/oat/at.log
+
+bin/*
+material.cfg
