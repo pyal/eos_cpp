@@ -43,7 +43,7 @@ ReflowComments: false
 SortIncludes: false
 SpaceAfterCStyleCast: false
 SpaceAfterControlStatementKeyword: false
-SpaceAfterTemplateKeyword: true
+#SpaceAfterTemplateKeyword: true
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeParens: Never
 SpaceInEmptyParentheses: false
