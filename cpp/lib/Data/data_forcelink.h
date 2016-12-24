@@ -3,4 +3,4 @@
 
 #include "datavec.h"
 
-ForceLinkVoid<DataVector<double, CopyStructFast<double> > > Dummy_DataVector_Double;
+ForceLinkVoid<DataVector<double, CopyStructFast<double>>> Dummy_DataVector_Double;

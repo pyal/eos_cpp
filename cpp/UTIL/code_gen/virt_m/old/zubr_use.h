@@ -5,135 +5,121 @@
 #define type_def int
 typedef struct z_symbol z_symbol;
 
-struct z_symbol
-{
-	modif_def *modif;
-	type_def *type;
-	//int *modif;
-	//int *type;
-	void *addr;
+struct z_symbol {
+    modif_def *modif;
+    type_def *type;
+    //int *modif;
+    //int *type;
+    void *addr;
 };
-enum tetrade_code
-{
-            PLUS_EXPR,
-           MINUS_EXPR,
-            MULT_EXPR,
-       TRUNC_DIV_EXPR,
-       TRUNC_MOD_EXPR,
-         BIT_XOR_EXPR,
-         BIT_AND_EXPR,
-         BIT_IOR_EXPR,
-           ANDIF_EXPR,
-            ORIF_EXPR,
-          LSHIFT_EXPR,
-          RSHIFT_EXPR,
-              LT_EXPR,
-              GT_EXPR,
-              LE_EXPR,
-              GE_EXPR,
-              NE_EXPR,
-              EQ_EXPR,
-  
-            ADDR_EXPR, /* unary  & */
-          NEGATE_EXPR, /* unary  - */
-         CONVERT_EXPR, /* unary  + */
-    PREINCREMENT_EXPR, /* unary ++ */
-    PREDECREMENT_EXPR, /* unary -- */
-   POSTINCREMENT_EXPR, /* unary ++ */
-   POSTDECREMENT_EXPR, /* unary -- */
-         BIT_NOT_EXPR, /* unary  ~ */
-       TRUTH_NOT_EXPR, /* unary  ! */
+enum tetrade_code {
+    PLUS_EXPR,
+    MINUS_EXPR,
+    MULT_EXPR,
+    TRUNC_DIV_EXPR,
+    TRUNC_MOD_EXPR,
+    BIT_XOR_EXPR,
+    BIT_AND_EXPR,
+    BIT_IOR_EXPR,
+    ANDIF_EXPR,
+    ORIF_EXPR,
+    LSHIFT_EXPR,
+    RSHIFT_EXPR,
+    LT_EXPR,
+    GT_EXPR,
+    LE_EXPR,
+    GE_EXPR,
+    NE_EXPR,
+    EQ_EXPR,
 
-             NOP_EXPR,
-    
-          UNUSED_EXPR
+    ADDR_EXPR,          /* unary  & */
+    NEGATE_EXPR,        /* unary  - */
+    CONVERT_EXPR,       /* unary  + */
+    PREINCREMENT_EXPR,  /* unary ++ */
+    PREDECREMENT_EXPR,  /* unary -- */
+    POSTINCREMENT_EXPR, /* unary ++ */
+    POSTDECREMENT_EXPR, /* unary -- */
+    BIT_NOT_EXPR,       /* unary  ~ */
+    TRUTH_NOT_EXPR,     /* unary  ! */
+
+    NOP_EXPR,
+
+    UNUSED_EXPR
 };
 
 #define program int
 
 
-
-
-extern int zubr_lex( void );
+extern int zubr_lex(void);
 extern void init_decl_prog();
 extern void free_symbol_table();
 
-extern void execute_program( program *cur );
-extern void free_program( program *cur  );
+extern void execute_program(program *cur);
+extern void free_program(program *cur);
 extern void goto_text_prog();
-extern z_symbol* make_pointer_declarator( z_symbol *sym2 );
-extern z_symbol* build_array(z_symbol *sym1, z_symbol *sym2 );//250
-extern z_symbol* build_indirect_ref( z_symbol *sym1, const char *str );
-extern z_symbol* build_unary_op(enum tetrade_code sym1, z_symbol *sym2 );
-extern z_symbol* build_binary_op(enum tetrade_code sym1, z_symbol *sym2, z_symbol *sym3 );
-extern z_symbol* build_modify_expr( z_symbol *sym1,enum tetrade_code sym2, z_symbol *sym3 );
-extern z_symbol* build_mth_builtin1_fn(z_symbol *sym1, z_symbol *sym2 );
-extern z_symbol* build_mth_builtin2_fn(z_symbol *sym1, z_symbol *sym2, z_symbol *sym3 );
-extern z_symbol* build_array_ref(z_symbol *sym1, z_symbol *sym2 );
-extern z_symbol* build_chainon_string(z_symbol *sym1, z_symbol *sym2 );
-extern z_symbol* init_identifier(z_symbol *sym1,int current_declspec_type,int current_declspec_flag);
+extern z_symbol *make_pointer_declarator(z_symbol *sym2);
+extern z_symbol *build_array(z_symbol *sym1, z_symbol *sym2);   //250
+extern z_symbol *build_indirect_ref(z_symbol *sym1, const char *str);
+extern z_symbol *build_unary_op(enum tetrade_code sym1, z_symbol *sym2);
+extern z_symbol *build_binary_op(enum tetrade_code sym1, z_symbol *sym2, z_symbol *sym3);
+extern z_symbol *build_modify_expr(
+    z_symbol *sym1,
+    enum tetrade_code sym2,
+    z_symbol *sym3);
+extern z_symbol *build_mth_builtin1_fn(z_symbol *sym1, z_symbol *sym2);
+extern z_symbol *build_mth_builtin2_fn(z_symbol *sym1, z_symbol *sym2, z_symbol *sym3);
+extern z_symbol *build_array_ref(z_symbol *sym1, z_symbol *sym2);
+extern z_symbol *build_chainon_string(z_symbol *sym1, z_symbol *sym2);
+extern z_symbol *init_identifier(
+    z_symbol *sym1,
+    int current_declspec_type,
+    int current_declspec_flag);
 extern void init();
-
-
-
-
-
 
 
 #endif
 
 
- //           int type;
+//           int type;
 
- //           $1->type  = ( is_constant( current_declspec_flags ) ) ? CONSTANT : VARIABLE;
+//           $1->type  = ( is_constant( current_declspec_flags ) ) ? CONSTANT : VARIABLE;
 
- //           type = get_symtype( current_declspec_flags ); 
- //           if( type == T_REAL )
- //           {
- //              /* real */
- //              $1->u.v.t = T_REAL;
- //              $1->u.v.data.v_real = 0.0;
- //           }
- //           else if( type == T_INT || type == T_UINT )
- //           {
- //              /* int */
- //              $1->u.v.t = type;
- //              $1->u.v.data.v_uint = 0;
- //           }
- //           else if( type == T_CHAR )
- //           {
- //              /* init as T_CHAR */
- //              $1->u.v.t = type;
- //              $1->u.v.data.v_char = 0;
- //           }
- //           else
- //           {
- //              fprintf( stderr,
- //              "%s: %s:%d: ERROR: incompatible type of initialiser constant\n",
- //                       progname, input_file_name, lineno );
- //              exit( 1 );
- //           }
- ////           current_declspec_flags = 0;
+//           type = get_symtype( current_declspec_flags );
+//           if( type == T_REAL )
+//           {
+//              /* real */
+//              $1->u.v.t = T_REAL;
+//              $1->u.v.data.v_real = 0.0;
+//           }
+//           else if( type == T_INT || type == T_UINT )
+//           {
+//              /* int */
+//              $1->u.v.t = type;
+//              $1->u.v.data.v_uint = 0;
+//           }
+//           else if( type == T_CHAR )
+//           {
+//              /* init as T_CHAR */
+//              $1->u.v.t = type;
+//              $1->u.v.data.v_char = 0;
+//           }
+//           else
+//           {
+//              fprintf( stderr,
+//              "%s: %s:%d: ERROR: incompatible type of initialiser constant\n",
+//                       progname, input_file_name, lineno );
+//              exit( 1 );
+//           }
+////           current_declspec_flags = 0;
 
- //           $$ = $1;
-
-
-
-
-
-
-
-
-
-
-
+//           $$ = $1;
 
 
 //
 //
-//		 
+//
 ///**************************************************************
-//  SYMTAB.H                                                     
+//  SYMTAB.H
 //              Copyright (C) 1995 by Andrew Kosteltsev
 //              All Rights Reserved
 // **************************************************************/
@@ -279,7 +265,7 @@ extern void init();
 //%type <code> unop
 //
 //
-//%token <itype> TYPESPEC 800   SCSPEC 801  TYPE_QUAL 802 
+//%token <itype> TYPESPEC 800   SCSPEC 801  TYPE_QUAL 802
 //
 //
 //%token <sym> IDENTIFIER 500 CONSTANT 502 VARIABLE 503
@@ -375,7 +361,7 @@ extern void init();
 //            current_declspec_flags = declspec_stack;
 //            declspec_stack = 0;
 //         }
-//       | declmods typespec reserved_declspecs  
+//       | declmods typespec reserved_declspecs
 //         {
 //            $$ = (declspec_stack |= $3);
 //            current_declspec_flags = declspec_stack;
@@ -567,7 +553,7 @@ extern void init();
 //         STRING
 //       | string STRING
 //         { $$ = build_chainon_string( $1, $2 ); }
-//       ; 
+//       ;
 //
 //
 //

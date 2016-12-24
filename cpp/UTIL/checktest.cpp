@@ -4,8 +4,7 @@
 #include "lib/std/ex_out.h"
 #include "lib/ref/commandline.h"
 
-double StndErr=1e-6;
-
+double StndErr = 1e-6;
 
 
 Stroka GenerateDetailedHelp() {
@@ -20,195 +19,194 @@ void PrintHelp(map<Stroka, Stroka> par) {
 
 
 int CheckDuplicateChars(const string &str) {
-	vector<int> test(256,0);
-	const char *ptr = str.c_str();
-	for(size_t i = 0; i < str.length(); i++)
-		if (test[ptr[i]]++ != 0)
-			return 1;
-	return 0;
+    vector<int> test(256, 0);
+    const char *ptr = str.c_str();
+    for(size_t i = 0; i < str.length(); i++)
+        if(test[ptr[i]]++ != 0)
+            return 1;
+    return 0;
 }
 boolean hasDuplicateChars(const string &str) {
-	boolean test[256];
-	for(size_t i = 0; i < str.length(); i++) 
-		test[str.at(i)] = false;
-	for(size_t i = 0; i < str.length(); i++) {
-		char val = str.at(i);
-		if (test[val])
-			return true;
-		test[val] = true;
-	}
-	return false;
+    boolean test[256];
+    for(size_t i = 0; i < str.length(); i++)
+        test[str.at(i)] = false;
+    for(size_t i = 0; i < str.length(); i++) {
+        char val = str.at(i);
+        if(test[val])
+            return true;
+        test[val] = true;
+    }
+    return false;
 }
 boolean hasDuplicateChars1(const string &str) {
-	int t = 0;
-	for(size_t i = 0; i < str.length(); i++) {
-		int val = str.at(i) - 'a';
-		if (t & (1>>val))
-			return true;
-		t = t | (1>>val);
-	}
-	return false;
+    int t = 0;
+    for(size_t i = 0; i < str.length(); i++) {
+        int val = str.at(i) - 'a';
+        if(t & (1 >> val))
+            return true;
+        t = t | (1 >> val);
+    }
+    return false;
 }
 void reverseString(char *str) {
-	if (!str)
-		return;
-	int l = strlen(str);
-	for(size_t i = 0; i < size_t(l / 2); i++) 
-		swap(str[i], str[l - i - 1]);
+    if(!str)
+        return;
+    int l = strlen(str);
+    for(size_t i = 0; i < size_t(l / 2); i++)
+        swap(str[i], str[l - i - 1]);
 }
 void removeDuplicate(char *str) {
-	char prev = 0, *pos = 0;
-	if (!str) 
-		return;
-	for(size_t i = 0; i < strlen(str); i++) {
-		if (prev && prev == str[i]) {
-			if (!pos)
-				pos = &str[i];
-		} else
-			if (pos) {
-				*pos = str[i];
-				pos++;
-		}
-		prev = str[i];
-	}
-	if (pos)
-		*pos = 0;
+    char prev = 0, *pos = 0;
+    if(!str)
+        return;
+    for(size_t i = 0; i < strlen(str); i++) {
+        if(prev && prev == str[i]) {
+            if(!pos)
+                pos = &str[i];
+        } else if(pos) {
+            *pos = str[i];
+            pos++;
+        }
+        prev = str[i];
+    }
+    if(pos)
+        *pos = 0;
 }
 
 void ChekDuplicateChars(map<Stroka, Stroka> par) {
-	if (hasDuplicateChars1(string(par["Str"].c_str())))
-		cout << "Duplicates present\n";
-	else
-		cout << "No duplicates\n";
+    if(hasDuplicateChars1(string(par["Str"].c_str())))
+        cout << "Duplicates present\n";
+    else
+        cout << "No duplicates\n";
 }
 void ReverseString(map<Stroka, Stroka> par) {
-	string reverse((par["Str"].c_str()));
-	reverseString((char*)reverse.c_str());
-	cout << " Str [" << par["Str"] << "] reverse [" << reverse.c_str() << "]\n";
+    string reverse((par["Str"].c_str()));
+    reverseString((char *)reverse.c_str());
+    cout << " Str [" << par["Str"] << "] reverse [" << reverse.c_str() << "]\n";
 }
 void Check(const char *in, const char *test) {
-	if (in == NULL) {
-		char *t = NULL;
-		removeDuplicate(t);
-		if (t !=NULL)
-			throw exception("Have  to be null but is not");
-		return;
-	}
+    if(in == NULL) {
+        char *t = NULL;
+        removeDuplicate(t);
+        if(t != NULL)
+            throw exception("Have  to be null but is not");
+        return;
+    }
 
-	string buf(in);
-	char *t = (char*)buf.c_str();
-	removeDuplicate(t);
-	if (strcmp(t, test) != 0)
-		throw exception(~(Stroka("test failed for str ") + in + " result " + t + " test " + test + "\n"));
+    string buf(in);
+    char *t = (char *)buf.c_str();
+    removeDuplicate(t);
+    if(strcmp(t, test) != 0)
+        throw exception(
+            ~(Stroka("test failed for str ") + in + " result " + t + " test " + test +
+              "\n"));
 }
 void RemoveDuplicate(map<Stroka, Stroka> par) {
-	string uniq((par["Str"].c_str()));
-	removeDuplicate((char*)uniq.c_str());
-	cout << " Str [" << par["Str"] << "] uniq [" << uniq.c_str() << "]\n";
-	Check("aaa","a");
-	Check("assddd","asd");
-	Check("adfd","adf");
+    string uniq((par["Str"].c_str()));
+    removeDuplicate((char *)uniq.c_str());
+    cout << " Str [" << par["Str"] << "] uniq [" << uniq.c_str() << "]\n";
+    Check("aaa", "a");
+    Check("assddd", "asd");
+    Check("adfd", "adf");
 }
 void makeStrStatistics(const char *str, vector<char> &stat) {
-	size_t l = strlen(str);
-	for(size_t i = 0; i < l; i++)
-		stat[str[i]]++;
+    size_t l = strlen(str);
+    for(size_t i = 0; i < l; i++)
+        stat[str[i]]++;
 }
 boolean isAnagram(const char *str1, const char *str2) {
-	if (!str1 || !str2)
-		return (str2?false:true);
-	if (strlen(str1) != strlen(str2))
-		return false;
-	vector<char> stat1(256, 0), stat2(256, 0);
-	makeStrStatistics(str1, stat1);
-	makeStrStatistics(str2, stat2);
-	for(size_t i = 0; i < stat1.size(); i++)
-		if (stat1[i] != stat2[i])
-			return false;
-	return true;
+    if(!str1 || !str2)
+        return (str2 ? false : true);
+    if(strlen(str1) != strlen(str2))
+        return false;
+    vector<char> stat1(256, 0), stat2(256, 0);
+    makeStrStatistics(str1, stat1);
+    makeStrStatistics(str2, stat2);
+    for(size_t i = 0; i < stat1.size(); i++)
+        if(stat1[i] != stat2[i])
+            return false;
+    return true;
 }
 
 #include <algorithm>
 
 boolean isAnagram2(const char *str1, const char *str2) {
-	std::string srt1(str1), srt2(str2);
-	std::sort(srt1.begin(), srt1.end());
-	std::sort(srt2.begin(), srt2.end());
-	return srt1.compare(srt2) == 0;
-
+    std::string srt1(str1), srt2(str2);
+    std::sort(srt1.begin(), srt1.end());
+    std::sort(srt2.begin(), srt2.end());
+    return srt1.compare(srt2) == 0;
 }
 void IsAnagram(map<Stroka, Stroka> par) {
-	if (isAnagram2(~par["Str1"], ~par["Str2"]))
-		cout << "String " << par["Str1"] << " and " << par["Str2"] << " are anagrams\n";
-	else
-		cout << "String " << par["Str1"] << " and " << par["Str2"] << " are not anagrams\n";
+    if(isAnagram2(~par["Str1"], ~par["Str2"]))
+        cout << "String " << par["Str1"] << " and " << par["Str2"] << " are anagrams\n";
+    else
+        cout << "String " << par["Str1"] << " and " << par["Str2"]
+             << " are not anagrams\n";
 }
 
 
 double pow_up(double a, int b) {
-    if (b == 0)
+    if(b == 0)
         return 1;
     double mulFactor = a, ans = 1;
-    if (b < 0) {
+    if(b < 0) {
         b = -b;
-        mulFactor = 1./a;
+        mulFactor = 1. / a;
     }
     int curPower = 1;
-//cout << a << " " << b << "\n";
-    while(curPower <=b) {
-        if (curPower & b)
+    //cout << a << " " << b << "\n";
+    while(curPower <= b) {
+        if(curPower & b)
             ans *= mulFactor;
         mulFactor *= mulFactor;
-//cout << ans << " " << mulFactor << " " << curPower << "\n";
+        //cout << ans << " " << mulFactor << " " << curPower << "\n";
         curPower = curPower << 1;
-    } 
+    }
     return ans;
-
 }
 
 void Pow(map<Stroka, Stroka> par) {
-	double a = atof(~par["X"]);
-	int b = atof(~par["Pow"]);
-	double p = pow_up(a, b), t = pow(a, b);
-	cout << a << " ** " << b << " = " << p
-		 << " cmp " << t << " delta " << p - t << "\n";
+    double a = atof(~par["X"]);
+    int b = atof(~par["Pow"]);
+    double p = pow_up(a, b), t = pow(a, b);
+    cout << a << " ** " << b << " = " << p << " cmp " << t << " delta " << p - t << "\n";
 }
-template <class T> 
-bool isPolymorphic() { 
-    bool answer=false;
+template <class T>
+bool isPolymorphic() {
+    bool answer = false;
     T *t = new T();
-    typeid(answer=true,*t); 
+    typeid(answer = true, *t);
     delete t;
-    return answer; 
+    return answer;
 }
-template <class T1, class T> 
-T1* myCast(T* data) { 
+template <class T1, class T>
+T1 *myCast(T *data) {
     T1 *ret = NULL;
     T *t = new T();
-    typeid(ret=static_cast<T1*>(data), *t); 
-    //ret=static_cast<T1*>(data); 
+    typeid(ret = static_cast<T1 *>(data), *t);
+    //ret=static_cast<T1*>(data);
     delete t;
-    return ret; 
+    return ret;
 }
 
 class PolyBase {
 public:
-   virtual void func(){}
+    virtual void func() {}
 };
 
 class NPolyBase {
 public:
-	void func(){}
-   //~NBase(){}
+    void func() {}
+    //~NBase(){}
 };
 
 void Polymorphic(map<Stroka, Stroka> par) {
-	//int i;
-	//PolyBase pb;
-	//NPolyBase npb;
-	//cout << " PolyBase isPolymorphic " << myCast<PolyBase, PolyBase>(&pb) << "\n";
-	//cout << " NPolyBase isPolymorphic " << myCast<PolyBase, NPolyBase>(&npb) << "\n";
-	//cout << " Int isPolymorphic " << myCast<PolyBase, int>(&i) << "\n";
+    //int i;
+    //PolyBase pb;
+    //NPolyBase npb;
+    //cout << " PolyBase isPolymorphic " << myCast<PolyBase, PolyBase>(&pb) << "\n";
+    //cout << " NPolyBase isPolymorphic " << myCast<PolyBase, NPolyBase>(&npb) << "\n";
+    //cout << " Int isPolymorphic " << myCast<PolyBase, int>(&i) << "\n";
 }
 
 //#include <list>
@@ -250,7 +248,7 @@ void Polymorphic(map<Stroka, Stroka> par) {
 //		SortedList &newTop = history.front();
 //		newTop.Data.push_front(val);
 //		ChainCheck(history);
-//		
+//
 //	}
 //	static double GetMin(list<SortedList> &history) {
 //		return history.back().Data.back();
@@ -303,15 +301,15 @@ void Polymorphic(map<Stroka, Stroka> par) {
 //}
 
 int ClcNumRoutes(int x, int y) {
-    if (x == 0 || y == 0)
+    if(x == 0 || y == 0)
         return 1;
-    return ClcNumRoutes(x-1,y) + ClcNumRoutes(x, y-1);
+    return ClcNumRoutes(x - 1, y) + ClcNumRoutes(x, y - 1);
 }
 
 double Fact(int n) {
-    if (n <=1)
+    if(n <= 1)
         return 1;
-    return n * Fact(n-1);
+    return n * Fact(n - 1);
 }
 
 int ClcNumRoutes(int n) {
@@ -319,9 +317,9 @@ int ClcNumRoutes(int n) {
 }
 
 void TestR(int n) {
-    double exp = ClcNumRoutes(n,n);
-    double strict = Fact(2*n)/sqr(Fact(n));
-    if ( exp != strict )
+    double exp = ClcNumRoutes(n, n);
+    double strict = Fact(2 * n) / sqr(Fact(n));
+    if(exp != strict)
         cout << " Test " << n << " robot " << exp << " strict " << strict << "\n";
     else
         cout << n << " OK\n";
@@ -386,7 +384,6 @@ void testrobot(map<Stroka, Stroka> par) {
 //}
 
 
-
 //int main( int argc, const char *argv[] )
 //{
 //    SetLeakTest();
@@ -435,9 +432,9 @@ void testrobot(map<Stroka, Stroka> par) {
 //#include <strstream>
 //#include <numeric>
 //#include "math.h"
-// 
+//
 //using namespace std;
-// 
+//
 //// Get all vars after adding next number
 //// Make all possible operations with the input list +-*/
 //void GetVars(int num, set<int> &vars) {
@@ -502,9 +499,9 @@ void testrobot(map<Stroka, Stroka> par) {
 #include <strstream>
 #include <numeric>
 #include "math.h"
- 
+
 using namespace std;
- 
+
 /*
 ID: pyal1
 PROG:  preface
@@ -531,32 +528,32 @@ LANG: C++
 
 
 using namespace std;
- 
+
 typedef long long l2;
 typedef pair<int, int> p2;
 typedef pair<double, double> d2;
-template<class T>
+template <class T>
 vector<T> &ReadData(vector<T> &dat, int s = 0) {
-    if (!s)
+    if(!s)
         cin >> s;
     dat.resize(s);
     for(size_t i = 0; i < dat.size(); i++)
         cin >> dat[i];
     return dat;
 }
-template<class T, class T1>
-ostream& operator<<(ostream &out, const pair<T, T1> &pnt) {
+template <class T, class T1>
+ostream &operator<<(ostream &out, const pair<T, T1> &pnt) {
     out << pnt.first << " " << pnt.second << " ";
     return out;
 };
-template<class T, class T1>
-istream& operator>>(istream &in, pair<T, T1> &pnt) {
+template <class T, class T1>
+istream &operator>>(istream &in, pair<T, T1> &pnt) {
     in >> pnt.first >> pnt.second;
     return in;
 };
 
-template<class T>
-ostream& operator<<(ostream &out, const set<T> &s) {
+template <class T>
+ostream &operator<<(ostream &out, const set<T> &s) {
     for(set<T>::const_iterator i = s.begin(); i != s.end(); i++) {
         out << *i << " ";
         //if ((i+1) != s.end())
@@ -565,49 +562,49 @@ ostream& operator<<(ostream &out, const set<T> &s) {
     return out;
 };
 
-template<class T>
-ostream& operator<<(ostream &out, const vector<T> &vec) {
+template <class T>
+ostream &operator<<(ostream &out, const vector<T> &vec) {
     for(size_t i = 0; i < vec.size(); i++) {
         out << vec[i];
-        if (i != vec.size() -1 )
+        if(i != vec.size() - 1)
             out << " ";
     }
     return out;
 };
 
-template<class T>
+template <class T>
 void PrintVector(const vector<T> &dat, const char *sep = NULL) {
-    if (!dat.size())
+    if(!dat.size())
         return;
     for(size_t i = 0; i < dat.size() - 1; i++)
-        if (!sep)
+        if(!sep)
             cout << dat[i] << "\t";
         else
             cout << dat[i] << sep;
     cout << dat[dat.size() - 1];
 }
-template<class T>
-void PrintArray(vector<vector<T> > &dat, const char *sep = NULL) {
+template <class T>
+void PrintArray(vector<vector<T>> &dat, const char *sep = NULL) {
     for(size_t i = 0; i < dat.size(); i++) {
         PrintVector(dat[i], sep);
         cout << "\n";
     }
 }
-template<class T>
+template <class T>
 map<T, int> Vector2Map(const vector<T> &vec, int InitByInd = 1) {
     map<T, int> res;
-    for (size_t i = 0; i < vec.size(); i++)
-        if (InitByInd)
+    for(size_t i = 0; i < vec.size(); i++)
+        if(InitByInd)
             res[vec[i]] = (int)i;
         else
             res[vec[i]] = 0;
     return res;
 }
-template<class T1, class T2>
-map<T1, T2> Vector2Map(const vector<pair<T1, T2> > &vec) {
+template <class T1, class T2>
+map<T1, T2> Vector2Map(const vector<pair<T1, T2>> &vec) {
     map<T1, T2> res;
-    for (size_t i = 0; i < vec.size(); i++)
-            res[vec[i].first] = vec[i].second;
+    for(size_t i = 0; i < vec.size(); i++)
+        res[vec[i].first] = vec[i].second;
     return res;
 }
 
@@ -615,56 +612,56 @@ template <class T>
 struct TCmpVector {
     vector<T> Vector;
 
-    TCmpVector() {};
-    TCmpVector(const vector<T> &srcV) : Vector(srcV) {};
-    TCmpVector(const TCmpVector &src) : Vector(src.Vector){}
-    TCmpVector& operator=(const TCmpVector &src) {
+    TCmpVector(){};
+    TCmpVector(const vector<T> &srcV) : Vector(srcV){};
+    TCmpVector(const TCmpVector &src) : Vector(src.Vector) {}
+    TCmpVector &operator=(const TCmpVector &src) {
         Vector = src.Vector;
         return *this;
     }
     int operator<(const TCmpVector &src) const {
         for(size_t i = 0; i < Vector.size(); i++) {
-            if (Vector[i] > src.Vector[i])
+            if(Vector[i] > src.Vector[i])
                 return 0;
-            if (Vector[i] < src.Vector[i])
+            if(Vector[i] < src.Vector[i])
                 return 1;
         }
         return 0;
     }
     int operator==(const TCmpVector &src) {
         for(size_t i = 0; i < Vector.size(); i++)
-            if (Vector[i] != src.Vector[i])
+            if(Vector[i] != src.Vector[i])
                 return 0;
         return 1;
     }
 };
-template<class T>
+template <class T>
 void ReadAll(istream &in, vector<T> &vec) {
     T el;
     vec.clear();
     while(1) {
         in >> el;
-        if (!in)
+        if(!in)
             break;
         vec.push_back(el);
     }
 }
 void *StaticSortArray;
-template<class T>
-bool greaterWeight( int w1, int w2 ){
-    return ((T*)StaticSortArray)[w1] > ((T*)StaticSortArray)[w2];
+template <class T>
+bool greaterWeight(int w1, int w2) {
+    return ((T *)StaticSortArray)[w1] > ((T *)StaticSortArray)[w2];
 }
-template<class T>
-bool lessWeight( int w1, int w2 ){
-    return ((T*)StaticSortArray)[w1] < ((T*)StaticSortArray)[w2];
+template <class T>
+bool lessWeight(int w1, int w2) {
+    return ((T *)StaticSortArray)[w1] < ((T *)StaticSortArray)[w2];
 };
-template<class T>
-std::vector<int> Sort(const std::vector<T> &vec, int AscendingOrder){
+template <class T>
+std::vector<int> Sort(const std::vector<T> &vec, int AscendingOrder) {
     std::vector<int> ind(vec.size());
-    for(size_t i = 0;i<ind.size();i++)
+    for(size_t i = 0; i < ind.size(); i++)
         ind[i] = (int)i;
-    StaticSortArray = (void*)&vec[0 ];
-    if (AscendingOrder)
+    StaticSortArray = (void *)&vec[0];
+    if(AscendingOrder)
         std::sort(ind.begin(), ind.end(), lessWeight<T>);
     else
         std::sort(ind.begin(), ind.end(), greaterWeight<T>);
@@ -673,8 +670,8 @@ std::vector<int> Sort(const std::vector<T> &vec, int AscendingOrder){
 
 void HashInsert(map<char, int> &hashCode, vector<char> &hashV, char ch) {
     int p = hashCode[ch];
-    while (hashV[p] != '0')
-        if (++p >= (int)hashV.size())
+    while(hashV[p] != '0')
+        if(++p >= (int)hashV.size())
             p = 0;
     hashV[p] = ch;
 }
@@ -688,7 +685,7 @@ int IsPossible(map<char, int> &hashCode, vector<char> &hashV) {
         vector<char> buf(hashV.size(), '0');
         for(size_t i = 0; i < order.size(); i++)
             HashInsert(hashCode, buf, order[i]);
-        if (buf == hashV)
+        if(buf == hashV)
             return 1;
     } while(next_permutation(order.begin(), order.end()));
     cout << "\n";
@@ -696,7 +693,7 @@ int IsPossible(map<char, int> &hashCode, vector<char> &hashV) {
 }
 
 
-typedef pair<int, int> i2i;  // value2weight
+typedef pair<int, int> i2i;   // value2weight
 istream &operator>>(istream &in, i2i &x) {
     in >> x.first >> x.second;
     return in;
@@ -709,7 +706,7 @@ void Set(vector<int> &index, int p, int q) {
     q = index[q];
     p = index[p];
     for(size_t i = 0; i < index.size(); i++)
-        if (index[i] == p)
+        if(index[i] == p)
             index[i] = q;
 }
 int Parent(int i, vector<int> &uni) {
@@ -720,13 +717,12 @@ int Parent(int i, vector<int> &uni) {
 void Set(int p, int q, vector<int> &uni, vector<int> &sUni) {
     p = Parent(p, uni);
     q = Parent(q, uni);
-        swap(p, q);
-    if (sUni[p] > sUni[q])
+    swap(p, q);
+    if(sUni[p] > sUni[q])
         swap(p, q);
     sUni[q] += sUni[p];
     uni[p] = uni[q];
 }
-
 
 
 void PrintLevel() {
@@ -739,12 +735,12 @@ void PrintLevel() {
     cout << "\n" << index << "\n";
     for(size_t i = 0; i < index.size(); i++) {
         int j = 0, c = i;
-        cout << i ;
+        cout << i;
         while(index[c] != c) {
             c = index[c];
             cout << " -> " << c;
             s[c]++;
-            if (j++ > 10) {
+            if(j++ > 10) {
                 cout << " \nfound circle\n";
                 return;
             }
@@ -752,15 +748,14 @@ void PrintLevel() {
         cout << "\n";
     }
     for(size_t i = 0; i < index.size(); i++) {
-        cout << i << "(" << s[i] <<")  ";
+        cout << i << "(" << s[i] << ")  ";
     }
     cout << "\n";
 }
 
 
-
-int main( int argc,   char *argv[] ) {
-    freopen(argv[1],"r", stdin);
+int main(int argc, char *argv[]) {
+    freopen(argv[1], "r", stdin);
     for(int i = 0; i < 5; i++)
         PrintLevel();
     exit(1);
@@ -769,10 +764,10 @@ int main( int argc,   char *argv[] ) {
     for(size_t i = 0; i < index.size(); i++)
         index[i] = i;
     int p, q;
-    while(scanf("%i-%i", &p, &q)== 2) {
+    while(scanf("%i-%i", &p, &q) == 2) {
         Set(index, p, q);
         //Set(p, q, index, s);
-    cout << index << "    " << p << " " << q << "\n";
+        cout << index << "    " << p << " " << q << "\n";
     }
     cout << index << "\n";
     //freopen("output.txt","w", stdout);
@@ -781,21 +776,6 @@ int main( int argc,   char *argv[] ) {
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //struct TKnapSack {
@@ -834,7 +814,7 @@ int main( int argc,   char *argv[] ) {
 //            for(size_t cap = 0; cap < (size_t)Value2Weight[Order[item]].second && cap < Item2Size_Value[item].size(); cap++)
 //                Item2Size_Value[item][cap] = Item2Size_Value[item - 1][cap];
 //            for(size_t cap = Value2Weight[Order[item]].second; cap < Item2Size_Value[item].size(); cap++)
-//                Item2Size_Value[item][cap] = max(Item2Size_Value[item - 1][cap - Value2Weight[Order[item]].second] + Value2Weight[Order[item]].first, Item2Size_Value[item -1][cap]); 
+//                Item2Size_Value[item][cap] = max(Item2Size_Value[item - 1][cap - Value2Weight[Order[item]].second] + Value2Weight[Order[item]].first, Item2Size_Value[item -1][cap]);
 //        }
 //        int curCap = CapacityK, curValue = 0;
 //        int value = Item2Size_Value[Item2Size_Value.size() - 1][curCap];
@@ -965,11 +945,6 @@ int main( int argc,   char *argv[] ) {
 //
 
 
-
-
-
-
-
 //int main( int argc,   char *argv[] ) {
 //    freopen(argv[1],"r", stdin);
 //    //freopen("output.txt","w", stdout);
@@ -1028,7 +1003,7 @@ int main( int argc,   char *argv[] ) {
 //                curCap = cap2value[curInd].first;
 //                curValue = cap2value[curInd].second;
 //            }
-//            for(; prevInd < cap2value.size() && cap2value[prevInd].first < cap + curCap; prevInd++) 
+//            for(; prevInd < cap2value.size() && cap2value[prevInd].first < cap + curCap; prevInd++)
 //                ret.push_back(cap2value[prevInd]);
 //            if (cap2value[prevInd].first == cap + curCap) {
 //                if (cap2value[prevInd].second < value + curValue) {
@@ -1076,27 +1051,6 @@ int main( int argc,   char *argv[] ) {
 //    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //int main( int argc,   char *argv[] ) {
 //    freopen(argv[1],"r", stdin);
 //    //freopen("test.out","w", stdout);
@@ -1109,7 +1063,7 @@ int main( int argc,   char *argv[] ) {
 //    ReadData(items);
 //    vector<int> row(knapSize, 0);
 //    vector<vector<int> > A(items.size(), row);
-//    for(int s = items[0].Weight; s < knapSize; s++) 
+//    for(int s = items[0].Weight; s < knapSize; s++)
 //        A[0][s] = items[0].Value;
 //    for(size_t i = 1; i < items.size(); i++) {
 //        for(int s = 0; s < knapSize; s++){
@@ -1156,27 +1110,6 @@ int main( int argc,   char *argv[] ) {
 //    }
 //    return 1;
 //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //int GetCombs(int money, vector<int> &coins, set<TCmpVector<int> > &combinations) {
@@ -1275,7 +1208,7 @@ int main( int argc,   char *argv[] ) {
 //
 //
 //using namespace std;
-// 
+//
 //typedef long long l2;
 //template<class T>
 //void ReadData(vector<T> &dat, int s = 0) {
@@ -1410,20 +1343,6 @@ int main( int argc,   char *argv[] ) {
 //
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //int Permute(vector<int> &permutes, vector<int> &numV, int &num3, int &num21, int &num22) {
 //    if (!permutes.size()) {
@@ -1480,47 +1399,12 @@ int main( int argc,   char *argv[] ) {
 //
 
 
-
-
-
-
-
-
-    //sort(gaps.begin(), gaps.end(), greater<int>());
-    //int wasGaps = accumulate(gaps.begin(), gaps.end(), 0);
-    //gaps.resize(nBoards - 1);
-    //int leftGaps = accumulate(gaps.begin(), gaps.end(), 0);
-    //cout << cows.back() - cows.front() << " " <<  wasGaps << " " << wasGaps + cows.size() << " " << leftGaps << "\n";
-    //cout << cows.back() - cows.front() - leftGaps + 1<< "\n";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//sort(gaps.begin(), gaps.end(), greater<int>());
+//int wasGaps = accumulate(gaps.begin(), gaps.end(), 0);
+//gaps.resize(nBoards - 1);
+//int leftGaps = accumulate(gaps.begin(), gaps.end(), 0);
+//cout << cows.back() - cows.front() << " " <<  wasGaps << " " << wasGaps + cows.size() << " " << leftGaps << "\n";
+//cout << cows.back() - cows.front() - leftGaps + 1<< "\n";
 
 
 //int main( int argc,   char *argv[] ) {
@@ -1575,14 +1459,13 @@ int main( int argc,   char *argv[] ) {
 //		int iLev = 0;
 //		l2 n = 0;
 //		for(int iS = sum; iS >=0 && iLev <= digits; iS -= rank, iLev++) {
-//			n += NumComb(iS, digits - iLev, rank -1) * CmnF(digits, iLev); 
+//			n += NumComb(iS, digits - iLev, rank -1) * CmnF(digits, iLev);
 //		}
 //		Nsdr[sum][digits][rank] = n;
 ////cout << " sum " << sum << " digs " << digits << " rank " << rank << " comb " << n << "\n";
 //	}
 //	return Nsdr[sum][digits][rank];
 //}
-
 
 
 //int main( int argc,   char *argv[] ) {
@@ -1602,21 +1485,6 @@ int main( int argc,   char *argv[] ) {
 //}
 //
 //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //int main( int argc,   char *argv[] ) {
@@ -1644,7 +1512,7 @@ int main( int argc,   char *argv[] ) {
 //				field[i][j] = 1;
 //				s++;
 //				sum[i][j] = s;
-//			} else 
+//			} else
 //				s = 0;
 //	}
 //	int maxPossible = 0;
@@ -1682,20 +1550,20 @@ int main( int argc,   char *argv[] ) {
 ////cout << d1 << " " << d2 << "\n";
 //	BigNum deriv(1);
 //	res.Set(1);
-//	for(int i = n; i > d1; i--) 
+//	for(int i = n; i > d1; i--)
 //		res.Mul(BigNum(i));
-//	for(int i = d2; i >= 2; i--) 
+//	for(int i = d2; i >= 2; i--)
 //		deriv.Mul(BigNum(i));
 ////cout << res << " " << deriv << "\n";
 //	res.Div(deriv);
 //}
 //l2 ClcMN(int n, int m) {
 //	l2 res = 1;
-//	for(int i = n; i > n - m; i--) 
+//	for(int i = n; i > n - m; i--)
 //		res *= i;
-//	for(int i = m; i >= 2; i--) 
+//	for(int i = m; i >= 2; i--)
 //		res /= i;
-//cout << " C [N " << n << " ,M " << m << " ] = " << res << "\n"; 
+//cout << " C [N " << n << " ,M " << m << " ] = " << res << "\n";
 //	return res;
 //}
 //l2 ClcNumHalfComb(int order, int sum) {
@@ -1766,20 +1634,6 @@ int main( int argc,   char *argv[] ) {
 //    //cout << A / FindNOD(A, B) * B << "\n";
 //    return 0;
 //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //template<class T>
@@ -2018,7 +1872,7 @@ int main( int argc,   char *argv[] ) {
 //                    s -= add * 10;
 //                }
 //                cur.Number.push_back(s);
-//				
+//
 //			}
 //
 //			sum.Add(cur);
@@ -2089,7 +1943,7 @@ int main( int argc,   char *argv[] ) {
 //    freopen("output.txt","w", stdout);
 //	int N;//, curL = 0, curN, prevN = -1000000;
 //	cin >> N;
-//	vector<double> probUnit(5, 1e-1); 
+//	vector<double> probUnit(5, 1e-1);
 //	//cout << 0 << " " << log(probUnit[0]) << " ";
 //	for(int i = 1; i < probUnit.size(); i++) {
 //		probUnit[i] *= pow(0.1, i);

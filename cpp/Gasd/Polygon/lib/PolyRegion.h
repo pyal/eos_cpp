@@ -13,39 +13,38 @@ namespace NPolygon {
     struct TPolyRegion : SavableClass {
 
     public:
-        map<Stroka, Ref<SavableClass> > MapSavableVar;
+        map<Stroka, Ref<SavableClass>> MapSavableVar;
         map<Stroka, double> MapDouble;
         TRegGrid Grid;
 
 
-
-        TPolyRegion();// : SavableClass() {};
+        TPolyRegion();   // : SavableClass() {};
 
         double GetConstantDouble(const Stroka &name) {
             TPolyRegion *base = GetRootRegion();
             map<Stroka, double>::iterator it = base->MapDouble.find(name);
-            if (it == base->MapDouble.end())
+            if(it == base->MapDouble.end())
                 throw info_except("Could not find name <%s>\n", ~name);
             return it->second;
         }
         int ConstantDoubleExists(const Stroka &name) {
             TPolyRegion *base = GetRootRegion();
             map<Stroka, double>::iterator it = base->MapDouble.find(name);
-            if (it == base->MapDouble.end())
+            if(it == base->MapDouble.end())
                 return 0;
             return 1;
         }
         SavableClass *GetConstantVariable(const Stroka &name) {
             TPolyRegion *base = GetRootRegion();
-            map<Stroka, Ref<SavableClass> >::iterator it = base->MapSavableVar.find(name);
-            if (it == base->MapSavableVar.end())
+            map<Stroka, Ref<SavableClass>>::iterator it = base->MapSavableVar.find(name);
+            if(it == base->MapSavableVar.end())
                 throw info_except("Could not find name <%s>\n", ~name);
             return it->second;
         }
         int ConstantVariableExists(const Stroka &name) {
             TPolyRegion *base = GetRootRegion();
-            map<Stroka, Ref<SavableClass> >::iterator it = base->MapSavableVar.find(name);
-            if (it == base->MapSavableVar.end())
+            map<Stroka, Ref<SavableClass>>::iterator it = base->MapSavableVar.find(name);
+            if(it == base->MapSavableVar.end())
                 return 0;
             return 1;
         }
@@ -56,21 +55,23 @@ namespace NPolygon {
             GetRootRegion()->MapSavableVar[name] = val;
         }
 
-//Vau!!! Very bad - regions can have arbitrary neighbours, have to store them, put info to the boundary...
-        void FillChildBounds (TRegBoundaryBase *bnd, const Stroka &varName) {
-            TShallowIterator prevRegion = ShallowEnd(), nextRegion = ShallowStart(), curRegion;
-            for(; prevRegion.IsOk() || nextRegion.IsOk(); prevRegion = nextRegion, nextRegion.Next()) {
+        //Vau!!! Very bad - regions can have arbitrary neighbours, have to store them, put info to the boundary...
+        void FillChildBounds(TRegBoundaryBase *bnd, const Stroka &varName) {
+            TShallowIterator prevRegion = ShallowEnd(), nextRegion = ShallowStart(),
+                             curRegion;
+            for(; prevRegion.IsOk() || nextRegion.IsOk();
+                prevRegion = nextRegion, nextRegion.Next()) {
                 TPolyRegion *regPrev = NULL, *regNext = NULL;
-                if (prevRegion.IsOk())
+                if(prevRegion.IsOk())
                     regPrev = prevRegion.CurRegion();
-                if (nextRegion.IsOk())
+                if(nextRegion.IsOk())
                     regNext = nextRegion.CurRegion();
-                if (prevRegion.IsOk())
+                if(prevRegion.IsOk())
                     bnd->FillBoundMinus(varName, regPrev, regNext);
-                    //bnd->FillBounds(varName, regPrev, regNext, regPrev);
-                if (nextRegion.IsOk())
+                //bnd->FillBounds(varName, regPrev, regNext, regPrev);
+                if(nextRegion.IsOk())
                     bnd->FillBoundPlus(varName, regPrev, regNext);
-                    //bnd->FillBounds(varName, regPrev, regNext, regNext);
+                //bnd->FillBounds(varName, regPrev, regNext, regNext);
             }
         }
         //void AddChildGridVar (const Stroka &varName);
@@ -79,26 +80,32 @@ namespace NPolygon {
 
         //GridMask GetParentBlockMask ();
 
-        int save_data_state( FilterOut&so) {
-            so<<" Grid ";Grid.save_data_state(so);
-            so<<" Vars { ";
-            for(map<Stroka, Ref<SavableClass> >::iterator it = MapSavableVar.begin(); it != MapSavableVar.end(); it++)
-                so<<it->first<<"\n"<<SavableClass::object2string(it->second)<<"\n";
-            so<<" } ";
-            so<<" Childs "<<Childs<<" Parent "<<Parent;
-            return 1; 
+        int save_data_state(FilterOut &so) {
+            so << " Grid ";
+            Grid.save_data_state(so);
+            so << " Vars { ";
+            for(map<Stroka, Ref<SavableClass>>::iterator it = MapSavableVar.begin();
+                it != MapSavableVar.end();
+                it++)
+                so << it->first << "\n"
+                   << SavableClass::object2string(it->second) << "\n";
+            so << " } ";
+            so << " Childs " << Childs << " Parent " << Parent;
+            return 1;
         };
-        int read_data_state(FilterIn&si) { 
+        int read_data_state(FilterIn &si) {
             Stroka tmp;
-            si>>tmp;Grid.read_data_state(si);
-            si>>tmp>>tmp;
+            si >> tmp;
+            Grid.read_data_state(si);
+            si >> tmp >> tmp;
             MapSavableVar.clear();
             while(!(!si) && !SavableClass::TestNextChar(si, '}')) {
                 Stroka name;
-                si>>name;
+                si >> name;
                 MapSavableVar[name] = SavableClass::Read(si);
             }
-            si>>tmp;operator>>(si, Childs)>>tmp;
+            si >> tmp;
+            operator>>(si, Childs) >> tmp;
             Parent = SavableClass::TestType<TPolyRegion>(si.getobject());
             return 1;
         };
@@ -108,7 +115,7 @@ namespace NPolygon {
         //struct TDeepIterator {
         //    list<Ref<TPolyRegion> >::iterator it;
         //    TPolyRegion *reg, *main;
-        //    Iterator(TPolyRegion *main_, TPolyRegion *reg_, const list<Ref<TPolyRegion> >::iterator &it_) 
+        //    Iterator(TPolyRegion *main_, TPolyRegion *reg_, const list<Ref<TPolyRegion> >::iterator &it_)
         //        : it(it_)
         //        , reg(reg_)
         //        , main(main_){}
@@ -118,21 +125,22 @@ namespace NPolygon {
         //    inline bool operator!=(const Iterator &iter) {
         //        return !operator==(iter);
         //    }
-        //}; 
+        //};
         //struct TDeepIterator {
         //};
         struct TShallowIterator {
             friend struct TPolyRegion;
+
         private:
             Ref<TPolyRegion> Base;
-            list<Ref<TPolyRegion> >::iterator Iter;
+            list<Ref<TPolyRegion>>::iterator Iter;
             //iterator<bidirectional_iterator_tag, Ref<TPolyRegion> > Iter;
             //iterator_traits<list<Ref<TPolyRegion> >::iterator>::iterator_category Iter;
             //bidirectional_iterator_tag IterBi;
         protected:
             inline void Last(TPolyRegion *base) {
                 Base = base;
-                if (Base) {
+                if(Base) {
                     Iter = Base->Childs.end();
                     Iter--;
                     //Iter = (Base->Childs.rbegin()).base();
@@ -143,69 +151,65 @@ namespace NPolygon {
                     //Iter = (Base->Childs.rbegin()++).base();
                 }
             }
+
         public:
-            TShallowIterator() {};
+            TShallowIterator(){};
             TShallowIterator(TPolyRegion *base) {
                 Start(base);
             };
-            TShallowIterator(const TShallowIterator &iter) 
-                : Base(iter.Base)
-                , Iter(iter.Iter) {
-            };
-            TShallowIterator& operator=(const TShallowIterator &it) {
+            TShallowIterator(const TShallowIterator &iter)
+                : Base(iter.Base), Iter(iter.Iter){};
+            TShallowIterator &operator=(const TShallowIterator &it) {
                 Base = it.Base;
                 Iter = it.Iter;
                 return *this;
             }
             inline void End() {
-                if (Base)
+                if(Base)
                     Iter = Base->Childs.end();
             }
             inline void Start(TPolyRegion *base) {
                 Base = base;
-                if (Base)
+                if(Base)
                     Iter = Base->Childs.begin();
             }
             inline int IsOk() {
                 return (!(!Base) && Iter != Base->Childs.end());
             }
             inline int Next() {
-                if (!IsOk())
+                if(!IsOk())
                     return 0;
                 Iter++;
                 //return 1;
                 return IsOk();
             }
             inline int Prev() {
-                if (!Base)
+                if(!Base)
                     return 0;
-				if (Iter == Base->Childs.begin()) {
-					Iter = Base->Childs.end();
-					return 0;
-				}
+                if(Iter == Base->Childs.begin()) {
+                    Iter = Base->Childs.end();
+                    return 0;
+                }
                 Iter--;
                 return IsOk();
             }
-			inline TPolyRegion * GetNext() {
-				TShallowIterator it(*this);
-				if (!it.Next())
-					return NULL;
-				return it.CurRegion();
-			}
-			inline TPolyRegion * GetPrev() {
-				TShallowIterator it(*this);
-				if (!it.Prev())
-					return NULL;
-				return it.CurRegion();
-			}
+            inline TPolyRegion *GetNext() {
+                TShallowIterator it(*this);
+                if(!it.Next())
+                    return NULL;
+                return it.CurRegion();
+            }
+            inline TPolyRegion *GetPrev() {
+                TShallowIterator it(*this);
+                if(!it.Prev())
+                    return NULL;
+                return it.CurRegion();
+            }
 
             inline TPolyRegion *CurRegion() {
                 return *Iter;
             }
-
         };
-
-
 
 
         TPolyRegion *GetRootRegion() {
@@ -305,20 +309,20 @@ namespace NPolygon {
             Grid.SetGridBoundarySize(level);
         }
 
-    //    friend TShallowIterator;
-    //protected:
-        list<Ref<TPolyRegion> > Childs;
-        TPolyRegion* Parent;
+        //    friend TShallowIterator;
+        //protected:
+        list<Ref<TPolyRegion>> Childs;
+        TPolyRegion *Parent;
     };
 
 
-}; //namespace NPolygon {
+};   //namespace NPolygon {
 
 #endif
 
 
-        //TPolyRegion(const TPolyRegion &right);
-        //~TPolyRegion();
-        //TPolyRegion & operator=(const TPolyRegion &right);
-        //int operator==(const TPolyRegion &right) const;
-        //int operator!=(const TPolyRegion &right) const;
+//TPolyRegion(const TPolyRegion &right);
+//~TPolyRegion();
+//TPolyRegion & operator=(const TPolyRegion &right);
+//int operator==(const TPolyRegion &right) const;
+//int operator!=(const TPolyRegion &right) const;

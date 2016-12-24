@@ -8,28 +8,26 @@
  *************************************/
 typedef struct symbol SYMBOL;
 //#include "..\vm3_cpp.h"
-struct symbol
-{
-   char *name;          /* имя переменной или функции */
-   int   type;          /* тип: VAR, BLTIN, UNDEF     */
-   union
-   {
-      double  val;       /* значение для переменной( VAR )           */
-      double  (*ptr)();  /* указатель на встроенную функцию( BLTIN ) */
-      int    (*defn)();  /* FUNCTION, PROCEDURE */
-      char   *str;       /* string */
-   } u;
+struct symbol {
+    char *name; /* имя переменной или функции */
+    int type;   /* тип: VAR, BLTIN, UNDEF     */
+    union {
+        double val;      /* значение для переменной( VAR )           */
+        double (*ptr)(); /* указатель на встроенную функцию( BLTIN ) */
+        int (*defn)();   /* FUNCTION, PROCEDURE */
+        char *str;       /* string */
+    } u;
 
-   struct symbol *next; /* связь со следующей записью */
+    struct symbol *next; /* связь со следующей записью */
 };
 
 /************************************************************
   Декларация функций добавления записи и поиска существующей
  ************************************************************/
-extern SYMBOL *install( char *s, int t, double d );
-extern SYMBOL *lookup( char *s );
+extern SYMBOL *install(char *s, int t, double d);
+extern SYMBOL *lookup(char *s);
 
-extern char *emalloc( unsigned n );
+extern char *emalloc(unsigned n);
 
 
 /******************  END OF FILE SYMTAB.H  ********************/

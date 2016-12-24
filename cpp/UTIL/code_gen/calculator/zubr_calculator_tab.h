@@ -14,10 +14,7 @@
 #define TYPE 261
 #define UNARYMINUS 262
 
-typedef union
-{
-   SYMBOL sym;
-} ZUBR_CALCULATOR_ZUBR_STYPE;
+typedef union { SYMBOL sym; } ZUBR_CALCULATOR_ZUBR_STYPE;
 
 extern ZUBR_CALCULATOR_ZUBR_STYPE zubr_calculator_zubr_lval;
 

@@ -7,13 +7,17 @@
 
 void ClcMassInBody(Body &WorkBody);
 
-void CellFixed(Body &WorkBody);//,double &PresDeriv);
+void CellFixed(Body &WorkBody);   //,double &PresDeriv);
 
 
-void ClcAddU(Body &WorkBody,double *AddU);
+void ClcAddU(Body &WorkBody, double *AddU);
 //void CalcPos(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeStability);
-void CalcTStpVisc(Body &WorkBody,double TimeStp,double &MinTimeStp,double TimeStability);
-void CalcPosE(Body &WorkBody,double TimeStp);
+void CalcTStpVisc(
+    Body &WorkBody,
+    double TimeStp,
+    double &MinTimeStp,
+    double TimeStability);
+void CalcPosE(Body &WorkBody, double TimeStp);
 
 
 #endif

@@ -8,17 +8,18 @@ struct TExceptionTester {
         log_always("Log test");
         try {
             throw info_except("Testing %s", "ok");
-        } catch (exception &ex) {
+        } catch(exception &ex) {
             log_always(string("Got exception:\n") + ex.what());
         }
 
         log_always(info_mark);
-//        verify(false);
-//        verify(0==1);
-        verify(0==0);
-//        verify(false, "FALSE");
+        //        verify(false);
+        //        verify(0==1);
+        verify(0 == 0);
+        //        verify(false, "FALSE");
     }
-
 };
 
-UnitTest ExceptionTester("ExceptionTest", [](){make_shared<TExceptionTester>()->DoTest();});
+UnitTest ExceptionTester("ExceptionTest", []() {
+    make_shared<TExceptionTester>()->DoTest();
+});

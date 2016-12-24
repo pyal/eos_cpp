@@ -10,91 +10,94 @@
 
 /********************** Hedge Periodic **************************************/
 
-class HedgePer {                    
+class HedgePer {
 public:
-  HedgePer() : dim(0), num_of_levels(0), levels(0), origin(0) { }       
-            // default constructor, all empty
+    HedgePer() : dim(0), num_of_levels(0), levels(0), origin(0) {}
+    // default constructor, all empty
 
-  HedgePer(const integer &DIM, const integer &n, const integer *Levs);   
-            // constructor which sets dim=DIM, num_of_levels=n and 
-            // levels sequence is set from Levs 
-            // check that dim is divisible by 2^maxlevel() performed
-            // assumption: Levs is defined as sequence of n integers
-            // levels are checked for consistency, if O.K.
-            // origin is allocated dim amount of  memory
-  
-  HedgePer(const HedgePer &);                   // copy constructor
+    HedgePer(const integer &DIM, const integer &n, const integer *Levs);
+    // constructor which sets dim=DIM, num_of_levels=n and
+    // levels sequence is set from Levs
+    // check that dim is divisible by 2^maxlevel() performed
+    // assumption: Levs is defined as sequence of n integers
+    // levels are checked for consistency, if O.K.
+    // origin is allocated dim amount of  memory
 
-  ~HedgePer() { DestroyHedge(); }               // destructor
+    HedgePer(const HedgePer &);   // copy constructor
 
-  const HedgePer &operator=(const HedgePer &);  // overload =
+    ~HedgePer() {
+        DestroyHedge();
+    }   // destructor
 
-  void DestroyHedge();                          // free all memory
+    const HedgePer &operator=(const HedgePer &);   // overload =
 
-  bool levels_consistent() const;               // checks if levels gives rise
-                                                // to a proper hedge
-  
-  integer maxlevel() const;                     // return maximum of levels 
+    void DestroyHedge();   // free all memory
 
-  integer block_length(const integer &i) const; // length of block 
-                                                // corresponding to levels[i]
+    bool levels_consistent() const;   // checks if levels gives rise
+                                      // to a proper hedge
 
-  real *block_start(const integer &i) const;    // pointer to begining of block
-                                                // corresponding to levels[i]
-  ////////////////////////////////////////////////////////////////////////////
+    integer maxlevel() const;   // return maximum of levels
 
-  integer dim;                 // total length of origin=dim
+    integer block_length(const integer &i) const;   // length of block
+                                                    // corresponding to levels[i]
 
-  integer num_of_levels;       // length of levels sequence
+    real *block_start(const integer &i) const;   // pointer to begining of block
+                                                 // corresponding to levels[i]
+    ////////////////////////////////////////////////////////////////////////////
 
-  integer *levels;             // sequence of levels defining hedge
+    integer dim;   // total length of origin=dim
 
-  real *origin;                // pointer to the begining of hedge's data
+    integer num_of_levels;   // length of levels sequence
+
+    integer *levels;   // sequence of levels defining hedge
+
+    real *origin;   // pointer to the begining of hedge's data
 };
 // end of HedgePer class definition
 
 /************************* Hedge Aperiodic ***********************************/
 
-class HedgeAper{                           
- public:
-  HedgeAper() : num_of_levels(0), levels(0), root(0) { }   
-            // default constructor, all empty
-  
-  HedgeAper(const integer &n, const integer *Levs);   
-            // constructor which sets dim=d, num_of_levels=n and 
-            // levels sequence is set from Levs 
-            // assumption: Levs is defined as sequence of n integers
-            // levels are checked for consistency, if O.K.
-            // root is allocated n empty intervals                 
-  
-  HedgeAper(const HedgeAper &);                   // copy constructor
+class HedgeAper {
+public:
+    HedgeAper() : num_of_levels(0), levels(0), root(0) {}
+    // default constructor, all empty
 
-  ~HedgeAper() { DestroyHedge(); }                // destructor
+    HedgeAper(const integer &n, const integer *Levs);
+    // constructor which sets dim=d, num_of_levels=n and
+    // levels sequence is set from Levs
+    // assumption: Levs is defined as sequence of n integers
+    // levels are checked for consistency, if O.K.
+    // root is allocated n empty intervals
 
-  const HedgeAper &operator=(const HedgeAper &);  // overload =
+    HedgeAper(const HedgeAper &);   // copy constructor
 
-  void DestroyHedge();                            // free all memory
+    ~HedgeAper() {
+        DestroyHedge();
+    }   // destructor
 
-  bool levels_consistent() const;                // checks if levels gives 
-                                                 // rise to a proper hedge
+    const HedgeAper &operator=(const HedgeAper &);   // overload =
 
-  integer maxlevel() const;                      // return maximum of levels
+    void DestroyHedge();   // free all memory
 
-  integer total() const {return num_of_levels;}  // InOut utility
+    bool levels_consistent() const;   // checks if levels gives
+                                      // rise to a proper hedge
 
-  Interval *start() { return root;}                  // InOut utility
-  ////////////////////////////////////////////////////////////////////////////
+    integer maxlevel() const;   // return maximum of levels
 
-  integer num_of_levels;         // length of levels sequence
+    integer total() const {
+        return num_of_levels;
+    }   // InOut utility
 
-  integer *levels;               // sequence of levels defining hedge
+    Interval *start() {
+        return root;
+    }   // InOut utility
+    ////////////////////////////////////////////////////////////////////////////
 
-  Interval *root;                // pointer to the first hedge's interval
+    integer num_of_levels;   // length of levels sequence
+
+    integer *levels;   // sequence of levels defining hedge
+
+    Interval *root;   // pointer to the first hedge's interval
 };
 // end of HedgeAper class definition
 #endif
-
-	  
-
-
-

@@ -52,45 +52,37 @@ RefCount::use_locks(bool inVal)
 
 */
 
-void
-RefCount::error(const char * w) const
-{
-  ExEnv::err() << "RefCount: ERROR: " << w << endl;
-
+void RefCount::error(const char *w) const {
+    ExEnv::err() << "RefCount: ERROR: " << w << endl;
 }
 
-void
-RefCount::too_many_refs() const
-{
-  error("Too many refs.");abort();
+void RefCount::too_many_refs() const {
+    error("Too many refs.");
+    abort();
 }
 
-void
-RefCount::not_enough_refs() const
-{
-  error("Ref count dropped below zero.");abort();
+void RefCount::not_enough_refs() const {
+    error("Ref count dropped below zero.");
+    abort();
 }
 #include "class_sav.h"
-RefCount::~RefCount()
-{
-//#if REF_MANAGE
-  if (managed() && nreference()) {
-      error("Deleting a referenced object.");
-//SavableClass* cr = dynamic_cast<SavableClass*>(this);
-//if (cr) {cout<<"Deleting obj "<<cr->class_name();}
-//cout<<" ~RefCount ref "<<this;
-//cout<<" NumRef "<<(int)nreference();
-//cout<<"\n";cout.flush();
+RefCount::~RefCount() {
+    //#if REF_MANAGE
+    if(managed() && nreference()) {
+        error("Deleting a referenced object.");
+        //SavableClass* cr = dynamic_cast<SavableClass*>(this);
+        //if (cr) {cout<<"Deleting obj "<<cr->class_name();}
+        //cout<<" ~RefCount ref "<<this;
+        //cout<<" NumRef "<<(int)nreference();
+        //cout<<"\n";cout.flush();
     }
-//#endif
+    //#endif
 }
 
 ///////////////////////////////////////////////////////////////////////
 
-void
-RefBase::warn ( const char * msg) const
-{
-  ExEnv::err() << "WARNING: " << msg << endl;
+void RefBase::warn(const char *msg) const {
+    ExEnv::err() << "WARNING: " << msg << endl;
 }
 /*
 void
@@ -105,84 +97,67 @@ RefBase::warn_skip_stack_delete() const
   warn("Ref: skipping delete of object on the stack");
 }
 */
-void
-RefBase::warn_bad_ref_count() const
-{
-  warn("Ref: bad reference count in referenced object\n");
+void RefBase::warn_bad_ref_count() const {
+    warn("Ref: bad reference count in referenced object\n");
 }
-void
-RefBase::ref_info(RefCount*p, ostream& os) const
-{
-  if (p)
-      os << "nreference() = " << p->nreference() << endl;
-  else
-      os << "reference is null" << endl;
+void RefBase::ref_info(RefCount *p, ostream &os) const {
+    if(p)
+        os << "nreference() = " << p->nreference() << endl;
+    else
+        os << "reference is null" << endl;
 }
 
-void
-RefBase::require_nonnull() const
-{
-  if (parentpointer() == 0) {
-      ExEnv::err() << "RefBase: needed a nonnull pointer but got null"
-           << endl;
-      abort();
+void RefBase::require_nonnull() const {
+    if(parentpointer() == 0) {
+        ExEnv::err() << "RefBase: needed a nonnull pointer but got null" << endl;
+        abort();
     }
 }
 
-RefBase::~RefBase()
-{
-}
+RefBase::~RefBase() {}
 
-void
-RefBase::check_pointer() const
-{
-  if (parentpointer() && parentpointer()->nreference() <= 0) {
-      warn_bad_ref_count();
+void RefBase::check_pointer() const {
+    if(parentpointer() && parentpointer()->nreference() <= 0) {
+        warn_bad_ref_count();
     }
 }
 
-void
-RefBase::ref_info(ostream& os) const
-{
-  RefBase::ref_info(parentpointer(),os);
+void RefBase::ref_info(ostream &os) const {
+    RefBase::ref_info(parentpointer(), os);
 }
 
-void
-RefBase::reference(RefCount *p)
-{
-  if (p) {
-//#if REF_CHECK_STACK
-//      if (DO_REF_CHECK_STACK(p)) {
-//          DO_REF_UNMANAGE(p);
-//          warn_ref_to_stack();
-//        }
-//#endif
-      p->reference();
+void RefBase::reference(RefCount *p) {
+    if(p) {
+        //#if REF_CHECK_STACK
+        //      if (DO_REF_CHECK_STACK(p)) {
+        //          DO_REF_UNMANAGE(p);
+        //          warn_ref_to_stack();
+        //        }
+        //#endif
+        p->reference();
     }
 }
 
-int
-RefBase::dereference(RefCount *p)
-{
-  if (p) 
-      return p->dereference();
-  else
-      return -1;
+int RefBase::dereference(RefCount *p) {
+    if(p)
+        return p->dereference();
+    else
+        return -1;
 }
 
-int 
-RefBase::managed(RefCount *p)
-{
-  if (p) 
-      return p->managed();
-  else
-      return -1;
+int RefBase::managed(RefCount *p) {
+    if(p)
+        return p->managed();
+    else
+        return -1;
 }
-void 
-RefBase::unmanage(RefCount *p){ if (p) p->unmanage();}
+void RefBase::unmanage(RefCount *p) {
+    if(p)
+        p->unmanage();
+}
 
-SavableClass* RefBase::GetSavableBase(RefCount *set) {
-    return dynamic_cast<SavableClass*>(set);
+SavableClass *RefBase::GetSavableBase(RefCount *set) {
+    return dynamic_cast<SavableClass *>(set);
 }
 
 //#include "class_sav.h"
@@ -210,7 +185,7 @@ SavableClass* RefBase::GetSavableBase(RefCount *set) {
 //    T* cr = NULL;
 //	if (set!=NULL) {
 //		cr = dynamic_cast<T*>(set);
-//      	if (!cr) 
+//      	if (!cr)
 //            throw info_except("In SavableClass* GetSavableBase(void *set=NULL) :  dynamic_cast<T*>(a)==NULL\n");
 //        assign_pointer(cr);
 //	}

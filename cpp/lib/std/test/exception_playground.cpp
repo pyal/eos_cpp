@@ -1,6 +1,6 @@
-#include <execinfo.h>	// for backtrace
-#include <dlfcn.h>		// for dladdr
-#include <cxxabi.h>		// for __cxa_demangle
+#include <execinfo.h>   // for backtrace
+#include <dlfcn.h>      // for dladdr
+#include <cxxabi.h>     // for __cxa_demangle
 
 #include <cstdio>
 #include <cstdlib>
@@ -14,7 +14,7 @@
 //#include "extra_test.cpp"
 
 
-UnitTest PlayGround("PlayGround", [](){
+UnitTest PlayGround("PlayGround", []() {
     log_always(string("Generating backtrace:\n") + info_except.what());
     log_always("Done");
 

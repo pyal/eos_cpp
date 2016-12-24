@@ -9,14 +9,14 @@ string ToLower(const char *str) {
     string ret(str);
     std::transform(ret.begin(), ret.end(), ret.begin(), ::tolower);
     return ret;
-
 }
-void UnitTest::DoAll(const char * test_name) {
+void UnitTest::DoAll(const char *test_name) {
     UnitTest *test = First;
     Time_struct Time;
     int n = 0;
     while(test) {
-        if(!test_name || ToLower(test->Test.Name.c_str()).find(ToLower(test_name)) != string::npos) {
+        if(!test_name ||
+           ToLower(test->Test.Name.c_str()).find(ToLower(test_name)) != string::npos) {
             test->Run();
             n++;
         }
@@ -30,4 +30,3 @@ void UnitTest::Run() {
     Test.F();
     std::cout << "Test complete " << GetName() << " in " << time << "\n";
 }
-

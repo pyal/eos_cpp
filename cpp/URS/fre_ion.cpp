@@ -3,22 +3,62 @@
 #include "fre_ion.h"
 
 
-static ClassDesc ClcIonisation_FreeEIonSimple_ClassDesc(typeid(ClcIonisation::FreeEIonSimple), "ClcIonisation::FreeEIonSimple", 1, "MatterFreeE_category", create<ClcIonisation::FreeEIonSimple>);
+static ClassDesc ClcIonisation_FreeEIonSimple_ClassDesc(
+    typeid(ClcIonisation::FreeEIonSimple),
+    "ClcIonisation::FreeEIonSimple",
+    1,
+    "MatterFreeE_category",
+    create<ClcIonisation::FreeEIonSimple>);
 
-static ClassDesc ClcIonisation_FreeEIonGrig_ClassDesc(typeid(ClcIonisation::FreeEIonGrig), "ClcIonisation::FreeEIonGrig", 1, "MatterFreeE_category", create<ClcIonisation::FreeEIonGrig>);
+static ClassDesc ClcIonisation_FreeEIonGrig_ClassDesc(
+    typeid(ClcIonisation::FreeEIonGrig),
+    "ClcIonisation::FreeEIonGrig",
+    1,
+    "MatterFreeE_category",
+    create<ClcIonisation::FreeEIonGrig>);
 
-static ClassDesc ClcIonisation_OneVarRosLowering_ClassDesc(typeid(ClcIonisation::OneVarRosLowering), "ClcIonisation::OneVarRosLowering", 1, "OneVarFunction_category", create<ClcIonisation::OneVarRosLowering>);
+static ClassDesc ClcIonisation_OneVarRosLowering_ClassDesc(
+    typeid(ClcIonisation::OneVarRosLowering),
+    "ClcIonisation::OneVarRosLowering",
+    1,
+    "OneVarFunction_category",
+    create<ClcIonisation::OneVarRosLowering>);
 
-static ClassDesc ClcIonisation_FreeEIonLowVolDepend_ClassDesc(typeid(ClcIonisation::FreeEIonLowVolDepend), "ClcIonisation::FreeEIonLowVolDepend", 1, "MatterFreeE_category", create<ClcIonisation::FreeEIonLowVolDepend>);
+static ClassDesc ClcIonisation_FreeEIonLowVolDepend_ClassDesc(
+    typeid(ClcIonisation::FreeEIonLowVolDepend),
+    "ClcIonisation::FreeEIonLowVolDepend",
+    1,
+    "MatterFreeE_category",
+    create<ClcIonisation::FreeEIonLowVolDepend>);
 
-static ClassDesc ClcIonisation_FreeEIonDeby_ClassDesc(typeid(ClcIonisation::FreeEIonDeby), "ClcIonisation::FreeEIonDeby", 1, "MatterFreeE_category", create<ClcIonisation::FreeEIonDeby>);
+static ClassDesc ClcIonisation_FreeEIonDeby_ClassDesc(
+    typeid(ClcIonisation::FreeEIonDeby),
+    "ClcIonisation::FreeEIonDeby",
+    1,
+    "MatterFreeE_category",
+    create<ClcIonisation::FreeEIonDeby>);
 
-static ClassDesc ClcIonisation_FreeEIonDebyHuckel_ClassDesc(typeid(ClcIonisation::FreeEIonDebyHuckel), "ClcIonisation::FreeEIonDebyHuckel", 1, "MatterFreeE_category", create<ClcIonisation::FreeEIonDebyHuckel>);
+static ClassDesc ClcIonisation_FreeEIonDebyHuckel_ClassDesc(
+    typeid(ClcIonisation::FreeEIonDebyHuckel),
+    "ClcIonisation::FreeEIonDebyHuckel",
+    1,
+    "MatterFreeE_category",
+    create<ClcIonisation::FreeEIonDebyHuckel>);
 
-static ClassDesc ClcIonisation_FreeEIonDebyAnisimov_ClassDesc(typeid(ClcIonisation::FreeEIonDebyAnisimov), "ClcIonisation::FreeEIonDebyAnisimov", 1, "MatterFreeE_category", create<ClcIonisation::FreeEIonDebyAnisimov>);
+static ClassDesc ClcIonisation_FreeEIonDebyAnisimov_ClassDesc(
+    typeid(ClcIonisation::FreeEIonDebyAnisimov),
+    "ClcIonisation::FreeEIonDebyAnisimov",
+    1,
+    "MatterFreeE_category",
+    create<ClcIonisation::FreeEIonDebyAnisimov>);
 
 
-static ClassDesc ClcIonisation_AnisimovLoweringCurve_ClassDesc(typeid(ClcIonisation::AnisimovLoweringCurve), "ClcIonisation::AnisimovLoweringCurve", 1, "NamedOneVarFunction_category", create<ClcIonisation::AnisimovLoweringCurve>);
+static ClassDesc ClcIonisation_AnisimovLoweringCurve_ClassDesc(
+    typeid(ClcIonisation::AnisimovLoweringCurve),
+    "ClcIonisation::AnisimovLoweringCurve",
+    1,
+    "NamedOneVarFunction_category",
+    create<ClcIonisation::AnisimovLoweringCurve>);
 
 namespace ClcIonisation {
 
@@ -28,8 +68,7 @@ namespace ClcIonisation {
     //map<Stroka, Ref<FreeEIonDebyHuckel::LoweringFunc> > FreeEIonDebyHuckel::CorrectFuncs;
 
 
-
-}; //ClcIonisation
+};   //ClcIonisation
 
 
 //static ClassDesc FreeEIonAdd_ClassDesc(typeid(FreeEIonAdd),"FreeEIonAdd",1,"MatterFreeE_category",create<FreeEIonAdd>);

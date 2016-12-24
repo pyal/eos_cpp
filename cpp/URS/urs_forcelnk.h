@@ -28,7 +28,6 @@ extern ForceLinkVoid<PolynomFunc> Dummy_PolynomFunc;
 extern ForceLinkVoid<NoiseWavelet> Dummy_NoiseWavelet;
 
 
-
 // ManyVarFunction
 extern ForceLinkVoid<Spl2DGenerator> Dummy_Spl2DGenerator;
 extern ForceLinkVoid<NoiseRemoval> Dummy_NoiseRemoval;
@@ -47,7 +46,6 @@ extern ForceLinkVoid<CurveSpline> Dummy_CurveSpline;
 extern ForceLinkVoid<ExtendedRegridSpline> Dummy_ExtendedRegridSpline;
 
 
-
 #include "mat/spline/spl_inc.h"
 extern ForceLinkVoid<TExpConverter> Dummy_TExpConverter;
 extern ForceLinkVoid<TAutoExpConverter> Dummy_TAutoExpConverter;
@@ -57,7 +55,6 @@ extern ForceLinkVoid<TSpline2DCalculator> Dummy_TSpline2DCalculator;
 extern ForceLinkVoid<TSpline2DGenerator> Dummy_TSpline2DGenerator;
 extern ForceLinkVoid<TSpline1DCalculator> Dummy_TSpline1DCalculator;
 extern ForceLinkVoid<TSpline1DGenerator> Dummy_TSpline1DGenerator;
-
 
 
 // MatterFreeE_category
@@ -72,7 +69,6 @@ extern ForceLinkVoid<FreeERossH2_DisLim0> Dummy_FreeERossH2_DisLim0;
 extern ForceLinkVoid<FreeERossH2_Minim> Dummy_FreeERossH2_Minim;
 extern ForceLinkVoid<FreeERossXe> Dummy_FreeERossXe;
 extern ForceLinkVoid<FreeERossBin> Dummy_FreeERossBin;
-
 
 
 #include "fre_url.h"
@@ -137,13 +133,17 @@ extern ForceLinkVoid<ClcMixture::FreeEMixture> Dummy_FreeEMixture;
 //extern ForceLinkVoid<RosLowering> Dummy_RosLowering;
 extern ForceLinkVoid<ClcIonisation::FreeEIonSimple> Dummy_ClcIonisation_FreeEIonSimple;
 extern ForceLinkVoid<ClcIonisation::FreeEIonGrig> Dummy_ClcIonisation_FreeEIonGrig;
-extern ForceLinkVoid<ClcIonisation::OneVarRosLowering> Dummy_ClcIonisation_OneVarRosLowering;
-extern ForceLinkVoid<ClcIonisation::FreeEIonLowVolDepend> Dummy_ClcIonisation_FreeEIonLowVolDepend;
+extern ForceLinkVoid<ClcIonisation::OneVarRosLowering>
+    Dummy_ClcIonisation_OneVarRosLowering;
+extern ForceLinkVoid<ClcIonisation::FreeEIonLowVolDepend>
+    Dummy_ClcIonisation_FreeEIonLowVolDepend;
 extern ForceLinkVoid<ClcIonisation::FreeEIonDeby> Dummy_ClcIonisation_FreeEIonDeby;
-extern ForceLinkVoid<ClcIonisation::FreeEIonDebyHuckel> Dummy_ClcIonisation_FreeEIonDebyHuckel;
-extern ForceLinkVoid<ClcIonisation::FreeEIonDebyAnisimov> Dummy_ClcIonisation_FreeEIonDebyAnisimov;
-extern ForceLinkVoid<ClcIonisation::AnisimovLoweringCurve> Dummy_ClcIonisation_AnisimovLoweringCurve;
-
+extern ForceLinkVoid<ClcIonisation::FreeEIonDebyHuckel>
+    Dummy_ClcIonisation_FreeEIonDebyHuckel;
+extern ForceLinkVoid<ClcIonisation::FreeEIonDebyAnisimov>
+    Dummy_ClcIonisation_FreeEIonDebyAnisimov;
+extern ForceLinkVoid<ClcIonisation::AnisimovLoweringCurve>
+    Dummy_ClcIonisation_AnisimovLoweringCurve;
 
 
 //#include "fre_anis_deby.h"
@@ -152,12 +152,10 @@ extern ForceLinkVoid<ClcIonisation::AnisimovLoweringCurve> Dummy_ClcIonisation_A
 //#include "clc_anis_deby.h"
 
 
-
 // MatterBnd_category
 #include "matt_2phase.h"
 extern ForceLinkVoid<MatterStable::TwoPhaseBoundary> Dummy_TwoPhaseBoundary;
 extern ForceLinkVoid<MatterLiqSol::LiquidSolidBnd> Dummy_LiquidSolidBnd;
-
 
 
 // Matter_category
@@ -200,7 +198,7 @@ extern ForceLinkVoid<Matter2StateProb> Dummy_Matter2StateProb;
 extern ForceLinkVoid<MatterStable> Dummy_MatterStable;
 extern ForceLinkVoid<MatterLiqSol> Dummy_MatterLiqSol;
 extern ForceLinkVoid<MatterBinodalSpinodal> Dummy_MatterBinodalSpinodal;
-//#ifdef InternalPointsUrs 
+//#ifdef InternalPointsUrs
 //#endif
 extern ForceLinkVoid<FreeELiqSol> Dummy_FreeELiqSol;
 
@@ -240,7 +238,3 @@ extern ForceLinkVoid<FreeEElectronStrict> Dummy_FreeEElectronStrict;
 //#include "urs/test/urs_2phase.h"
 //extern ForceLinkVoid<UrsCurve_PT_Bnd_Constructor> Dummy_UrsCurve_PT_Bnd_Constructor;
 //extern ForceLinkVoid<UrsCurve_PT_Bnd_Binary> Dummy_UrsCurve_PT_Bnd_Binary;
-
-
-
-

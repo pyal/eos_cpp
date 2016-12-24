@@ -10,60 +10,78 @@
 //  SetRndDistrib(GausDistrib,-4*GausDistribSigma,4*GausDistribSigma,100,1e-5,Distrib);
 // }
 
-void MC_StepOld(VecCl &ph,double Phi0,int N,double MainHarm,int FurieDiscr,
-             double FullTime,double StrongShort)
- {
-  double gZero=0,gSigma=1;RndGaus gaus(gZero,gSigma);
-  gaus.Init(-4*gSigma,4*gSigma,100,1e-5);
-  int NumJ=FurieDiscr;
-  VecCl Phi_cos(NumJ),Phi_sin(NumJ);
-  for (int k=1;k<=NumJ;k++) 
-   {Phi_cos[k]=gaus.Rnd();Phi_sin[k]=gaus.Rnd();}
-  double StrongCoef=StrongShort*sqr(2*M_PI/FullTime);
-  MainHarm*=2/FullTime;
-  Phi_cos=Phi_cos*MainHarm;Phi_sin=Phi_sin*MainHarm;
-  for (int k=1;k<=N;k++) 
-   {
-    ph[k]=Phi0;
-    for (int j=1;j<=NumJ;j++) 
-      ph[k]+=(Phi_cos[j]*cos(M_PI*k*(j-1)/N)+Phi_sin[j]*sin(M_PI*k*(j-1)/N))/(sqrt(max<double>(j-1,0.25))*(1+sqr(j)*StrongCoef));
-   }
+void MC_StepOld(
+    VecCl &ph,
+    double Phi0,
+    int N,
+    double MainHarm,
+    int FurieDiscr,
+    double FullTime,
+    double StrongShort) {
+    double gZero = 0, gSigma = 1;
+    RndGaus gaus(gZero, gSigma);
+    gaus.Init(-4 * gSigma, 4 * gSigma, 100, 1e-5);
+    int NumJ = FurieDiscr;
+    VecCl Phi_cos(NumJ), Phi_sin(NumJ);
+    for(int k = 1; k <= NumJ; k++) {
+        Phi_cos[k] = gaus.Rnd();
+        Phi_sin[k] = gaus.Rnd();
+    }
+    double StrongCoef = StrongShort * sqr(2 * M_PI / FullTime);
+    MainHarm *= 2 / FullTime;
+    Phi_cos = Phi_cos * MainHarm;
+    Phi_sin = Phi_sin * MainHarm;
+    for(int k = 1; k <= N; k++) {
+        ph[k] = Phi0;
+        for(int j = 1; j <= NumJ; j++)
+            ph[k] += (Phi_cos[j] * cos(M_PI * k * (j - 1) / N) +
+                      Phi_sin[j] * sin(M_PI * k * (j - 1) / N)) /
+                     (sqrt(max<double>(j - 1, 0.25)) * (1 + sqr(j) * StrongCoef));
+    }
+};
 
- };
-    
-void MC_Step(VecCl &ph,double Phi0,int N,double MainHarm,int FurieDiscr,
-             double FullTime,double StrongShort)
- {
-  double gZero=0,gSigma=1;RndGaus gaus(gZero,gSigma);
-  gaus.Init(-4*gSigma,4*gSigma,100,1e-5);
+void MC_Step(
+    VecCl &ph,
+    double Phi0,
+    int N,
+    double MainHarm,
+    int FurieDiscr,
+    double FullTime,
+    double StrongShort) {
+    double gZero = 0, gSigma = 1;
+    RndGaus gaus(gZero, gSigma);
+    gaus.Init(-4 * gSigma, 4 * gSigma, 100, 1e-5);
 
-  int NumJ=FurieDiscr,j,k;
-  VecCl Phi_cos(NumJ),Phi_sin(NumJ);
-  for ( k=1;k<=NumJ;k++) 
-   {Phi_cos[k]=gaus.Rnd();Phi_sin[k]=gaus.Rnd();}
-  double StrongCoef=StrongShort*sqr(2*M_PI/FullTime);
-  MainHarm*=2/FullTime;
-  Phi_cos=Phi_cos*MainHarm;Phi_sin=Phi_sin*MainHarm;
+    int NumJ = FurieDiscr, j, k;
+    VecCl Phi_cos(NumJ), Phi_sin(NumJ);
+    for(k = 1; k <= NumJ; k++) {
+        Phi_cos[k] = gaus.Rnd();
+        Phi_sin[k] = gaus.Rnd();
+    }
+    double StrongCoef = StrongShort * sqr(2 * M_PI / FullTime);
+    MainHarm *= 2 / FullTime;
+    Phi_cos = Phi_cos * MainHarm;
+    Phi_sin = Phi_sin * MainHarm;
 
-  VecCl CosIJ(N),SinIJ(N);
-  double coef=M_PI/N;
-  for (k=1;k<=N;k++) 
-     {CosIJ[k]=cos(coef*(k-1));SinIJ[k]=sin(coef*(k-1));}
-  for (k=1;k<=N;k++) 
-   {
-    ph[k]=Phi0;
-    for ( j=1;j<=NumJ;j++) 
-     {
-      int r=k*(j-1)/N;
-      double SCCoef=1;if ((r/2)*2!=r) SCCoef=-1;
-      r=k*(j-1)-r*N+1;//if (r==0) r=N;
-      ph[k]+=(SCCoef*Phi_cos[j]*CosIJ[r]+SCCoef*Phi_sin[j]*SinIJ[r])/
-                                         sqrt(max<double>(j-1,0.25)*(1+sqr(j)*StrongCoef));
-     }
-   }
- };
-
-
+    VecCl CosIJ(N), SinIJ(N);
+    double coef = M_PI / N;
+    for(k = 1; k <= N; k++) {
+        CosIJ[k] = cos(coef * (k - 1));
+        SinIJ[k] = sin(coef * (k - 1));
+    }
+    for(k = 1; k <= N; k++) {
+        ph[k] = Phi0;
+        for(j = 1; j <= NumJ; j++) {
+            int r = k * (j - 1) / N;
+            double SCCoef = 1;
+            if((r / 2) * 2 != r)
+                SCCoef = -1;
+            r = k * (j - 1) - r * N + 1;   //if (r==0) r=N;
+            ph[k] += (SCCoef * Phi_cos[j] * CosIJ[r] + SCCoef * Phi_sin[j] * SinIJ[r]) /
+                     sqrt(max<double>(j - 1, 0.25) * (1 + sqr(j) * StrongCoef));
+        }
+    }
+};
 
 
 //
@@ -81,7 +99,7 @@ void MC_Step(VecCl &ph,double Phi0,int N,double MainHarm,int FurieDiscr,
 //
 //  int NumJ=FurieDiscr,j,k;
 //  VecCl Phi_cos(NumJ),Phi_sin(NumJ);
-//  for ( k=1;k<=NumJ;k++) 
+//  for ( k=1;k<=NumJ;k++)
 //   {Phi_cos[k]=gaus.Rnd();Phi_sin[k]=gaus.Rnd();}
 //  double StrongCoef=StrongShort*sqr(2*M_PI/FullTime);
 //  MainHarm*=2/FullTime;
@@ -89,12 +107,12 @@ void MC_Step(VecCl &ph,double Phi0,int N,double MainHarm,int FurieDiscr,
 //
 //  VecCl CosIJ(N),SinIJ(N);
 //  double coef=M_PI/N;
-//  for (k=1;k<=N;k++) 
+//  for (k=1;k<=N;k++)
 //     {CosIJ[k]=cos(coef*(k-1));SinIJ[k]=sin(coef*(k-1));}
-//  for (k=1;k<=N;k++) 
+//  for (k=1;k<=N;k++)
 //   {
 //    ph[k]=Phi0;
-//    for ( j=1;j<=NumJ;j++) 
+//    for ( j=1;j<=NumJ;j++)
 //     {
 //      int r=k*(j-1)/N;
 //      double SCCoef=1;if ((r/2)*2!=r) SCCoef=-1;
@@ -107,24 +125,6 @@ void MC_Step(VecCl &ph,double Phi0,int N,double MainHarm,int FurieDiscr,
 //
 // };
 //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*

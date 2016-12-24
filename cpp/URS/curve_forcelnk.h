@@ -26,8 +26,6 @@ extern ForceLinkVoid<UrsCurve_OneVarFunction> Dummy_UrsCurve_OneVarFunction;
 extern ForceLinkVoid<UrsCurve_NamedOneVarFunction> Dummy_UrsCurve_NamedOneVarFunction;
 
 
-
-
 #include "urs/test/urs_curve_calculator.h"
 extern ForceLinkVoid<UrsCurve_Calculator> Dummy_UrsCurve_Calculator;
 
@@ -49,7 +47,3 @@ extern ForceLinkVoid<UrsCurve_PT_UnstBnd_Clc> Dummy_UrsCurve_PT_UnstBnd_Clc;
 extern ForceLinkVoid<UrsCurve_PT_UnstBnd_Binary> Dummy_UrsCurve_PT_UnstBnd_Binary;
 
 extern ForceLinkVoid<UrsCurve_PT_clc> Dummy_UrsCurve_PT_clc;
-
-
-
-

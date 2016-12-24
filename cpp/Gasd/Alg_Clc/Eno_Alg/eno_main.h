@@ -8,63 +8,84 @@
 #include "Gasd/Topology/grid_operator.h"
 
 
+struct DivOper : OperatorOneD {
+    enum { ClcSpline, ClcDeriv, ClcFlux } OperationType;
 
-struct DivOper:OperatorOneD
- {
-  enum { ClcSpline,ClcDeriv,ClcFlux } OperationType;
-
-  GridVectorField<double> Dif;
-  GridField<int> StartLev;
-  GridField<double> Pos;
-  int FixedStp;
-  int Oper;
-  int MinGlobal;
+    GridVectorField<double> Dif;
+    GridField<int> StartLev;
+    GridField<double> Pos;
+    int FixedStp;
+    int Oper;
+    int MinGlobal;
 
 
-  DivOper():Pos(NULL,NULL,1),StartLev(NULL,NULL,1),Dif(0,NULL,NULL,1),MinGlobal(0){};
-  virtual void Set(OperatorMask *shift,int ax,int lev,int min_glob=0) 
-   {OperatorOneD::Set(shift,ax,lev);Dif.SetDim(Level+1);Oper=ClcSpline;MinGlobal=min_glob;
-    if (Level>=Shift->MaxShift) {fcout<<" DivOper, MaxShift>Level - condition violated.\n";fcout.flush();abort();}
-    shift->Grid->AddVar(&Dif);shift->Grid->AddVar(&StartLev);shift->Grid->AddVar(&Pos); };
+    DivOper()
+        : Pos(NULL, NULL, 1),
+          StartLev(NULL, NULL, 1),
+          Dif(0, NULL, NULL, 1),
+          MinGlobal(0){};
+    virtual void Set(OperatorMask *shift, int ax, int lev, int min_glob = 0) {
+        OperatorOneD::Set(shift, ax, lev);
+        Dif.SetDim(Level + 1);
+        Oper = ClcSpline;
+        MinGlobal = min_glob;
+        if(Level >= Shift->MaxShift) {
+            fcout << " DivOper, MaxShift>Level - condition violated.\n";
+            fcout.flush();
+            abort();
+        }
+        shift->Grid->AddVar(&Dif);
+        shift->Grid->AddVar(&StartLev);
+        shift->Grid->AddVar(&Pos);
+    };
 
-// u_func==NULL - initPos else InitDeriv (pos already stored)
-  virtual void Init(GridVectorField<double> *pos,GridField<double> *u_func=NULL)
-   {
-//     {fcout<<" DivOper::Init u_func - zero. BAD.\n";fcout.flush();abort();}
-//    GridField<double> *cel=NULL;
-//    if (pos!=NULL) cel=pos->GetX(Axis);
-    if (u_func==NULL) InitPos(pos);
-    else ClcDerivative(u_func);
-   };
-  virtual void SetAction(OperatorOneD &oper){Oper=((DivOper*)(&oper))->Oper;};
-  inline int SetOperation(int oper=-1){if (oper!=-1) Oper=oper;return Oper;}
+    // u_func==NULL - initPos else InitDeriv (pos already stored)
+    virtual void Init(GridVectorField<double> *pos, GridField<double> *u_func = NULL) {
+        //     {fcout<<" DivOper::Init u_func - zero. BAD.\n";fcout.flush();abort();}
+        //    GridField<double> *cel=NULL;
+        //    if (pos!=NULL) cel=pos->GetX(Axis);
+        if(u_func == NULL)
+            InitPos(pos);
+        else
+            ClcDerivative(u_func);
+    };
+    virtual void SetAction(OperatorOneD &oper) {
+        Oper = ((DivOper *)(&oper))->Oper;
+    };
+    inline int SetOperation(int oper = -1) {
+        if(oper != -1)
+            Oper = oper;
+        return Oper;
+    }
 
-  virtual void Operate(GridMask &ClcMask,GridField<double> &dat,GridField<double> &res)
-   {
-    switch(Oper)
-     {
-      case ClcSpline:  ClcPolynom(ClcMask,dat,res);break;
-      default:fcout<<" Unknown operation in DivOper::Operate.\n";fcout.flush();abort();
-     }
-   };
+    virtual void Operate(
+        GridMask &ClcMask,
+        GridField<double> &dat,
+        GridField<double> &res) {
+        switch(Oper) {
+        case ClcSpline:
+            ClcPolynom(ClcMask, dat, res);
+            break;
+        default:
+            fcout << " Unknown operation in DivOper::Operate.\n";
+            fcout.flush();
+            abort();
+        }
+    };
 
 
-
-
-
-  void InitPos(GridVectorField<double> *pos)
-   {
-    if (pos==NULL) FixedStp=1;
-    else
-     {
-      GridField<double> *cel=pos->GetX(Axis);
-      int Zero=Shift->MaxShift;
-      GridMask &m=Shift->Shift[Axis][Zero],&m_min=Shift->Shift[Axis][Zero-1];
-      Pos(m)=( (*cel)(m)+(*cel)(m_min) )*0.5;
-      FixedStp=0;
-     }
-   }
-/*
+    void InitPos(GridVectorField<double> *pos) {
+        if(pos == NULL)
+            FixedStp = 1;
+        else {
+            GridField<double> *cel = pos->GetX(Axis);
+            int Zero = Shift->MaxShift;
+            GridMask &m = Shift->Shift[Axis][Zero], &m_min = Shift->Shift[Axis][Zero - 1];
+            Pos(m) = ((*cel)(m) + (*cel)(m_min)) * 0.5;
+            FixedStp = 0;
+        }
+    }
+    /*
   void FindMin()
    {
     int N=Shift->WorkMask.SetDim(), Zero=Shift->MaxShift,k;
@@ -87,241 +108,269 @@ struct DivOper:OperatorOneD
      }
    };
 */
-  void FindMin()
-   {
-    int N=Shift->WorkMask.SetDim(), Zero=Shift->MaxShift,k,pos;
-    GridMaskVector &mv=Shift->Shift[Axis];
-    for (k=0;k<N;k++) 
-     {
-//fcout<<" k "<<k<<" one_est ";
-      int lev=-1;
-      GridIndex i;
-      double min,tmp;
-      if ((i=mv[Zero-Level][k])>=0) 
-       {
-        if (MinGlobal)
-         {
-          i=mv[Zero][k];
-          lev=0;min=fabs(Dif.GetX(Level-1)->GetPnt(i));
-          for (pos=1;pos<Level;pos++) 
-           if ( (tmp=fabs(Dif.GetX(Level-1)->GetPnt(mv[Zero-pos][k])))<min ) {min=tmp;lev=pos;}
-         }
+    void FindMin() {
+        int N = Shift->WorkMask.SetDim(), Zero = Shift->MaxShift, k, pos;
+        GridMaskVector &mv = Shift->Shift[Axis];
+        for(k = 0; k < N; k++) {
+            //fcout<<" k "<<k<<" one_est ";
+            int lev = -1;
+            GridIndex i;
+            double min, tmp;
+            if((i = mv[Zero - Level][k]) >= 0) {
+                if(MinGlobal) {
+                    i = mv[Zero][k];
+                    lev = 0;
+                    min = fabs(Dif.GetX(Level - 1)->GetPnt(i));
+                    for(pos = 1; pos < Level; pos++)
+                        if((tmp = fabs(Dif.GetX(Level - 1)->GetPnt(mv[Zero - pos][k]))) <
+                           min) {
+                            min = tmp;
+                            lev = pos;
+                        }
+                } else {
+                    //fcout<<lev;
+                    //for (pos=0;pos<Level;pos++) fcout<<fabs(Dif.GetX(Level)->GetPnt(mv[Zero-pos][k]));
+                    lev = 0;
+                    for(pos = 1; pos < Level; pos++)
+                        if(fabs(Dif.GetX(pos)->GetPnt(mv[Zero - lev - 1][k])) <
+                           fabs(Dif.GetX(pos)->GetPnt(mv[Zero - lev][k])))
+                            lev++;
+                    //fcout<<"\n k "<<k<<" second_est "<<lev;
+                    //for (pos=0;pos<Level;pos++) fcout<<fabs(Dif.GetX(pos)->GetPnt(mv[Zero-lev][k]));
+                }
+            }
+            //fcout<<"\n";
+            StartLev.GetPnt(mv[Zero][k]) = lev;
+            //      StartLev.GetPnt(mv[Zero][k])=0;
+            //fcout<<" Lev "<<lev<<" 0 "<<Dif.GetX(Level)->GetPnt(mv[Zero][k])<<Dif.GetX(Level)->GetPnt(mv[Zero-1][k])<<"\n";
+        }
+    };
+
+    void ClcDerivative(GridField<double> *get)   //,GridField<double> *cell_center)
+    {
+        int Zero = Shift->MaxShift, or ;
+        GridMask &m = Shift->Shift[Axis][Zero],
+                 &m_pls =
+                     Shift->Shift[Axis][Zero + 1];   //,&m_min=Shift->Shift[Axis][Zero-1]
+        GridMaskVector &mv = Shift->Shift[Axis];
+
+        (*Dif.GetX(0))(m) = (*get)(m);
+        if(!FixedStp)
+            for(or = 1; or <= Level; or ++)
+                (*Dif.GetX(or))(m) = ((*Dif.GetX(or -1))(m_pls) - (*Dif.GetX(or -1))(m)) /
+                                     (Pos(mv[or + 1 + Zero]) - Pos(m));
         else
-         {
-//fcout<<lev;
-//for (pos=0;pos<Level;pos++) fcout<<fabs(Dif.GetX(Level)->GetPnt(mv[Zero-pos][k]));
-          lev=0;
-          for (pos=1;pos<Level;pos++) 
-           if ( fabs(Dif.GetX(pos)->GetPnt(mv[Zero-lev-1][k]))<
-                fabs(Dif.GetX(pos)->GetPnt(mv[Zero-lev][k]))) lev++;
-//fcout<<"\n k "<<k<<" second_est "<<lev;
-//for (pos=0;pos<Level;pos++) fcout<<fabs(Dif.GetX(pos)->GetPnt(mv[Zero-lev][k]));
-         }
+            for(or = 1; or <= Level; or ++)
+                (*Dif.GetX(or))(m) =
+                    ((*Dif.GetX(or -1))(m_pls) - (*Dif.GetX(or -1))(m)) / (or +1);
 
-       }
-//fcout<<"\n";
-      StartLev.GetPnt(mv[Zero][k])=lev;
-//      StartLev.GetPnt(mv[Zero][k])=0;
-//fcout<<" Lev "<<lev<<" 0 "<<Dif.GetX(Level)->GetPnt(mv[Zero][k])<<Dif.GetX(Level)->GetPnt(mv[Zero-1][k])<<"\n";
-     }
-   };
+        //fcout<<" Start=========================================\n";
+        //for (or=0;or<=Level;or++)
+        //fcout<<Dif.GetX(or)->data<<"\n";
+        //fcout<<" End=========================================\n";
 
-  void ClcDerivative(GridField<double> *get)//,GridField<double> *cell_center)
-   { 
-    int Zero=Shift->MaxShift,or;
-    GridMask &m=Shift->Shift[Axis][Zero],&m_pls=Shift->Shift[Axis][Zero+1];//,&m_min=Shift->Shift[Axis][Zero-1]
-    GridMaskVector &mv=Shift->Shift[Axis];
+        FindMin();
+    }
+    void ClcPolynom(GridMask &ClcMask, GridField<double> &dat, GridField<double> &res) {
+        int Zero = Shift->MaxShift, k, L = Level, N = ClcMask.SetDim(), k0;
+        DataVector<int> StdK = Shift->CvtFrom(ClcMask);
+        GridMaskVector &mv = Shift->Shift[Axis];
+        for(k = 0; k < N; k++) {
+            k0 = StdK[k];
+            if((mv[Zero - L][k0] < 0) || (mv[Zero + L][k0] < 0))
+                continue;
+            double sum = 0;
+            int r = StartLev.GetPnt(mv[Zero][k0]);
+            GridIndex i = ClcMask[k];
+            for(int j = 1; j <= L + 1; j++) {
+                double s = 0;
+                for(int mi = 0; mi < j; mi++) {
+                    double mul = 1;
+                    for(int l = 0; l < j; l++) {
+                        if(l == mi)
+                            continue;
+                        double x = dat.GetPnt(i);
+                        if(FixedStp)
+                            mul *= (x - (-r + l - 0.5));   //x-(i0-r+l-0.5)
+                        else
+                            mul *= (x - Pos.GetPnt(mv[Zero - r + l][k0]));
+                    }
+                    s += mul;
+                }
 
-    (*Dif.GetX(0))(m)=(*get)(m);
-    if (!FixedStp)
-        for (or=1;or<=Level;or++) 
-          (*Dif.GetX(or))(m)=( (*Dif.GetX(or-1))(m_pls)-(*Dif.GetX(or-1))(m) )
-                                                /( Pos(mv[or+1+Zero])-Pos(m) );
-      else
-        for (or=1;or<=Level;or++) 
-         (*Dif.GetX(or))(m)=((*Dif.GetX(or-1))(m_pls)-(*Dif.GetX(or-1))(m))/(or+1);
+                s *= Dif.GetX(j - 1)->GetPnt(mv[Zero - r][k0]);
+                sum += s;
+            }
+            res.GetPnt(i) = sum;
+        }
+    };
+};
 
-//fcout<<" Start=========================================\n";
-//for (or=0;or<=Level;or++)
-//fcout<<Dif.GetX(or)->data<<"\n";
-//fcout<<" End=========================================\n";
+struct FluxOper : OperatorOneD {
+    Ref<DivOper> Div;
+    DataArray<double> BoundRCoef, BoundLCoef;
+    int AutoInitDiv;
+    FluxOper() : Div(NULL){};
 
-    FindMin();
-   }
-  void ClcPolynom(GridMask &ClcMask,GridField<double> &dat,GridField<double> &res)
-   {
-    int Zero=Shift->MaxShift,k,L=Level,N=ClcMask.SetDim(),k0;
-    DataVector<int> StdK=Shift->CvtFrom(ClcMask);
-    GridMaskVector &mv=Shift->Shift[Axis];
-    for (k=0;k<N;k++)
-     {
-      k0=StdK[k];
-      if ( (mv[Zero-L][k0]<0) || (mv[Zero+L][k0]<0) ) continue;
-      double sum=0;
-      int r=StartLev.GetPnt(mv[Zero][k0]);
-      GridIndex i=ClcMask[k];
-      for (int j=1;j<=L+1;j++) 
-       {
-        double s=0;
-        for (int mi=0;mi<j;mi++) 
-         {
-          double mul=1;
-          for (int l=0;l<j;l++) 
-           {
-            if (l==mi) continue;
-            double x=dat.GetPnt(i);
-            if (FixedStp) mul*=(x-(-r+l-0.5));//x-(i0-r+l-0.5)
-            else mul*=(x-Pos.GetPnt(mv[Zero-r+l][k0]));
-           }
-          s+=mul;
-         }
-
-        s*=Dif.GetX(j-1)->GetPnt(mv[Zero-r][k0]);
-        sum+=s;
-       }
-      res.GetPnt(i)=sum;
-     }
-   };
- };
-
-struct FluxOper: OperatorOneD
- {
-  Ref<DivOper> Div;
-  DataArray<double> BoundRCoef,BoundLCoef;
-  int AutoInitDiv;
-  FluxOper():Div(NULL){};
-
-  virtual void Set(OperatorMask *shift,int ax,int lev,DivOper *div,int autoInitDiv=1) 
-   {
-    OperatorOneD::Set(shift,ax,lev);Div=div;autoInitDiv=AutoInitDiv;
-    if (AutoInitDiv) Div->Set(shift,ax,lev);
-//    Level++;
-    BoundRCoef.SetDim(Level,Level);BoundLCoef.SetDim(Level,Level);
-//    BoundRCoef.SetDim(Level+1,Level+1);BoundLCoef.SetDim(Level+1,Level+1);
-   };
+    virtual void Set(
+        OperatorMask *shift,
+        int ax,
+        int lev,
+        DivOper *div,
+        int autoInitDiv = 1) {
+        OperatorOneD::Set(shift, ax, lev);
+        Div = div;
+        autoInitDiv = AutoInitDiv;
+        if(AutoInitDiv)
+            Div->Set(shift, ax, lev);
+        //    Level++;
+        BoundRCoef.SetDim(Level, Level);
+        BoundLCoef.SetDim(Level, Level);
+        //    BoundRCoef.SetDim(Level+1,Level+1);BoundLCoef.SetDim(Level+1,Level+1);
+    };
 
 
-  virtual void Init(GridVectorField<double> *pos,GridField<double> *u_func=NULL)
-   {
-    if (AutoInitDiv) Div->Init(pos,u_func);
-    if (u_func==NULL) ConstructCoef(pos);
-   };
-//  virtual void SetAction(OperatorOneD &oper){Oper=((DivOper*)(&oper))->Oper;};
-//  inline int SetOperation(int oper=-1){if (oper!=-1) Oper=oper;return Oper;}
+    virtual void Init(GridVectorField<double> *pos, GridField<double> *u_func = NULL) {
+        if(AutoInitDiv)
+            Div->Init(pos, u_func);
+        if(u_func == NULL)
+            ConstructCoef(pos);
+    };
+    //  virtual void SetAction(OperatorOneD &oper){Oper=((DivOper*)(&oper))->Oper;};
+    //  inline int SetOperation(int oper=-1){if (oper!=-1) Oper=oper;return Oper;}
 
-  virtual void Operate(GridMask &ClcMask,GridField<double> &dat,GridVectorField<double> &res)
-   {
-    ClcFlux(ClcMask,res);
-   };
+    virtual void Operate(
+        GridMask &ClcMask,
+        GridField<double> &dat,
+        GridVectorField<double> &res) {
+        ClcFlux(ClcMask, res);
+    };
 
 
+    double ClcCoefJRX(int j, int r, double i_sh, int k) {
+        int m, l, q;
+        double sm, sl, mq, pl;
+        sm = 0;
+        for(m = j + 1; m <= k; m++) {
+            sl = 0;
+            for(l = 0; l <= k; l++) {
+                mq = 1;
+                if(l == m)
+                    continue;
+                for(q = 0; q <= k; q++)
+                    if((q == m) || (q == l))
+                        continue;
+                    else
+                        mq *= (i_sh + r - q + 0.5);
+                sl += mq;
+            }
+            pl = 1;
+            for(l = 0; l <= k; l++)
+                if(l == m)
+                    continue;
+                else
+                    pl *= (m - l);
+            sm += (sl / pl);
+        }
+        return sm;
+    }
 
-  double ClcCoefJRX(int j,int r,double i_sh,int k)
-   {
-    int m,l,q;
-    double sm,sl,mq,pl;
-    sm=0;
-    for (m=j+1;m<=k;m++) 
-     {
-      sl=0;
-      for (l=0;l<=k;l++)
-       {
-        mq=1;
-        if (l==m) continue;
-        for (q=0;q<=k;q++) if ((q==m) || (q==l)) continue;else mq*=(i_sh+r-q+0.5);
-        sl+=mq;
-       }
-      pl=1;
-      for (l=0;l<=k;l++)  if (l==m) continue;else pl*=(m-l);
-      sm+=(sl/pl);
-     }
-    return sm;
-   }
-    
-  void ConstructCoef(GridVectorField<double> *pos)
-   {
-    int k=Level,j,r;
-//    if (pos==NULL) //FixedStp=1; {
-    for (j=0;j<k;j++)  
-     {
-      for (r=0;r<k;r++) // for (r=-1;r<k;r++) 
-       {
-        BoundRCoef(r,j)=ClcCoefJRX(j,r,0.5,k);
-        BoundLCoef(r,j)=ClcCoefJRX(j,r,-0.5,k);
-       }
-     }
-   }
-  void ClcFlux(GridMask &ClcMask,GridVectorField<double> &res)
-   {
-    int Zero=Shift->MaxShift,k,N=ClcMask.SetDim(),k0;
-    DataVector<int> StdK=Shift->CvtFrom(ClcMask);
-    GridMaskVector &mv=Shift->Shift[Axis];
-    for (k=0;k<N;k++)
-     {
-      k0=StdK[k];
-      if ( (mv[Zero-Level][k0]<0) || (mv[Zero+Level][k0]<0) ) continue;
-      double Fr=0,Fl=0;
-      int r=Div->StartLev.GetPnt(mv[Zero][k0]);
-      GridIndex i=ClcMask[k];
-//      if (FixedStp)
-       {
-        for (int j=0;j<Level;j++) 
-         {
-          Fr+=BoundRCoef(r,j)*Div->Dif.GetX(0)->GetPnt(mv[Zero+j-r][k0]);
-          Fl+=BoundLCoef(r,j)*Div->Dif.GetX(0)->GetPnt(mv[Zero+j-r][k0]);
-         }
-       }
-//      else
-      res.GetX(0)->GetPnt(i)=Fl;
-      res.GetX(1)->GetPnt(i)=Fr;
-     }
-//fcout<<res.GetX(0)->data;fcout.flush();abort();
-   };
-
- };
+    void ConstructCoef(GridVectorField<double> *pos) {
+        int k = Level, j, r;
+        //    if (pos==NULL) //FixedStp=1; {
+        for(j = 0; j < k; j++) {
+            for(r = 0; r < k; r++)   // for (r=-1;r<k;r++)
+            {
+                BoundRCoef(r, j) = ClcCoefJRX(j, r, 0.5, k);
+                BoundLCoef(r, j) = ClcCoefJRX(j, r, -0.5, k);
+            }
+        }
+    }
+    void ClcFlux(GridMask &ClcMask, GridVectorField<double> &res) {
+        int Zero = Shift->MaxShift, k, N = ClcMask.SetDim(), k0;
+        DataVector<int> StdK = Shift->CvtFrom(ClcMask);
+        GridMaskVector &mv = Shift->Shift[Axis];
+        for(k = 0; k < N; k++) {
+            k0 = StdK[k];
+            if((mv[Zero - Level][k0] < 0) || (mv[Zero + Level][k0] < 0))
+                continue;
+            double Fr = 0, Fl = 0;
+            int r = Div->StartLev.GetPnt(mv[Zero][k0]);
+            GridIndex i = ClcMask[k];
+            //      if (FixedStp)
+            {
+                for(int j = 0; j < Level; j++) {
+                    Fr +=
+                        BoundRCoef(r, j) * Div->Dif.GetX(0)->GetPnt(mv[Zero + j - r][k0]);
+                    Fl +=
+                        BoundLCoef(r, j) * Div->Dif.GetX(0)->GetPnt(mv[Zero + j - r][k0]);
+                }
+            }
+            //      else
+            res.GetX(0)->GetPnt(i) = Fl;
+            res.GetX(1)->GetPnt(i) = Fr;
+        }
+        //fcout<<res.GetX(0)->data;fcout.flush();abort();
+    };
+};
 
 //struct :OperatorOneD
 
-struct ReconstrFlux: OperatorOneD
- {
-  enum { Godunov, LaxFriedrich } FluxType;
-  int flux,MonotoneIncreaseFlux;
-  double Alpha;
-  ReconstrFlux():flux(LaxFriedrich),Alpha(10),MonotoneIncreaseFlux(1){};
+struct ReconstrFlux : OperatorOneD {
+    enum { Godunov, LaxFriedrich } FluxType;
+    int flux, MonotoneIncreaseFlux;
+    double Alpha;
+    ReconstrFlux() : flux(LaxFriedrich), Alpha(10), MonotoneIncreaseFlux(1){};
 
-  virtual void Set(OperatorMask *shift,int ax,int lev,int MonotInc=1,int flux_type=LaxFriedrich,double alpha=10) 
-   { OperatorOneD::Set(shift,ax,lev);flux=flux_type;Alpha=alpha;MonotoneIncreaseFlux=MonotInc; };
+    virtual void Set(
+        OperatorMask *shift,
+        int ax,
+        int lev,
+        int MonotInc = 1,
+        int flux_type = LaxFriedrich,
+        double alpha = 10) {
+        OperatorOneD::Set(shift, ax, lev);
+        flux = flux_type;
+        Alpha = alpha;
+        MonotoneIncreaseFlux = MonotInc;
+    };
 
 
-//  virtual void SetAction(OperatorOneD &oper){Oper=((DivOper*)(&oper))->Oper;};
-  inline int SetOperation(int oper=-1){if (oper!=-1) flux=oper;return flux;}
+    //  virtual void SetAction(OperatorOneD &oper){Oper=((DivOper*)(&oper))->Oper;};
+    inline int SetOperation(int oper = -1) {
+        if(oper != -1)
+            flux = oper;
+        return flux;
+    }
 
-  virtual void Operate(GridMask &ClcMask,GridVectorField<double> &dat,GridField<double> &res)
-   {
-    int Zero=Shift->MaxShift,k,N=ClcMask.SetDim(),k0;
-    DataVector<int> StdK=Shift->CvtFrom(ClcMask);
-    GridMask m=Shift->Shift[Axis][Zero],m_pls=Shift->Shift[Axis][Zero+1],
-                                              m_min=Shift->Shift[Axis][Zero-1];
-    for (k=0;k<N;k++)
-     {
-      k0=StdK[k];
-      GridIndex i=ClcMask[k];
-      if ( (m_min[k0]<0) || (m[k0]<0) )  continue;
-      double fa=dat.GetX(3)->GetPnt(m_min[k0]),fb=dat.GetX(2)->GetPnt(m[k0]);
-      if (flux==Godunov)
-       {
-        if (MonotoneIncreaseFlux) res.GetPnt(i)=fa;
-        else res.GetPnt(i)=fb;
-       }
-      else
-       {
-        res.GetPnt(i)=0.5*( fa+fb-Alpha*
-         ( dat.GetX(0)->GetPnt(m[k0])-dat.GetX(1)->GetPnt(m_min[k0]) ) );
-       }
-     }
-//fcout<<res.data<<"\n";fcout.flush();//abort();
-   };
- };
+    virtual void Operate(
+        GridMask &ClcMask,
+        GridVectorField<double> &dat,
+        GridField<double> &res) {
+        int Zero = Shift->MaxShift, k, N = ClcMask.SetDim(), k0;
+        DataVector<int> StdK = Shift->CvtFrom(ClcMask);
+        GridMask m = Shift->Shift[Axis][Zero], m_pls = Shift->Shift[Axis][Zero + 1],
+                 m_min = Shift->Shift[Axis][Zero - 1];
+        for(k = 0; k < N; k++) {
+            k0 = StdK[k];
+            GridIndex i = ClcMask[k];
+            if((m_min[k0] < 0) || (m[k0] < 0))
+                continue;
+            double fa = dat.GetX(3)->GetPnt(m_min[k0]), fb = dat.GetX(2)->GetPnt(m[k0]);
+            if(flux == Godunov) {
+                if(MonotoneIncreaseFlux)
+                    res.GetPnt(i) = fa;
+                else
+                    res.GetPnt(i) = fb;
+            } else {
+                res.GetPnt(i) = 0.5 * (fa + fb -
+                                       Alpha * (dat.GetX(0)->GetPnt(m[k0]) -
+                                                dat.GetX(1)->GetPnt(m_min[k0])));
+            }
+        }
+        //fcout<<res.data<<"\n";fcout.flush();//abort();
+    };
+};
 
 #endif
 

@@ -19,7 +19,6 @@
 //double FreeEIonOneMat::LastElDencStatic = sqrt(MathZer);
 
 
-
 namespace ClcIonisation {
 
     MathAnisIon::MathAnisIon(){};
@@ -28,4 +27,4 @@ namespace ClcIonisation {
     MathAnisIon *MathAnisIon::CurPtr = NULL;
 
 
-}; //ClcIonisation
+};   //ClcIonisation

@@ -1,14 +1,6 @@
 
 
 
-
-
-
-
-
-
-
-
 /*
 struct FAArrNamed:FAArr{
 	FAArrNamed():FAArr(){};

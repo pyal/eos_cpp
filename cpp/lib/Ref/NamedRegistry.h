@@ -6,79 +6,69 @@
 struct NamedObject;
 
 
-struct NamedRegistry : public SavableClass  //## Inherits: <unnamed>%3EF756E0010B
+struct NamedRegistry : public SavableClass   //## Inherits: <unnamed>%3EF756E0010B
 {
-      NamedRegistry();
-//      NamedRegistry(const NamedRegistry &right);
-      NamedRegistry (char *name, char* cl_name, char* categor = NULL, char *descr = NULL, void(*print)(FilterOut&) = NULL);
-      ~NamedRegistry();
+    NamedRegistry();
+    //      NamedRegistry(const NamedRegistry &right);
+    NamedRegistry(
+        char *name,
+        char *cl_name,
+        char *categor = NULL,
+        char *descr = NULL,
+        void (*print)(FilterOut &) = NULL);
+    ~NamedRegistry();
 
-      NamedRegistry & operator=(const NamedRegistry &right);
+    NamedRegistry &operator=(const NamedRegistry &right);
 
 
-      void init (char *name, char* cl_name, char* categor = NULL, char *descr = NULL, void(*print)(FilterOut&)  = NULL);
-      NamedRegistry* name_to_reg_data (void char_Xname);
-      void list_all_names (char *categor = NULL);
-      void print_all_help (char *categor = NULL);
-      int check_registered (char* name, DescribedClass* cl = NULL);
-      char * get_name (DescribedClass* cl, char *categor = NULL, int check_unic = 0);
-      char* obj_name ();
-      char* obj_descr ();
-      char* category ();
-      char* obj_classname ();
+    void init(
+        char *name,
+        char *cl_name,
+        char *categor = NULL,
+        char *descr = NULL,
+        void (*print)(FilterOut &) = NULL);
+    NamedRegistry *name_to_reg_data(void char_Xname);
+    void list_all_names(char *categor = NULL);
+    void print_all_help(char *categor = NULL);
+    int check_registered(char *name, DescribedClass *cl = NULL);
+    char *get_name(DescribedClass *cl, char *categor = NULL, int check_unic = 0);
+    char *obj_name();
+    char *obj_descr();
+    char *category();
+    char *obj_classname();
 
-  public:
-  protected:
-  private:
-      static const std::map* get_all_ ();
-      static void set_all_ (std::map* value);
+public:
+protected:
+private:
+    static const std::map *get_all_();
+    static void set_all_(std::map *value);
 
-      const char * get_obj_name_ () const;
-      void set_obj_name_ (char * value);
+    const char *get_obj_name_() const;
+    void set_obj_name_(char *value);
 
-      const char * get_obj_descr_ () const;
-      void set_obj_descr_ (char * value);
+    const char *get_obj_descr_() const;
+    void set_obj_descr_(char *value);
 
-      const char * get_obj_classname_ () const;
-      void set_obj_classname_ (char * value);
+    const char *get_obj_classname_() const;
+    void set_obj_classname_(char *value);
 
-      const char * get_obj_category_ () const;
-      void set_obj_category_ (char * value);
+    const char *get_obj_category_() const;
+    void set_obj_category_(char *value);
 
-      const void(*)(FilterOut&) get_obj_print_ () const;
-      void set_obj_print_ (void(*)(FilterOut&) value);
+    const void (*)(FilterOut &) get_obj_print_() const;
+    void set_obj_print_(void (*)(FilterOut &) value);
 
-  private: //## implementation
-      static std::map* all_;
-      char *obj_name_;
-      char *obj_descr_;
-      char *obj_classname_;
-      char *obj_category_;
-      void(*obj_print_)(FilterOut&);
-
+private:   //## implementation
+    static std::map *all_;
+    char *obj_name_;
+    char *obj_descr_;
+    char *obj_classname_;
+    char *obj_category_;
+    void (*obj_print_)(FilterOut &);
 };
 
 
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*
@@ -235,4 +225,3 @@ inline void NamedRegistry::set_obj_print_ (void(*)(FilterOut&) value)
 }
 
 */
-

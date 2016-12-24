@@ -2,21 +2,22 @@
 #include <lib/box_lib/ivl_box.h>
 
 
-
 MatterConverterSplIO *MatterConverterSplIO::CurPtr = NULL;
 
-static ClassDesc MatterConverterSplIO_ClassDesc(typeid(MatterConverterSplIO),"MatterConverterSplIO",1,"BlackBox_category",create<MatterConverterSplIO>);
-
+static ClassDesc MatterConverterSplIO_ClassDesc(
+    typeid(MatterConverterSplIO),
+    "MatterConverterSplIO",
+    1,
+    "BlackBox_category",
+    create<MatterConverterSplIO>);
 
 
 MatterConverterSplIO::MatterConverterSplIO()
-    : IBlackBoxBase()
-    , IvlParam(new TIvlParametersSplIO)
-    , Pspl(new ExtendedRegridSpline)
-    , Tspl(new ExtendedRegridSpline)
-        , MisfitFindE(1e-6)
-        , NumEGridPnt(100)
-        , NumVGridPnt(100)
-        , EOSspl("ivl_cvt.spl")
-{
-}
+    : IBlackBoxBase(),
+      IvlParam(new TIvlParametersSplIO),
+      Pspl(new ExtendedRegridSpline),
+      Tspl(new ExtendedRegridSpline),
+      MisfitFindE(1e-6),
+      NumEGridPnt(100),
+      NumVGridPnt(100),
+      EOSspl("ivl_cvt.spl") {}

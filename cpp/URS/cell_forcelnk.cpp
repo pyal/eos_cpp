@@ -1,7 +1,6 @@
 #include <lib/precompiled/cell_kru.h>
 
 
-
 #include "cell_forcelnk.h"
 
 

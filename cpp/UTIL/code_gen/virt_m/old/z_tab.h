@@ -27,11 +27,10 @@
 #define STRING 505
 #define MTH_BUILTIN 600
 
-typedef union
-{
-   unsigned long      itype;
-   z_symbol          *sym;
-   enum tetrade_code  code;
+typedef union {
+    unsigned long itype;
+    z_symbol *sym;
+    enum tetrade_code code;
 } ZUBR_STYPE;
 
 extern ZUBR_STYPE zubr_lval;

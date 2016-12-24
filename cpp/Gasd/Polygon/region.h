@@ -6,6 +6,6 @@
 
 struct Region {
     void Print() {
-        cout<<" OK\n";
+        cout << " OK\n";
     }
 };

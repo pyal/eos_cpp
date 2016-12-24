@@ -7,7 +7,6 @@
 #include "lib/precompiled/poly_test.h"
 
 
-
 #include "urs_forcelnk.h"
 
 // VarFunction_category - category
@@ -41,7 +40,6 @@ ForceLinkVoid<BrigtnesTemp> Dummy_BrigtnesTemp;
 ForceLinkVoid<Cold_TF_Kalitkin_P> Dummy_Cold_TF_Kalitkin_P;
 
 
-
 // Spline_category - category
 // Used in spline urs
 ForceLinkVoid<RegridSpline> Dummy_RegridSpline;
@@ -57,8 +55,6 @@ ForceLinkVoid<TSpline2DCalculator> Dummy_TSpline2DCalculator;
 ForceLinkVoid<TSpline2DGenerator> Dummy_TSpline2DGenerator;
 ForceLinkVoid<TSpline1DCalculator> Dummy_TSpline1DCalculator;
 ForceLinkVoid<TSpline1DGenerator> Dummy_TSpline1DGenerator;
-
-
 
 
 // MatterFreeE_category
@@ -132,11 +128,14 @@ ForceLinkVoid<ClcMixture::FreeEMixture> Dummy_FreeEMixture;
 ForceLinkVoid<ClcIonisation::FreeEIonSimple> Dummy_ClcIonisation_FreeEIonSimple;
 ForceLinkVoid<ClcIonisation::FreeEIonGrig> Dummy_ClcIonisation_FreeEIonGrig;
 ForceLinkVoid<ClcIonisation::OneVarRosLowering> Dummy_ClcIonisation_OneVarRosLowering;
-ForceLinkVoid<ClcIonisation::FreeEIonLowVolDepend> Dummy_ClcIonisation_FreeEIonLowVolDepend;
+ForceLinkVoid<ClcIonisation::FreeEIonLowVolDepend>
+    Dummy_ClcIonisation_FreeEIonLowVolDepend;
 ForceLinkVoid<ClcIonisation::FreeEIonDeby> Dummy_ClcIonisation_FreeEIonDeby;
 ForceLinkVoid<ClcIonisation::FreeEIonDebyHuckel> Dummy_ClcIonisation_FreeEIonDebyHuckel;
-ForceLinkVoid<ClcIonisation::FreeEIonDebyAnisimov> Dummy_ClcIonisation_FreeEIonDebyAnisimov;
-ForceLinkVoid<ClcIonisation::AnisimovLoweringCurve> Dummy_ClcIonisation_AnisimovLoweringCurve;
+ForceLinkVoid<ClcIonisation::FreeEIonDebyAnisimov>
+    Dummy_ClcIonisation_FreeEIonDebyAnisimov;
+ForceLinkVoid<ClcIonisation::AnisimovLoweringCurve>
+    Dummy_ClcIonisation_AnisimovLoweringCurve;
 
 
 ForceLinkVoid<FreeEElectron> Dummy_FreeEElectron;
@@ -145,7 +144,7 @@ ForceLinkVoid<FreeEElectron> Dummy_FreeEElectron;
 ForceLinkVoid<MatterStable::TwoPhaseBoundary> Dummy_TwoPhaseBoundary;
 ForceLinkVoid<MatterLiqSol::LiquidSolidBnd> Dummy_LiquidSolidBnd;
 
- //Matter_category
+//Matter_category
 #include "matt_h2.h"
 ForceLinkVoid<MatterH2Sol> Dummy_MatterH2Sol;
 ForceLinkVoid<MatterH2Liq> Dummy_MatterH2Liq;
@@ -188,7 +187,6 @@ ForceLinkVoid<OneVarFormula> Dummy_OneVarFormula;
 
 
 ForceLinkVoid<FreeEElectronStrict> Dummy_FreeEElectronStrict;
-
 
 
 //ForceLinkVoid<URS_Curve> Dummy_URS_Curve;

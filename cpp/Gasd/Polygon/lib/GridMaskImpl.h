@@ -7,11 +7,11 @@ namespace NPolygon {
     struct TGridMaskSimple : TGridMaskBase {
     private:
         int Beg, End;
+
     public:
-        TGridMaskSimple(int length = 0);// : TGridMaskBase(), Beg(0), End(length) {};
-        TGridMaskSimple(int beg, int end) : TGridMaskBase(), Beg(beg), End(end) {
-        };
-        TGridMaskSimple & operator=(const TGridMaskSimple &right) {
+        TGridMaskSimple(int length = 0);   // : TGridMaskBase(), Beg(0), End(length) {};
+        TGridMaskSimple(int beg, int end) : TGridMaskBase(), Beg(beg), End(end){};
+        TGridMaskSimple &operator=(const TGridMaskSimple &right) {
             Set(right.Beg, right.End);
         }
         void Set(int beg, int end) {
@@ -20,7 +20,7 @@ namespace NPolygon {
         }
 
         virtual int GetNextInterval(int &low, int &up, int reverse) {
-            if (low >= 0) 
+            if(low >= 0)
                 return 0;
             low = Beg;
             up = End;
@@ -34,10 +34,10 @@ namespace NPolygon {
         }
         virtual Ref<TGridMaskBase> Shift(int level) {
             return new TGridMaskSimple(Beg + level, End + level);
-
         }
-        virtual void Cut(TGridMaskBase* largerMask) {
-            TGridMaskSimple *mask = SavableClass::TestType<TGridMaskSimple>(largerMask, "mask have to be simple");
+        virtual void Cut(TGridMaskBase *largerMask) {
+            TGridMaskSimple *mask = SavableClass::TestType<TGridMaskSimple>(
+                largerMask, "mask have to be simple");
             Beg = max<int>(mask->Beg, Beg);
             End = min<int>(mask->End, End);
         }
@@ -49,51 +49,56 @@ namespace NPolygon {
             return End - Beg;
         }
         virtual int MaxPointInd() {
-            if (Beg < 0)
+            if(Beg < 0)
                 throw info_except("Start index <%i> is below zero!!!\n", Beg);
             return End;
         }
         virtual Ref<TGridMaskBase> ExpandGrid(const TRegionBounds &bnds) {
-			if (bnds.IsPoint())
-				throw info_except("Is point, not region\n");
+            if(bnds.IsPoint())
+                throw info_except("Is point, not region\n");
             End = (End - Beg) + bnds.GetRgt() - bnds.GetLft();
             Beg = 0;
             //return new TGridMaskSimple(bnds.GetRgt(), End + bnds.GetLft());
             return new TGridMaskSimple(-bnds.GetLft(), End - bnds.GetRgt());
         }
         virtual Ref<TGridMaskBase> ShrinkGrid(const TRegionBounds &bnds) {
-			if (!bnds.IsPoint())
-				return new TGridMaskSimple(Beg + bnds.GetLft(), End + bnds.GetRgt());
-			if (bnds.NoLft())
-				return new TGridMaskSimple(End + bnds.GetRgt() - 1, End + bnds.GetRgt());
-			return new TGridMaskSimple(Beg + bnds.GetLft(), Beg + bnds.GetLft() + 1);
+            if(!bnds.IsPoint())
+                return new TGridMaskSimple(Beg + bnds.GetLft(), End + bnds.GetRgt());
+            if(bnds.NoLft())
+                return new TGridMaskSimple(End + bnds.GetRgt() - 1, End + bnds.GetRgt());
+            return new TGridMaskSimple(Beg + bnds.GetLft(), Beg + bnds.GetLft() + 1);
         }
 
-        int save_data_state( FilterOut&so) {
-            so<<" Beg "<<Beg<<" End "<<End;
-            return 1; 
-        };
-        int read_data_state(FilterIn&si) { 
-            Stroka tmp;
-            si>>tmp>>Beg>>tmp>>End;
+        int save_data_state(FilterOut &so) {
+            so << " Beg " << Beg << " End " << End;
             return 1;
         };
-        void IterateRegion(const TGridMaskedData &src, const TGridMaskedData &dst, void (*doit)(int , int )){
+        int read_data_state(FilterIn &si) {
+            Stroka tmp;
+            si >> tmp >> Beg >> tmp >> End;
+            return 1;
+        };
+        void IterateRegion(
+            const TGridMaskedData &src,
+            const TGridMaskedData &dst,
+            void (*doit)(int, int)) {
             TGridMaskSimple *mSrc = SavableClass::TestType<TGridMaskSimple>(src.Mask);
             TGridMaskSimple *mDst = SavableClass::TestType<TGridMaskSimple>(dst.Mask);
-            if (mSrc->NumPoints() != mDst->NumPoints())
-                throw info_except("Sizes of masks are different!!! Src<%i> Dst<%i>", mSrc->NumPoints(), mDst->NumPoints());
+            if(mSrc->NumPoints() != mDst->NumPoints())
+                throw info_except(
+                    "Sizes of masks are different!!! Src<%i> Dst<%i>",
+                    mSrc->NumPoints(),
+                    mDst->NumPoints());
             size_t iSrc = mSrc->Beg, iDst = mDst->Beg;
-            for(;iSrc < (size_t)mSrc->End; iSrc++, iDst++)
+            for(; iSrc < (size_t)mSrc->End; iSrc++, iDst++)
                 doit(iSrc, iDst);
         }
-        void IterateRegion(const TGridMaskedData &src, void (*doit)(int)){
+        void IterateRegion(const TGridMaskedData &src, void (*doit)(int)) {
             TGridMaskSimple *mSrc = SavableClass::TestType<TGridMaskSimple>(src.Mask);
             size_t iSrc = mSrc->Beg;
-            for(;iSrc < (size_t)mSrc->End; iSrc++)
+            for(; iSrc < (size_t)mSrc->End; iSrc++)
                 doit(iSrc);
         }
-
     };
 
     //struct TGridMaskSimple : TGridMaskBase {
@@ -140,7 +145,7 @@ namespace NPolygon {
 
     //    }
     //    int set (int ind) {
-    //        if (ind < Beg || ind > End) 
+    //        if (ind < Beg || ind > End)
     //            throw info_except("Bad index %i\n", ind);
     //        CurInd = ind;
     //        return CurInd;
@@ -151,9 +156,9 @@ namespace NPolygon {
     //    }
     //    int save_data_state( FilterOut&so) {
     //        so<<" Beg "<<Beg<<" End "<<End<<" CurInd "<<CurInd<<" ";
-    //        return 1; 
+    //        return 1;
     //    };
-    //    int read_data_state(FilterIn&si) { 
+    //    int read_data_state(FilterIn&si) {
     //        Stroka tmp;
     //        si>>tmp>>Beg>>tmp>>End>>tmp>>CurInd;
     //        return 1;
@@ -165,4 +170,4 @@ namespace NPolygon {
     //};
 
 
-}; //namespace NPolygon {
+};   //namespace NPolygon {

@@ -5,7 +5,7 @@
 //#include <string.h>
 //#include <stdio.h>
 //
-//void func(const char *s) 
+//void func(const char *s)
 //{
 //     char buffer[BUFFER_SIZE];
 //     if (s) strncpy(buffer, s, BUFFER_SIZE - 1)[BUFFER_SIZE - 1] = '\x00';
@@ -15,16 +15,16 @@
 
 #include <string>
 #include <iostream>
-using namespace::std;
-void main() 
-{
-unsigned char c;
-int i=0;
-int c1 = 0, c2 = 255;
-for (c = c1; c <= c2; c++) {
-  if (c==0) cout<<"\n";
-cout<<i++;     
-}
+using namespace ::std;
+void main() {
+    unsigned char c;
+    int i = 0;
+    int c1 = 0, c2 = 255;
+    for(c = c1; c <= c2; c++) {
+        if(c == 0)
+            cout << "\n";
+        cout << i++;
+    }
 }
 
 //

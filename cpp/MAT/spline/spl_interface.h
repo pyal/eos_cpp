@@ -10,9 +10,7 @@
 #include <lib/ref/file_manip.h>
 
 struct ISplineCalculator : SavableClass {
-    ISplineCalculator()
-        : SplFileName("SingleFileStorage") {
-    }
+    ISplineCalculator() : SplFileName("SingleFileStorage") {}
     virtual int GetSplineDim() = 0;
     //    return SplineDim;
     //}
@@ -20,7 +18,7 @@ struct ISplineCalculator : SavableClass {
     virtual vector<double> GetBndMax() = 0;
     virtual double GetMisfit() = 0;
     int NoExternalFile() {
-       return (SplFileName == "SingleFileStorage");
+        return (SplFileName == "SingleFileStorage");
     }
     virtual void SaveSplineData(FilterOut &out) = 0;
     virtual void ReadSplineData(FilterIn &in) = 0;
@@ -30,9 +28,9 @@ struct ISplineCalculator : SavableClass {
     //   out.close();
     //}
 
-    virtual int  Evaluate (const vector<vector<double> > &dat, vector<double> &res) = 0;
-    virtual int  Evaluate (const vector<double> &dat, double &res) {
-        vector<vector<double> > datV(dat.size());
+    virtual int Evaluate(const vector<vector<double>> &dat, vector<double> &res) = 0;
+    virtual int Evaluate(const vector<double> &dat, double &res) {
+        vector<vector<double>> datV(dat.size());
         vector<double> resV;
         for(size_t i = 0; i < datV.size(); i++)
             datV[i].push_back(dat[i]);
@@ -48,66 +46,65 @@ struct ISplineCalculator : SavableClass {
         double y;
         xV[0] = x;
         int err;
-        if (!(err = spl->Evaluate(xV, y)) && err_mes )
-            throw info_except("Could not evaluate spline for x = %f y = %f res = %i\nDescription : %s", x, y, err, err_mes);
+        if(!(err = spl->Evaluate(xV, y)) && err_mes)
+            throw info_except(
+                "Could not evaluate spline for x = %f y = %f res = %i\nDescription : %s",
+                x,
+                y,
+                err,
+                err_mes);
         return y;
     }
-// FIXED !!!! use ReadSplineData
-    virtual int save_data_state(FilterOut&so) {
-       so << "SplFileName " << SplFileName;
-       if (NoExternalFile())
+    // FIXED !!!! use ReadSplineData
+    virtual int save_data_state(FilterOut &so) {
+        so << "SplFileName " << SplFileName;
+        if(NoExternalFile())
             SaveSplineData(so);
-       else
-           if (File::GetFileSize(~SplFileName) == -1) {
-               FilterTextOut out(~SplFileName);
-               out.SetRefMask(SavableClass::SimpleEdit);
-               SaveSplineData(out);
-           }
-       return 1; 
+        else if(File::GetFileSize(~SplFileName) == -1) {
+            FilterTextOut out(~SplFileName);
+            out.SetRefMask(SavableClass::SimpleEdit);
+            SaveSplineData(out);
+        }
+        return 1;
     }
-    virtual int read_data_state(FilterIn&si) {
-       Stroka tmp;
-       si >> tmp >> SplFileName;
-       if (NoExternalFile())
-           ReadSplineData(si);
-       else {
-           FilterTextIn in(~SplFileName);
-           in.SetRefMask(SavableClass::SimpleEdit);
-           ReadSplineData(in);
-       }
-       return 1;
+    virtual int read_data_state(FilterIn &si) {
+        Stroka tmp;
+        si >> tmp >> SplFileName;
+        if(NoExternalFile())
+            ReadSplineData(si);
+        else {
+            FilterTextIn in(~SplFileName);
+            in.SetRefMask(SavableClass::SimpleEdit);
+            ReadSplineData(in);
+        }
+        return 1;
     }
     Stroka MakeHelp() {
-        Stroka ret("Spline calculation class. Internal spline data is stored in the separate file SplFileName. If SplFileName==SingleFileStorage - spline data is taken from the current config ");
+        Stroka ret(
+            "Spline calculation class. Internal spline data is stored in the separate file SplFileName. If SplFileName==SingleFileStorage - spline data is taken from the current config ");
         return ret;
     }
 
 protected:
     Stroka SplFileName;
-//    int SplineDim;
+    //    int SplineDim;
 };
-
 
 
 struct ISplineGenerator : SavableClass {
-    virtual int  Generate(vector<vector<double> > &dat, int Cont = 0) = 0;
-    virtual ISplineCalculator* GetCalculator() = 0;
-    virtual void MakeGrid(vector<vector<double> > &grid, const vector<int> &numPnt, const vector<double> &bndMin, const vector<double> &bndMax) {
-    }
+    virtual int Generate(vector<vector<double>> &dat, int Cont = 0) = 0;
+    virtual ISplineCalculator *GetCalculator() = 0;
+    virtual void MakeGrid(
+        vector<vector<double>> &grid,
+        const vector<int> &numPnt,
+        const vector<double> &bndMin,
+        const vector<double> &bndMax) {}
     virtual int GetSplineDim() = 0;
     //    return SplineDim;
     //}
-//private:
-//    int SplineDim;
+    //private:
+    //    int SplineDim;
 };
- 
-
-
-
-
-
-
-
 
 
 struct ISplineCalculatorStd : ISplineCalculator {
@@ -124,10 +121,12 @@ struct ISplineCalculatorStd : ISplineCalculator {
     //virtual int  Evaluate (const vector<vector<double> > &dat, vector<double> &res);
     virtual void SaveSplineData(FilterOut &out) {
         out << " Description " << ~SplineDescr << ~SavableClass::EOLN();
-        out << " SplMisfit " << SplMisfit << " SplineCoefsDim " << (int)SplineCoefs.size() << ~SavableClass::ppEOLN();
-        for(int i = 0; i < (int)SplineCoefs.size() -1; i++) {
-            out << " Axis " << i << " Size " << (int)SplineCoefs[i].size() << " Min " << Min[i] << " Max " << Max[i];
-            if (i != SplineCoefs.size() - 2)
+        out << " SplMisfit " << SplMisfit << " SplineCoefsDim " << (int)SplineCoefs.size()
+            << ~SavableClass::ppEOLN();
+        for(int i = 0; i < (int)SplineCoefs.size() - 1; i++) {
+            out << " Axis " << i << " Size " << (int)SplineCoefs[i].size() << " Min "
+                << Min[i] << " Max " << Max[i];
+            if(i != SplineCoefs.size() - 2)
                 out << SavableClass::EOLN();
             else
                 out << SavableClass::mmEOLN();
@@ -152,8 +151,13 @@ struct ISplineCalculatorStd : ISplineCalculator {
     }
 
 
-    void SetData(const char *splineFile, const char *splineDescr, const vector<double> &minV, const vector<double> &maxV, 
-        double splMisfit, const vector<vector<double> > &splineCoefs) {
+    void SetData(
+        const char *splineFile,
+        const char *splineDescr,
+        const vector<double> &minV,
+        const vector<double> &maxV,
+        double splMisfit,
+        const vector<vector<double>> &splineCoefs) {
         DataManip::CopyVector(Min, minV);
         DataManip::CopyVector(Max, maxV);
         SplMisfit = splMisfit;
@@ -168,30 +172,22 @@ protected:
     vector<double> Min, Max;
     double SplMisfit;
     Stroka SplineDescr, SplineFile;
-    vector<vector<double> > SplineCoefs;
+    vector<vector<double>> SplineCoefs;
 };
-
-
-
-
-
-
-
 
 
 struct ISplineGeneratorStd : ISplineGenerator {
     ISplineGeneratorStd()
-        : GenerationMisfit(1e-6)
-        , SplineName("t.ispl")
-        , SplineDescr("No_spline") {
-    }
+        : GenerationMisfit(1e-6), SplineName("t.ispl"), SplineDescr("No_spline") {}
 
-    virtual int  GenerateExtra(vector<vector<double> > &dat, double misfit) {
+    virtual int GenerateExtra(vector<vector<double>> &dat, double misfit) {
         double old = GenerationMisfit;
         GenerationMisfit = misfit;
         int ret;
-        try { ret = Generate(dat, 0); } 
-        catch (stdexception &/*ex*/) { }
+        try {
+            ret = Generate(dat, 0);
+        } catch(stdexception & /*ex*/) {
+        }
         GenerationMisfit = old;
         return ret;
     }
@@ -199,13 +195,18 @@ struct ISplineGeneratorStd : ISplineGenerator {
         return GenerationMisfit;
     }
     //int  Generate(vector<vector<double> > &dat, int Cont = -1);
-    virtual ISplineCalculator* GetCalculator() {
+    virtual ISplineCalculator *GetCalculator() {
         return SplineCalculator;
     }
 
-    virtual void MakeGrid(vector<vector<double> > &grid, const vector<int> &numPnt, const vector<double> &bndMin, const vector<double> &bndMax) {
+    virtual void MakeGrid(
+        vector<vector<double>> &grid,
+        const vector<int> &numPnt,
+        const vector<double> &bndMin,
+        const vector<double> &bndMax) {
         int splineDim = GetSplineDim();
-        if (numPnt.size() != splineDim || bndMin.size() != splineDim || bndMax.size() != splineDim)
+        if(numPnt.size() != splineDim || bndMin.size() != splineDim ||
+           bndMax.size() != splineDim)
             throw info_except("Grid size is zero\n");
         grid.resize(splineDim);
         for(int i = 0; i < splineDim; i++)
@@ -217,13 +218,13 @@ struct ISplineGeneratorStd : ISplineGenerator {
         return 1;
     }
     int save_data_state(FilterOut &out) {
-        out << " GenerationMisfit " << GenerationMisfit << " SplineName " << SplineName << " SplineDescr " << SplineDescr;
+        out << " GenerationMisfit " << GenerationMisfit << " SplineName " << SplineName
+            << " SplineDescr " << SplineDescr;
         return 1;
     }
+
 protected:
     Ref<ISplineCalculatorStd> SplineCalculator;
     double GenerationMisfit;
     Stroka SplineName, SplineDescr;
 };
-
-

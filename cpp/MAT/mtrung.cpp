@@ -1,75 +1,107 @@
 #include <lib/precompiled/math.h>
 #include "mtrung.h"
 
-double *parptr,*dirptr,*tmpptr;
+double *parptr, *dirptr, *tmpptr;
 XAr_func hifunc;
 
 double VecHiFunc(double x);
 // Rung - Curt method with control of the Error on the step
 // for the function:       d(y)=d(x)*f(x,y)
-  int goodstp(double r,double &hc,double err)
-    {
-					r=fabs(r);
-     if (r<err/30) r=err/30; 
-//cout<<" r "<<r<<" err "<<err<<"\n";
-     if (r>err) hc=err/r;
-     else hc=log(err/r);
-//cout<<" r "<<r<<" err "<<err<<" hc "<<hc<<"\n";
-     if (r>3*err)  return 0;
-     return 1;
-    };
-  int stop(double x,double y,int iter,int MaxIter,double x_beg,
-                                              double x_end,BrkXY_func Brk)
-    {
-     int ret=0; 
-     if (iter++>MaxIter) return 1;
-     if ( !In_Lim(x,x_beg,x_end,1) ) return -1;
-     if (Brk!=NULL) ret=Brk(x,y);
-     return ret;
-    };
-  void SetStp(double &err,double &stp,double x_beg,double x_end)
-    {
-     if (fabs(stp)>fabs(x_end-x_beg)/10.) stp=fabs(x_end-x_beg)/10.; 
-     if (fabs(stp)<MathZer) stp=StndErr;
-     if (!In_Lim(x_beg+stp,x_beg,x_end)) stp=-stp;
-     if (err<=0) err=StndErr;
-    };
-int NotRungCurt(XYZ_func func,double x_beg,double y_beg,double x_end,
-                            double &x,double &y,
-                            double &stp,double err,int MaxIter,
-                                                 BrkXY_func Brk)
-  {
-   SetStp(err,stp,x_beg,x_end);
-   x=x_beg;y=y_beg;
-   double &h=stp,k1,k2,k3,k4,k5,k6,r,hc;
-   int iter=0,ret;
-   while ( !(ret=stop(x,y,iter,MaxIter,x_beg,x_end,Brk)) )
-     {
-						k1=h*(*func)(x,y);k2=h*(*func)(x+h/2,y+k1/2);
-      k3=h*(*func)(x+h/2,y+(k1+k2)/4);
-      k4=h*(*func)(x+h,y-k2+2*k3);
-      k5=h*(*func)(x+2*h/3,y+(7*k1+10*k2+k4)/27);
-      k6=h*(*func)(x+h/5,y+(28*k1-125*k2+546*k3+54*k4-378*k5)/625);
+int goodstp(double r, double &hc, double err) {
+    r = fabs(r);
+    if(r < err / 30)
+        r = err / 30;
+    //cout<<" r "<<r<<" err "<<err<<"\n";
+    if(r > err)
+        hc = err / r;
+    else
+        hc = log(err / r);
+    //cout<<" r "<<r<<" err "<<err<<" hc "<<hc<<"\n";
+    if(r > 3 * err)
+        return 0;
+    return 1;
+};
+int stop(
+    double x,
+    double y,
+    int iter,
+    int MaxIter,
+    double x_beg,
+    double x_end,
+    BrkXY_func Brk) {
+    int ret = 0;
+    if(iter++ > MaxIter)
+        return 1;
+    if(!In_Lim(x, x_beg, x_end, 1))
+        return -1;
+    if(Brk != NULL)
+        ret = Brk(x, y);
+    return ret;
+};
+void SetStp(double &err, double &stp, double x_beg, double x_end) {
+    if(fabs(stp) > fabs(x_end - x_beg) / 10.)
+        stp = fabs(x_end - x_beg) / 10.;
+    if(fabs(stp) < MathZer)
+        stp = StndErr;
+    if(!In_Lim(x_beg + stp, x_beg, x_end))
+        stp = -stp;
+    if(err <= 0)
+        err = StndErr;
+};
+int NotRungCurt(
+    XYZ_func func,
+    double x_beg,
+    double y_beg,
+    double x_end,
+    double &x,
+    double &y,
+    double &stp,
+    double err,
+    int MaxIter,
+    BrkXY_func Brk) {
+    SetStp(err, stp, x_beg, x_end);
+    x = x_beg;
+    y = y_beg;
+    double &h = stp, k1, k2, k3, k4, k5, k6, r, hc;
+    int iter = 0, ret;
+    while(!(ret = stop(x, y, iter, MaxIter, x_beg, x_end, Brk))) {
+        k1 = h * (*func)(x, y);
+        k2 = h * (*func)(x + h / 2, y + k1 / 2);
+        k3 = h * (*func)(x + h / 2, y + (k1 + k2) / 4);
+        k4 = h * (*func)(x + h, y - k2 + 2 * k3);
+        k5 = h * (*func)(x + 2 * h / 3, y + (7 * k1 + 10 * k2 + k4) / 27);
+        k6 = h * (*func)(
+                     x + h / 5,
+                     y + (28 * k1 - 125 * k2 + 546 * k3 + 54 * k4 - 378 * k5) / 625);
 
-      r=(42*k1+224*k3+21*k4-162*k5-125*k6)/336;
-//cout<<" x "<<x<<" y "<<y<<" h "<<h<<" r "<<r<<"\n";
-      if ( goodstp(r,hc,err) ) { y+=(k1+4*k3+k4)/6+r;x+=h; }
-      h*=hc;
-      if ((x+h-x_end)*(x-x_end)<0) h=x_end-x; 
-     }
-			h=x_end-x;
-						k1=h*(*func)(x,y);k2=h*(*func)(x+h/2,y+k1/2);
-      k3=h*(*func)(x+h/2,y+(k1+k2)/4);
-      k4=h*(*func)(x+h,y-k2+2*k3);
-      k5=h*(*func)(x+2*h/3,y+(7*k1+10*k2+k4)/27);
-      k6=h*(*func)(x+h/5,y+(28*k1-125*k2+546*k3+54*k4-378*k5)/625);
-      r=(42*k1+224*k3+21*k4-162*k5-125*k6)/336;
-						y+=(k1+4*k3+k4)/6+r;x+=h;
+        r = (42 * k1 + 224 * k3 + 21 * k4 - 162 * k5 - 125 * k6) / 336;
+        //cout<<" x "<<x<<" y "<<y<<" h "<<h<<" r "<<r<<"\n";
+        if(goodstp(r, hc, err)) {
+            y += (k1 + 4 * k3 + k4) / 6 + r;
+            x += h;
+        }
+        h *= hc;
+        if((x + h - x_end) * (x - x_end) < 0)
+            h = x_end - x;
+    }
+    h = x_end - x;
+    k1 = h * (*func)(x, y);
+    k2 = h * (*func)(x + h / 2, y + k1 / 2);
+    k3 = h * (*func)(x + h / 2, y + (k1 + k2) / 4);
+    k4 = h * (*func)(x + h, y - k2 + 2 * k3);
+    k5 = h * (*func)(x + 2 * h / 3, y + (7 * k1 + 10 * k2 + k4) / 27);
+    k6 = h *
+         (*func)(
+             x + h / 5, y + (28 * k1 - 125 * k2 + 546 * k3 + 54 * k4 - 378 * k5) / 625);
+    r = (42 * k1 + 224 * k3 + 21 * k4 - 162 * k5 - 125 * k6) / 336;
+    y += (k1 + 4 * k3 + k4) / 6 + r;
+    x += h;
 
-//cout<<" x_end "<<x_end<<" x "<<x<<"\n";
-   if (ret==-1) ret=0;
-   return ret;
-  };
+    //cout<<" x_end "<<x_end<<" x "<<x<<"\n";
+    if(ret == -1)
+        ret = 0;
+    return ret;
+};
 /*
 //=====================================================================
 //===============         MinFunc           ===========================

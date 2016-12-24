@@ -14,7 +14,6 @@
 // To include test function descriptions in the output
 
 
-
 // FAZer - category
 ForceLinkVoid<FAZerHQs> Dummy_FAZerHQs;
 ForceLinkVoid<FAZerHQsM> Dummy_FAZerHQsM;
@@ -50,16 +49,4 @@ ForceLinkVoid<FAZerQsH> Dummy_FAZerQsH;
 //ForceLinkVoid<FAZerHQs_Eiler> Dummy_FAZerHQs_Eiler;
 
 
-
-
-
-
-
-
-
-
-
 #endif
-
-
-

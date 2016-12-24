@@ -5,15 +5,19 @@
 
 namespace NPolygon {
 
-static ClassDesc NPolygon_PolyRegion_ClassDesc(typeid(NPolygon::TPolyRegion),"NPolygon::TPolyRegion",1,"NPolygon::PolyRegion_category",create<NPolygon::TPolyRegion>);
+    static ClassDesc NPolygon_PolyRegion_ClassDesc(
+        typeid(NPolygon::TPolyRegion),
+        "NPolygon::TPolyRegion",
+        1,
+        "NPolygon::PolyRegion_category",
+        create<NPolygon::TPolyRegion>);
 
 
-    TPolyRegion::TPolyRegion() : SavableClass(), Parent(NULL) {
+    TPolyRegion::TPolyRegion()
+        : SavableClass(),
+          Parent(NULL){
 
-    };
-
-
-}; //namespace NPolygon {
-
+          };
 
 
+};   //namespace NPolygon {

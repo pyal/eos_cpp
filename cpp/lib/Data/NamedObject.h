@@ -6,178 +6,272 @@
 
 struct NamedObject;
 struct NamedStore;
-struct NamedObjectStoreAbstract
- {
-  virtual void DeleteObject(NamedObject *obj)=0;
-  virtual int Add (NamedObject* dat, int pos = -1)=0; 
- };
+struct NamedObjectStoreAbstract {
+    virtual void DeleteObject(NamedObject *obj) = 0;
+    virtual int Add(NamedObject *dat, int pos = -1) = 0;
+};
 
 // Copying, looses information about storage. Have to add to store manually.
 // Local objects - unmanage - or double deleting will occur, after storing in store.
-struct NamedObject : public SavableClass  //## Inherits: <unnamed>%3EF6CA430254
+struct NamedObject : public SavableClass   //## Inherits: <unnamed>%3EF6CA430254
 {
 
-   NamedObject(const char *obj_name_=NULL,SavableClass *store=NULL,int store_num=-1,int UmanagePtrForLocal=0):obj_name(0),StoredBy(0),StoredByNum(-1)
-    {if (!obj_name_) set_obj_name(".");else set_obj_name(obj_name_);
-     StoredBy=store;NamedObjectStoreAbstract *tmp=get_store();
-     if (tmp) {tmp->Add(this,store_num);};if (UmanagePtrForLocal) unmanage();}
-   virtual ~NamedObject()
-    {
-     remove_from_store();
-     delete obj_name;obj_name=NULL;
+    NamedObject(
+        const char *obj_name_ = NULL,
+        SavableClass *store = NULL,
+        int store_num = -1,
+        int UmanagePtrForLocal = 0)
+        : obj_name(0), StoredBy(0), StoredByNum(-1) {
+        if(!obj_name_)
+            set_obj_name(".");
+        else
+            set_obj_name(obj_name_);
+        StoredBy = store;
+        NamedObjectStoreAbstract *tmp = get_store();
+        if(tmp) {
+            tmp->Add(this, store_num);
+        };
+        if(UmanagePtrForLocal)
+            unmanage();
+    }
+    virtual ~NamedObject() {
+        remove_from_store();
+        delete obj_name;
+        obj_name = NULL;
     };
 
-   NamedObject(const NamedObject &right):obj_name(NULL),StoredBy(0),StoredByNum(-1)
-    {set_obj_name(right.obj_name);};//put_in_store(right.StoredBy);
-   
-   virtual int save_data_state (FilterOut &so){if (!obj_name) set_obj_name(".");so<<KeyDesc("ObjectName")<<obj_name<<KeyDesc("StoredBy")<<StoredBy<<KeyDesc("StoredByNum")<<StoredByNum;return !(!so);}
-   virtual int read_data_state (FilterIn &si) {char tmp[256];si>>StdKey>>tmp>>StdKey>>StoredBy>>StdKey>>StoredByNum;set_obj_name(tmp);return 1;}
+    NamedObject(const NamedObject &right) : obj_name(NULL), StoredBy(0), StoredByNum(-1) {
+        set_obj_name(right.obj_name);
+    };   //put_in_store(right.StoredBy);
 
-// =====================================  To be redefined =====================================   
-// To create a copy on new store
-   virtual NamedObject* CreateCopyOnStore(SavableClass* newStor,int newNum=-2){NamedObject* ret=new NamedObject(*this);if (newNum==-2) newNum=StoredByNum;ret->put_in_store(newStor,newNum);return ret;}
-// To be Called each time var is setted to the new store   
-   virtual void StoreChanged(){};
-
-
-   inline void set_obj_name (const char* value)  {delete obj_name;obj_name=NULL;if (value==NULL) return;obj_name=new char[strlen(value)+1];strcpy(obj_name,value);}
-   inline const char* get_obj_name () const{return obj_name==0?"":obj_name;}
-
-   inline const int get_StoredByNum () const{return StoredByNum;};
-   inline SavableClass* get_StoredBy () const
-    {return StoredBy;
+    virtual int save_data_state(FilterOut &so) {
+        if(!obj_name)
+            set_obj_name(".");
+        so << KeyDesc("ObjectName") << obj_name << KeyDesc("StoredBy") << StoredBy
+           << KeyDesc("StoredByNum") << StoredByNum;
+        return !(!so);
+    }
+    virtual int read_data_state(FilterIn &si) {
+        char tmp[256];
+        si >> StdKey >> tmp >> StdKey >> StoredBy >> StdKey >> StoredByNum;
+        set_obj_name(tmp);
+        return 1;
     }
 
- 
-   inline void remove_from_store(int CallChanges=1) 
-    {
-     NamedObjectStoreAbstract *tmp=get_store();
-     if (tmp)  
-      { 
-       tmp->DeleteObject(this);
-       StoredBy=NULL;
-       StoredByNum=-1;
-       if (CallChanges) StoreChanged();
-      }
+    // =====================================  To be redefined =====================================
+    // To create a copy on new store
+    virtual NamedObject *CreateCopyOnStore(SavableClass *newStor, int newNum = -2) {
+        NamedObject *ret = new NamedObject(*this);
+        if(newNum == -2)
+            newNum = StoredByNum;
+        ret->put_in_store(newStor, newNum);
+        return ret;
+    }
+    // To be Called each time var is setted to the new store
+    virtual void StoreChanged(){};
+
+
+    inline void set_obj_name(const char *value) {
+        delete obj_name;
+        obj_name = NULL;
+        if(value == NULL)
+            return;
+        obj_name = new char[strlen(value) + 1];
+        strcpy(obj_name, value);
+    }
+    inline const char *get_obj_name() const {
+        return obj_name == 0 ? "" : obj_name;
+    }
+
+    inline const int get_StoredByNum() const {
+        return StoredByNum;
     };
-// inc reference before changing store otherwise - object will be lost, deleted.
-   inline int put_in_store(SavableClass *stor,int store_num=-1){this->reference();remove_from_store(0);StoredBy=stor;if (get_store()) get_store()->Add(this,store_num);this->dereference();StoreChanged();return StoredByNum;}
-
- private:
-   inline NamedObjectStoreAbstract* get_store(){ return dynamic_cast<NamedObjectStoreAbstract*>(StoredBy);}
- protected:
-// To be used by NamedStore
-   inline void set_StoredByNum (int value)  {StoredByNum=value;}
-   inline void set_store(SavableClass *stor,int store_num=-1) 
-    {
-     this->reference();
-     remove_from_store(0);
-     StoredBy=stor;StoredByNum=store_num;
-     this->dereference();
-     StoreChanged();
+    inline SavableClass *get_StoredBy() const {
+        return StoredBy;
     }
-   inline void set_not_stored() {if (StoredBy==NULL) return; StoredBy=NULL;StoredByNum=-1;StoreChanged();};
-   inline void force_store(SavableClass *stor,int store_num=-1) {StoredBy=stor;StoredByNum=store_num;}
 
- private: //## implementation
-   char* obj_name;
-   SavableClass* StoredBy;
-   int StoredByNum;//,ObjectStored;
 
-   friend struct NamedStore;
+    inline void remove_from_store(int CallChanges = 1) {
+        NamedObjectStoreAbstract *tmp = get_store();
+        if(tmp) {
+            tmp->DeleteObject(this);
+            StoredBy = NULL;
+            StoredByNum = -1;
+            if(CallChanges)
+                StoreChanged();
+        }
+    };
+    // inc reference before changing store otherwise - object will be lost, deleted.
+    inline int put_in_store(SavableClass *stor, int store_num = -1) {
+        this->reference();
+        remove_from_store(0);
+        StoredBy = stor;
+        if(get_store())
+            get_store()->Add(this, store_num);
+        this->dereference();
+        StoreChanged();
+        return StoredByNum;
+    }
+
+private:
+    inline NamedObjectStoreAbstract *get_store() {
+        return dynamic_cast<NamedObjectStoreAbstract *>(StoredBy);
+    }
+
+protected:
+    // To be used by NamedStore
+    inline void set_StoredByNum(int value) {
+        StoredByNum = value;
+    }
+    inline void set_store(SavableClass *stor, int store_num = -1) {
+        this->reference();
+        remove_from_store(0);
+        StoredBy = stor;
+        StoredByNum = store_num;
+        this->dereference();
+        StoreChanged();
+    }
+    inline void set_not_stored() {
+        if(StoredBy == NULL)
+            return;
+        StoredBy = NULL;
+        StoredByNum = -1;
+        StoreChanged();
+    };
+    inline void force_store(SavableClass *stor, int store_num = -1) {
+        StoredBy = stor;
+        StoredByNum = store_num;
+    }
+
+private:   //## implementation
+    char *obj_name;
+    SavableClass *StoredBy;
+    int StoredByNum;   //,ObjectStored;
+
+    friend struct NamedStore;
 };
 
-#define NAMED_SPARCE this->SparceArray<Ref<NamedObject>,CopyStructRef<Ref<NamedObject> > >
+#define NAMED_SPARCE this->SparceArray<Ref<NamedObject>, CopyStructRef<Ref<NamedObject>>>
 // DefaultStorage - to be used in construction
 // struct AAA:SavabeClass,NamedObjectStoreAbstract {NamedStore Vars;}
-struct NamedStore : public SparceArray<Ref<NamedObject>,CopyStructRef<Ref<NamedObject> > >,
-                    public NamedObjectStoreAbstract  //## Inherits: <unnamed>%3EF7566D0173
- {
-  public:
-   NamedStore(SavableClass *def=NULL){Ref<NamedObject> no_=NULL;SetEmpty(&no_);DefaultStorage=((def==NULL)?this:def);}
-   NamedStore(const NamedStore &right){DefaultStorage=this;this->operator=(right);}
-   ~NamedStore(){};
-
-   NamedStore & operator=(const NamedStore &right);
-
-   inline NamedObject* GetPtr(int i)                           
-    {if (IsEmpty(i)) 
-      {i=NAMED_SPARCE::Add(i);
-       if (NamedObject *tmp=NAMED_SPARCE::operator[](i)) tmp->set_store(DefaultStorage,i);
-      }
-     return NAMED_SPARCE::operator[](i).pointer();
-    };
-   inline int SetPtr(NamedObject* obj)
-    {
-     if (obj==NULL) return -1;
-     if (obj->get_StoredBy()==DefaultStorage) 
-      {
-       int StoreNum=obj->get_StoredByNum();
-       if (obj!=GetPtr(StoreNum)) {cout<<" NamedStore::SetPtr To different objects in one point\n";abort();}
-       return StoreNum;
-      }
-     else return Add(obj);
-    };
-//   inline Ref<NamedObject>& operator [] (int i)                 {if (IsEmpty(i)) {i=NAMED_SPARCE::Add(i);if (NAMED_SPARCE::operator[](i)) NAMED_SPARCE::operator[](i)->set_store(DefaultStorage,i);}return NAMED_SPARCE::operator[](i);}
-   virtual inline int Add (Ref<NamedObject> &dat, int pos = -1) 
-    {
-     if (pos>=0) {if (!IsEmpty(pos)) {if (NamedObject *tmp=GetPtr(pos)) tmp->set_not_stored();NAMED_SPARCE::Del(pos);}}
-     else if ((dat)&&(dat->get_StoredBy()==DefaultStorage)) return dat->get_StoredByNum();
-     int i=NAMED_SPARCE::Add(dat,pos);
-     if (dat) dat->set_store(DefaultStorage,i);
-     return i;
+struct NamedStore
+    : public SparceArray<Ref<NamedObject>, CopyStructRef<Ref<NamedObject>>>,
+      public NamedObjectStoreAbstract   //## Inherits: <unnamed>%3EF7566D0173
+{
+public:
+    NamedStore(SavableClass *def = NULL) {
+        Ref<NamedObject> no_ = NULL;
+        SetEmpty(&no_);
+        DefaultStorage = ((def == NULL) ? this : def);
     }
-   virtual inline void Del (int pos)                            
-    {
-     if (!IsEmpty(pos)) 
-      {if (operator[](pos)) operator[](pos)->set_not_stored();NAMED_SPARCE::Del(pos);}
+    NamedStore(const NamedStore &right) {
+        DefaultStorage = this;
+        this->operator=(right);
     }
-   virtual inline void Move (int frpos, int topos)              
-    {NAMED_SPARCE::Add(NAMED_SPARCE::operator[](frpos),topos);NAMED_SPARCE::Del(frpos);
-     GetPtr(topos)->set_StoredByNum(topos);}
-   virtual int save_data_state (FilterOut& so){NAMED_SPARCE::save_data_state(so);so<<KeyDesc("DefStorage")<<DefaultStorage;return 1;};
-   virtual int read_data_state (FilterIn& si) {NAMED_SPARCE::read_data_state(si);si>>StdKey>>DefaultStorage;return 1;};
+    ~NamedStore(){};
 
-   inline void set_DefaultStorage(SavableClass *def)
-    {DefaultStorage=def;SparceArrayInd* ind_p=GetInd ();int cur=-1;
-     while ((cur=ind_p->Next(cur))>=0) operator[](cur)->force_store(DefaultStorage,cur);};
-   virtual int Name2Pos(char *name);                       
-// from NamedObjectStoreAbstract
-   virtual void DeleteObject(NamedObject *obj)      { if (!obj) return;Del(obj->get_StoredByNum()); };
+    NamedStore &operator=(const NamedStore &right);
+
+    inline NamedObject *GetPtr(int i) {
+        if(IsEmpty(i)) {
+            i = NAMED_SPARCE::Add(i);
+            if(NamedObject *tmp = NAMED_SPARCE::operator[](i))
+                tmp->set_store(DefaultStorage, i);
+        }
+        return NAMED_SPARCE::operator[](i).pointer();
+    };
+    inline int SetPtr(NamedObject *obj) {
+        if(obj == NULL)
+            return -1;
+        if(obj->get_StoredBy() == DefaultStorage) {
+            int StoreNum = obj->get_StoredByNum();
+            if(obj != GetPtr(StoreNum)) {
+                cout << " NamedStore::SetPtr To different objects in one point\n";
+                abort();
+            }
+            return StoreNum;
+        } else
+            return Add(obj);
+    };
+    //   inline Ref<NamedObject>& operator [] (int i)                 {if (IsEmpty(i)) {i=NAMED_SPARCE::Add(i);if (NAMED_SPARCE::operator[](i)) NAMED_SPARCE::operator[](i)->set_store(DefaultStorage,i);}return NAMED_SPARCE::operator[](i);}
+    virtual inline int Add(Ref<NamedObject> &dat, int pos = -1) {
+        if(pos >= 0) {
+            if(!IsEmpty(pos)) {
+                if(NamedObject *tmp = GetPtr(pos))
+                    tmp->set_not_stored();
+                NAMED_SPARCE::Del(pos);
+            }
+        } else if((dat) && (dat->get_StoredBy() == DefaultStorage))
+            return dat->get_StoredByNum();
+        int i = NAMED_SPARCE::Add(dat, pos);
+        if(dat)
+            dat->set_store(DefaultStorage, i);
+        return i;
+    }
+    virtual inline void Del(int pos) {
+        if(!IsEmpty(pos)) {
+            if(operator[](pos))
+                operator[](pos)->set_not_stored();
+            NAMED_SPARCE::Del(pos);
+        }
+    }
+    virtual inline void Move(int frpos, int topos) {
+        NAMED_SPARCE::Add(NAMED_SPARCE::operator[](frpos), topos);
+        NAMED_SPARCE::Del(frpos);
+        GetPtr(topos)->set_StoredByNum(topos);
+    }
+    virtual int save_data_state(FilterOut &so) {
+        NAMED_SPARCE::save_data_state(so);
+        so << KeyDesc("DefStorage") << DefaultStorage;
+        return 1;
+    };
+    virtual int read_data_state(FilterIn &si) {
+        NAMED_SPARCE::read_data_state(si);
+        si >> StdKey >> DefaultStorage;
+        return 1;
+    };
+
+    inline void set_DefaultStorage(SavableClass *def) {
+        DefaultStorage = def;
+        SparceArrayInd *ind_p = GetInd();
+        int cur = -1;
+        while((cur = ind_p->Next(cur)) >= 0)
+            operator[](cur)->force_store(DefaultStorage, cur);
+    };
+    virtual int Name2Pos(char *name);
+    // from NamedObjectStoreAbstract
+    virtual void DeleteObject(NamedObject *obj) {
+        if(!obj)
+            return;
+        Del(obj->get_StoredByNum());
+    };
     using NamedObjectStoreAbstract::Add;
-    using SparceArray<Ref<NamedObject>,CopyStructRef<Ref<NamedObject> > >::Add;
-   virtual int Add (NamedObject* dat, int pos = -1) {Ref<NamedObject> tmp=dat;return Add(tmp,pos);}
-   virtual void StoreChanged();
-  protected:
-   SavableClass *DefaultStorage;
-//   inline Ref<NamedObject>& operator [] (int i)                 {fcout<<"Error NamedStore::operator []";abort();}
-   inline Ref<NamedObject>& operator [] (int i)                 {if (IsEmpty(i)) {i=NAMED_SPARCE::Add(i);if (NAMED_SPARCE::operator[](i)) NAMED_SPARCE::operator[](i)->set_store(DefaultStorage,i);}return NAMED_SPARCE::operator[](i);}
- };
+    using SparceArray<Ref<NamedObject>, CopyStructRef<Ref<NamedObject>>>::Add;
+    virtual int Add(NamedObject *dat, int pos = -1) {
+        Ref<NamedObject> tmp = dat;
+        return Add(tmp, pos);
+    }
+    virtual void StoreChanged();
 
-struct NamedObjectInited:public NamedObject
- { virtual void Init(){};};
+protected:
+    SavableClass *DefaultStorage;
+    //   inline Ref<NamedObject>& operator [] (int i)                 {fcout<<"Error NamedStore::operator []";abort();}
+    inline Ref<NamedObject> &operator[](int i) {
+        if(IsEmpty(i)) {
+            i = NAMED_SPARCE::Add(i);
+            if(NAMED_SPARCE::operator[](i))
+                NAMED_SPARCE::operator[](i)->set_store(DefaultStorage, i);
+        }
+        return NAMED_SPARCE::operator[](i);
+    }
+};
 
+struct NamedObjectInited : public NamedObject {
+    virtual void Init(){};
+};
 
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*
@@ -388,4 +482,3 @@ inline void NamedRegistry::set_obj_print_ (void(*)(FilterOut&) value)
 }
 
 */
-

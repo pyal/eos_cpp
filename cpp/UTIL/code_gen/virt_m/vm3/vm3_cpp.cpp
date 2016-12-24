@@ -1,23 +1,23 @@
 #include "vm3_cpp.h"
 
-extern "C" void InitProgram()
-{
-	cout<<"UUUUUUUUUUUUUUUUUUUUU\n";
+extern "C" void InitProgram() {
+    cout << "UUUUUUUUUUUUUUUUUUUUU\n";
 };
 void InitVariables(){};
 
-extern "C" void PrintSymbol(SYMBOL *fst)
-{if (fst) cout<<(*fst);else cout<<" symbol is ZERO\n";};
+extern "C" void PrintSymbol(SYMBOL *fst) {
+    if(fst)
+        cout << (*fst);
+    else
+        cout << " symbol is ZERO\n";
+};
 
-extern "C" void PrintSymbols(SYMBOL *fst)
-{
-	SYMBOL *cur=fst;
-	while (cur!=NULL) 
-	{
- 		PrintSymbol(cur);//cout<<(*cur);
-		cur=cur->next;
-	}
-
+extern "C" void PrintSymbols(SYMBOL *fst) {
+    SYMBOL *cur = fst;
+    while(cur != NULL) {
+        PrintSymbol(cur);   //cout<<(*cur);
+        cur = cur->next;
+    }
 }
 
 /*

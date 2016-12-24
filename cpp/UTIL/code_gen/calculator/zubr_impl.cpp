@@ -3,66 +3,68 @@
 #include "zubr_impl.h"
 
 
-int zubr_calculator_zubr_lex(){
+int zubr_calculator_zubr_lex() {
     Lex_Result *res = CalculatorProgam::GetCurPtr()->lex->Analyse();
-	if (!res) 
-		return 0;
-	if (res->res_type==Lex_Result::Error)
-		throw info_except(" Lexema extraction error: %s\n",res->res_str.c_str());
-    if (res->res_type==Lex_Result::NumberDouble){
-        zubr_calculator_zubr_lval.sym=CalculatorProgam::GenerateDouble(res->res_val);
+    if(!res)
+        return 0;
+    if(res->res_type == Lex_Result::Error)
+        throw info_except(" Lexema extraction error: %s\n", res->res_str.c_str());
+    if(res->res_type == Lex_Result::NumberDouble) {
+        zubr_calculator_zubr_lval.sym = CalculatorProgam::GenerateDouble(res->res_val);
         return NUMBER;
     }
-    if (res->res_type==Lex_Result::NumberInt){
+    if(res->res_type == Lex_Result::NumberInt) {
         {
-        Ref<DataConstr> d = CalculatorProgam::GenerateDouble(res->res_int);
-        zubr_calculator_zubr_lval.sym = d;
+            Ref<DataConstr> d = CalculatorProgam::GenerateDouble(res->res_int);
+            zubr_calculator_zubr_lval.sym = d;
         }
-//        zubr_calculator_zubr_lval.sym=CalculatorProgam::GenerateDouble(res->res_int);
+        //        zubr_calculator_zubr_lval.sym=CalculatorProgam::GenerateDouble(res->res_int);
         return NUMBER;
     }
-    if (res->res_type==Lex_Result::Identifier){
+    if(res->res_type == Lex_Result::Identifier) {
         Ref<DataConstr> type = CalculatorProgam::GetType(res->res_str.c_str());
-        if (type){
-			zubr_calculator_zubr_lval.sym=type;
-	        return TYPE;
+        if(type) {
+            zubr_calculator_zubr_lval.sym = type;
+            return TYPE;
         }
         Ref<DataConstr> d = CalculatorProgam::GetVar(res->res_str.c_str());
-		if (d){
-			zubr_calculator_zubr_lval.sym=d;
-	        return VAR;
-		}
-        zubr_calculator_zubr_lval.sym = CalculatorProgam::GenerateUndef(res->res_str.c_str());
-		return IDENT;
+        if(d) {
+            zubr_calculator_zubr_lval.sym = d;
+            return VAR;
+        }
+        zubr_calculator_zubr_lval.sym =
+            CalculatorProgam::GenerateUndef(res->res_str.c_str());
+        return IDENT;
     }
-    if (res->res_type==Lex_Result::Token){
-        if (res->res_int<1500)
+    if(res->res_type == Lex_Result::Token) {
+        if(res->res_int < 1500)
             return res->res_int;
-		else return 0;
+        else
+            return 0;
         //zubr_calculator_zubr_lval=CalculatorProgam::GetCurPtr()->vars.AddVar(res->res_str.c_str(),BLTIN,0,0,BuildInFunc::FPtr[res->res_int-1500],0);
         //return BLTIN;
-
     }
-    if (res->res_type==Lex_Result::String){
-        zubr_calculator_zubr_lval.sym=CalculatorProgam::GenerateString(Stroka(res->res_str.c_str()));
-//        DataConstr *d = (DataConstr *)zubr_calculator_zubr_lval.sym;
+    if(res->res_type == Lex_Result::String) {
+        zubr_calculator_zubr_lval.sym =
+            CalculatorProgam::GenerateString(Stroka(res->res_str.c_str()));
+        //        DataConstr *d = (DataConstr *)zubr_calculator_zubr_lval.sym;
         //Ref<Stroka>* s = (Ref<Stroka>*)DataSimpleStorage::GetData( d->dat );
         return STRING;
     }
-    if (res->res_type==Lex_Result::End)
+    if(res->res_type == Lex_Result::End)
         return 0;
     zubr_calculator_zubr_error("Do not understand token");
     return 0;
-}   
-
-void zubr_calculator_zubr_error(const char*er){
-    int Line, Pos;
-    CalculatorProgam::GetCurPtr()->lex->GetBuferReadingPos(Line,Pos);
-    cout<<" Error occured in Line:"<<Line<<" Pos "<<Pos<<"\n";
-    if (er)  cout<<" Error is : "<<er<<"\n";
-    exit(1);
 }
 
+void zubr_calculator_zubr_error(const char *er) {
+    int Line, Pos;
+    CalculatorProgam::GetCurPtr()->lex->GetBuferReadingPos(Line, Pos);
+    cout << " Error occured in Line:" << Line << " Pos " << Pos << "\n";
+    if(er)
+        cout << " Error is : " << er << "\n";
+    exit(1);
+}
 
 
 //
@@ -92,10 +94,7 @@ void zubr_calculator_zubr_error(const char*er){
 //private:
 //    static CalculatorProgam* Ptr,*Ptr_Old;
 //};
-CalculatorProgam *CalculatorProgam::Ptr,*CalculatorProgam::Ptr_Old;
-
-
-
+CalculatorProgam *CalculatorProgam::Ptr, *CalculatorProgam::Ptr_Old;
 
 
 //CalculatorProgam &CalculatorProgam::Execute(){
@@ -108,61 +107,63 @@ CalculatorProgam *CalculatorProgam::Ptr,*CalculatorProgam::Ptr_Old;
 //    return *this;
 //}
 //
-void warning(const char *fst, const char *sec){
-    cout<<" Warning: "<<fst;
-    if (sec) cout<<" | "<<sec;
-    cout<<":\n";
+void warning(const char *fst, const char *sec) {
+    cout << " Warning: " << fst;
+    if(sec)
+        cout << " | " << sec;
+    cout << ":\n";
 }
 
-void print( Ref<DataConstr> dat ){
-	if (dat->Type->TypeName==Stroka("double")){
-		printf( "\t%25.17e\n", *(double*)DataSimpleStorage::GetData(dat->dat) );
-	} else {
-		if (dat->Type->TypeName==Stroka("string")){
-			printf( "\t%s\n", (*(Ref<Stroka>*)DataSimpleStorage::GetData(dat->dat) )->c_str());
-		} else{
-			printf("\tType:%s\n",dat->Type->TypeName.c_str());
-		}
-	}
+void print(Ref<DataConstr> dat) {
+    if(dat->Type->TypeName == Stroka("double")) {
+        printf("\t%25.17e\n", *(double *)DataSimpleStorage::GetData(dat->dat));
+    } else {
+        if(dat->Type->TypeName == Stroka("string")) {
+            printf(
+                "\t%s\n",
+                (*(Ref<Stroka> *)DataSimpleStorage::GetData(dat->dat))->c_str());
+        } else {
+            printf("\tType:%s\n", dat->Type->TypeName.c_str());
+        }
+    }
 }
 
-SYMBOL EndStmt( SYMBOL fst ){
-//	DataConstr* f = (DataConstr*)(fst);
-//	cout<<*f<<"\n";
-//	return fst;
-	return NULL;
+SYMBOL EndStmt(SYMBOL fst) {
+    //	DataConstr* f = (DataConstr*)(fst);
+    //	cout<<*f<<"\n";
+    //	return fst;
+    return NULL;
 };
-SYMBOL AddOper( SYMBOL fst, SYMBOL sec, char oper ){
-	DataConstr* f = (DataConstr*)(fst);
-	DataConstr* s = (DataConstr*)(sec);
-    return CalculatorProgam::AddOper(f,s,oper);
+SYMBOL AddOper(SYMBOL fst, SYMBOL sec, char oper) {
+    DataConstr *f = (DataConstr *)(fst);
+    DataConstr *s = (DataConstr *)(sec);
+    return CalculatorProgam::AddOper(f, s, oper);
 };
-void ListStart( ){
-	CalculatorProgam::ListStart();
+void ListStart() {
+    CalculatorProgam::ListStart();
 }
-SYMBOL ListAdd( SYMBOL fst ){
-	DataConstr* f = (DataConstr*)(fst);
-	return CalculatorProgam::ListAdd(f);
+SYMBOL ListAdd(SYMBOL fst) {
+    DataConstr *f = (DataConstr *)(fst);
+    return CalculatorProgam::ListAdd(f);
 }
-SYMBOL AddFunc( SYMBOL fst ){
-	DataConstr* f = (DataConstr*)(fst);
-	return CalculatorProgam::AddFunc(f);
+SYMBOL AddFunc(SYMBOL fst) {
+    DataConstr *f = (DataConstr *)(fst);
+    return CalculatorProgam::AddFunc(f);
 }
-SYMBOL GetEl( SYMBOL fst, SYMBOL sec ){
-	DataConstr* f = (DataConstr*)(fst);
-	DataConstr* s = (DataConstr*)(sec);
-    return CalculatorProgam::AddOper(f,s,'[');
+SYMBOL GetEl(SYMBOL fst, SYMBOL sec) {
+    DataConstr *f = (DataConstr *)(fst);
+    DataConstr *s = (DataConstr *)(sec);
+    return CalculatorProgam::AddOper(f, s, '[');
 }
-SYMBOL DefineVar( SYMBOL fst, SYMBOL sec ){
-	DataConstr* f = (DataConstr*)(fst);
-	DataConstr* s = (DataConstr*)(sec);
+SYMBOL DefineVar(SYMBOL fst, SYMBOL sec) {
+    DataConstr *f = (DataConstr *)(fst);
+    DataConstr *s = (DataConstr *)(sec);
     return CalculatorProgam::DefineVar(f, s);
 }
-SYMBOL DefineVar( SYMBOL fst){
-	DataConstr* f = (DataConstr*)(fst);
+SYMBOL DefineVar(SYMBOL fst) {
+    DataConstr *f = (DataConstr *)(fst);
     return CalculatorProgam::DefineVar(f);
 }
-
 
 
 //void initcode( void )
@@ -201,8 +202,8 @@ SYMBOL DefineVar( SYMBOL fst){
 //void execute( INST *p )
 //{
 //    CalculatorProgam *Ptr = CalculatorProgam::GetCurPtr();
-//    for( Ptr->progr_counter = p; 
-//        *(Ptr->progr_counter) != STOP && !Ptr->returning; )  
+//    for( Ptr->progr_counter = p;
+//        *(Ptr->progr_counter) != STOP && !Ptr->returning; )
 //        (*(*(Ptr->progr_counter++)))();
 //	Ptr->progr_counter++;
 //	if (*(Ptr->progr_counter)!=STOP){
@@ -514,7 +515,6 @@ SYMBOL DefineVar( SYMBOL fst){
 //
 //
 ///*************************************************/
-
 
 
 //void print( void )

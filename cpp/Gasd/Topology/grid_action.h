@@ -9,58 +9,78 @@
 #define GridIndex int
 
 typedef DataVector<GridIndex> GridMask;
-typedef DataVector<GridMask,CopyStructSlow<GridMask> > GridMaskVector;
+typedef DataVector<GridMask, CopyStructSlow<GridMask>> GridMaskVector;
 
 
+struct GridBoundPnt {
+    SpacePoint Center;
+    SpacePoint NormalDir;   //(GridIndex &k);
+    double Surface;         //(GridIndex &k);
+    GridIndex First, Second;
+    int FirstPos, SecondPos;
+
+    GridBoundPnt() {
+        Surface = 0;
+        First = -1;
+        Second = -1;
+        FirstPos = -1;
+        SecondPos = -1;
+    }
+    GridBoundPnt(const GridBoundPnt &pnt) {
+        Center = pnt.Center;
+        NormalDir = pnt.NormalDir;
+        Surface = pnt.Surface;
+        First = pnt.First;
+        Second = pnt.Second;
+        FirstPos = pnt.FirstPos;
+        SecondPos = pnt.SecondPos;
+    }
+    GridBoundPnt &operator=(const GridBoundPnt &pnt) {
+        Center = pnt.Center;
+        NormalDir = pnt.NormalDir;
+        Surface = pnt.Surface;
+        First = pnt.First;
+        Second = pnt.Second;
+        FirstPos = pnt.FirstPos;
+        SecondPos = pnt.SecondPos;
+        return *this;
+    }
+
+    GridBoundPnt &InvertDirection() {
+        ExchVar(&First, &Second, sizeof(GridIndex));
+        ExchVar(&FirstPos, &SecondPos, sizeof(int));
+        NormalDir = NormalDir * (-1);
+        return *this;
+    };
+    GridIndex GetNeib(GridIndex One) {
+        return (One == First) ? Second : (One == Second) ? First : -2;
+    }
+    //  void ChangeNeib(GridIndex oldind,GridIndex newind,int newpos)
+    //   {(oldind==First)?Second=newind;SecondPos=newpos;:First=newind;FirstPos=newpos;}
+    void ChangeNeib(GridIndex oldind, GridIndex newind) {
+        (oldind == First) ? Second = newind : First = newind;
+    }
+    int NoNeibous() {
+        return (First == Second) ? (Second == -1) ? 1 : 0 : 0;
+    }
+};
+
+FilterIn &operator>>(FilterIn &si, GridBoundPnt &buf);
+FilterOut &operator<<(FilterOut &so, GridBoundPnt &buf);
 
 
-
-struct GridBoundPnt
- {
-  SpacePoint Center;
-  SpacePoint NormalDir;//(GridIndex &k);
-  double Surface;//(GridIndex &k);
-  GridIndex First,Second;
-  int FirstPos,SecondPos;
-
-   GridBoundPnt() {Surface=0;First=-1;Second=-1;FirstPos=-1;SecondPos=-1;}
-   GridBoundPnt(const GridBoundPnt &pnt) 
-    {Center=pnt.Center;NormalDir=pnt.NormalDir;Surface=pnt.Surface;
-     First=pnt.First;Second=pnt.Second;FirstPos=pnt.FirstPos;SecondPos=pnt.SecondPos;}
-   GridBoundPnt &operator=(const GridBoundPnt &pnt) 
-    {Center=pnt.Center;NormalDir=pnt.NormalDir;Surface=pnt.Surface;
-     First=pnt.First;Second=pnt.Second;FirstPos=pnt.FirstPos;SecondPos=pnt.SecondPos;
-     return *this;}
-
-  GridBoundPnt &InvertDirection()
-   {ExchVar(&First,&Second,sizeof(GridIndex)); ExchVar(&FirstPos,&SecondPos,sizeof(int));
-    NormalDir=NormalDir*(-1); return *this; };
-  GridIndex GetNeib(GridIndex One)
-   {return (One==First)?Second:(One==Second)?First:-2;}
-//  void ChangeNeib(GridIndex oldind,GridIndex newind,int newpos)
-//   {(oldind==First)?Second=newind;SecondPos=newpos;:First=newind;FirstPos=newpos;}
-  void ChangeNeib(GridIndex oldind,GridIndex newind)
-   {(oldind==First)?Second=newind:First=newind;}
-  int NoNeibous(){return (First==Second)?(Second==-1)?1:0:0;}
-
- };
-
-FilterIn& operator>>(FilterIn &si,GridBoundPnt &buf);
-FilterOut& operator<<(FilterOut &so,GridBoundPnt &buf);
-
-
-
-
-struct GridAction
- {
-   enum { AddPnt,DelPnt,MovePnt,ModifyPnt,VarModifyPnt,VarAddPnt } ActionTypes;
-   int Action;
-   GridIndex Index,Param;
-   void SetAction(int act,GridIndex ind,GridIndex par)
-     {Action=act;Index=ind;Param=par;}
- };
-FilterIn& operator>>(FilterIn &si,GridAction &buf);
-FilterOut& operator<<(FilterOut &so,GridAction &buf);
+struct GridAction {
+    enum { AddPnt, DelPnt, MovePnt, ModifyPnt, VarModifyPnt, VarAddPnt } ActionTypes;
+    int Action;
+    GridIndex Index, Param;
+    void SetAction(int act, GridIndex ind, GridIndex par) {
+        Action = act;
+        Index = ind;
+        Param = par;
+    }
+};
+FilterIn &operator>>(FilterIn &si, GridAction &buf);
+FilterOut &operator<<(FilterOut &so, GridAction &buf);
 
 
 /*
@@ -91,8 +111,6 @@ And in "grid_center.cpp"
 Grid<GridCenterPnt>* Grid<GridCenterPnt>::cur;
 
 */
-
-
 
 
 #endif

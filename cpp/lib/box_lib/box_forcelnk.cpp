@@ -6,7 +6,5 @@
 #include "box_forcelnk.h"
 
 
-
 ForceLinkVoid<TIvlParametersSplIO> Dummy_TIvlParametersSplIO;
 ForceLinkVoid<MatterConverterSplIO> Dummy_MatterConverterSplIO;
-
