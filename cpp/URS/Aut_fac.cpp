@@ -11,7 +11,7 @@ void ClcPos(One_Cell &Par, double &Pos0, double &Pos1, double &Pos2, double &L)
 // Taking Sh0.Time - as last calculated parameter for shock times
 // And Par.CurrentTime - as new time, we calculate the result positions
 {
-    double Ulast = Par.Sh0.Med.Velo + Par.Sh1.Med.Velo + Par.Sh2.Med.Velo;
+//    double Ulast = Par.Sh0.Med.Velo + Par.Sh1.Med.Velo + Par.Sh2.Med.Velo;
     double dU = Par.Sh1.Med.Velo + Par.Sh2.Med.Velo, Ct = Par.CurTime;
     Pos1 = 0;
     Pos2 = 0;
@@ -69,7 +69,7 @@ void AddNewWave(One_Cell &Par, Shock_Par Res, int Fst) {
             ExchangeBounds(Par);
         return;
     }
-    double Pos1 = Par.Sh1.Pos, Pos2 = Par.Sh2.Pos, L = Par.Sh0.Pos;
+    double Pos2 = Par.Sh2.Pos, L = Par.Sh0.Pos; //Pos1 = Par.Sh1.Pos,
     //   double Told=Pos2/max<double>(StndErr,(Par.Sh2.Dvel+Par.Sh0.Med.Velo));
     //   double Tnew=L/max<double>(StndErr,(Res.Dvel+Par.Sh0.Med.Velo));
     //   if ((Tnew<=Told) || (Norm(Par.Sh2.Med)<sqrt(MathZer)))
@@ -114,7 +114,9 @@ Int_Par Hug_Dyn(Int_Par &Par)
 { Int_Par ret=Par;ret.Pres*=1e5;return ret;}
 */
 int Interact(One_Cell &Fst, One_Cell &Sec, MatterIO *MFst, MatterIO *MSec, double Tim) {
-    Int_Par Par1 = Par1 * 0, Par2 = Par2 * 0;
+    Int_Par Par1, Par2;
+    Par1 = Par1 * 0;
+    Par2 = Par1;
     Fst.CurTime = Tim;
     Sec.CurTime = Tim;
     if(MFst != NULL) {
@@ -198,7 +200,7 @@ Shock_Par SetMeanPar(One_Cell &Par, Int_Par *Set) {
 };
 ostream &operator<<(ostream &output, One_Cell &Par) {
     //   if ((Par.M!=NULL) && (!MatterStore(output,Par.M)))  { cout<<"Could not store. Exit.\n";exit(0);}
-    Shock_Par ret = SetMeanPar(Par);
+    Shock_Par ret = SetMeanPar(Par, NULL);
     output << FM << ret.Pos << FMT << ret.Med.Pres << FMT << ret.Med.Dens << FMT
            << ret.Med.Ener << FMT << ret.Med.Velo;
     //      d[1]=Data[i].PosM;d[2]=Data[i].IntM.Pres*1e-5;d[3]=Data[i].IntM.Dens;
@@ -290,7 +292,7 @@ int GetNumMatter(int k, AutIO &dat) {
 int AutIO::ReadIni(istream &input) {
     InterfaceIODelete();
     char tmp[256];   //,tmp1[256];
-    int k, NumIntPar = 0;
+    int k;//, NumIntPar = 0;
     input >> tmp >> NumPnt;   //>>tmp>>CurTime;input.getline(tmp,256);
     input >> tmp >> NumMatter >> tmp;
     if(NumMatter > MaxNumMatter - 2) {
@@ -340,7 +342,7 @@ void AutIO::ReadPar(istream &input) {
         cout << " Bad Number of points in AutIO::ReadPar\n";
         return;
     }
-    int i = 0, NumR = 5;
+    int i = 0;//, NumR = 5;
     char tmp[256];
     Data = new One_Cell[NumPnt + 2];
     input >> tmp >> CurTime;

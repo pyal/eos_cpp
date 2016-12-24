@@ -24,7 +24,7 @@ struct One_Cell
    double CurTime;
    double Length,Mass,Position;
    One_Cell(){CurTime=0;};
-   friend Shock_Par SetMeanPar(One_Cell &Par,Int_Par *Set=NULL);
+   friend Shock_Par SetMeanPar(One_Cell &Par,Int_Par *Set);
 //   friend Int_Par GetPar1(One_Cell Par);
 //   friend Int_Par GetPar2(One_Cell Par);
    friend void SetCurTim(One_Cell &Par,double Tim);

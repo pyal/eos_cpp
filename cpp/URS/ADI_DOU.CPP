@@ -1,4 +1,5 @@
 #include <lib/precompiled/adi_dou.h>
+#include <version.h>
 
 #include "adi_dou.h"
 
@@ -151,26 +152,33 @@ int main(int argc,char *argv[])
          {
           cout<<" usage \n"<<
                 "      adi_dou.exe conf out_file [/Key] \n"<<
-                "      Key: \n"<<
-                "           t23.2 : Given Last Time, determine first velocity  \n"<<
-                "           d23.2 : Given Last Shock, determine first velocity  \n"<<
-                "           p23.2 : Given Last Pres, determine first velocity  \n"<<
-                "           s23.2 : Given Last Mass U, determine first velocity  \n"<<
-                "           v5.4  : In calculation use first velocity          \n"<<
-                "           i10   : Make number iterations                     \n"<<
-                "           f     : Calculate only hugoniots( not isoent)      \n"<<
-                "           u     : To search Velocity in limits u0+-u         \n"<<
-                "           z     : For all take zero initial pressure        \n"<<
-                "           oRes  : Output only raw data in the file Res       \n"<<
-                " conf   structure:                                            \n"<<
-                "                                                              \n"<<
-                " NumMatter 2                                                  \n"<<
-                "                                                              \n"<<
-                "MatterABu   Material_File material.cfg Substance Steel-Tern   \n"<<
-                "u  5.2  r  7.89  p  0  e  0  l  1  t  1  d  1                 \n"<<
-                "                                                              \n"<<
-                "MatterABu   Material_File material.cfg Substance Z-Al203_     \n"<<
-                "u  0  r  3.985  p  0  e  0  l  1  t  1  d  1                  \n";
+                "      Version: " << VERSION << "\n" <<
+                R"(
+      Key:
+           t23.2 : Given Last Time, determine first velocity
+           d23.2 : Given Last Shock, determine first velocity
+           p23.2 : Given Last Pres, determine first velocity
+           s23.2 : Given Last Mass U, determine first velocity
+           v5.4  : In calculation use first velocity
+           i10   : Make number iterations
+           f     : Calculate only hugoniots( not isoent)
+           u     : To search Velocity in limits u0+-u
+           z     : For all take zero initial pressure
+           oRes  : Output only raw data in the file Res
+
+ conf   structure:
+
+     NumMatter 3
+
+     MatterABu  { Material_File material.cfg Substance Steel-Tern }
+     u  5.2  r  7.89  p  0  e  0  l  1  t  1  d  1
+
+     MatterABu  { Material_File material.cfg Substance Z-Al203_ }
+     u  0  r  3.985  p  0  e  0  l  1  t  1  d  1
+
+     MatterABu  { Material_File material.cfg Substance Steel-Tern }
+     u  0  r  7.89  p  0  e  0  l  1  t  1  d  1
+                  )";
           exit(0);
          }
        double BegVel=0,FindD=0,FindP=0,FindT=0,FindU=0;int DoIter=0;

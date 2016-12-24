@@ -183,3 +183,10 @@ target_link_libraries(ivl_cvt reflib stdlib urs_curve_lib quad_pack_lib mathlib
         box_lib
         )
 add_dependencies(ivl_cvt version)
+
+add_executable(adi_dou cpp/Urs/Adi_dou.cpp ${ADI_DOU_SOURCE_FILES})
+target_link_libraries(adi_dou reflib stdlib urs_curve_lib quad_pack_lib mathlib
+        waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
+        box_lib
+        )
+add_dependencies(adi_dou version)

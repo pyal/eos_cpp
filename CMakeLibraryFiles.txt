@@ -18,7 +18,6 @@ set(STDLIB_SOURCE_FILES
         )
 
 set(REFLIB_SOURCE_FILES
-        cpp/lib/Ref/CommandParse.cpp
         cpp/lib/Ref/CommandLine.cpp
 #        cpp/lib/Ref/NamedRegistry.cpp
         cpp/lib/Ref/Stroka.cpp
@@ -335,10 +334,10 @@ set(EOSLIB_SOURCE_FILES
         cpp/Urs/Free_fun.h
         cpp/Urs/urs_forcelnk.cpp
         cpp/Urs/urs_forcelnk.h
-#        cpp/perl/ClcGasd.pm
-#        cpp/perl/resource/gasd/script_data/MATERIAL.CFG
-#        cpp/perl/resource/gasd/script/test_urs_main.pl
-        )
+#cpp/perl/ClcGasd.pm
+#cpp/perl/resource/gasd/script_data/MATERIAL.CFG
+#cpp/perl/resource/gasd/script/test_urs_main.pl
+)
 
 set(LIBF2C_SOURCE_FILES
         cpp/F2C/libf2c/abort_.c
@@ -623,3 +622,19 @@ set(BOX_LIB_SOURCE_FILES
         cpp/lib/box_lib/box_forcelnk.cpp
         cpp/lib/box_lib/box_forcelnk.h
 )
+
+set(ADI_DOU_SOURCE_FILES
+        #cpp/Urs/Adi_dou.cpp
+        cpp/Urs/Aut_fac.cpp
+        cpp/Urs/aut_hug.cpp
+        cpp/Urs/Matt_adi.cpp
+        cpp/Urs/urs_forcelnk.cpp
+        cpp/Urs/Adi_dou.h
+        cpp/Urs/Aut_fac.h
+        cpp/Urs/aut_hug.H
+        cpp/Urs/Matt_adi.h
+        cpp/Urs/urs_forcelnk.h
+)
+
+
+

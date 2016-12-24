@@ -33,7 +33,7 @@ void SetIntPar(double r,double e)
 double PressurePorous(double r,double e)
   {
    SetIntPar(r,e);
-   double P=MatterAdiabat->Pressure(r,e);
+//   double P=MatterAdiabat->Pressure(r,e);
    return max<double>(MatterAdiabat->Pressure(r,e),Pcritical);
 //   return MatterAdiabat->Pressure(r,e);
   };
@@ -170,11 +170,11 @@ public:
     do {  FromDenc=NextDenc;FromEnergy=NextEnergy;}
     while (NextPressure(NextDenc,NextEnergy,Pres,ToPres,Stp)&&(++Num<MaxNum));
 //cout<<"\n";
-    double Err=1e-6;
+//    double Err=1e-6;
     ResDenc=0.5*(NextDenc+FromDenc);ResEnergy=0.5*(NextEnergy+FromEnergy);
     if (Num>=MaxNum) return 0;
     Denc=FromDenc;Energy=FromEnergy;Pressure=ToPres;
-    int ret=Fzero(PresMisf,FromDenc,NextDenc,ResDenc,Err,Err,MaxNum);
+//    int ret=Fzero(PresMisf,FromDenc,NextDenc,ResDenc,Err,Err,MaxNum);
     ResEnergy=IsentropeEnergy(ResDenc);
     return 1;
   }
@@ -464,26 +464,26 @@ cout<<" E "<<E<<"\n";
 void ShowIsoEntrope(fstream &in)
   {
    char buf[256];
-   double T,P,E,E0,s=1e-3;//x,x_c,
+   double T,P,E,E0;//,s=1e-3;//x,x_c,
 //			int res;
    MatterIO *M;M=MatterAdiabat;
 //   if (!MatterRegister(in,M)) { cout<<"Could not register. Exit.\n";exit(0);}
    //IsoM=M;
-   double min,max,stp,Rconst=M->DencityCold(),Cur_U=0;
+   double min,Max,stp,Cur_U=0; //Rconst=M->DencityCold(),
    IsentropeIntegralClass Isent(MatterAdiabat);
-   if (InputPar(in,E0,min,max,stp,buf))
+   if (InputPar(in,E0,min,Max,stp,buf))
      {
       fstream out(buf,ios::out);
 //     Rcritical=Rconst*Bconst/(fabs(Bconst-1)+StndErr);
 out<<" Isoentrope\n";
 out<<"        Dencity          Pressure          Temperature         Energy       dU\n";
       double Ecur=E0,Rcur=min;
-//      for (double k=min(min,max);k<=max<double>(max,min);k+=max<double>(min(fabs(stp),(max<double>(max,min)-k)*(1+2*M_Eps)),2*k*M_Eps) )
-      stp=max<double>(fabs(stp),2*min*M_Eps);(min>max)?stp=-stp:stp=stp;
+//      for (double k=min(min,Max);k<=Max<double>(Max,min);k+=Max<double>(min(fabs(stp),(Max<double>(Max,min)-k)*(1+2*M_Eps)),2*k*M_Eps) )
+      stp=max<double>(fabs(stp),2*min*M_Eps);(min>Max)?stp=-stp: stp;
       double k=min-stp;
-      while (In_Lim(k=k+stp,min,max,1))
+      while (In_Lim(k=k+stp,min,Max,1))
       //{
-      //for (double k=min;k<=max;k+=max<double>(fabs(stp),2*k*M_Eps))
+      //for (double k=min;k<=Max;k+=Max<double>(fabs(stp),2*k*M_Eps))
         {
 //         x=k/Rconst;
 //         E=Eliquid(x,T0);  // T0 is Temperature
@@ -500,8 +500,8 @@ out<<"        Dencity          Pressure          Temperature         Energy     
          E=Isent.IsentropeEnergy(Rcur,Ecur,k);
          T=M->Temperature(k,E);
          P=M->Pressure(k,E);
-//         Cur_U+=Isent.IsentropeDU(min(Rcur,k),max<double>(Rcur,k));
-         //if (k==min(min,max)) Cur_U=-Cur_U;
+//         Cur_U+=Isent.IsentropeDU(min(Rcur,k),Max<double>(Rcur,k));
+         //if (k==min(min,Max)) Cur_U=-Cur_U;
          Cur_U+=Isent.IsentropeDU(Rcur,Ecur,k);
 //         double ResDenc,ResEnergy;
 //         Isent.IsentropePres(min,E0,P,ResDenc,ResEnergy);
@@ -810,7 +810,7 @@ if (misfit>10*StndErr) cout<<" mis "<<misfit<<" r2 "<<r2<<"\n";//ChRead();
 
 double MisfitHug(double x)
   {
-   double porous=ConstPar[0],v1=ConstPar[1],p1=ConstPar[2];
+   double v1=ConstPar[1],p1=ConstPar[2]; //porous=ConstPar[0],
    double e1=ConstPar[3],du=ConstPar[4];
 	  
 //   if (x>-MathZer) { cout<<" Wrong Sound x = "<<x<<"\n";exit(0);}
@@ -859,7 +859,7 @@ void SetHugPar(double &v1,double &x,double &du,
 //   double PEderiv=( PressurePorous(r1,e1+StndErr)-p1 )/StndErr;
 //cout<<" PE "<<PEderiv<<" ";PEderiv=max<double>(PEderiv,1);
    double Sound=SoundPorous(r1,e1);
-   double s0=Sound;
+//   double s0=Sound;
 
    xstp=-2.*du;x=Sound+xstp;
    double x0=x,Mis=MathInf;

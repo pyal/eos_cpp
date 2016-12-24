@@ -6,11 +6,11 @@ int OnlyHugoniotCalculation = 0;
 
 int GetInitialPressure = 0;
 
-double Norm(Int_Par &Par) {
+double Norm(const Int_Par &Par) {
     return fabs(Par.Dens) + fabs(Par.Ener) + fabs(Par.Pres) + fabs(Par.Velo);
 };
 
-Int_Par operator*(Int_Par &Par, double coef) {
+Int_Par operator*(const Int_Par &Par, double coef) {
     Int_Par ret = Par;
     if(coef != 0) {
         ret.Dens *= coef;
@@ -27,13 +27,13 @@ Int_Par operator*(Int_Par &Par, double coef) {
 };
 //Int_Par operator/(Int_Par &Par,double coef);
 
-Int_Par operator+(Int_Par &Par, double coef) {
+Int_Par operator+(const Int_Par &Par, double coef) {
     Int_Par ret = Par;
     ret.Velo += coef;
     return ret;
 };
 
-Int_Par operator+(Int_Par &Par1, Int_Par &Par2) {
+Int_Par operator+(const Int_Par &Par1, const Int_Par &Par2) {
     Int_Par ret = Par1;
     ret.Dens += Par2.Dens;
     ret.Ener += Par2.Ener;
@@ -42,7 +42,7 @@ Int_Par operator+(Int_Par &Par1, Int_Par &Par2) {
     return ret;
 };
 
-Int_Par operator-(Int_Par &Par1, Int_Par &Par2) {
+Int_Par operator-(const Int_Par &Par1, const Int_Par &Par2) {
     Int_Par ret = Par1;
     ret.Dens -= Par2.Dens;
     ret.Ener -= Par2.Ener;
@@ -130,15 +130,9 @@ double MisU(double P) {
     return ret;
 }
 
-void Hug2(
-    Int_Par &P1,
-    Int_Par &P2,
-    Int_Par &Pr1,
-    double &Dr1,
-    Int_Par &Pr2,
-    double &Dr2,
-    MatterIO *Mat1,
-    MatterIO *Mat2) {
+void Hug2(Int_Par &P1, Int_Par &P2, Int_Par &Pr1,
+        double &Dr1, Int_Par &Pr2, double &Dr2,
+        MatterIO *Mat1, MatterIO *Mat2) {
     double Pest;   //,Delta;
     MatterAdiabat = Mat1;
     P1.Pres = PressurePorous(P1.Dens, P1.Ener);
