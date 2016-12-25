@@ -12,9 +12,9 @@ RndAngleGenerator_Kashuba::RndAngleGenerator_Kashuba(
     double strongshort)
     : Phi0(phi0),
       MainHarm(mainharm),
-      FurieDiscr(furiediscr),
       FullTime(fulltime),
       StrongShort(strongshort),
+      FurieDiscr(furiediscr),
       N(n){};
 
 void RndAngleGenerator_Kashuba::Rnd(VecCl &Rnd_Angle, VecCl &Rnd_Time) {

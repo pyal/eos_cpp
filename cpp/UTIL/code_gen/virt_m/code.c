@@ -99,34 +99,34 @@ void whilecode( void )
    DATUM d;
    INST *savepc = pc;
 
-   execute( savepc + 2 );               /* условие */
+   execute( savepc + 2 );               /* СѓСЃР»РѕРІРёРµ */
    d = pop();
    while( d.val )
    {
-      execute( *((INST **)(savepc)) );  /* тело */
+      execute( *((INST **)(savepc)) );  /* С‚РµР»Рѕ */
       if( returning ) break;
-      execute( savepc + 2 );            /* условие */
+      execute( savepc + 2 );            /* СѓСЃР»РѕРІРёРµ */
       d = pop();
    }
 
    if( !returning )
-      pc = *((INST **)(savepc + 1));    /* следующий оператор */
+      pc = *((INST **)(savepc + 1));    /* СЃР»РµРґСѓСЋС‰РёР№ РѕРїРµСЂР°С‚РѕСЂ */
 }
 
 void ifcode( void )
 {
    DATUM d;
-   INST *savepc = pc;                   /* часть "then" */
+   INST *savepc = pc;                   /* С‡Р°СЃС‚СЊ "then" */
 
-   execute( savepc + 3 );               /* условие */
+   execute( savepc + 3 );               /* СѓСЃР»РѕРІРёРµ */
    d = pop();
 
    if( d.val ) execute( *((INST **)(savepc)) );
-   else if( *((INST **)(savepc + 1)) )  /* часть "else" ? */
+   else if( *((INST **)(savepc + 1)) )  /* С‡Р°СЃС‚СЊ "else" ? */
            execute( *((INST **)(savepc + 1)) );
 
    if( !returning )
-      pc = *((INST **)(savepc + 2));    /* следующий оператор */
+      pc = *((INST **)(savepc + 2));    /* СЃР»РµРґСѓСЋС‰РёР№ РѕРїРµСЂР°С‚РѕСЂ */
 }
 
 void defin( SYMBOL *sp )

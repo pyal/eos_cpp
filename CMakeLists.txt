@@ -125,6 +125,12 @@ add_dependencies(math_func_lib version)
 add_library(box_lib STATIC ${BOX_LIB_SOURCE_FILES})
 add_dependencies(box_lib version)
 
+add_library(poly_lib STATIC ${POLY_LIB_SOURCE_FILES})
+add_dependencies(poly_lib version)
+
+add_library(messb_lib STATIC ${MESSB_LIB_SOURCE_FILES})
+add_dependencies(messb_lib version)
+
 
 
 
@@ -190,3 +196,40 @@ target_link_libraries(adi_dou reflib stdlib urs_curve_lib quad_pack_lib mathlib
         box_lib
         )
 add_dependencies(adi_dou version)
+
+
+add_executable(poly_test cpp/Gasd/Polygon/poly_test.cpp ${ADI_DOU_SOURCE_FILES})
+target_link_libraries(poly_test reflib stdlib urs_curve_lib quad_pack_lib mathlib
+        waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
+        box_lib poly_lib
+        )
+add_dependencies(poly_test version)
+
+add_executable(famessb cpp/messb/Famain.cpp ${FAMESSB_SOURCE_FILES})
+target_link_libraries(famessb reflib stdlib urs_curve_lib quad_pack_lib mathlib
+        waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
+#        box_lib poly_lib
+        messb_lib
+        )
+add_dependencies(famessb version)
+
+
+
+
+
+
+
+
+
+
+
+
+
+#add_executable(test_urs cpp/Urs/test/test_urs.cpp ${TEST_URS_SOURCE_FILES})
+#target_link_libraries(test_urs reflib stdlib urs_curve_lib quad_pack_lib mathlib
+#        waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
+#        box_lib
+#        )
+#add_dependencies(test_urs version)
+
+

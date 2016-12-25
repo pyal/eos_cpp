@@ -10,10 +10,10 @@
 #include "lib/std/ex_out.h"
 //#include "ex_out.h"
 #include "messb_forcelnk.h"
-#include "kashuba\kashuba_forcelnk.h"
+#include "kashuba/kashuba_forcelnk.h"
 #include "lib/std/stdexception.h"
-#include "urs\curve_forcelnk.h"
-#include "urs\urs_forcelnk.h"
+#include "urs/curve_forcelnk.h"
+#include "urs/urs_forcelnk.h"
 
 //#define MaxFunctions   50
 

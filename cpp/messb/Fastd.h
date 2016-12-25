@@ -46,6 +46,7 @@ struct FAArrAdd : FAArr {
         DeleteFAArr();
     };
     double Clc(double Xval);
+    using FAArr::Clc;
     void Clc(double *Xval, double *Res);
     void Input(istream &input);
     void Output(ostream &Output);
@@ -77,6 +78,7 @@ struct FAArrSet : FAArr {
         return NumParArr[0] + NumFunc - 1;
     };
     double Clc(double Xval);
+    using FAArr::Clc;
     void Clc(double *Xval, double *Res);
 
     void SetPar(double *par);

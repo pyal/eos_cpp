@@ -134,14 +134,14 @@ struct ScrText:ScrPixel  // Screen positions...........
       {
        Hidden=1;
        DrawMeth=meth;
-       buf=strdup(mes);fil=strdup(buf);strset(fil,'Û');
+       buf=strdup(mes);fil=strdup(buf);strset(fil,'â–ˆ');
       };
    void SetScrText(char* mes,double x_mes,double y_mes,TextStrc meth,int Color)
       {
        Hide();
        DrawMeth=meth;
        if (buf!=NULL) {delete buf;delete fil;}
-       buf=strdup(mes);fil=strdup(buf);strset(fil,'Û');
+       buf=strdup(mes);fil=strdup(buf);strset(fil,'â–ˆ');
        CellX(x_mes);CellY(y_mes);PixColor(Color);
       };
    void SetTxtMeth(TextStrc meth){Hide();DrawMeth=meth;Show();};

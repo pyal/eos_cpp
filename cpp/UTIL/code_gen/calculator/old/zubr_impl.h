@@ -37,7 +37,7 @@ extern "C"
     }
 
     SYMBOL sym_ptr;
-    Stroka name; /* имя переменной или функции */
+    Stroka name;  /* РёРјСЏ РїРµСЂРµРјРµРЅРЅРѕР№ РёР»Рё С„СѓРЅРєС†РёРё */
     enum Type {
         Number = NUMBER,
         Var = VAR,
@@ -50,8 +50,8 @@ extern "C"
         [];   //={"NumberInt","NumberDouble","String","Char","Token","Identifier","Error","End"};
     static const char *GetTypeName(int t);
     struct InDat {
-        double val;    /* значение для переменной( VAR )           */
-        void *ptr;     /* указатель на встроенную функцию( BLTIN ) */
+        double val;     /* Р·РЅР°С‡РµРЅРёРµ РґР»СЏ РїРµСЂРµРјРµРЅРЅРѕР№( VAR )           */
+        void *ptr;      /* СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РІСЃС‚СЂРѕРµРЅРЅСѓСЋ С„СѓРЅРєС†РёСЋ( BLTIN ) */
         int (*defn)(); /* FUNCTION, PROCEDURE */
         Stroka str;    /* string */
         InDat() : val(0), ptr(0), defn(0){};

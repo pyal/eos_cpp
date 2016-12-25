@@ -593,34 +593,34 @@ SYMBOL DefineVar(SYMBOL fst) {
 //   Datum d;
 //   INST *savepc = pc;
 //
-//   execute( savepc + 2 );               /* ������� */
+//   execute( savepc + 2 );               /* условие */
 //   d = pop();
 //   while( d.val )
 //   {
-//      execute( *((INST **)(savepc)) );  /* ���� */
+//      execute( *((INST **)(savepc)) );  /* тело */
 //      if( returning ) break;
-//      execute( savepc + 2 );            /* ������� */
+//      execute( savepc + 2 );            /* условие */
 //      d = pop();
 //   }
 //
 //   if( !returning )
-//      pc = *((INST **)(savepc + 1));    /* ��������� �������� */
+//      pc = *((INST **)(savepc + 1));    /* следующий оператор */
 //}
 //
 //void ifcode( void )
 //{
 //   Datum d;
-//   INST *savepc = pc;                   /* ����� "then" */
+//   INST *savepc = pc;                   /* часть "then" */
 //
-//   execute( savepc + 3 );               /* ������� */
+//   execute( savepc + 3 );               /* условие */
 //   d = pop();
 //
 //   if( d.val ) execute( *((INST **)(savepc)) );
-//   else if( *((INST **)(savepc + 1)) )  /* ����� "else" ? */
+//   else if( *((INST **)(savepc + 1)) )  /* часть "else" ? */
 //           execute( *((INST **)(savepc + 1)) );
 //
 //   if( !returning )
-//      pc = *((INST **)(savepc + 2));    /* ��������� �������� */
+//      pc = *((INST **)(savepc + 2));    /* следующий оператор */
 //}
 //
 //void defin( SYMBOL *sp )

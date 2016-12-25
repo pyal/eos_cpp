@@ -474,9 +474,9 @@ struct FreeEElectron:FreeEIOFind {
 // Pc*b+R*Tc=sqrt(3*Pc*a)
 // (Pc*b+R*Tc)/(3*Pc)=Vc
 // Landau crit point
-// T��=(8/27*A/B)     /R?
-// V��=3B
-// P��=A/(27*B*B)
+// Tкр=(8/27*A/B)     /R?
+// Vкр=3B
+// Pкр=A/(27*B*B)
 
 /*
 #include "fre_ros.h"

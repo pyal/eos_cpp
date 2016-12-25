@@ -198,9 +198,9 @@ function InfinQunc8(Func:FunType;A,AbsErr,InFinZero:RealType;NumZero:byte;
   MaxFunc:longint;var Flag:RealType):RealType;
 {
  Normal   - use X16,Y16 -> X0,Y0; Xi -> Xi+Hm
- Div step - use X0öX8,Y0öY8; mem X9öX16,Y9öY16  
+ Div step - use X0Ñ–X8,Y0Ñ–Y8; mem X9Ñ–X16,Y9Ñ–Y16
  Mult step - use X16,Y16 -> X0,Y0
- Normal after Div - use mem X9öX16,Y9öY16
+ Normal after Div - use mem X9Ñ–X16,Y9Ñ–Y16
  Last interval - use X16,Y16 -> X0,Y0
 }   
  const
@@ -335,9 +335,9 @@ function InFinQunc10(Func:FunType;A,AbsErr,InFinZero:RealType;NumZero:byte;
   MaxFunc:longint;var Flag:RealType):RealType;
 {
  Normal   - use X20,Y20 -> X0,Y0; Xi -> Xi+Hm
- Div step - use X0öX10,Y0öY10; mem X11öX20,Y11öY20  
+ Div step - use X0Ñ–X10,Y0Ñ–Y10; mem X11Ñ–X20,Y11Ñ–Y20
  Mult step - use X20,Y20 -> X0,Y0
- Normal after Div - use mem X11öX20,Y11öY20
+ Normal after Div - use mem X11Ñ–X20,Y11Ñ–Y20
  Last interval - use X20,Y20 -> X0,Y0
 }   
  const
@@ -472,9 +472,9 @@ function InFinQunc10(Func:FunType;A,AbsErr,InFinZero:RealType;NumZero:byte;
 function StepQunc8(Func:FunType;A,B,AbsErr:RealType;MaxFunc:longint;var Flag:RealType):RealType;
 {
  Normal   - use X16,Y16 -> X0,Y0; Xi -> Xi+Hm
- Div step - use X0öX8,Y0öY8; mem X9öX16,Y9öY16  
+ Div step - use X0Ñ–X8,Y0Ñ–Y8; mem X9Ñ–X16,Y9Ñ–Y16
  Mult step - use X16,Y16 -> X0,Y0
- Normal after Div - use mem X9öX16,Y9öY16
+ Normal after Div - use mem X9Ñ–X16,Y9Ñ–Y16
  Last interval - use X16,Y16 -> X0,Y0
 }   
  const

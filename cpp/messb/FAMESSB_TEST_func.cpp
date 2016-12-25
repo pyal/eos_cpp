@@ -240,10 +240,11 @@ FAZerHQsAver::FAZerHQsAver() {
 
 
 void FAZerHQsAver::ClcBase(double *par, double *Xval, double *Res) {
-    double Teta = par[7], Phi = par[10], H = par[3], Qs = par[4], Eta = par[9],
-           Gamma = par[8], IS = par[5], W = par[6], Gr = par[1], Amp = par[2],
-           Teta_V = par[14], Add_H = par[15], I_Hx = par[10], I_Hy = par[11],
-           I_Hz = par[12], Hc = par[13], Fine = par[16], Sum8 = par[17];
+//    double Teta = par[7], H = par[3], Qs = par[4],
+//           Gamma = par[8], W = par[6], Amp = par[2],
+//           Add_H = par[15], I_Hx = par[10], I_Hy = par[11],
+//           Hc = par[13], Sum8 = par[17];
+    //Teta_V = par[14], Gr = par[1], Eta = par[9], IS = par[5], I_Hz = par[12], Fine = par[16], Phi = par[10],
 
     Res[0] = Xval[0];
     (VecCl(Xval[0]) * 0).Copy2Double(Res);

@@ -44,10 +44,10 @@ namespace NPolygon {
         }
         virtual void IterateFunction(const TGridMaskedData &mdata, void (*func)(T &dst)) {
             int curL = -1, curU = -1;   //, wasL = -1, wasU = -1;
-            int wasX = -1;
+//            int wasX = -1;
             TGridVar *ptr = SavableClass::TestType<TGridVar>(mdata.Data);
             vector<T> &tmpStor = ptr->VectorT;
-            TGridMaskBase *curMask = mdata.Mask;
+//            TGridMaskBase *curMask = mdata.Mask;
             TGridVar *Old = CurrentPtr;
             CurrentPtr = this;
             while(mdata.Mask->GetNextInterval(curL, curU, 0)) {
@@ -242,7 +242,9 @@ namespace NPolygon {
 
 
         T &operator[](size_t k) {
-            return Data[k];
+// TODO TEST IT !!!
+//            return Data[k];
+            return VectorT[k];
         };
         virtual void Resize(int dim, TGridMaskBase *curMask, TGridMaskBase *wasMask) {
             if(curMask == NULL || wasMask == NULL) {

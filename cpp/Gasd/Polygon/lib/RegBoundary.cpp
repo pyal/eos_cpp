@@ -219,8 +219,8 @@ namespace NPolygon {
         int level = RegPlus->Grid.GetBoundarySize();
         TGridMaskedData::TIterator start =
             RegPlus->Grid.GetMaskedData(BaseBounds, varName).Start();
-        TGridVectorVar<double> *invDencVelEnersum =
-            SavableClass::TestType<TGridVectorVar<double>>(RegPlus->Grid.GetVar(varName));
+//        TGridVectorVar<double> *invDencVelEnersum =
+//            SavableClass::TestType<TGridVectorVar<double>>(RegPlus->Grid.GetVar(varName));
         for(TGridMaskedData::TIterator it =
                 RegPlus->Grid.GetMaskedData(TRegionBounds(-level, level), varName);
             it.IsOk() && it != start;
@@ -241,9 +241,9 @@ namespace NPolygon {
         int level = RegMinus->Grid.GetBoundarySize();
         TGridMaskedData::TIterator end =
             RegMinus->Grid.GetMaskedData(BaseBounds, varName).Last();
-        TGridVectorVar<double> *invDencVelEnersum =
-            SavableClass::TestType<TGridVectorVar<double>>(
-                RegMinus->Grid.GetVar(varName));
+//        TGridVectorVar<double> *invDencVelEnersum =
+//            SavableClass::TestType<TGridVectorVar<double>>(
+//                RegMinus->Grid.GetVar(varName));
         for(TGridMaskedData::TIterator it =
                 RegMinus->Grid.GetMaskedData(TRegionBounds(-level, level), varName)
                     .Last();

@@ -58,7 +58,7 @@ double TestCase_Famessb_Internal::MakeParamsFit(
 
 
 void TestCase_Famessb_Internal::Test_Turn_Matr(TestCase *ptr) {
-    TestCase_Famessb_Internal *cur = Restore(ptr);
+//    TestCase_Famessb_Internal *cur = Restore(ptr);
     CMatrCl H2 = HamHTurned_Z_Qs(HamData(90, 90, 100, 10, 1, 1, 1), 90, 90).Make8Ham();
     CMatrCl H1 = Ham_Qs_Gamma(HamData(90, 0, 100, 10, 1, 1, 1), 90).Make8Ham();
     CMatrCl Turn = TurnSpinors::FormTurn4_2Ham(90, 90);
@@ -199,7 +199,7 @@ void TestCase_Famessb_Internal::Test_Turn_Angles(TestCase *ptr) {
 };
 
 #include "messb_in.h"
-#include "mat\mtrnd.h"
+#include "mat/mtrnd.h"
 
 void TestCase_Famessb_Internal::Test_Rnd_Angles_Generators(TestCase *ptr) {
     VecCl teta, phi, time;

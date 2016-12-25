@@ -80,7 +80,7 @@ namespace NPolygon {
         }
         void Finish(){};
         static void Test_Simple(TestCase *ptr) {
-            TestCase_Gasd_Static *cur = TestCase_RestorePtr<TestCase_Gasd_Static>(ptr);
+//            TestCase_Gasd_Static *cur = TestCase_RestorePtr<TestCase_Gasd_Static>(ptr);
             SavableClass::SetRefOutMethod(SavableClass::SingleFileStorage);
             Ref<TTestSimple> t1 = new TTestSimple(new TTestSimple), t2 = new TTestSimple,
                              t3 = new TTestSimple;
@@ -102,7 +102,7 @@ namespace NPolygon {
                     ~objStr4);
         }
         static void Test_ListSave(TestCase *ptr) {
-            TestCase_Gasd_Static *cur = TestCase_RestorePtr<TestCase_Gasd_Static>(ptr);
+//            TestCase_Gasd_Static *cur = TestCase_RestorePtr<TestCase_Gasd_Static>(ptr);
             SavableClass::SetRefOutMethod(SavableClass::SingleFileStorage);
             Ref<TTest> t1 = new TTest(new TTest);
             Stroka objStr1 = SavableClass::object2string(t1.pointer());

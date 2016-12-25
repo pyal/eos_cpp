@@ -341,7 +341,7 @@ double FreeEIdealElectron::ClcAddHiT(double molveight){
 // ===============================================================
 // =============      FreeEVirial        =========================
 // ===============================================================
-//  Second virial is calculated in the �����䥫줥� ( �����䥫줥� )
+//  Second virial is calculated in the Гельшфельдер ( Гильшфельдер )
 //                                                        B
 //  F=  Zero - R*T*ln(V) - R*T*C *ln(T) - HiT*R*T + R*T* ---
 //                -k            v                         V

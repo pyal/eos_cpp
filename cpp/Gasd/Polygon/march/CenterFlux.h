@@ -41,13 +41,13 @@ namespace NPolygon {
             TRegionBounds bndsLft = bnds - 1, bndsRgt = bnds;
             TGridMaskedData flux(reg->Grid.GetMaskedData(bnds, fName));
             flux = reg->Grid.GetMaskedData(bndsLft, uName);
-            flux -= reg->Grid.GetMaskedData(bndsRgt, uName);
-            flux *= reg->Grid.GetMaskedData(bndsLft, dxName);
-            flux /= dT;
+            flux.operator-=(reg->Grid.GetMaskedData(bndsRgt, uName));
+            flux.operator*=(reg->Grid.GetMaskedData(bndsLft, dxName));
+            flux.operator/=(dT);
 
-            flux += reg->Grid.GetMaskedData(bndsRgt, CalculatedFlux);
-            flux += reg->Grid.GetMaskedData(bndsLft, CalculatedFlux);
-            flux *= 0.5;
+            flux.operator+=(reg->Grid.GetMaskedData(bndsRgt, CalculatedFlux));
+            flux.operator+=(reg->Grid.GetMaskedData(bndsLft, CalculatedFlux));
+            flux.operator*=(0.5);
         }
     };
     // given ( 0, 0 ) use (-1, 0)  -> (0, 0)
@@ -255,7 +255,7 @@ namespace NPolygon {
                     else if(r <= 1)
                         res = 1;
                     else if(r > 1 && r < 1 / MathZer)
-                        res = min(2, phiG + (1 - phiG) * r);
+                        res = min<double>(2, phiG + (1 - phiG) * r);
                     else
                         res = 1;   // r = -INF
                 }
@@ -270,7 +270,7 @@ namespace NPolygon {
         //TRegionBounds bndsCenter;
         void Init(TPolyRegion *reg, const Stroka &flux) {
             if(!reg->Grid.VarExists("flicLim")) {
-                TGridVariablesBase *rData = reg->Grid.GetVar(flux);
+//                TGridVariablesBase *rData = reg->Grid.GetVar(flux);
                 reg->Grid.AddVar("flicLim", new TGridVar<double>());
                 //reg->Grid.AddVar("flicLim", SavableClass::TestType<TGridVariablesBase>(rData->Duplicate()));
             }
@@ -308,14 +308,14 @@ namespace NPolygon {
         // FluxVarsLagrange(U P PU)
         void CreateVars(TPolyRegion *reg) {}
         void CreateBoundary(TPolyRegion *reg) {}
-        double ClcTimeStp(TPolyRegion *reg) {}
+        double ClcTimeStp(TPolyRegion *reg) { return 1;}
         void MakeTimeStp(TPolyRegion *reg) {}
     };
 
     struct TPolyMarchU2 : TPolyMarchRegionBase {
         struct FluxClaculatorU2 : FluxCalculatorBase {
             FluxClaculatorU2()
-                : FluxCalculatorBase(), SoundSpeed(1), LinearFlux(0), NegativeSound(0){};
+                : FluxCalculatorBase(), SoundSpeed(1), NegativeSound(0), LinearFlux(0){};
             virtual void ClcFlux(
                 TPolyRegion *reg,
                 const Stroka &uName,
@@ -418,7 +418,7 @@ namespace NPolygon {
                 double X1 = *(double *)reg->Grid.GetMaskedData(TRegionBounds(), "X")
                                  .Last()
                                  .GetElementPtr();
-                double Xm = 0.5 * (X1 - X0);
+//                double Xm = 0.5 * (X1 - X0);
                 for(; itX.IsOk(); itX.Next(), itY.Next()) {
                     *(double *)itY.GetElementPtr() =
                         5 +
@@ -565,11 +565,12 @@ namespace NPolygon {
         TPolyMarchDriverFluxU2()
             : TPolyMarchDriverFluxBase(),
               SoundSpeed(1),
+              NegativeSound(0),
               LinearFlux(0),
               Xname("X"),
               Yname("Y"),
-              BoundaryMakerY(TRegionBounds(0, -1)),
-              NegativeSound(0){};
+              BoundaryMakerY(TRegionBounds(0, -1))
+        {};
         virtual Stroka GetRvarName(
             TPolyRegion *reg,
             const Stroka &uName,
@@ -650,10 +651,10 @@ namespace NPolygon {
         TRegionBounds BndCenteredU, BndBoundX, BndFluxU, BndTime;
         TPolyMarchDriver()
             : TPolyMarchRegionBase(),
-              ClcBaseFlux(new TPolyMarchDriverFluxU2()),
-              ClcRI("FluxVar", ClcBaseFlux),
-              ClcLF("FluxVar"),
               ClcForce("FluxLF", "FluxRI"),
+              ClcBaseFlux(new TPolyMarchDriverFluxU2()),
+              ClcLF("FluxVar"),
+              ClcRI("FluxVar", ClcBaseFlux),
               MarchFlux("FluxLF"),
               MarchCourant(0.5) {}
 
@@ -802,17 +803,17 @@ namespace NPolygon {
         TRegBoundaryCircleX BoundaryMakerX;
 
         double SoundSpeed;
-        int NegativeSound, LinearFlux;
+        int LinearFlux, NegativeSound;
 
         TPolyMarchDriverFluxGasdLagrangeImitation()
             : TPolyMarchDriverFluxBase(),
-              CombiVar("DencVelEner"),
               Xname("X"),
               DensName("Density"),
               VelName("Velocity"),
               EnerName("Energy"),
               PresName("Pressure"),
               EOSName("EOS"),
+              CombiVar("DencVelEner"),
               BoundaryMakerY(TRegionBounds(0, -1)),
               SoundSpeed(1),
               LinearFlux(0),
@@ -911,9 +912,9 @@ namespace NPolygon {
     struct TPolyMarchDriverFluxGasdLagrange : TPolyMarchDriverFluxBase {
         Stroka Xname, DencName, VelName, EnerName, PresName, EOSName;
         Stroka CombiVar;
-        TRegBoundaryGasd BoundaryMakerY;
         //TRegBoundarySame BoundaryMakerY;
         TRegBoundaryCircleX BoundaryMakerX;
+        TRegBoundaryGasd BoundaryMakerY;
         TRegBoundaryCircle_ZeroConst BoundaryMakerMass;
         //TRegBoundarySame BoundaryMakerMass;
 
@@ -925,25 +926,26 @@ namespace NPolygon {
 
         TPolyMarchDriverFluxGasdLagrange()
             : TPolyMarchDriverFluxBase(),
-              CombiVar("DencVelEner"),
-              CombiRVar("DencVelEner_Limiter"),
-              BoundaryMakerMass(TRegionBounds(0, -1), "0 0.5"),
-              BoundaryMakerY(TRegionBounds(0, -1)),
-              BoundaryMakerX(TRegionBounds(0, -1)),
               Xname("X"),
               DencName("Density"),
               VelName("Velocity"),
               EnerName("Energy"),
               PresName("Pressure"),
               EOSName("EOS"),
+              CombiVar("DencVelEner"),
+              BoundaryMakerX(TRegionBounds(0, -1)),
+              BoundaryMakerY(TRegionBounds(0, -1)),
+              BoundaryMakerMass(TRegionBounds(0, -1), "0 0.5"),
               MassName("Mass"),
               InvDencName("InvDenc"),
+              EnergySumName("EnergySum"),
               SoundName("Sound"),
               VelPrevName("VelPrev"),
+              CombiRVar("DencVelEner_Limiter"),
               TmpVarName("TmpVar"),
-              BrookFinalDencity(7.89),
               SetBrookDencity(1),
-              EnergySumName("EnergySum") {
+              BrookFinalDencity(7.89)
+        {
             LimiterVarVector = EnerName + " " + DencName + " " + PresName + " " +
                                VelName + " " + SoundName;
         };
@@ -1161,9 +1163,11 @@ namespace NPolygon {
             if(sName != SoundName)
                 reg->Grid.GetMaskedData(bnds, SoundName) =
                     reg->Grid.GetMaskedData(bnds, sName);
-            Abs(reg->Grid.GetMaskedData(bnds, TmpVarName),
-                (reg->Grid.GetMaskedData(bnds + 1, VelName) -
-                 reg->Grid.GetMaskedData(bnds, VelName)));
+            reg->Grid.GetMaskedData(bnds, TmpVarName).Abs(reg->Grid.GetMaskedData(bnds + 1, VelName) -
+                                                          reg->Grid.GetMaskedData(bnds, VelName));
+//            Abs(reg->Grid.GetMaskedData(bnds, TmpVarName),
+//                (reg->Grid.GetMaskedData(bnds + 1, VelName) -
+//                 reg->Grid.GetMaskedData(bnds, VelName)));
             reg->Grid.GetMaskedData(bnds, sName) +=
                 reg->Grid.GetMaskedData(bnds, TmpVarName);
 

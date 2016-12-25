@@ -1,7 +1,7 @@
 #ifndef __MESSB_ANGLE_GEN_H
 #define __MESSB_ANGLE_GEN_H
 #include "messb.h"
-#include "mat\cmatrics.h"
+#include "mat/cmatrics.h"
 
 
 struct RndBaseTimeGenerator : RefCount {
@@ -21,7 +21,7 @@ protected:
     double CurTime;
 };
 
-#include "mat\mtrnd.h"
+#include "mat/mtrnd.h"
 struct RndTimeGenerator : RndBaseTimeGenerator {
     Ref<RndFunc> Time;
     RndTimeGenerator(RndFunc *time, double starttime, double finaltime)
@@ -40,8 +40,8 @@ struct RndAngleGenerator_Base : RefCount {
 };
 
 struct RndAngleGenerator : RndAngleGenerator_Base {
-    Ref<RndFunc> Angle;
     Ref<RndTimeGenerator> Time;
+    Ref<RndFunc> Angle;
     RndAngleGenerator(RndFunc *angle, RndTimeGenerator *time)
         : Time(time), Angle(angle) {}
 
@@ -90,7 +90,7 @@ struct Rnd2AngleGenerator_Base : RefCount {
         VecCl &ToAdd_Time);
 };
 struct Rnd2AngleGenerator : Rnd2AngleGenerator_Base {
-    Ref<RndAngleGenerator_Base> Phi, Teta;
+    Ref<RndAngleGenerator_Base> Teta, Phi;
     Rnd2AngleGenerator(RndAngleGenerator_Base *teta, RndAngleGenerator_Base *phi)
         : Teta(teta), Phi(phi){};
     //  int Rnd(double &Rnd_Phi,double &Rnd_Teta,double &Rnd_Time)
@@ -169,7 +169,7 @@ struct HamTimeAverageRndWalk : HamTimeAverageGenerator {
         double gamma,
         int hmulcos,
         int outangles)
-        : Ham(ham), angles(ang), Gamma(gamma), HmulCos(hmulcos), OutAngles(outangles) {}
+        : angles(ang), Ham(ham), Gamma(gamma), HmulCos(hmulcos), OutAngles(outangles) {}
     Ref<Rnd2AngleGenerator_Base> angles;
     Ref<HamData> Ham;
     double Gamma;
@@ -192,7 +192,9 @@ struct RndBoltsman_GausWalk : RndFunc {
     };
     double Rnd() {
         double stp = rndGaus->Rnd();
-        double a = CurAngle, a1 = CurAngle - stp, a2 = CurAngle + stp;
+//        double a = CurAngle,
+
+        double a1 = CurAngle - stp, a2 = CurAngle + stp;
         //if (In_Lim(90,a,a1)) a1=90;else if (In_Lim(-90,a,a1)) a1=-90;
         //if (In_Lim(90,a,a2)) a2=90;else if (In_Lim(-90,a,a2)) a2=-90;
         double p1 = rndBolt->Clc(a1), p2 = rndBolt->Clc(a2);

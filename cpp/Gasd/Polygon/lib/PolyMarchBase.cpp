@@ -21,13 +21,14 @@ namespace NPolygon {
 
     TPolyMarchBody::TPolyMarchBody()
         : TPolyMarchRegionBase(),
+          Marcher(new TPolyMarchTestZero),
           FromTime(0),
           ToTime(1000),
           MaxTimeStep(1),
           OutputTime(0),
-          OutputNames("X:Y"),
           ResultsFile("output.dat"),
-          Marcher(new TPolyMarchTestZero) {}
+          OutputNames("X:Y")
+    {}
 
 
 };   //namespace NPolygon {

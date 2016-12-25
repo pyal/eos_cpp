@@ -77,18 +77,18 @@ stmt:    expr               { code( (INST)pop ); }
        | PRINT prlist       { $$ = $2; }
        | while cond stmt end
          {
-            ($1)[1] = (INST)$3; /* тело цикла */
+            ($1)[1] = (INST)$3; /* С‚РµР»Рѕ С†РёРєР»Р° */
             ($1)[2] = (INST)$4; /* end */
          }
        | if cond stmt end
          {
-            ($1)[1] = (INST)$3; /* часть then */
+            ($1)[1] = (INST)$3; /* С‡Р°СЃС‚СЊ then */
             ($1)[3] = (INST)$4; /* end */
          }
        | if cond stmt end ELSE stmt end
          {
-            ($1)[1] = (INST)$3; /* часть then */
-            ($1)[2] = (INST)$6; /* часть else */
+            ($1)[1] = (INST)$3; /* С‡Р°СЃС‚СЊ then */
+            ($1)[2] = (INST)$6; /* С‡Р°СЃС‚СЊ else */
             ($1)[3] = (INST)$7; /* end */
          }
        | '{' stmtlist '}'  { $$ = $2; }
@@ -261,7 +261,7 @@ int zubr_lex( void )
       double d = 0.0;
       int n = getc( f );
 
-      /* моей функции scanf() нельзя отдавать число "." */
+      /* РјРѕРµР№ С„СѓРЅРєС†РёРё scanf() РЅРµР»СЊР·СЏ РѕС‚РґР°РІР°С‚СЊ С‡РёСЃР»Рѕ "." */
       if( c == '.' && !isdigit( n ) )
       {
          ungetc( n, f );

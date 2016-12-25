@@ -9,7 +9,7 @@
 #include "lib/ref/class_sav.h"
 #include "lib/ref/ref.h"
 //#include "described.h"
-#include "lib\gasd_min\gasd_min.h"
+#include "lib/gasd_min/gasd_min.h"
 
 // To include test function descriptions in the output
 

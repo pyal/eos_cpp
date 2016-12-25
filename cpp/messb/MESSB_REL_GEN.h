@@ -1,8 +1,8 @@
 #ifndef __MESSB_REL_GEN_H
 #define __MESSB_REL_GEN_H
 
-#include "mat\mtrnd.h"
-#include "mat\matrics.h"
+#include "mat/mtrnd.h"
+#include "mat/matrics.h"
 
 
 // Model H=Asin(Teta)^2

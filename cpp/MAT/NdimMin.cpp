@@ -952,13 +952,13 @@ void MapVars::SetMap(VecCl &start, VecCl &coder) {
         if(coder[k] != 0)
             mapVar.push_back(k);
 };
-VecCl MapVars::CodeVec(VecCl &src) {
+VecCl MapVars::CodeVec(const VecCl &src) {
     VecCl res((int)mapVar.size());
     for(int k = 1; k <= (int)mapVar.size(); k++)
         res[k] = src[mapVar[k - 1]];
     return res;
 }
-VecCl MapVars::DeCodeVec(VecCl &src) {
+VecCl MapVars::DeCodeVec(const VecCl &src) {
     VecCl res = Start;
     for(int k = 1; k <= (int)mapVar.size(); k++)
         res[mapVar[k - 1]] = src[k];

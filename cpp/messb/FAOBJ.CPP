@@ -38,7 +38,7 @@ void OutFormatted(strstream &out,strstream &in,int MargFstLft,int MargLft,int Ma
 {
 	char tmp[1024];
 //	while (!(!in)) { in>>tmp;out<<tmp<<" ";}return;
-	int Cur=0,Add=MargFstLft,FstLine=1;
+	int Cur=0,Add=MargFstLft;//,FstLine=1;
 	while (!(!in))
 	{ in>>tmp;Add+=(int)strlen(tmp);
 	  if (Cur+Add>MargRgt) MakeNewLine(out,&tmp[0],Cur,Add,MargLft,MargRgt);
@@ -91,11 +91,12 @@ int FAZerBase::SetStdPar_GrInt(char **namepar,double *valpar,char **helppar,int 
    return 2;
 }
 
-void FAZerBase::ParStp(double *par,double *stp)
-{
+void FAZerBase::ParStp(double *par,double *stp) {
   for (int k=1;k<=NumPar;k++)
-    if (stp[k]!=0) if (fabs(par[k])<=MathZer) stp[k]=0.1;
-                  else stp[k]=par[k]*0.01;
+    if (stp[k]!=0) {
+        if (fabs(par[k])<=MathZer) stp[k]=0.1;
+            else stp[k]=par[k]*0.01;
+    }
 };
 void   FAZerBase::Clc(double *par,double *Xval,double *Res)
 {
@@ -114,7 +115,7 @@ void FAIO::SaveInPar(ostream &output)
     double *Par=new double [N+1];
     GetPar(Par);
     for (int k=1;k<=N;k++) output<<Par[k]<<" ";
-    delete Par;
+    delete []Par;
    };
 void FAIO::GetInPar(istream &input)
    {
@@ -122,7 +123,7 @@ void FAIO::GetInPar(istream &input)
     double *Par=new double [N+1];
     for (int k=1;k<=N;k++) input>>Par[k];
     SetPar(Par);
-    delete Par;
+    delete []Par;
    };
 void FAIO::list_all_functions(ostream &out)
 {
@@ -340,7 +341,7 @@ void FAArr::Output(ostream &output)
 //fstream& operator>>(fstream &input,FAArr &Func)
 void FAArr::Input(istream &input)
   {
-   int Cur=0;
+//   int Cur=0;
    for (int k=1;k<=NumFunc;k++)
      {
       FuncArr[k]=NULL;if (!FARegister(input,FuncArr[k]))

@@ -126,8 +126,8 @@ FAZerGaus::FAZerGaus()
   };
 void   FAZerGaus::ClcBase(double *par,double *Xval,double *Res) 
   {
-   double gr=par[1],in=par[2],
-          wi=sqr(par[4]),pos=par[3];
+//   double gr=par[1],in=par[2],
+    double wi=sqr(par[4]),pos=par[3];
    double misfit;
    for (int k=1;k<=Xval[0];k++)
      {
@@ -161,7 +161,7 @@ double FAArrAdd::Clc(double Xval)
   };
 void   FAArrAdd::Clc(double *Xval,double *Res)
   {
-   double *tmp=new double[Xval[0]+1];
+   double *tmp=new double[int(Xval[0])+1];
    FuncArr[1]->Clc(Xval,Res);
 //MemoryMove(&tmp[1],&Res[1],sizeof(double )*(Xval[0]));
    for (int k=2;k<=NumFunc;k++)
@@ -169,7 +169,7 @@ void   FAArrAdd::Clc(double *Xval,double *Res)
       FuncArr[k]->Clc(Xval,tmp);
       for (int k1=1;k1<=Xval[0];k1++) Res[k1]+=tmp[k1];
      }
-   delete tmp;
+   delete []tmp;
   };
 
 void FAArrAdd::Output(ostream &output)
@@ -244,10 +244,10 @@ void   FAArrSet::Clc(double *Xval,double *Res)
   {
 //cout<<" Begin Set Clc \n";
    if (NumFunc==1) { FuncArr[1]->Clc(Xval,Res);return;}
-   double *tmpy1=new double[Xval[0]+1];
-   double *tmpy2=new double[Xval[0]+1];
-   double *tmpy3=new double[Xval[0]+1];
-   double *tmpx=new double[Xval[0]+1];
+   double *tmpy1=new double[int(Xval[0])+1];
+   double *tmpy2=new double[int(Xval[0])+1];
+   double *tmpy3=new double[int(Xval[0])+1];
+   double *tmpx=new double[int(Xval[0])+1];
    MemoryMove(Xval,tmpx,sizeof(double )*Xval[0]+1);
    MemoryMove(Xval,tmpy1,sizeof(double )*Xval[0]+1);
    MemoryMove(Xval,tmpy2,sizeof(double )*Xval[0]+1);
@@ -290,8 +290,8 @@ void   FAArrSet::Clc(double *Xval,double *Res)
 //    <<"  Num  "<<tmpx[0]<<"\n";
 //ChRead();
      }
-   delete tmpx;
-   delete tmpy1;delete tmpy2;delete tmpy3;delete Pos;delete Shf;
+   delete []tmpx;
+   delete []tmpy1;delete []tmpy2;delete []tmpy3;delete []Pos;delete []Shf;
 //cout<<"End Clc Set\n";
   };
 
@@ -442,7 +442,7 @@ void FAArrSet::Input(istream &input)
    double *tmp1=new double[GetNumPar()+1];
    GetPar(tmp1);SetPar(tmp1);        // just to set correlated parameters
 
-   delete tmp1;
+   delete []tmp1;
   };
 
    
@@ -558,7 +558,7 @@ void   FARoll::Clc(double *Xval,double *Res)
   {
    int NumPar=Func->GetNumPar();
    double *Par=new double[NumPar+1],Coef;
-   double *OneRes=new double[Xval[0]];
+   double *OneRes=new double[int(Xval[0])];
    FASingleIO::GetPar(Par);
    for (int k=1;k<=Xval[0];k++) Res[k]=0;
    for (int k=1;k<=XParamPnt[0];k++)
@@ -568,7 +568,7 @@ void   FARoll::Clc(double *Xval,double *Res)
       Coef=YParamPnt[k];
       for (int k1=1;k1<=Xval[0];k1++) Res[k1]+=OneRes[k1]*Coef;
      }
-   delete OneRes;delete Par;
+   delete []OneRes;delete []Par;
   };
 
 double FARoll::Clc(double Xval)
@@ -582,7 +582,7 @@ double FARoll::Clc(double Xval)
       Par[NParam]=XParamPnt[k];FASingleIO::SetPar(Par);
       Sum+=FASingleIO::Clc(Xval)*YParamPnt[k];
      }
-   delete Par;
+   delete []Par;
    return Sum;
   };
 

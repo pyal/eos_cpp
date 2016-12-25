@@ -150,44 +150,36 @@ namespace NPolygon {
     struct TGridMaskedData;
     struct TGridVariablesBase : SavableClass {
         friend struct TGridMaskedData;
-        friend TGridMaskedData operator+(const TGridMaskedData &dat, double c);
-        friend TGridMaskedData operator+(
-            TGridMaskedData &dst,
-            const TGridMaskedData &src);
-        friend TGridMaskedData operator+=(const TGridMaskedData &dat, double c);
-        friend TGridMaskedData operator+=(
-            TGridMaskedData &dst,
-            const TGridMaskedData &src);
+//        friend TGridMaskedData operator+(const TGridMaskedData &dat, double c);
+//        friend TGridMaskedData operator+(
+//            TGridMaskedData &dst,
+//            const TGridMaskedData &src);
+//        friend void operator+=(const TGridMaskedData &dat, double c);
+//        friend void operator+=(
+//            TGridMaskedData &dst,
+//            const TGridMaskedData &src);
 
-        friend TGridMaskedData operator-(const TGridMaskedData &dat, double c);
-        friend TGridMaskedData operator-(
-            TGridMaskedData &dst,
-            const TGridMaskedData &src);
-        friend TGridMaskedData operator-=(const TGridMaskedData &dat, double c);
-        friend TGridMaskedData operator-=(
-            TGridMaskedData &dst,
-            const TGridMaskedData &src);
+//        friend TGridMaskedData operator-(const TGridMaskedData &dat, double c);
+//        friend TGridMaskedData operator-(
+//            TGridMaskedData &dst,
+//            const TGridMaskedData &src);
+//
+//        friend TGridMaskedData operator*(const TGridMaskedData &dat, double c);
+//        friend TGridMaskedData operator*(
+//            TGridMaskedData &dst,
+//            const TGridMaskedData &src);
+//        friend void operator*=(const TGridMaskedData &dat, double c);
+//        friend void operator*=(
+//            TGridMaskedData &dst,
+//            const TGridMaskedData &src);
 
-        friend TGridMaskedData operator*(const TGridMaskedData &dat, double c);
-        friend TGridMaskedData operator*(
-            TGridMaskedData &dst,
-            const TGridMaskedData &src);
-        friend TGridMaskedData operator*=(const TGridMaskedData &dat, double c);
-        friend TGridMaskedData operator*=(
-            TGridMaskedData &dst,
-            const TGridMaskedData &src);
-
-        friend TGridMaskedData operator/(const TGridMaskedData &dat, double c);
-        friend TGridMaskedData operator/(
-            TGridMaskedData &dst,
-            const TGridMaskedData &src);
-        friend TGridMaskedData operator/=(const TGridMaskedData &dat, double c);
-        friend TGridMaskedData operator/=(
-            TGridMaskedData &dst,
-            const TGridMaskedData &src);
+//        friend TGridMaskedData operator/(const TGridMaskedData &dat, double c);
+//        friend TGridMaskedData operator/(
+//            TGridMaskedData &dst,
+//            const TGridMaskedData &src);
 
         friend TGridMaskedData operator/(double c, const TGridMaskedData &dat);
-        friend TGridMaskedData Abs(TGridMaskedData &dst, const TGridMaskedData &src);
+//        friend TGridMaskedData Abs(TGridMaskedData &dst, const TGridMaskedData &src);
 
     protected:
         virtual TGridMaskedData Add(
@@ -269,6 +261,27 @@ namespace NPolygon {
             Data = right.Data;
             Mask = right.Mask;
         }
+//        friend TGridMaskedData operator+(const TGridMaskedData &dat, double c);
+//        friend TGridMaskedData operator+(TGridMaskedData &dst, const TGridMaskedData &src);
+        TGridMaskedData operator+(double c) const;
+        TGridMaskedData operator+(const TGridMaskedData &src) const;
+        TGridMaskedData operator-(double c) const;
+        TGridMaskedData operator-(const TGridMaskedData &src) const;
+        TGridMaskedData operator*(double c) const ;
+        TGridMaskedData operator*(const TGridMaskedData &src) const;
+
+        void operator+=(double c);
+        void operator+=(const TGridMaskedData &src);
+        void operator-=(double c);
+        void operator-=(const TGridMaskedData &src);
+        void operator*=(double c);
+        void operator*=(const TGridMaskedData &src);
+        void operator/=(double c);
+        void operator/=(const TGridMaskedData &src);
+        TGridMaskedData operator/(double c) const;
+        TGridMaskedData operator/(const TGridMaskedData &src) const;
+
+        void Abs(const TGridMaskedData &src);
         //inline void* GetElementPtr(size_t k) {
         //    return Data->GetElementPtr(k);
         //}
@@ -390,21 +403,23 @@ namespace NPolygon {
             }
             inline void Next() {
                 CurInd++;
-                if(CurInd >= Up)
-                    if(!Mask->Mask->GetNextInterval(Low, Up, 0))
+                if(CurInd >= Up) {
+                    if (!Mask->Mask->GetNextInterval(Low, Up, 0))
                         Mask->Clear();
                     else
                         CurInd = Low;
+                }
             }
             inline int NextSlow() {
                 if(!IsOk())
                     return 0;
                 CurInd++;
-                if(CurInd >= Up)
-                    if(!Mask->Mask->GetNextInterval(Low, Up, 0))
+                if(CurInd >= Up) {
+                    if (!Mask->Mask->GetNextInterval(Low, Up, 0))
                         Mask->Clear();
                     else
                         CurInd = Low;
+                }
                 return IsOk();
             }
             TIterator operator+(int level) {
@@ -485,10 +500,6 @@ namespace NPolygon {
             return it;
         }
     };
-    TGridMaskedData operator+(const TGridMaskedData &dat, double c);
-    TGridMaskedData operator+(TGridMaskedData &dst, const TGridMaskedData &src);
-    TGridMaskedData operator+=(const TGridMaskedData &dat, double c);
-    TGridMaskedData operator+=(TGridMaskedData &dst, const TGridMaskedData &src);
 
 
     //struct TGridMaskedDataIterator {

@@ -2,7 +2,7 @@
 #ifndef __KASHUBA_EXPORT_H
 #define __KASHUBA_EXPORT_H
 
-#include "..\famessb.h"
+#include "../famessb.h"
 //#include ".\kashuba_appr.h"
 
 

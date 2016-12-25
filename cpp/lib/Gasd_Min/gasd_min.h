@@ -3,9 +3,9 @@
 #ifndef __GASD_MIN_H
 #define __GASD_MIN_H
 
-#include "messb\fastd.h"
-#include "urs\fre_ros.h"
-#include "urs\fre_multi.h"
+#include "messb/fastd.h"
+#include "urs/fre_ros.h"
+#include "urs/fre_multi.h"
 
 //=====================================================================
 //=======================  FAZerColdExp6Curve   =======================
@@ -75,7 +75,7 @@ protected:
     Ref<MatterFreeE> FreeE;
 };
 
-#include "urs\test\urs_curve.h"
+#include "urs/test/urs_curve.h"
 //#include "lib/ref/class_sav.h"
 
 

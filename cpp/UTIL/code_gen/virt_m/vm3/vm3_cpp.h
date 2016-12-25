@@ -21,17 +21,17 @@ struct symbol_io : symbol {
 
 //struct symbol
 //{
-//   char *name;          /* имя переменной или функции */
-//   int   type;          /* тип: VAR, BLTIN, UNDEF     */
+//   char *name;          /* РёРјСЏ РїРµСЂРµРјРµРЅРЅРѕР№ РёР»Рё С„СѓРЅРєС†РёРё */
+//   int   type;          /* С‚РёРї: VAR, BLTIN, UNDEF     */
 //   union
 //   {
-//      double  val;       /* значение для переменной( VAR )           */
-//      double  (*ptr)();  /* указатель на встроенную функцию( BLTIN ) */
+//      double  val;       /* Р·РЅР°С‡РµРЅРёРµ РґР»СЏ РїРµСЂРµРјРµРЅРЅРѕР№( VAR )           */
+//      double  (*ptr)();  /* СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РІСЃС‚СЂРѕРµРЅРЅСѓСЋ С„СѓРЅРєС†РёСЋ( BLTIN ) */
 //      int    (*defn)();  /* FUNCTION, PROCEDURE */
 //      char   *str;       /* string */
 //   } u;
 //
-//   struct symbol *next; /* связь со следующей записью */
+//   struct symbol *next; /* СЃРІСЏР·СЊ СЃРѕ СЃР»РµРґСѓСЋС‰РµР№ Р·Р°РїРёСЃСЊСЋ */
 //};
 
 

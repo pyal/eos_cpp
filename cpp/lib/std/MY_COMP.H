@@ -43,11 +43,11 @@ public:
 
     // Create a complex object given polar coordinates
     friend my_comp   polar(double __mag, double __angle);
+    friend my_comp     exp(const my_comp   &);
 
     // Overloaded ANSI C math functions
     friend my_comp     cos(const my_comp   &);
     friend my_comp     cosh(const my_comp   &);
-    friend my_comp     exp(const my_comp   &);
     friend my_comp     log(const my_comp   &);
     friend my_comp     pow(const my_comp   & __base, my_comp   & __expon);
     friend my_comp     pow(const my_comp   & __base, double __expon);
@@ -190,6 +190,10 @@ inline my_comp   polar(double __mag, double __angle)
     return my_comp(__mag*cos(__angle), __mag*sin(__angle));
 }
 
+inline my_comp exp(const my_comp   &__z1) {
+    double c = exp(__z1.re);
+    return  my_comp(c * cos(__z1.im), c * sin(__z1.im));
+}
 
 // Definitions of non-member binary operator functions
 

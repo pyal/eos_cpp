@@ -1,9 +1,9 @@
 #ifndef _FAMESSB_TEST_H_
 #define _FAMESSB_TEST_H_
 
-#include "lib\test_fact\test_case.h"
+#include "lib/test_fact/test_case.h"
 #include "test_urs_resource.h"
-#include "lib\test_fact\resource_reader.h"
+#include "lib/test_fact/resource_reader.h"
 extern int CopyFile(const char *src, const char *dst);
 
 

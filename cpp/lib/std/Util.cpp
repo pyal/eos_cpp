@@ -297,7 +297,7 @@ void line_feed(istream &i) {
         i.putback(ch);
 };
 
-int seek_str(istream &in, char *Str) {
+int seek_str(istream &in, const char *Str) {
     char tmp[256];
     while(!seek_eof(in)) {
         in >> tmp;

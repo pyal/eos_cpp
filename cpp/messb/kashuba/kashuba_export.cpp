@@ -80,8 +80,8 @@ FAZerHQs_Rotate::FAZerHQs_Rotate() {
 void FAZerHQs_Rotate::ClcBase(double *par, double *Xval, double *Res) {
     double Teta = par[7], Phi = par[8], H = par[3], Qs = par[4], Eta = par[9],
            IS = par[5], W = par[6];
-    double Gr = par[1], Amp = par[2], T = par[10], Tb = par[11], A = par[12],
-           Wc = par[13];
+    double T = par[10], Tb = par[11], A = par[12],
+           Wc = par[13];//Gr = par[1], Amp = par[2],
     Solver_H_Z_poly_kashuba(new Ham_Qs_Eiler(Teta, Phi, H, Qs, Eta, IS, W), T, Tb, A, Wc)
         .Solve(Xval, Res);
 }
@@ -198,12 +198,12 @@ FAZerQsHRelaxKashuba::FAZerQsHRelaxKashuba() {
     helppar[23] = strdup(
         "  Number of time steps to make for Amplitude construction, have to be of the order 10000 - the higher - the better ( but in some moment calculation can become unstable ");
 };
-#include "..\messb_in.h"
+#include "../messb_in.h"
 
 void FAZerQsHRelaxKashuba::ClcBase(double *par, double *Xval, double *Res) {
-    double Ground = par[1], Intencity = par[2], H = par[3], QS = par[4], IS = par[5],
+    double H = par[3], QS = par[4], IS = par[5],
            W = par[6], Teta = par[7], Phi = par[8], Eta = par[9], OutPhi = par[10],
-           Time = par[11], NumToAver = par[12], NTimeAver = par[13], EndTAver = par[14];
+           Time = par[11], NumToAver = par[12], NTimeAver = par[13], EndTAver = par[14]; //Ground = par[1], Intencity = par[2],
 
     double NumTimes = par[15], RotTime = par[16], FurieDisc = par[17],
            StrongSho = par[18], Phi0 = par[19], Teta0 = par[20], EigenMethod = par[21],

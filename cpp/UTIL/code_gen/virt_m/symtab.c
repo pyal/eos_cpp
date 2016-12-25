@@ -15,7 +15,7 @@
 
 #include "z_tab.h"
 
-static SYMBOL *symlist = 0; /* указатель на таблицу символов */
+static SYMBOL *symlist = 0; /* СѓРєР°Р·Р°С‚РµР»СЊ РЅР° С‚Р°Р±Р»РёС†Сѓ СЃРёРјРІРѕР»РѕРІ */
 
 char * emalloc( unsigned n )
 {
@@ -25,8 +25,8 @@ char * emalloc( unsigned n )
    if( p == 0 )
    {
       /*
-        при неудачном выполнении malloc()
-        завершаем работу
+        РїСЂРё РЅРµСѓРґР°С‡РЅРѕРј РІС‹РїРѕР»РЅРµРЅРёРё malloc()
+        Р·Р°РІРµСЂС€Р°РµРј СЂР°Р±РѕС‚Сѓ
        */
       printf( "calc: ERROR: out of memory\n" );
       exit( 1 );
@@ -44,7 +44,7 @@ SYMBOL *lookup( char *s )
    for( sp = symlist; sp != (SYMBOL *)0; sp = sp->next )
       if( strcmp( sp->name, s ) == 0 ) return( sp );
 
-   return( 0 );  /* запись не найдена */
+   return( 0 );  /* Р·Р°РїРёСЃСЊ РЅРµ РЅР°Р№РґРµРЅР° */
 }
 
 

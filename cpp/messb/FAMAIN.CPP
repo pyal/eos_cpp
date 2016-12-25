@@ -1,16 +1,16 @@
 
-
-
 #include "famain.h"
 //#include "test_case.h"
 #define MaxArrPnt      15000
 
+#ifndef MAC
 extern unsigned _stklen=64500;
+#endif
 double StndErr=1e-6;
 extern int CopyFile(const char *src,const char *dst);
 
 
-extern void WriteExample(char *name);
+extern void WriteExample(const char *name);
 int  EnterXY(fstream &in_data,double &x,double &y,double &hi,
                                                   int coly,int colhi)
   { double ar[256];
@@ -34,12 +34,16 @@ int EnterAll(OutParStrc &OutPar,istream &in)
    double *Hival=new double[MaxArrPnt];
    OutPar.FirstRow=1;
    while (!seek_eof(in_data)) {
-     if (EnterXY(in_data,Xval[1],Yval[1],Hival[1],OutPar.ColFr,OutPar.HiCol))
-       if (Xval[1]<OutPar.FrVel) OutPar.FirstRow++;else break;}
+       if (EnterXY(in_data, Xval[1], Yval[1], Hival[1], OutPar.ColFr, OutPar.HiCol)) {
+           if (Xval[1] < OutPar.FrVel) OutPar.FirstRow++; else break;
+       }
+   }
    int Num=2;
-   while ( (!seek_eof(in_data)) && (Num<MaxArrPnt) ){
-     if (EnterXY(in_data,Xval[Num],Yval[Num],Hival[Num],OutPar.ColFr,OutPar.HiCol))
-       if (Xval[Num]<=OutPar.ToVel) Num++;else break;}
+   while ( (!seek_eof(in_data)) && (Num<MaxArrPnt) ) {
+       if (EnterXY(in_data, Xval[Num], Yval[Num], Hival[Num], OutPar.ColFr, OutPar.HiCol)) {
+           if (Xval[Num] <= OutPar.ToVel) Num++; else break;
+       }
+   }
    Num--;
    if (Num<=2) { cout<<"\nNo data points in input file \n";exit(1);}
    OutPar.NumRow=Num;Xval[0]=Num;Yval[0]=Num;
@@ -49,7 +53,7 @@ int EnterAll(OutParStrc &OutPar,istream &in)
    if (!FAWRegister(in,WorkFunc)) {cout<<"Unknown work.\n";exit(0);}
    if (!FARegister(in,Func)) {cout<<"Unknown function.\n";exit(0);}
 //cout<<" HiCol "<<HiCol;
-   if (OutPar.HiCol==0) {delete Hival;Hival=NULL;}
+   if (OutPar.HiCol==0) {delete []Hival;Hival=NULL;}
    if (OutPar.HiCol<0) for (int k=1;k<=Num;k++) Hival[k]=1/Yval[k];
    WorkFunc->SetFuncPnt(Func,Xval,Yval,Hival);
 //cout<<coreleft()<<" Entered All Good\n";
@@ -74,7 +78,7 @@ void  OutGrDat(OutParStrc &OutPar)
    int Num=0,NumCol;
    double ar[257],*Xval,*Yval,*Func_y;
    FAIO *Func;WorkFunc->GetFuncPnt(Func,Xval,Yval);
-   Func_y=new double[Xval[0]+1];Func_y[0]=Xval[0];Func->Clc(Xval,Func_y);
+   Func_y=new double[int(Xval[0])+1];Func_y[0]=Xval[0];Func->Clc(Xval,Func_y);
 
    while (!seek_eof(in))
      {
@@ -185,7 +189,7 @@ void ChangeFile(char *inname,char *outname,int LoadColumn,int LoadFileNames,
 //cout<<" Sucssesfull ChangeFile\n";
   };
 //#include <time.h>
-#include <process.h>
+//#include <process.h>
 int main( int argc,  char *argv[] )
   {
 //   RandomInit();
@@ -223,7 +227,7 @@ try{
    int WriteGrDat=0,LoadColumn=0,LoadFileNames=0,LoadParameters=0,NotCalc=0,RestoreParam=0;
 //   if ( (tmpptr=GetCmd("/e",argc-1,argv))!=NULL )  {system(string("notepad ").append(argv[1]).c_str());return;}
    if ( (tmpptr=GetCmd("/v",argc-1,argv))!=NULL )  RandomClass::InitSeed(RandomClass::RandomInit::PseudoRandom);
-   if ( (tmpptr=GetCmd("/e",argc-1,argv))!=NULL )  {_execlp("notepad","notepad",argv[1],NULL);return 1;}
+//   if ( (tmpptr=GetCmd("/e",argc-1,argv))!=NULL )  {_execlp("notepad","notepad",argv[1],NULL);return 1;}
    if ( (tmpptr=GetCmd("/c",argc-1,argv))!=NULL )  LoadColumn=1;
    if ( (tmpptr=GetCmd("/p",argc-1,argv))!=NULL )  LoadParameters=1;
    if ( (tmpptr=GetCmd("/n",argc-1,argv))!=NULL )  LoadFileNames=1;
@@ -351,12 +355,12 @@ void Show(char *argv[],int NumToShow)
    double *Xval,*Yval,*Func_y;
    FAIO *Func=NULL;
    WorkFunc->GetFuncPnt(Func,Xval,Yval);
-   Func_y=new double [Xval[0]+1];Func_y[0]=Xval[0];
+   Func_y=new double [int(Xval[0])+1];Func_y[0]=Xval[0];
    Func->Clc(Xval,Func_y);
    int N=Func->GetNumPar();
    double *TmpPar=new double[N+1];TmpPar[0]=N;
    Func->GetPar(TmpPar);Func->SetPar(TmpPar);
-   delete TmpPar; //?
+   delete []TmpPar; //?
    double ar[257];
    for (int k=1;k<=Xval[0];k++)
      {
@@ -382,7 +386,7 @@ LeakTest();
 
 
 
-void WriteExample(char *name)
+void WriteExample(const char *name)
   {
    fstream out(name,ios::out);
    out

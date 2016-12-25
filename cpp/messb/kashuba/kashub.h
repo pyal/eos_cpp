@@ -2,8 +2,8 @@
 #ifndef __KASHUB_H
 #define __KASHUB_H
 
-#include "mat\mtrnd.h"
-#include "mat\matrics.h"
+#include "mat/mtrnd.h"
+#include "mat/matrics.h"
 
 void MC_Step(
     VecCl &ph,

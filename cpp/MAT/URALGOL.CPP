@@ -18,9 +18,9 @@ void URtred2(MatrCl &InMat,double *Diag,double *DiagPl,MatrCl &Conv,double Tol)
       l=i-2;f=Conv(i,i-1);
       g=0;for(k=1;k<=l;k++) g+=sqr(Conv(i,k));
       h=g+sqr(f);
-//    è‡•Æ°‡†ßÆ¢†≠®• ï†„·ÂÆ´Ï§•‡† ≠• ¢ÎØÆ´≠Ô•‚·Ô ® Ø‡Æ®·ÂÆ§®‚
-//    Ø•‡•ÂÆ§ ™ ¨•‚™• skip •·´® Ø†‡†¨•‚‡ g ·´®Ë™Æ¨ ¨†´, Á‚Æ°Î
-//    £†‡†≠‚®‡Æ¢†‚Ï Æ‡‚Æ£Æ≠†´Ï≠Æ·‚Ï
+//    –ü—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏–µ –•–∞—É—Å—Ö–æ–ª—å–¥–µ—Ä–∞ –Ω–µ –≤—ã–ø–æ–ª–Ω—è–µ—Ç—Å—è –∏ –ø—Ä–æ–∏—Å—Ö–æ–¥–∏—Ç
+//    –ø–µ—Ä–µ—Ö–æ–¥ –∫ –º–µ—Ç–∫–µ skip –µ—Å–ª–∏ –ø–∞—Ä–∞–º–µ—Ç—Ä g —Å–ª–∏—à–∫–æ–º –º–∞–ª, —á—Ç–æ–±—ã
+//    –≥–∞—Ä–∞–Ω—Ç–∏—Ä–æ–≤–∞—Ç—å –æ—Ä—Ç–æ–≥–æ–Ω–∞–ª—å–Ω–æ—Å—Ç—å
       if (g<=Tol) { DiagPl[i]=f;h=0;
 //cout<<" Skip \n";
                                      goto skip;}
@@ -31,15 +31,15 @@ void URtred2(MatrCl &InMat,double *Diag,double *DiagPl,MatrCl &Conv,double Tol)
       for (j=1;j<=l;j++)
         {
          Conv(j,i)=Conv(i,j)/h;g=0;
-//    ‰Æ‡¨®‡Æ¢†≠®• ¢•™‚Æ‡† InMat*u
+//    —Ñ–æ—Ä–º–∏—Ä–æ–≤–∞–Ω–∏–µ –≤–µ–∫—Ç–æ—Ä–∞ InMat*u
          for (k=1;k<=j;k++) g+=Conv(j,k)*Conv(i,k);
          for (k=j+1;k<=l;k++) g+=Conv(k,j)*Conv(i,k);
-//    ‰Æ‡¨®‡Æ¢†≠®• ¢•™‚Æ‡† p
+//    —Ñ–æ—Ä–º–∏—Ä–æ–≤–∞–Ω–∏–µ –≤–µ–∫—Ç–æ—Ä–∞ p
          DiagPl[j]=g/h;f+=g*Conv(j,i);
         }
-//    ¢ÎÁ®·´•≠®• Ø†‡†¨•‚‡† K
+//    –≤—ã—á–∏—Å–ª–µ–Ω–∏–µ –ø–∞—Ä–∞–º–µ—Ç—Ä–∞ K
       hh=f/(h+h);
-//    Ø‡•Æ°‡†ßÆ¢†≠®• ¨†‚®ÊÎ InMat
+//    –ø—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏–µ –º–∞—Ç–∏—Ü—ã InMat
       for (j=1;j<=l;j++)
         {
          f=Conv(i,j);g=DiagPl[j]-hh*f;DiagPl[j]=g;
@@ -50,7 +50,7 @@ void URtred2(MatrCl &InMat,double *Diag,double *DiagPl,MatrCl &Conv,double Tol)
 //cout<<" Matr "<<N-i+1<<" = \n"<<Conv;
      }
    Diag[1]=0;DiagPl[1]=0;
-//    ≠†™ÆØ´•≠®• ¨†‚‡®Ê Ø‡•Æ°‡†ßÆ¢†≠®Ô
+//    –Ω–∞–∫–æ–ø–ª–µ–Ω–∏–µ –º–∞—Ç—Ä–∏—Ü –ø—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏—è
    for (i=1;i<=N;i++)
      {
       if (Diag[i]!=0) 
@@ -83,7 +83,7 @@ int URtql2(double *Diag,double *DiagPl,MatrCl &Conv)
       j=0;h=MinDouble*(fabs(Diag[l])+fabs(DiagPl[l]));
       if (b<h) b=h;
 //cout<<" b= "<<b<<"\n";
-//    Ì‚Æ ÆØ‡•§•´•≠®• Ø‡•≠•°‡•¶®¨Æ ¨†´Æ£Æ Ì´•¨•≠‚†
+//    —ç—Ç–æ –æ–ø—Ä–µ–¥–µ–ª–µ–Ω–∏–µ –ø—Ä–µ–Ω–µ–±—Ä–µ–∂–∏–º–æ –º–∞–ª–æ–≥–æ —ç–ª–µ–º–µ–Ω—Ç–∞
       for (m=l;m<=N;m++) if (fabs(DiagPl[m])<=b) goto cont;
   cont:
 //cout<<" m= "<<m<<" l= "<<l;
@@ -91,7 +91,7 @@ int URtql2(double *Diag,double *DiagPl,MatrCl &Conv)
   nextit:
       if (j==30) return 0;
       j++;
-//    ‰Æ‡¨®‡Æ¢†≠®• ·§¢®£†
+//    —Ñ–æ—Ä–º–∏—Ä–æ–≤–∞–Ω–∏–µ —Å–¥–≤–∏–≥–∞
       g=Diag[l];p=(Diag[l+1]-g)/(2*DiagPl[l]);
       r=sqrt(sqr(p)+1);
       if (p<0) Diag[l]=DiagPl[l]/(p-r);
@@ -99,7 +99,7 @@ int URtql2(double *Diag,double *DiagPl,MatrCl &Conv)
       h=g-Diag[l];
       for (i=l+1;i<=N;i++) Diag[i]-=h;
       f+=h;
-//    QL - Ø‡•Æ°‡†ßÆ¢†≠®•
+//    QL - –ø—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏–µ
       p=Diag[m];c=1;s=0;
       for (i=m-1;i>=l;i--)
         {
@@ -118,7 +118,7 @@ int URtql2(double *Diag,double *DiagPl,MatrCl &Conv)
            }
          p=c*Diag[i]-s*g;
          Diag[i+1]=h+s*(c*g+s*Diag[i]);
-//     ‰Æ‡¨®‡Æ¢†≠®• ·Æ°·‚¢•≠≠Æ£ ¢•™‚Æ‡†
+//     —Ñ–æ—Ä–º–∏—Ä–æ–≤–∞–Ω–∏–µ —Å–æ–±—Å—Ç–≤–µ–Ω–Ω–æ–≥ –≤–µ–∫—Ç–æ—Ä–∞
          for (k=1;k<=N;k++)
            {
             h=Conv(k,i+1);
@@ -134,7 +134,7 @@ int URtql2(double *Diag,double *DiagPl,MatrCl &Conv)
      }
 //VecCl VDiag(Diag);
 //cout<<" Diag "<<VDiag;VDiag.Ptr=NULL;
-//     ‡†ß¨•È•≠®• ·Æ°·‚¢•≠≠ÎÂ ß≠†Á•≠®© ® ·Æ°·‚¢•≠≠ÎÂ ¢•™‚Æ‡Æ¢
+//     —Ä–∞–∑–º–µ—â–µ–Ω–∏–µ —Å–æ–±—Å—Ç–≤–µ–Ω–Ω—ã—Ö –∑–Ω–∞—á–µ–Ω–∏–π –∏ —Å–æ–±—Å—Ç–≤–µ–Ω–Ω—ã—Ö –≤–µ–∫—Ç–æ—Ä–æ–≤
    for (i=1;i<=N;i++)
      {
       k=i;p=Diag[i];
@@ -166,8 +166,8 @@ long double URinnerpod(int l,int s,int u,long double c,const VecCl &a,const VecC
    return sum;
   };
 
-//     ê†ß´Æ¶•≠®• ®·ÂÆ§≠Æ© ¨†‚‡®ÊÎ ≠† Ø‡Æ®ß¢•§•≠®• 2 ‚‡•„£Æ´Ï≠ÎÂ
-//  · ®·ØÆ´ÏßÆ¢†≠®•¨ †´£Æ‡®‚¨† ä‡†„‚† + ¢ÎÁ®·´Ô•‚·Ô det(A). ·‚‡ 97
+//     –†–∞–∑–ª–æ–∂–µ–Ω–∏–µ –∏—Å—Ö–æ–¥–Ω–æ–π –º–∞—Ç—Ä–∏—Ü—ã –Ω–∞ –ø—Ä–æ–∏–∑–≤–µ–¥–µ–Ω–∏–µ 2 —Ç—Ä–µ—É–≥–æ–ª—å–Ω—ã—Ö
+//  —Å –∏—Å–ø–æ–ª—å–∑–æ–≤–∞–Ω–∏–µ–º –∞–ª–≥–æ—Ä–∏—Ç–º–∞ –ö—Ä–∞—É—Ç–∞ + –≤—ã—á–∏—Å–ª—è–µ—Ç—Å—è det(A). —Å—Ç—Ä 97
 
 int URunsymdet(MatrCl &a,double eps,double &d1,int &d2,int *rear)
   {
@@ -217,15 +217,15 @@ void URunsymsol(MatrCl &a,int *rear,VecCl &b)
   {
    int i,N=a.Dim();//j,k,
    double x;
-//      Ø•‡•·‚†≠Æ¢™† ·‚‡Æ™ ¨†‚‡®ÊÎ Ø‡†¢ÎÂ Á†·‚•© b
+//      –ø–µ—Ä–µ—Å—Ç–∞–Ω–æ–≤–∫–∞ —Å—Ç—Ä–æ–∫ –º–∞—Ç—Ä–∏—Ü—ã –ø—Ä–∞–≤—ã—Ö —á–∞—Å—Ç–µ–π b
    for (i=1;i<=N;i++)
      if (rear[i]!=i) 
        { x=b[i];b[i]=b[rear[i]];b[rear[i]]=x;} 
-//      ‡•Ë•≠®• ·®·‚•¨Î  Ly=b
+//      —Ä–µ—à–µ–Ω–∏–µ —Å–∏—Å—Ç–µ–º—ã  Ly=b
    for (i=1;i<=N;i++)
       b[i]=-URinnerpod(1,1,i-1,-b[i],MatrCl::GetRow(a,i),b)/a(i,i);
 //cout<<L*b-B;MatrCl B1=b;
-//      ‡•Ë•≠®• ·®·‚•¨Î  Ux=y
+//      —Ä–µ—à–µ–Ω–∏–µ —Å–∏—Å—Ç–µ–º—ã  Ux=y
    for (i=N;i>=1;i--)
       b[i]=-URinnerpod(i+1,1,N,-b[i],MatrCl::GetRow(a,i),b);
 //cout<<U*b-B1<<"\n";
@@ -309,8 +309,8 @@ my_comp URCinnerpod(int l,int s,int u,my_comp c,const CVecCl &a,const CVecCl &b)
    return my_comp(re,im);
   };
 
-//     ê†ß´Æ¶•≠®• ®·ÂÆ§≠Æ© ¨†‚‡®ÊÎ ≠† Ø‡Æ®ß¢•§•≠®• 2 ‚‡•„£Æ´Ï≠ÎÂ
-//  · ®·ØÆ´ÏßÆ¢†≠®•¨ †´£Æ‡®‚¨† ä‡†„‚† + ¢ÎÁ®·´Ô•‚·Ô det(A). ·‚‡ 97
+//     –†–∞–∑–ª–æ–∂–µ–Ω–∏–µ –∏—Å—Ö–æ–¥–Ω–æ–π –º–∞—Ç—Ä–∏—Ü—ã –Ω–∞ –ø—Ä–æ–∏–∑–≤–µ–¥–µ–Ω–∏–µ 2 —Ç—Ä–µ—É–≥–æ–ª—å–Ω—ã—Ö
+//  —Å –∏—Å–ø–æ–ª—å–∑–æ–≤–∞–Ω–∏–µ–º –∞–ª–≥–æ—Ä–∏—Ç–º–∞ –ö—Ä–∞—É—Ç–∞ + –≤—ã—á–∏—Å–ª—è–µ—Ç—Å—è det(A). —Å—Ç—Ä 97
 
 int URCunsymdet(CMatrCl &a,double eps,my_comp &d1,int &d2,int *rear)
   {
@@ -363,15 +363,15 @@ void URCunsymsol(CMatrCl &a,int *rear,CVecCl &b)
   {
    int i,N=a.Dim();//j,k,
    my_comp x;
-//      Ø•‡•·‚†≠Æ¢™† ·‚‡Æ™ ¨†‚‡®ÊÎ Ø‡†¢ÎÂ Á†·‚•© b
+//      –ø–µ—Ä–µ—Å—Ç–∞–Ω–æ–≤–∫–∞ —Å—Ç—Ä–æ–∫ –º–∞—Ç—Ä–∏—Ü—ã –ø—Ä–∞–≤—ã—Ö —á–∞—Å—Ç–µ–π b
    for (i=1;i<=N;i++)
      if (rear[i]!=i) 
        { x=b[i];b[i]=b[rear[i]];b[rear[i]]=x;} 
-//      ‡•Ë•≠®• ·®·‚•¨Î  Ly=b
+//      —Ä–µ—à–µ–Ω–∏–µ —Å–∏—Å—Ç–µ–º—ã  Ly=b
    for (i=1;i<=N;i++)
       b[i]=-URCinnerpod(1,1,i-1,-b[i],CMatrCl::GetRow(a,i),b)/a(i,i);
 //cout<<L*b-B;MatrCl B1=b;
-//      ‡•Ë•≠®• ·®·‚•¨Î  Ux=y
+//      —Ä–µ—à–µ–Ω–∏–µ —Å–∏—Å—Ç–µ–º—ã  Ux=y
    for (i=N;i>=1;i--)
       b[i]=-URCinnerpod(i+1,1,N,-b[i],CMatrCl::GetRow(a,i),b);
 //cout<<U*b-B1<<"\n";
@@ -436,7 +436,7 @@ int CSolveAxb(CMatrCl &a,CVecCl &b,CVecCl &x,double Tol)
   };
 
 
-int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
+int URComeig(const CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
   {
    my_comp ctmp,c1,c2,s1,s2,ch,cg,ce,cb,cd,cki,cmi;
    double tem,tau,g,hj,te,tee,max,s,c,isw,de,d,root1,root2,sa,ca,cotx,cot2x;
@@ -447,11 +447,11 @@ int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
    double eps=1e-14;
    Lft=a*0;Lft=Lft+1;Rgt=Lft;
 //CMatrCl Contr=a;
-// Ø‡Æ¢•‡™† Á®·´† ¢ÎØÆ´≠•≠≠ÎÂ ÆØ•‡†Ê®©
+// –ø—Ä–æ–≤–µ—Ä–∫–∞ —á–∏—Å–ª–∞ –≤—ã–ø–æ–ª–Ω–µ–Ω–Ω—ã—Ö –æ–ø–µ—Ä–∞—Ü–∏–π
    for (it=1;it<=35;it++)
      {
       if (mark) goto done;
-// ™‡®‚•‡®© ·ÂÆ§®¨Æ·‚®
+// –∫—Ä–∏—Ç–µ—Ä–∏–π —Å—Ö–æ–¥–∏–º–æ—Å—Ç–∏
       tau=0;
       for (k=1;k<=N;k++) 
         {
@@ -461,7 +461,7 @@ int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
          tau+=tem;
          en[k]=tem+fabs(my_real(a(k,k)))+fabs(my_imag(a(k,k)));
         }
-// Ø•‡•·‚†≠Æ¢™† ·‚‡Æ™ ® ·‚Æ´°ÊÆ¢
+// –ø–µ—Ä–µ—Å—Ç–∞–Ω–æ–≤–∫–∞ —Å—Ç—Ä–æ–∫ –∏ —Å—Ç–æ–ª–±—Ü–æ–≤
       for (k=1;k<N;k++) 
         {
           max=en[k];i=k;
@@ -483,7 +483,7 @@ int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
             }
         }
       if (tau<100*eps) goto done;
-// Ø•‡•°Æ‡ Ì´•¨•≠‚Æ¢ ¨†‚‡®ÊÎ
+// –ø–µ—Ä–µ–±–æ—Ä —ç–ª–µ–º–µ–Ω—Ç–æ–≤ –º–∞—Ç—Ä–∏—Ü—ã
       mark=1;
       for (k=1;k<N;k++) 
         {
@@ -528,7 +528,7 @@ int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
               cot2x=d/root1;
               cotx=cot2x+(sig*sqrt(1+sqr(cot2x)));
               sx=sig/sqrt(1+sqr(cotx));cx=sx*cotx;
-// ÆØ‡•§•´•≠®• Ø†‡†¨•‚‡Æ¢ ¢‡†È•≠®Ô
+// –æ–ø—Ä–µ–¥–µ–ª–µ–Ω–∏–µ –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤ –≤—Ä–∞—â–µ–Ω–∏—è
               eta=(my_real(ce)*my_real(cb)+my_imag(ce)*my_imag(cb))/root1;
               tse=(my_real(cb)*my_imag(cb)-my_real(ce)*my_imag(ce))/root1;
               te =sig*(-root1*de+tse*d)/root2;
@@ -550,7 +550,7 @@ int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
               tanh=root/(g+2*(nc+nd));
               ch1=1/sqrt(1-sqr(tanh));
               sh=ch1*tanh;
-// ØÆ§£Æ‚Æ¢™† ™ Ø‡•Æ°‡†ßÆ¢†≠®Ó
+// –ø–æ–¥–≥–æ—Ç–æ–≤–∫–∞ –∫ –ø—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏—é
           trans:
               tem=sx*sh*(sa*cb1-sb*ca);
               c1=my_comp(cx*ch1-tem,-sx*sh*(ca*cb1+sa*sb));
@@ -559,12 +559,12 @@ int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
               s1=my_comp(tep-tem,0);s2=my_comp(-tep-tem,0);
               tep=sx*ch1*sa;tem=cx*sh*cb1;
               s1=my_comp(my_real(s1),tep+tem);s2=my_comp(my_real(s2),tep-tem);
-// Ø‡Æ¢•‡™† ¢ÎØÆ´≠Ô‚Ï Ø‡•Æ°‡†ßÆ¢†≠®• ®´® ≠•‚
+// –ø—Ä–æ–≤–µ—Ä–∫–∞ –≤—ã–ø–æ–ª–Ω—è—Ç—å –ø—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏–µ –∏–ª–∏ –Ω–µ—Ç
               tem=fabs(s1);tep=fabs(s2);
               if ( (tem>eps) || (tep>eps) )
                 {
                  mark=0;
-// ´•¢Æ• Ø‡•Æ°‡†ßÆ¢†≠®•
+// –ª–µ–≤–æ–µ –ø—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏–µ
                  for (i=1;i<=N;i++)
                    {
                     cki=a(k,i);cmi=a(m,i);
@@ -574,7 +574,7 @@ int URComeig(CMatrCl &a,CMatrCl &Lft,CMatrCl &Rgt)
                     Rgt(k,i)=c1*cki+s1*cmi;
                     Rgt(m,i)=s2*cki+c2*cmi;
                    }
-// Ø‡†¢Æ• Ø‡•Æ°‡†ßÆ¢†≠®•
+// –ø—Ä–∞–≤–æ–µ –ø—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏–µ
                  for (i=1;i<=N;i++)
                    {
                     cki=a(i,k);cmi=a(i,m);

@@ -14,11 +14,11 @@
 //#include "util.h"
 //#include <PROCESS.H>
 #include "faobj.h"
-#include "mat\eigen_ma.h"
-#include "mat\myappr.h"
-#include "mat\matrics.h"
+#include "mat/eigen_ma.h"
+#include "mat/myappr.h"
+#include "mat/matrics.h"
 #include "lib/ref/class.h"
-#include "mat\ndimmin.h"
+#include "mat/ndimmin.h"
 
 
    
@@ -53,7 +53,7 @@ struct FAWZer:DescribedClass
         delete name;name=NULL;
       };
 
-   FAWZer():name(NULL),XArr(NULL),YArr(NULL),Func(NULL),HiArr(NULL){};
+   FAWZer():name(NULL),XArr(NULL),YArr(NULL),HiArr(NULL),Func(NULL){};
    virtual ~FAWZer(){FAWZerDelete();};
    virtual void DrawHelp(ostream &out)
    { out<<" Function is created by string\n"<<name<<" "; };
@@ -100,14 +100,14 @@ struct FAWStand:FAWZer
 
 struct FAWOptim:FAWZer
   {
-   long NumIt,NumT;
    double FuncError,ResError;
+    long NumT, NumIt;
    int SumFuncMinim;
 
    int NumFuncEval;
    FAWOptim();
    void FAWDo();
-   static void Cur_Theo(VecCl &par,VecCl &res);
+   static void Cur_Theo(const VecCl &par,VecCl &res);
 
    void Output(ostream &output);
    void Input(istream &input);

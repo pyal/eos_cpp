@@ -95,7 +95,7 @@ void SphereAnglesGenerator::MakeRotAngles(V3D_Angles &rot_ax,V3D_Angles &view_ax
   //VecCl A;
   //double Hc;
 AnisotropeGenerator *AnisotropeGenerator::CurPtr;
-#include "mat\quad.h"
+#include "mat/quad.h"
 double AnisotropeGenerator::FindAnisC(double c)
 {
   double a12=2*(CurPtr->A.x()-CurPtr->A.y()),a13=2*(CurPtr->A.x()-CurPtr->A.z());

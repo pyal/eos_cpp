@@ -401,8 +401,8 @@ struct MapVars {
     vector<int> mapVar;
     VecCl Start, Norm;
     void SetMap(VecCl &start, VecCl &coder);
-    VecCl CodeVec(VecCl &src);
-    VecCl DeCodeVec(VecCl &src);
+    VecCl CodeVec(const VecCl &src);
+    VecCl DeCodeVec(const VecCl &src);
 };
 
 #include "mtrnd.h"

@@ -3,13 +3,13 @@
 #define __FAState_H
 
 #include "faobj.h"
-//#include "urs\matt_reg.h"
-#include "urs\empi_equ.h"
-#include "urs\fre_fac.h"
+//#include "urs/matt_reg.h"
+#include "urs/empi_equ.h"
+#include "urs/fre_fac.h"
 //#include "matt_cfg.h"
-#include "urs\matt_adi.h"
-#include "urs\matt_h2.h"
-#include "urs\matt_his.h"
+#include "urs/matt_adi.h"
+#include "urs/matt_h2.h"
+#include "urs/matt_his.h"
 //#include "h2_liqui.h"
 //#include "faregist.h"
 

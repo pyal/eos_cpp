@@ -6,8 +6,8 @@
 #include "faobj.h"
 //#define __FAMessbRegist_H
 #include "faregist.h"
-#include "mat\quad.h"
-#include "mat\mtfunc.h"
+#include "mat/quad.h"
+#include "mat/mtfunc.h"
 
 int FAMessbRegister(fstream &in,FAIO *&Func,char *name);
 extern int FARegister(istream &in,FAIO *&Func);

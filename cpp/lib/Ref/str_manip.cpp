@@ -187,10 +187,10 @@ namespace Str {
     }
 
     int IsGlasn(char ch) {
-        return (strchr("�����������", ch) != NULL);
+        return (strchr("йуеыаоэяиюё", ch) != NULL);
     }
     int IsSoGlasn(char ch) {
-        return (strchr("�������������������", ch) != NULL);
+        return (strchr("цкншщхъфвпрлджчсмть", ch) != NULL);
     }
     int IsRussianLanguageFast(const char *str1) {
         for(size_t k = 0; k < strlen(str1); k++)
@@ -240,11 +240,11 @@ namespace Str {
         if(!CountSpec)
             return (
                 strchr(
-                    "������������������������������������������������������������������",
+                    "ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ",
                     (unsigned char)ch) != NULL);
         return (
             strchr(
-                "������������������������������������������������������������������.-",
+                "ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ",
                 (unsigned char)ch) != NULL);
     }
     bool IsEnglishChar(char ch) {

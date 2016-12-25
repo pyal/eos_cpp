@@ -185,7 +185,7 @@ void Solver_H_Z_poly::Solve(double *x,double *Res)
   SolveIntPos(Ham->Make4Ham(),Int,Pos);
   Intencity(Int,Pos,x,Res);
 }
-void Solver_H_Z_poly::SolveIntPos(CMatrCl &Hamilt,VecCl &Int,VecCl &Pos)
+void Solver_H_Z_poly::SolveIntPos(const CMatrCl &Hamilt,VecCl &Int,VecCl &Pos)
 {
   int N=Hamilt.Dim();
   CMatrCl EigenVect(N),EigenVect1(N);
@@ -227,7 +227,7 @@ void Solver_H_Z_poly::Intencity(VecCl &Int,VecCl &Pos,double *x,double *res)
 void Solver_H_Z_poly_kashuba::Intencity(VecCl &Int,VecCl &Pos,double *x,double *res)
 {
   double ZerPos=(Pos*(Pos*0+1))/8;
-  double s,p,W=sqr(Ham->Wid/2);
+  double s,p;//,W=sqr(Ham->Wid/2);
   double K=Ham->Wid/(2*M_PI);
   for (int k=1;k<=x[0];k++)
   {
@@ -248,7 +248,7 @@ void Solver_H_Z_poly_kashuba::Intencity(VecCl &Int,VecCl &Pos,double *x,double *
 VecCl Solver_H_Z_mono::MakeAmpVec()
 {  
   VecCl ret(4);
-  double Cos=cos(TetaH_View*M_PI/180),Sin=sin(TetaH_View*M_PI/180);
+  double Cos=cos(TetaH_View*M_PI/180);//,Sin=sin(TetaH_View*M_PI/180);
   double Cos2=sqr(Cos);
   ret[1]=(1+Cos2)*0.75;ret[2]=1.-Cos2;ret[3]=(1+Cos2)*0.25;ret[4]=0;
   return ret; 
@@ -257,7 +257,7 @@ void Solver_H_Z_mono::IntPos(CMatrCl &EigenVect,VecCl &EigenVal,VecCl &Int,VecCl
 {
   Solver_H_Z_poly::IntPos(EigenVect,EigenVal,Int,Pos);
   double Cos=cos(TetaH_View*M_PI/180),Sin=sin(TetaH_View*M_PI/180);
-  double Cos2=sqr(Cos);
+//  double Cos2=sqr(Cos);
 
 //  Add interference 
   my_comp e1=my_comp(cos(PhiH_View*M_PI/180),sin(PhiH_View*M_PI/180)),e2=e1*e1;
@@ -303,7 +303,7 @@ void Solver_H_Free_poly::Solve(double *x,double *Res)
   SolveIntPos(Ham->Make8Ham(),Int,Pos);
   Intencity(Int,Pos,x,Res);
 }
-void Solver_H_Free_poly::SolveIntPos(CMatrCl &Hamilt,CVecCl &Int,CVecCl &Pos)
+void Solver_H_Free_poly::SolveIntPos(const CMatrCl &Hamilt,CVecCl &Int,CVecCl &Pos)
 {
   int N=Hamilt.Dim();
   CMatrCl Lft(N),Rgt(N);
@@ -360,7 +360,7 @@ CMatrCl Solver_Blume_Nax_poly::MakeMatr()
   int k,k1;
   CMatrCl One8(8),Res(Nham*8);Res=Res*0;One8=One8*0;
   CMatrCl Zer(Nham);Zer=Zer*0;
-  my_comp sum=0;
+//  my_comp sum=0;
   for (k=1;k<=Nham;k++)
   {
     for (k1=1;k1<=Nham;k1++)
@@ -663,7 +663,6 @@ void GetVecIntTurn(CMatrCl &Mat,CVecCl &Int,CVecCl &Pos,CMatrCl &Amp)
    CVecCl Vec,VecL,VecR;
    CMatrCl Eig(N),Lft(N),Rgt(N);Eig=Mat;
    URComeig(Eig,Lft,Rgt);
-///*
    for (int k=1;k<=N;k++)
      {
       Pos[k]=Eig(k,k);
@@ -998,7 +997,6 @@ void R3HQs(CMatrCl &Mat,double Teta,double Phi,double H,double Qs,double Eta,
    R01HQs(H33,Teta, Phi, H, Qs, Eta, Is, Wid,-120+Alph_zx,Alph_xy);
 //cout<<" H33 \n"<<H33;
    H12=H12*0;H13=H12;H21=H12;H23=H12;H31=H12;H32=H12;
-///*
    double a12,a13,a21,a23,a31,a32;
    if ( (T1>MathZer) && (T2>MathZer) && (T3>MathZer) )
      {
@@ -1009,7 +1007,6 @@ void R3HQs(CMatrCl &Mat,double Teta,double Phi,double H,double Qs,double Eta,
       H21=H21+my_comp(0,a21);H22=H22-my_comp(0,T2);H23=H23+my_comp(0,a23);
       H31=H31+my_comp(0,a31);H32=H32+my_comp(0,a32);H33=H33-my_comp(0,T3);
      }
-//* /
       H11=H11-my_comp(0,T3+T2);H12=H12+my_comp(0,T2);H13=H13+my_comp(0,T3);
       H21=H21+my_comp(0,T1);H22=H22-my_comp(0,T1+T3);H23=H23+my_comp(0,T3);
       H31=H31+my_comp(0,T1);H32=H32+my_comp(0,T2);H33=H33-my_comp(0,T1+T2);
@@ -1336,7 +1333,6 @@ void R3HQsAmpVec(double Alph_zx1,double Alph_xy1,
 
 
 // H//z
-/*
 void GetVecInt(CMatrCl &Mat,CVecCl &Int,CVecCl &Pos,CVecCl &Amp)
   {
    int N=Mat.Dim(); 
@@ -1352,10 +1348,8 @@ void GetVecInt(CMatrCl &Mat,CVecCl &Int,CVecCl &Pos,CVecCl &Amp)
         }
      }
   };   
-*/
-
-/*
-//H - not turned
+
+ //H - not turned
 double RInt(CMatrCl &Mat,CMatrCl &AmpL,CMatrCl &AmpR,double x,double Wid1)
   {
    int N=Mat.Dim();

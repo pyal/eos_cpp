@@ -17,7 +17,7 @@ extern "C"
     DataBase(){};
     DataBase(const DataBase &dat){};
 
-    Stroka name; /* имя переменной или функции */
+    Stroka name;  /* РёРјСЏ РїРµСЂРµРјРµРЅРЅРѕР№ РёР»Рё С„СѓРЅРєС†РёРё */
     virtual int MakeOperation(
         Operation oper,
         DataBase *res,

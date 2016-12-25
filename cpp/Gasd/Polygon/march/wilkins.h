@@ -145,9 +145,9 @@ namespace NPolygon {
         }
         void MakeVisc(TPolyRegion *reg, const Stroka &viscName) {
             TRegionBounds bndCent(0, -1);
-            double *vel = (double *)reg->Grid.GetMaskedData(bndCent, VelName)
-                              .Start()
-                              .GetElementPtr();
+//            double *vel = (double *)reg->Grid.GetMaskedData(bndCent, VelName)
+//                              .Start()
+//                              .GetElementPtr();
             double *velPlus = (double *)reg->Grid.GetMaskedData(bndCent, VelPlusName)
                                   .Start()
                                   .GetElementPtr();
@@ -225,7 +225,7 @@ namespace NPolygon {
 
         void FillChildBoundsVacuumX(TPolyRegion *reg, const Stroka &varName) {
             TPolyRegion::TShallowIterator prevIt;
-            TPolyRegion *prevRegion = NULL;
+//            TPolyRegion *prevRegion = NULL;
             for(TPolyRegion::TShallowIterator curIt = reg->ShallowStart(); curIt.IsOk();
                 prevIt = curIt, curIt.Next()) {
                 if(!IsVacuum(curIt.CurRegion()))
@@ -248,8 +248,8 @@ namespace NPolygon {
                                       ->Grid.GetMaskedData(bndX, varName)
                                       .Start()
                                       .GetElementPtr();
-                int sizeNext =
-                    curIt.CurRegion()->Grid.GetMaskedData(bndX, varName).Start().Size();
+//                int sizeNext =
+//                    curIt.CurRegion()->Grid.GetMaskedData(bndX, varName).Start().Size();
                 posCur[0] = posPrev[sizePrev - 1];
                 posCur[sizeCur - 1] = posNext[0];
             }
@@ -321,10 +321,6 @@ namespace NPolygon {
     public:
         TMarchWilkins()
             : TPolyMarchRegionBase(),
-              BoundaryMakerMass(TRegionBounds(0, -1), "0 "),
-              BoundaryMakerX(TRegionBounds(0, 0)),
-              BoundaryMakerPres(TRegionBounds(0, -1), "1e-4"),
-              BoundaryMakerVel(TRegionBounds(0, -1), "0 1"),
               PresName("Pres"),
               SoundName("Sound"),
               EnerName("Ener"),
@@ -337,10 +333,9 @@ namespace NPolygon {
               VolPlusName("VolPlus"),
               PosPlusName("PosPlus"),
               DencPlusName("DencPlus"),
-              MassName("Mass")
+              MassName("Mass"),
               //, MassBndName("MassBnd")
               //, ViscPresName("ViscPres")
-              ,
               VolDerivName("VolDeriv"),
               ViscPlusName("ViscPlus"),
               ViscName("Visc"),
@@ -350,7 +345,12 @@ namespace NPolygon {
               MarchCourant(0.1),
               MinPres(1e-4),
               EnergyPresCoef(0),
-              MinPresCoef(1) {}
+              MinPresCoef(1),
+              BoundaryMakerX(TRegionBounds(0, 0)),
+              BoundaryMakerMass(TRegionBounds(0, -1), "0 "),
+              BoundaryMakerPres(TRegionBounds(0, -1), "1e-4"),
+              BoundaryMakerVel(TRegionBounds(0, -1), "0 1")
+        {}
         //virtual double GetCurTime() { return CurTime;}
         virtual void InitBeforeBounds(TPolyRegion *reg) {
             InitRegion(reg);

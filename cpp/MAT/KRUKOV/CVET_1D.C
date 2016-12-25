@@ -1,5 +1,5 @@
 /*
-   Åãéä  ÉêÄîàäà STEREO-PC.1d ë ÉêÄîàäéâ
+   –ë–õ–û–ö  –ì–†–ê–§–ò–ö–ò STEREO-PC.1d –° –ì–†–ê–§–ò–ö–û–ô
    Copyright (c) 26.03.1991 SPI     All rights reserved.
 */
 
@@ -22,24 +22,24 @@
 #define OFF	0			/* Define some handy constants	*/
 
 /* ------------------------------------------------------- */
-/* è†‡†¨•‚‡Î, ÆØ‡•§•´Ô•¨Î• ¢ °´Æ™• ≠†Á. §†≠≠ÎÂ             */
+/* –ü–∞—Ä–∞–º–µ—Ç—Ä—ã, –æ–ø—Ä–µ–¥–µ–ª—è–µ–º—ã–µ –≤ –±–ª–æ–∫–µ –Ω–∞—á. –¥–∞–Ω–Ω—ã—Ö             */
 /* ------------------------------------------------------- */
 
-#define MNCR       750        /* å†™·®¨†´Ï≠Æ• ™Æ´®Á•·‚¢Æ ÔÁ••™ ØÆ Æ·® R */
-#define KOLGR       4         /* äÆ´®Á•·‚¢Æ £‡†‰®™Æ¢ (4)   */
+#define MNCR       750        /* –ú–∞–∫—Å–∏–º–∞–ª—å–Ω–æ–µ –∫–æ–ª–∏—á–µ—Å—Ç–≤–æ —è—á–µ–µ–∫ –ø–æ –æ—Å–∏ R */
+#define KOLGR       4         /* –ö–æ–ª–∏—á–µ—Å—Ç–≤–æ –≥—Ä–∞—Ñ–∏–∫–æ–≤ (4)   */
 
-#define CHSL  5 /* ÇÆß¨Æ¶≠Æ• Á®·´Æ ‚•´ ®´® ·´Æ•¢ */
-#define DLSL 16 /* Ñ´®≠† char-¨†··®¢Æ¢ §´Ô Â‡†≠•≠®Ô Á®·•´ */
+#define CHSL  5 /* –í–æ–∑–º–æ–∂–Ω–æ–µ —á–∏—Å–ª–æ —Ç–µ–ª –∏–ª–∏ —Å–ª–æ–µ–≤ */
+#define DLSL 16 /* –î–ª–∏–Ω–∞ char-–º–∞—Å—Å–∏–≤–æ–≤ –¥–ª—è —Ö—Ä–∞–Ω–µ–Ω–∏—è —á–∏—Å–µ–ª */
     char s1[MAXPATH];
     char s2[80];
     size_t size;
      int frstent=0;
     FILE *stream1;
     FILE *stream2;
-	 char *namezad="?        ";     /* à¨Ô ß†§†Á® */
-   char *spath  ="ë‚‡Æ™† §´Ô ‰Æ‡¨®‡Æ¢†≠®Ô Ø„‚® ØÆ®·™† ≠„¶≠Æ£Æ ‰†©´†";
+	 char *namezad="?        ";     /* –ò–º—è –∑–∞–¥–∞—á–∏ */
+   char *spath  ="–°—Ç—Ä–æ–∫–∞ –¥–ª—è —Ñ–æ—Ä–º–∏—Ä–æ–≤–∞–Ω–∏—è –ø—É—Ç–∏ –ø–æ–∏—Å–∫–∞ –Ω—É–∂–Ω–æ–≥–æ —Ñ–∞–π–ª–∞";
 
-			   /* è†‡†¨•‚‡Î Æ‚Æ°‡†¶•≠®Ô */
+			   /* –ü–∞—Ä–∞–º–µ—Ç—Ä—ã –æ—Ç–æ–±—Ä–∞–∂–µ–Ω–∏—è */
 	 char gr  [DLSL];
 	 char gp  [DLSL];
 	 char gv  [DLSL];
@@ -52,7 +52,7 @@
 	 char gpr  [DLSL];
 	 char gvr  [DLSL];
 	 char ger  [DLSL];
-			   /* äÆ≠•Ê ·Ø®·™† Ø†‡†¨•‚‡Æ¢ Æ‚Æ°‡†¶•≠®Ô */
+			   /* –ö–æ–Ω–µ—Ü —Å–ø–∏—Å–∫–∞ –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤ –æ—Ç–æ–±—Ä–∞–∂–µ–Ω–∏—è */
 char *VidGraf[] = {
   "Density",  "Presure", "Velocity", "Energy"
 };
@@ -65,7 +65,7 @@ int    MaxColors;		/* The maximum # of colors available	*/
 int    ErrorCode;		/* Reports any graphics errors		*/
 struct palettetype palette;		/* Used to read palette info	*/
 
-			      /* ë•‚ÆÁ≠Î• ¨†··®¢Î           */
+			      /* –°–µ—Ç–æ—á–Ω—ã–µ –º–∞—Å—Å–∏–≤—ã           */
 	  int c1[MNCR+2];
 	float c2[MNCR+2];
 	float c3[MNCR+2];
@@ -101,45 +101,45 @@ void GrWindow(char *header,int col);
 void changetextstyle(int font, int direction, int charsize);
 void StatusLine(char *msg);
 int  gprintf(int *xloc, int *yloc, char *fmt, ... );
-	     /* Ç≠„‚‡•≠≠®• Ø‡ÆÊ•§„‡Î */
+	     /* –í–Ω—É—Ç—Ä–µ–Ω–Ω–∏–µ –ø—Ä–æ—Ü–µ–¥—É—Ä—ã */
 	void kadr_0();
 	void kadr_im();
 	void readrez(FILE *stream);
   void im_ext(char *s, char *namezad, char ext[]);
    int schitg(void);
-	/*  -------   ä Æ ≠ • Ê  Æ Ø ® · † ≠ ® ©  -------   */
+	/*  -------   –ö –æ –Ω –µ —Ü  –æ –ø –∏ —Å –∞ –Ω –∏ –π  -------   */
 
 
 void main(int argc, char *argv[])
      {
       i=argc;
-      if (strcmp(argv[2], "dialog")==0)  /* ÇÂÆ§ ®ß Ø‡Æ£‡†¨¨Î "§®†´Æ£" */
+      if (strcmp(argv[2], "dialog")==0)  /* –í—Ö–æ–¥ –∏–∑ –ø—Ä–æ–≥—Ä–∞–º–º—ã "–¥–∏–∞–ª–æ–≥" */
 	 strcpy(namezad, argv[1]);
       else
-	 { kadr_0(); kadr_im();}         /* è‡Ô¨Æ© ¢ÂÆ§ */
+	 { kadr_0(); kadr_im();}         /* –ü—Ä—è–º–æ–π –≤—Ö–æ–¥ */
 
-  	im_ext(spath,namezad,".t");    /* Pass - ¢ spath */
+  	im_ext(spath,namezad,".t");    /* Pass - –≤ spath */
 	  if ((stream1 = fopen(spath, "rb")) == NULL)
-  {error_message("  ì ß†§†Á® · Ì‚®¨ ®¨•≠•¨ ≠•‚ Æ§≠Æ¨•‡≠Æ£Æ ‡•Ë•≠®Ô !  ");
+  {error_message("  –£ –∑–∞–¥–∞—á–∏ —Å —ç—Ç–∏–º –∏–º–µ–Ω–µ–º –Ω–µ—Ç –æ–¥–Ω–æ–º–µ—Ä–Ω–æ–≥–æ —Ä–µ—à–µ–Ω–∏—è !  ");
 	  i = get_char(); clear_message(); exit(1);}
 	  readrez(stream1);
 
- begingr: i=schitg(); /* á†§†≠®• ®´® Ø‡Æ·¨Æ‚‡ Ø†‡†¨•‚‡Æ¢ ¢Î·¢•Á®¢†≠®Ô */
+ begingr: i=schitg(); /* –ó–∞–¥–∞–Ω–∏–µ –∏–ª–∏ –ø—Ä–æ—Å–º–æ—Ç—Ä –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤ –≤—ã—Å–≤–µ—á–∏–≤–∞–Ω–∏—è */
 
 	  fst=0;
-	  mvgr[0] = atoi(gr); /* è´Æ‚≠Æ·‚Ï             */
-	  mvgr[1] = atoi(gp); /* Ñ†¢´•≠®•              */
-	  mvgr[2] = atoi(gv); /* ë™Æ‡Æ·‚Ï              */
-	  mvgr[3] = atoi(ge); /* ù≠•‡£®Ô               */
+	  mvgr[0] = atoi(gr); /* –ü–ª–æ—Ç–Ω–æ—Å—Ç—å             */
+	  mvgr[1] = atoi(gp); /* –î–∞–≤–ª–µ–Ω–∏–µ              */
+	  mvgr[2] = atoi(gv); /* –°–∫–æ—Ä–æ—Å—Ç—å              */
+	  mvgr[3] = atoi(ge); /* –≠–Ω–µ—Ä–≥–∏—è               */
 
-		       /* ëÆÆ‚¢•‚·‚¢„ÓÈ®• £‡†≠®ÊÎ */
+		       /* –°–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤—É—é—â–∏–µ –≥—Ä–∞–Ω–∏—Ü—ã */
 	  granl[0] = atof(grl);   granr[0] = atof(grr);
 	  granl[1] = atof(gpl);   granr[1] = atof(gpr);
 	  granl[2] = atof(gvl);   granr[2] = atof(gvr);
 	  granl[3] = atof(gel);   granr[3] = atof(ger);
 
       /* ======================================================= */
-      /*                á†§†≠®• £‡†‰®Á•·™Æ£Æ Æ™≠†                */
+      /*                –ó–∞–¥–∞–Ω–∏–µ –≥—Ä–∞—Ñ–∏—á–µ—Å–∫–æ–≥–æ –æ–∫–Ω–∞                */
       /* ======================================================= */
   Initialize(); 		/* Set system into Graphics mode	*/
 
@@ -149,12 +149,12 @@ void main(int argc, char *argv[])
   setlinestyle( SOLID_LINE, 0, NORM_WIDTH );
   setfillstyle( EMPTY_FILL, 0 );
   height = textheight( "H" );           /* Detemine current height */
-  grrl=80; ggrr=630; grt=80; grb=400;   /* ê†ß¨•‡Î £‡†‰. Æ™≠†      */
-  lxwind = ggrr-grrl;                   /* Ñ´®≠† Æ™≠† ¢ §®·™‡•‚†Â  */
-  lywind = grb-grt;                     /* ÇÎ·Æ‚† Æ™≠† ¢ §®·™‡•‚†Â */
-  stepx = (float)lxwind/(float)ncr;     /* ò†£ ØÆ Æ·® Â            */
+  grrl=80; ggrr=630; grt=80; grb=400;   /* –†–∞–∑–º–µ—Ä—ã –≥—Ä–∞—Ñ. –æ–∫–Ω–∞      */
+  lxwind = ggrr-grrl;                   /* –î–ª–∏–Ω–∞ –æ–∫–Ω–∞ –≤ –¥–∏—Å–∫—Ä–µ—Ç–∞—Ö  */
+  lywind = grb-grt;                     /* –í—ã—Å–æ—Ç–∞ –æ–∫–Ω–∞ –≤ –¥–∏—Å–∫—Ä–µ—Ç–∞—Ö */
+  stepx = (float)lxwind/(float)ncr;     /* –®–∞–≥ –ø–æ –æ—Å–∏ —Ö            */
   x = 10; y = grt-2*height;
-  for (ii=0; ii<4; ii++) {              /* ÇÎ¢Æ§ VidGraf     */
+  for (ii=0; ii<4; ii++) {              /* –í—ã–≤–æ–¥ VidGraf     */
   setcolor(ii+9);                       /* Set current color */
     if (mvgr[ii]!=0) {
     gprintf( &x, &y, "%s", VidGraf[ii]);
@@ -164,7 +164,7 @@ void main(int argc, char *argv[])
     gprintf( &x, &y, "%g", granl[ii]);
     y+=4*height;
     }
-  }  /* äÆ≠•Ê ¢Î¢Æ§† VidGraf */
+  }  /* –ö–æ–Ω–µ—Ü –≤—ã–≤–æ–¥–∞ VidGraf */
 
   x = 10; y = grb-3*height;
   setcolor(13);
@@ -172,10 +172,10 @@ void main(int argc, char *argv[])
   y+=2*height;
   gprintf( &x, &y, "%g - %d (%g)", 0.0, ncr, dlina);
 
-  GrWindow( namezad, 13 );  /* á†™†ß £‡†‰®Á•·™Æ£Æ Æ™≠† */
+  GrWindow( namezad, 13 );  /* –ó–∞–∫–∞–∑ –≥—Ä–∞—Ñ–∏—á–µ—Å–∫–æ–≥–æ –æ–∫–Ω–∞ */
 
       /* ------------------------------------------------------- */
-      /*               É‡†≠®ÊÎ ®ß¨•≠•≠®Ô Ø†‡†¨•‚‡Æ¢              */
+      /*               –ì—Ä–∞–Ω–∏—Ü—ã –∏–∑–º–µ–Ω–µ–Ω–∏—è –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤              */
       /* ------------------------------------------------------- */
        if ((granl[0]==0.0) && (granr[0]==0)) {
 	  rot=-1e10; rob=1e10;
@@ -205,27 +205,27 @@ void main(int argc, char *argv[])
 	      if (c5[j] >et) et=c5[j]; }}
 	else  { et=granr[3]; eb=granl[3]; }
 
-   fseek(stream1,0L, SEEK_SET); /* ì·‚†≠Æ¢™† „™†ß†‚•´Ô ØÆ‚Æ™† ¢ ≠†Á†´Æ */
+   fseek(stream1,0L, SEEK_SET); /* –£—Å—Ç–∞–Ω–æ–≤–∫–∞ —É–∫–∞–∑–∞—Ç–µ–ª—è –ø–æ—Ç–æ–∫–∞ –≤ –Ω–∞—á–∞–ª–æ */
 	ii=Paus(); 
-      if (ii==1) {closegraph(); exit(0);} /* äéçÖñ êÄÅéíõ */
+      if (ii==1) {closegraph(); exit(0);} /* –ö–û–ù–ï–¶ –†–ê–ë–û–¢–´ */
 
       setviewport( grrl, grt, ggrr, grb, 1 );	/* Open port for grafic */
 
-			 /* ñ®™´ ØÆ ß†Ø®·Ô¨ */
+			 /* –¶–∏–∫–ª –ø–æ –∑–∞–ø–∏—Å—è–º */
   begloop:
-  while( !kbhit() ){  /* èÆ™† ≠• ≠†¶†‚† ™´†¢®Ë† - Ø‡Æ·¨Æ‚‡ */
+  while( !kbhit() ){  /* –ü–æ–∫–∞ –Ω–µ –Ω–∞–∂–∞—Ç–∞ –∫–ª–∞–≤–∏—à–∞ - –ø—Ä–æ—Å–º–æ—Ç—Ä */
 getch(); 
 
   readrez(stream1);
   clearviewport();
-  setcolor(11);                         /* ÇÎ¢Æ§ Ë†£† ØÆ ¢‡•¨•≠® */
+  setcolor(11);                         /* –í—ã–≤–æ–¥ —à–∞–≥–∞ –ø–æ –≤—Ä–µ–º–µ–Ω–∏ */
   changetextstyle( DEFAULT_FONT, HORIZ_DIR, 1 );
   x = lxwind-50; y = 5;
   gprintf( &x, &y, "step=%d", nstp);
   y += 2*height;
   gprintf( &x, &y, "   t=%g", t);
 
-  for (ii=0; ii<4; ii++) {              /* ÇÎ¢Æ§ £‡†‰®™Æ¢    */
+  for (ii=0; ii<4; ii++) {              /* –í—ã–≤–æ–¥ –≥—Ä–∞—Ñ–∏–∫–æ–≤    */
   setcolor(ii+9);                       /* Set current color */
     if (mvgr[ii]!=0) {
        realx = 0.0;
@@ -234,11 +234,11 @@ getch();
        if (ii==2) {realy=c4[0]; niz=vb; verh=vt;}
        if (ii==3) {realy=c5[0]; niz=eb; verh=et;}
        w1 = verh-niz;
-       if (w1<1e-10) {niz -= 1; verh += 1;} /* àß°•£†•¨ §•´•≠®Ô ≠† ≠Æ´Ï */
+       if (w1<1e-10) {niz -= 1; verh += 1;} /* –ò–∑–±–µ–≥–∞–µ–º –¥–µ–ª–µ–Ω–∏—è –Ω–∞ –Ω–æ–ª—å */
        w1 = lywind/(verh-niz);
 	x = 0; y = (int)(lywind-(realy-niz)*w1);
 	moveto(x, y);
-	for (j=1; j<=ncr; j++) { /* ñ®™´ ØÆ ‚ÆÁ™†¨ £‡†‰®™† */
+	for (j=1; j<=ncr; j++) { /* –¶–∏–∫–ª –ø–æ —Ç–æ—á–∫–∞–º –≥—Ä–∞—Ñ–∏–∫–∞ */
 	realx += stepx;
        if (ii==0) realy=c2[j];
        if (ii==1) realy=c3[j];
@@ -248,10 +248,10 @@ getch();
        y = (int)(lywind-(realy-niz)*w1);
 	     lineto(x, y);
        k++;
-      } /* äÆ≠•Ê Ê®™´† ØÆ ‚ÆÁ™†¨ */
-    }                   /* äÆ≠•Ê VidGraf         */
-  }                     /* äÆ≠•Ê ¢Î¢Æ§† £‡†‰®™Æ¢ */
-			/* ÇÎ¢Æ§ ·ÆÂ‡†≠•≠®Ô */
+      } /* –ö–æ–Ω–µ—Ü —Ü–∏–∫–ª–∞ –ø–æ —Ç–æ—á–∫–∞–º */
+    }                   /* –ö–æ–Ω–µ—Ü VidGraf         */
+  }                     /* –ö–æ–Ω–µ—Ü –≤—ã–≤–æ–¥–∞ –≥—Ä–∞—Ñ–∏–∫–æ–≤ */
+			/* –í—ã–≤–æ–¥ —Å–æ—Ö—Ä–∞–Ω–µ–Ω–∏—è */
   if (fst==0) {
      fst=1;
      setviewport( 0, 0, MaxX, MaxY, 1 );	/* Open fool screen */
@@ -268,7 +268,7 @@ getch();
      x = 250; y+=2*height;
      gprintf( &x,&y,"Mass  Impulse  Energy");
      setviewport( grrl, grt, ggrr, grb, 1 );	/* Open port for grafic */
-     } /* ÇÎ¢Æ§† §´Ô Ë†£a 0 */
+     } /* –í—ã–≤–æ–¥–∞ –¥–ª—è —à–∞–≥a 0 */
 
      else
 
@@ -284,21 +284,21 @@ getch();
      x+=100;
      gprintf( &x,&y,"%g", energy);
      setviewport( grrl, grt, ggrr, grb, 1 );	/* Open port for grafic */
-     } /* ÇÎ¢Æ§† ·ÆÂ‡†≠•≠®Ô */
+     } /* –í—ã–≤–æ–¥–∞ —Å–æ—Ö—Ä–∞–Ω–µ–Ω–∏—è */
 
       setviewport( grrl, grt, ggrr, grb, 1 );	/* Open port for grafic */
    if (feof(stream1)) {
-      ii=Paus(); if (ii==1) {closegraph(); exit(0);} /* äéçÖñ êÄÅéíõ */
+      ii=Paus(); if (ii==1) {closegraph(); exit(0);} /* –ö–û–ù–ï–¶ –†–ê–ë–û–¢–´ */
     closegraph(); goto begingr;}
 
-      } /* äÆ≠•Ê Ø‡Æ™‡„‚™® °•ß Æ·‚†≠Æ¢™® */
+      } /* –ö–æ–Ω–µ—Ü –ø—Ä–æ–∫—Ä—É—Ç–∫–∏ –±–µ–∑ –æ—Å—Ç–∞–Ω–æ–≤–∫–∏ */
 
-      x = getch();				/* è‡ÆØ„·™ ≠†¶†‚Æ© §´Ô Ø†„ßÎ ™´†¢®Ë® */
+      x = getch();				/* –ü—Ä–æ–ø—É—Å–∫ –Ω–∞–∂–∞—Ç–æ–π –¥–ª—è –ø–∞—É–∑—ã –∫–ª–∞–≤–∏—à–∏ */
       ii=Paus();
       if (ii==1) { closegraph(); goto begingr;}  
       setviewport( grrl, grt, ggrr, grb, 1 );	/* Open port for grafic */
       goto begloop;
- } /* äÆ≠•Ê MAIN-Ø‡Æ£‡†¨¨Î */
+ } /* –ö–æ–Ω–µ—Ü MAIN-–ø—Ä–æ–≥—Ä–∞–º–º—ã */
 /* ==================================================================== */
 
 /*									*/
@@ -360,7 +360,7 @@ int gprintf( int *xloc, int *yloc, char *fmt, ... )
 
  int Paus(void)
 {
-  static char msg[] = "<Esc>-¢ÎÂÆ§, ´Ó°†Ô ™´†¢®Ë† - Ø‡Æ§Æ´¶•≠®•";
+  static char msg[] = "<Esc>-–≤—ã—Ö–æ–¥, –ª—é–±–∞—è –∫–ª–∞–≤–∏—à–∞ - –ø—Ä–æ–¥–æ–ª–∂–µ–Ω–∏–µ";
   int c, rez=0;
 
   StatusLine( msg );			/* Put msg at bottom of screen	*/
@@ -483,7 +483,7 @@ void changetextstyle(int font, int direction, int charsize)
   }
 }
       /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-      /*                    ç„´•¢Æ© ™†§‡                         */
+      /*                    –ù—É–ª–µ–≤–æ–π –∫–∞–¥—Ä                         */
       /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
      void kadr_0()
@@ -497,16 +497,16 @@ void changetextstyle(int font, int direction, int charsize)
 	set_border(wndA, 1);
 	set_colors(wndA, ALL, AQUA, WHITE, BRIGHT);
 
-	wprintf(wndA, "\n\n   è ê é É ê Ä å å ç Ä ü  ë à ë í Ö å Ä");
+	wprintf(wndA, "\n\n   –ü –† –û –ì –† –ê –ú –ú –ù –ê –Ø  –° –ò –° –¢ –ï –ú –ê");
 	wprintf(wndA,     "\n\n            S T E R E O - P C          ");
-	wprintf(wndA,     "\n\n               (¢•‡·®Ô 1.0)            ");
+	wprintf(wndA,     "\n\n               (–≤–µ—Ä—Å–∏—è 1.0)            ");
 
 	display_window(wnd0);
 	display_window(wndA);
-       } /* äÆ≠•Ê ≠„´•¢Æ£Æ ™†§‡† */
+       } /* –ö–æ–Ω–µ—Ü –Ω—É–ª–µ–≤–æ–≥–æ –∫–∞–¥—Ä–∞ */
       /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-      /*	       ä†§‡ - ¢¢Æ§† ®¨•≠® ß†§†Á®                 */
-      /*	       ê•ß„´Ï‚†‚ - ¢ namezad                     */
+      /*	       –ö–∞–¥—Ä - –≤–≤–æ–¥–∞ –∏–º–µ–Ω–∏ –∑–∞–¥–∞—á–∏                 */
+      /*	       –†–µ–∑—É–ª—å—Ç–∞—Ç - –≤ namezad                     */
       /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
      void kadr_im()
      {
@@ -515,22 +515,22 @@ void changetextstyle(int font, int direction, int charsize)
 	load_help("kdr3.hlp");
 
 	wnd = establish_window(25, 18, 3, 30);
-	set_title(wnd, " Ç¢•§®‚• ®¨Ô ß†§†Á® ");
+	set_title(wnd, " –í–≤–µ–¥–∏—Ç–µ –∏–º—è –∑–∞–¥–∞—á–∏ ");
 	set_border(wnd,1);
 	set_colors(wnd, ALL, AQUA, WHITE, BRIGHT);
 	set_colors(wnd, ACCENT, WHITE, BLACK, DIM);
 	display_window(wnd);
-	wprompt(wnd, 6, 0, "à¨Ô: ");
+	wprompt(wnd, 6, 0, "–ò–º—è: ");
 	init_template(wnd);
 	fld = establish_field(wnd, 11, 0, "________", namezad, 'a');
 	field_window(fld,"kdr3.1  ", 80, 25);
 	clear_template(wnd);
         data_entry(wnd);
 	delete_window(wnd);
-     } /* äÆ≠•Ê ™†§‡† ¢¢Æ§† ®¨•≠® ß†§†Á® */
+     } /* –ö–æ–Ω–µ—Ü –∫–∞–¥—Ä–∞ –≤–≤–æ–¥–∞ –∏–º–µ–Ω–∏ –∑–∞–¥–∞—á–∏ */
 
 /* ================================================================= */
-       /* ëÆß§†≠®• ·‚‡Æ™® §´Ô ‚•™„È•© §®‡•™‚Æ‡®® <s> = <file>.<ext> */
+       /* –°–æ–∑–¥–∞–Ω–∏–µ —Å—Ç—Ä–æ–∫–∏ –¥–ª—è —Ç–µ–∫—É—â–µ–π –¥–∏—Ä–µ–∫—Ç–æ—Ä–∏–∏ <s> = <file>.<ext> */
    void im_ext(char *s, char *file, char ext[])
     {
     char drive[MAXDRIVE];
@@ -544,13 +544,13 @@ void changetextstyle(int font, int direction, int charsize)
     strcpy(fi,file);
     strcpy(ex,ext);
     fnmerge(s,drive,dir,fi,ex);   /* merge everything into one string */
-      }  /* äÆ≠•Ê ·Æß§†≠®Ô ·‚‡Æ™® */
+      }  /* –ö–æ–Ω–µ—Ü —Å–æ–∑–¥–∞–Ω–∏—è —Å—Ç—Ä–æ–∫–∏ */
 
 
       /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-      /*               ó‚•≠®• ‡•ß„´Ï‚†‚Æ¢ ·Á•‚†                  */
+      /*               –ß—Ç–µ–Ω–∏–µ —Ä–µ–∑—É–ª—å—Ç–∞—Ç–æ–≤ —Å—á–µ—Ç–∞                  */
       /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-		   /* ó‚•≠®• ‡•ß„´Ï‚†‚Æ¢ ·Á•‚† */
+		   /* –ß—Ç–µ–Ω–∏–µ —Ä–µ–∑—É–ª—å—Ç–∞—Ç–æ–≤ —Å—á–µ—Ç–∞ */
 	  void readrez(FILE *stream) {
 	       size=sizeof(nzap); fread(&nzap, size, 1, stream);
 				  fread(&nstp, size, 1, stream);
@@ -566,17 +566,17 @@ void changetextstyle(int font, int direction, int charsize)
 		fread(&c3, size, ii, stream);
 		fread(&c4, size, ii, stream);
 		fread(&c5, size, ii, stream);
-	  } /* äÆ≠•Ê Á‚•≠®Ô ‡•ß„´Ï‚†‚Æ¢ · §®·™† */
+	  } /* –ö–æ–Ω–µ—Ü —á—Ç–µ–Ω–∏—è —Ä–µ–∑—É–ª—å—Ç–∞—Ç–æ–≤ —Å –¥–∏—Å–∫–∞ */
 
-       int schitg(void)   /* ëÁ®‚Î¢†≠®•  ®´® ß†Ø®·Ï <namezad>.g */
+       int schitg(void)   /* –°—á–∏—Ç—ã–≤–∞–Ω–∏–µ  –∏–ª–∏ –∑–∞–ø–∏—Å—å <namezad>.g */
        {
 	WINDOW *wnd;
   FIELD *fld;
 	FILE *stream;
-	im_ext(spath,namezad,".g");    /* Pass - ¢ spath */
-   if ((stream = fopen(spath, "rb")) == NULL) { /* ç• ß†§†≠Î Ø†‡†¨•‚‡Î ·¢•‚† */
+	im_ext(spath,namezad,".g");    /* Pass - –≤ spath */
+   if ((stream = fopen(spath, "rb")) == NULL) { /* –ù–µ –∑–∞–¥–∞–Ω—ã –ø–∞—Ä–∞–º–µ—Ç—Ä—ã —Å–≤–µ—Ç–∞ */
 	frstent = 1;}
-   if (frstent == 0) {   /* ëÁ®‚Î¢†≠®• Ø†‡†¨•‚‡Æ¢ ·¢•‚† */
+   if (frstent == 0) {   /* –°—á–∏—Ç—ã–≤–∞–Ω–∏–µ –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤ —Å–≤–µ—Ç–∞ */
 
    size=sizeof(gr);
    fread(&gr, size, 1, stream);
@@ -591,10 +591,10 @@ void changetextstyle(int font, int direction, int charsize)
    fread(&gvr, size, 1, stream);
    fread(&gel, size, 1, stream);
    fread(&ger, size, 1, stream);
-   fclose(stream);   }    /* äÆ≠•Ê ·Á®‚Î¢†≠®Ô */
+   fclose(stream);   }    /* –ö–æ–Ω–µ—Ü —Å—á–∏—Ç—ã–≤–∞–Ω–∏—è */
 
 
-		    /* á†§†≠®• ®´® Ø‡Æ·¨Æ‚‡ Ø†‡†¨•‚‡Æ¢ ·¢•‚† */
+		    /* –ó–∞–¥–∞–Ω–∏–µ –∏–ª–∏ –ø—Ä–æ—Å–º–æ—Ç—Ä –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤ —Å–≤–µ—Ç–∞ */
 	load_help("kdr3.hlp");
 	wnd = establish_window(2, 1, 23, 76);
 	set_title(wnd, namezad);
@@ -602,16 +602,16 @@ void changetextstyle(int font, int direction, int charsize)
 	set_colors(wnd, ACCENT, WHITE, BLACK, DIM);
 	display_window(wnd);
 
-	wprompt(wnd, 2, 1, "ÇÎ·¢•Á®¢†•¨Î• Ø†‡†¨•‚‡Î:");
-	wprompt(wnd, 2, 3, "è´Æ‚≠Æ·‚Ï - ");
-	wprompt(wnd, 2, 5, "Ñ†¢´•≠®•  - ");
-	wprompt(wnd, 2, 7, "ë™Æ‡Æ·‚Ï  - ");
-	wprompt(wnd, 2, 9, "ù≠•‡£®Ô   - ");
-	wprompt(wnd, 2, 11,"É‡†≠®ÊÎ ®ß¨•≠•≠®Ô Ø†‡†¨•‚‡Æ¢:");
-	wprompt(wnd, 5, 13,"è´Æ‚≠Æ·‚Ï");
-	wprompt(wnd, 5, 15,"Ñ†¢´•≠®•");
-	wprompt(wnd, 5, 17,"ë™Æ‡Æ·‚Ï");
-	wprompt(wnd, 5, 19,"ù≠•‡£®Ô");
+	wprompt(wnd, 2, 1, "–í—ã—Å–≤–µ—á–∏–≤–∞–µ–º—ã–µ –ø–∞—Ä–∞–º–µ—Ç—Ä—ã:");
+	wprompt(wnd, 2, 3, "–ü–ª–æ—Ç–Ω–æ—Å—Ç—å - ");
+	wprompt(wnd, 2, 5, "–î–∞–≤–ª–µ–Ω–∏–µ  - ");
+	wprompt(wnd, 2, 7, "–°–∫–æ—Ä–æ—Å—Ç—å  - ");
+	wprompt(wnd, 2, 9, "–≠–Ω–µ—Ä–≥–∏—è   - ");
+	wprompt(wnd, 2, 11,"–ì—Ä–∞–Ω–∏—Ü—ã –∏–∑–º–µ–Ω–µ–Ω–∏—è –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤:");
+	wprompt(wnd, 5, 13,"–ü–ª–æ—Ç–Ω–æ—Å—Ç—å");
+	wprompt(wnd, 5, 15,"–î–∞–≤–ª–µ–Ω–∏–µ");
+	wprompt(wnd, 5, 17,"–°–∫–æ—Ä–æ—Å—Ç—å");
+	wprompt(wnd, 5, 19,"–≠–Ω–µ—Ä–≥–∏—è");
       if (frstent==1)                 init_template(wnd);
 	fld = establish_field(wnd, 15, 3, "_", gr, 'a');
 	field_window(fld,"kdr3.21 ", 80, 25);
@@ -639,13 +639,13 @@ void changetextstyle(int font, int direction, int charsize)
 	field_window(fld,"kdr3.25 ", 80, 25);
       if (frstent==1)	clear_template(wnd);
 	data_entry(wnd);
-		    /* äÆ≠•Ê ß†§†≠®Ô ®´® Ø‡Æ·¨Æ‚‡† Ø†‡†¨•‚‡Æ¢ ·¢•‚† */
+		    /* –ö–æ–Ω–µ—Ü –∑–∞–¥–∞–Ω–∏—è –∏–ª–∏ –ø—Ä–æ—Å–º–æ—Ç—Ä–∞ –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤ —Å–≤–µ—Ç–∞ */
 		    
-		    /* á†Ø®·Ï ‰†©´† .g */
+		    /* –ó–∞–ø–∏—Å—å —Ñ–∞–π–ª–∞ .g */
    if ((stream = fopen(spath, "wb")) == NULL) 
-       printf("\n\n\n\nç• ¨Æ£„ Æ‚™‡Î‚Ï ‰†©´.g ≠† ß†Ø®·Ï");
+       printf("\n\n\n\n–ù–µ –º–æ–≥—É –æ—Ç–∫—Ä—ã—Ç—å —Ñ–∞–π–ª.g –Ω–∞ –∑–∞–ø–∏—Å—å");
 
-   /* á†Ø®·Ï Ø†‡†¨•‚‡Æ¢ ·Á•‚† */
+   /* –ó–∞–ø–∏—Å—å –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤ —Å—á–µ—Ç–∞ */
    size=sizeof(gr);
    fwrite(&gr, size, 1, stream);
    fwrite(&gp, size, 1, stream);
@@ -663,7 +663,7 @@ void changetextstyle(int font, int direction, int charsize)
       frstent=0;
       return(0);
 
-       }	 /* äÆ≠•Ê Ø‡ÆÊ•§„‡Î ·Á®‚Î¢†≠®Ô ® ß†Ø®·® Ø†‡†¨•‚‡Æ¢ ·Á•‚† */
+       }	 /* –ö–æ–Ω–µ—Ü –ø—Ä–æ—Ü–µ–¥—É—Ä—ã —Å—á–∏—Ç—ã–≤–∞–Ω–∏—è –∏ –∑–∞–ø–∏—Å–∏ –ø–∞—Ä–∞–º–µ—Ç—Ä–æ–≤ —Å—á–µ—Ç–∞ */
 
 
 

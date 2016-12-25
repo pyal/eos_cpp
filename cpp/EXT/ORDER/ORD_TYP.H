@@ -7,18 +7,18 @@
 
 #define FieldOrderMaxNum 100
 #define ASCI_FILE_DEF
-// Поиск конца файла ОК - если найден
+// РџРѕРёСЃРє РєРѕРЅС†Р° С„Р°Р№Р»Р° РћРљ - РµСЃР»Рё РЅР°Р№РґРµРЅ
 int seek_eof(istream &i);
-// Поиск конца файла или строки ОК - если найден
+// РџРѕРёСЃРє РєРѕРЅС†Р° С„Р°Р№Р»Р° РёР»Рё СЃС‚СЂРѕРєРё РћРљ - РµСЃР»Рё РЅР°Р№РґРµРЅ
 int seek_eoln(istream &i);
 
 
 
-// Интерфейс структуры определяющей тип данных
-// Данные должны определять - какой больше
-// Для ASCII данных также определяется процедуры записи и чтения
-// Также Pos - положения данного типа относительно начала 0 элемента
-// Length  - длина типа
+// РРЅС‚РµСЂС„РµР№СЃ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕРїСЂРµРґРµР»СЏСЋС‰РµР№ С‚РёРї РґР°РЅРЅС‹С…
+// Р”Р°РЅРЅС‹Рµ РґРѕР»Р¶РЅС‹ РѕРїСЂРµРґРµР»СЏС‚СЊ - РєР°РєРѕР№ Р±РѕР»СЊС€Рµ
+// Р”Р»СЏ ASCII РґР°РЅРЅС‹С… С‚Р°РєР¶Рµ РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РїСЂРѕС†РµРґСѓСЂС‹ Р·Р°РїРёСЃРё Рё С‡С‚РµРЅРёСЏ
+// РўР°РєР¶Рµ Pos - РїРѕР»РѕР¶РµРЅРёСЏ РґР°РЅРЅРѕРіРѕ С‚РёРїР° РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РЅР°С‡Р°Р»Р° 0 СЌР»РµРјРµРЅС‚Р°
+// Length  - РґР»РёРЅР° С‚РёРїР°
 struct FieldType
 {
 //	const char * const name;
@@ -32,12 +32,12 @@ struct FieldType
 	virtual int ReadPar(fstream &in,void *Ptr)=0;
 #endif
 	virtual ~FieldType(){};
-// Процедура для регистрации типа - по имени определяет какой именно
-// Экземпляр нужно создавать строка или real int long
+// РџСЂРѕС†РµРґСѓСЂР° РґР»СЏ СЂРµРіРёСЃС‚СЂР°С†РёРё С‚РёРїР° - РїРѕ РёРјРµРЅРё РѕРїСЂРµРґРµР»СЏРµС‚ РєР°РєРѕР№ РёРјРµРЅРЅРѕ
+// Р­РєР·РµРјРїР»СЏСЂ РЅСѓР¶РЅРѕ СЃРѕР·РґР°РІР°С‚СЊ СЃС‚СЂРѕРєР° РёР»Рё real int long
 	friend int RegisterField(char *name,int Length,int Pos,FieldType *&Field);
 };
 
-// Описание типа строка
+// РћРїРёСЃР°РЅРёРµ С‚РёРїР° СЃС‚СЂРѕРєР°
 struct FieldString:FieldType
 {int Order(void *Fst,void *Sec) { char *ch1=(char *)Fst,*ch2=(char *)Sec;return Stricmp(ch1,ch2);};
 #ifdef ASCI_FILE_DEF
@@ -45,7 +45,7 @@ void SavePar(fstream &out,void *Ptr) {char *ch1=(char *)Ptr;out<<ch1;};
 int ReadPar(fstream &in,void *Ptr) {if (seek_eof(in))return 0;char *ch1=(char *)Ptr;in>>ch1;return 1;};
 #endif
 };
-// Описание типа real
+// РћРїРёСЃР°РЅРёРµ С‚РёРїР° real
 struct FieldReal:FieldType
 {int Order(void *Fst,void *Sec) { double *ch1=(double *)Fst,*ch2=(double *)Sec;
 int ret=0;if (*ch1-*ch2>0) ret=1;else if (*ch1-*ch2<0) ret=-1;return ret;};
@@ -54,7 +54,7 @@ void SavePar(fstream &out,void *Ptr) {double *ch1=(double *)Ptr;out<<*ch1;};
 int ReadPar(fstream &in,void *Ptr) {if (seek_eof(in))return 0;double *ch1=(double *)Ptr;in>>*ch1;return 1;};
 #endif
 };
-// Описание типа int
+// РћРїРёСЃР°РЅРёРµ С‚РёРїР° int
 struct FieldInt:FieldType
 {int Order(void *Fst,void *Sec)
 { int *ch1=(int*)Fst,*ch2=(int*)Sec;return *ch1-*ch2;};
@@ -63,7 +63,7 @@ void SavePar(fstream &out,void *Ptr) {int *ch1=(int *)Ptr;out<<*ch1;};
 int ReadPar(fstream &in,void *Ptr) {if (seek_eof(in))return 0;int *ch1=(int *)Ptr;in>>*ch1;return 1;};
 #endif
 };
-// Описание типа long
+// РћРїРёСЃР°РЅРёРµ С‚РёРїР° long
 struct FieldLong:FieldType
 {int Order(void *Fst,void *Sec)
 { int *ch1=(int*)Fst,*ch2=(int*)Sec;return *ch1-*ch2;};
@@ -77,10 +77,10 @@ int ReadPar(fstream &in,void *Ptr) {if (seek_eof(in))return 0;int *ch1=(int *)Pt
 
 
 
-// Коллекция. Сохраняет данные базы
-// SizeEl - размер элемента
-// IndexAr - таблица индексов - сортированных
-// NumEl - Число записей в базе данных
+// РљРѕР»Р»РµРєС†РёСЏ. РЎРѕС…СЂР°РЅСЏРµС‚ РґР°РЅРЅС‹Рµ Р±Р°Р·С‹
+// SizeEl - СЂР°Р·РјРµСЂ СЌР»РµРјРµРЅС‚Р°
+// IndexAr - С‚Р°Р±Р»РёС†Р° РёРЅРґРµРєСЃРѕРІ - СЃРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹С…
+// NumEl - Р§РёСЃР»Рѕ Р·Р°РїРёСЃРµР№ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…
 struct MyIndexCollection
 {
 	MyIndexCollection(){ IndexAr=NULL;};

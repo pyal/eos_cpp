@@ -1,4 +1,5 @@
 #include <lib/precompiled/Ref.h>
+#include <version.h>
 
 
 #include "CommandLine.h"
@@ -137,16 +138,15 @@ namespace NRef {
     int TCommandParse::SimpleRun(int argc, const char *argv[]) {
         int formattedLength = 90;
         if(argc < 2) {
-            Stroka descr = "Program build date is :" + Stroka(__DATE__) + "\t" +
-                           Stroka(__TIME__) + "\n\n";
-            Stroka str =
-                descr + "General help for the program is:~+\n" + MainHelp + "~-\n";
-            str += "Parameters defined are: ";
+            Stroka descr = "Program build date: " + Stroka(__DATE__) + " " + Stroka(__TIME__) + "\n";
+            descr += Stroka("Version ") + VERSION + "\n\n";
+            descr += "General help for the program is:~+\n" + MainHelp + "~-\n";
+            descr += "Parameters defined are: ";
             for(int i = 1; i < min(argc, 5); i++)
-                str += Stroka("<") + argv[i] + "> ";
-            str += "\nHave to define 2 paramteres: mode \"mode parameters\"\n" +
+                descr += Stroka("<") + argv[i] + "> ";
+            descr += "\nHave to define 2 paramteres: mode \"mode parameters\"\n" +
                    MakeHelp() + "\n";
-            std::cout << TFormatOutput("    ", 0, formattedLength).Format(~str);
+            std::cout << TFormatOutput("    ", 0, formattedLength).Format(~descr);
             std::cout.flush();
             exit(1);
         }

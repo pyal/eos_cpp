@@ -48,11 +48,11 @@ struct AnisotropeGenerator:RefCount
   double Hc;
   V3D_Angles Hint;
   V3D_XYZ A;
-  static AnisotropeGenerator *AnisotropeGenerator::CurPtr;
-  static double AnisotropeGenerator::FindAnisC(double c);
+  static AnisotropeGenerator *CurPtr;
+  static double FindAnisC(double c);
   V3D_XYZ CurrentH;
 
-  AnisotropeGenerator(double hcore,V3D_Angles &h_internal,V3D_XYZ &a_tensor):
+  AnisotropeGenerator(double hcore, const V3D_Angles &h_internal, const V3D_XYZ &a_tensor):
                       Hc(hcore),Hint(h_internal),A(a_tensor){};
   void GetResH(V3D_Angles &Hrnd,V3D_Angles &Hres);
 

@@ -3,7 +3,10 @@
 
 #include "faobj.h"
 //#include "faregist.h"
-//#include "util\tmstd.h"
+//#include "util/tmstd.h"
+
+
+double RealTime(double Wait);
 
 int FATMRegister(fstream &in,FAIO *&Func,char *name);
 extern int FARegister(fstream &in,FAIO *&Func);

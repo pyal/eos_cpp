@@ -61,7 +61,7 @@ namespace NPolygon {
         Stroka TimeDepFile;
         Stroka RegCoefName, EnergyAddName, PosName;
         //Ref<TPolyMarchRegionBase> Marcher;
-        double MinReadT, MaxReadT, IntegralReadT;
+        double MinReadT, MaxReadT;//, IntegralReadT;
         double TimeIntNormCoef;   //
         CurveSpline TimeDepSpl;
 

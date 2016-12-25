@@ -52,12 +52,13 @@ namespace NPolygon {
 
     TPolyMarchU2::TPolyMarchU2()
         : TPolyMarchRegionBase(),
-          ClcU2(),
-          ClcRI("FluxVar", &ClcU2),
-          ClcLF("FluxVar"),
           ClcForce("FluxLF", "FluxRI"),
+          ClcU2(),
+          ClcLF("FluxVar"),
+          ClcRI("FluxVar", &ClcU2),
+          BoundaryMakerY(TRegionBounds(0, -1)),
           MarchFlux("FluxLF"),
-          MarchCourant(0.5),
-          BoundaryMakerY(TRegionBounds(0, -1)) {}
+          MarchCourant(0.5)
+    {}
 
 };   // namespace NPolygon {

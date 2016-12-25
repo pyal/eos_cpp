@@ -206,9 +206,9 @@ cout<<" D "<<Denc<<" T "<<T<<" TD "<<TD<<"\n";
 // Pc*b+R*Tc=sqrt(3*Pc*a)
 // (Pc*b+R*Tc)/(3*Pc)=Vc
 // Landau crit point
-// Tªà=(8/27*A/B)     /R?
-// Vªà=3B
-// Pªà=A/(27*B*B)
+// TĞºÑ€=(8/27*A/B)     /R?
+// VĞºÑ€=3B
+// PĞºÑ€=A/(27*B*B)
 
 /*
 double EVanDerVals(double Denc,double T) // With turn Cv=5/2

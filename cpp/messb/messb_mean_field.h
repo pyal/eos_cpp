@@ -4,9 +4,9 @@
 //#include "matrics.h"
 #include "lib/std/ex_out.h"
 #include "messb.h"
-#include "mat\mtrnd.h"
+#include "mat/mtrnd.h"
 #include "famessb.h"
-#include "mat\quad.h"
+#include "mat/quad.h"
 
 
 struct MagnonMeanField : RndIntegral {
@@ -62,8 +62,8 @@ struct TetaGenerator : RefCount {
     }
 
 protected:
-    int NumHTetaInt, CurNum;
     Ref<MagnonMeanField> RndGenerator;
+    int NumHTetaInt, CurNum;
     VecCl TetaProb, TetaStp;
     double NormCoef;
 };
@@ -131,10 +131,10 @@ private:
 
 
 struct TetaAverageSolver : Solver {
-    Ref<MeanAngleConstructor> MeanH;
     Ref<HamData> Ham;
-    int OutPhi;
     Ref<TetaGenerator> TetaGen;
+    int OutPhi;
+    Ref<MeanAngleConstructor> MeanH;
     TetaAverageSolver(
         HamData *ham,
         TetaGenerator *tetagen,
@@ -240,8 +240,8 @@ struct MagnonFieldStd : MagnonMeanField {
     double NormalizeCoef;
 
 private:
-    double MinEn, Statistic, QCoef1, QCoef0, Tpow;
     double JS_const, Temp, Epow;
+    double MinEn, Statistic, QCoef1, QCoef0, Tpow;
     double ExpFactorMax;
 };
 
@@ -323,7 +323,7 @@ private:
     int NumInt2EstMax;
     double ExpFactor;   //is -ExpFactorMax - to be added under exp
     double JS_const, Temp, Statistic;
-    double Q_a0, Q_a1, E_a0, E_a1, T_pow;
+    double T_pow, E_a0, E_a1, Q_a0, Q_a1;
 };
 struct MagnonFieldAccustic : MagnonMeanField {
     MagnonFieldAccustic(
@@ -478,8 +478,8 @@ private:
     int NumInt2EstMax;
     double ExpFactor;   //is -ExpFactorMax - to be added under exp
     double JS_const, Temp, Statistic;
-    double Q_a0, Q_a1, E_a0, E_a1, T_pow;
-    double Q_min, Q_max, E_max, dCosMax;
+    double T_pow, E_a0, E_a1, Q_a0, Q_a1 ;
+    double E_max, Q_max, Q_min, dCosMax;
 };
 struct MagnonFieldPaper : MagnonMeanField {
     MagnonFieldPaper(
@@ -500,9 +500,9 @@ struct MagnonFieldPaper : MagnonMeanField {
           Statistic(statistic),
           Q_a0(q_a0),
           Q_a1(q_a1),
-          R(Rconst),
           Q_max(q_max),
           Q_min(q_min),
+          R(Rconst),
           dCosMax(dcosmax) {
         Temp = fabs(Temp);
         R = fabs(R);
@@ -654,7 +654,7 @@ protected:
     double ExpFactor;   //is -ExpFactorMax - to be added under exp
     double JS_const, Temp, Statistic;
     double Q_a0, Q_a1;
-    double Q_min, Q_max, R, dCosMax;
+    double Q_max, Q_min, R, dCosMax;
 };
 struct MagnonFieldPaperPlus : MagnonFieldPaper {
     double AlphaPar;
@@ -746,7 +746,7 @@ struct MagnonFieldPaperPlus : MagnonFieldPaper {
         } else {
             der = -R * Temp;
         }
-        double Phi = tet * M_PI / 180, CosX = cos(Phi), SinX = fabs(sin(Phi));
+        double Phi = tet * M_PI / 180, SinX = fabs(sin(Phi));//CosX = cos(Phi),
         if(fabs(der) < M_Eps2)
             der = M_Eps2;
         //cout<<" der "<<der<<" "<<" SinX "<<SinX<<"\n"; cout.flush();
@@ -877,7 +877,7 @@ protected:
     double ExpFactor;   //is -ExpFactorMax - to be added under exp
     double Temp, Statistic;
     double Q_a0, Q_a1, Q_a2;
-    double Q_min, Q_max, R, dCosMax;
+    double R, Q_max, Q_min, dCosMax;
     //private:
     //// Integral calculation only
     //    double

@@ -770,7 +770,7 @@ int zubr_lex( void )
       double d = 0.0;
       int n = getc( f );
 
-      /* моей функции scanf() нельзя отдавать число "." */
+      /* РјРѕРµР№ С„СѓРЅРєС†РёРё scanf() РЅРµР»СЊР·СЏ РѕС‚РґР°РІР°С‚СЊ С‡РёСЃР»Рѕ "." */
       if( c == '.' && !isdigit( n ) )
       {
          ungetc( n, f );
@@ -1142,22 +1142,22 @@ zubr_reduce:
       case 19:
 #line 79 "main.y"
          {
-            (zubr_vsp[-3].inst)[1] = (INST)zubr_vsp[-1].inst; /* тело цикла */
+            (zubr_vsp[-3].inst)[1] = (INST)zubr_vsp[-1].inst; /* С‚РµР»Рѕ С†РёРєР»Р° */
             (zubr_vsp[-3].inst)[2] = (INST)zubr_vsp[0].inst; /* end */
          }
          break;
       case 20:
 #line 84 "main.y"
          {
-            (zubr_vsp[-3].inst)[1] = (INST)zubr_vsp[-1].inst; /* часть then */
+            (zubr_vsp[-3].inst)[1] = (INST)zubr_vsp[-1].inst; /* С‡Р°СЃС‚СЊ then */
             (zubr_vsp[-3].inst)[3] = (INST)zubr_vsp[0].inst; /* end */
          }
          break;
       case 21:
 #line 89 "main.y"
          {
-            (zubr_vsp[-6].inst)[1] = (INST)zubr_vsp[-4].inst; /* часть then */
-            (zubr_vsp[-6].inst)[2] = (INST)zubr_vsp[-1].inst; /* часть else */
+            (zubr_vsp[-6].inst)[1] = (INST)zubr_vsp[-4].inst; /* С‡Р°СЃС‚СЊ then */
+            (zubr_vsp[-6].inst)[2] = (INST)zubr_vsp[-1].inst; /* С‡Р°СЃС‚СЊ else */
             (zubr_vsp[-6].inst)[3] = (INST)zubr_vsp[0].inst; /* end */
          }
          break;

@@ -83,7 +83,7 @@ $Matter	MatterZubarev   Material_File material.cfg Substance ZubarevGeks
 #Section 0 	MatterBinodalSpinodal    InternalPointsUrs
 #Section 0 	MatterLiqSol ? ......
 #Section 0	MatterBornMaier  - no impl? - not used  Matter for geksogen, with cold curve approximtion
-#Section 0 	FreeEVirial	// VanDerValsN2    A 0.10875 B 1.0965   CvId 2.5 NMol 28 Zero 0 HiT 0  Vkp=3.2895 Pkp=33.5e-4 Tkp=126.2 Tªà=(8/27*A/B)/R  Vªà=3B Pªà=A/(27*B*B) (R = 8.3e-3) Pkr(GPa) 33.5e-4 Tkr(K) 126.2 Rkr(g/cm3) 0.304
+#Section 0 	FreeEVirial	// VanDerValsN2    A 0.10875 B 1.0965   CvId 2.5 NMol 28 Zero 0 HiT 0  Vkp=3.2895 Pkp=33.5e-4 Tkp=126.2 TÐºÑ€=(8/27*A/B)/R  VÐºÑ€=3B PÐºÑ€=A/(27*B*B) (R = 8.3e-3) Pkr(GPa) 33.5e-4 Tkr(K) 126.2 Rkr(g/cm3) 0.304
 
 #Section 5 	MatterHisch
 $MinDenc 1e-3
@@ -156,7 +156,7 @@ $MaxE 1e5
 $NumDencPnt 60
 $NumSameDencPnt 60
 $Matter	MatterFreeE FreeEVanDerVals   Material_File material.cfg Substance VanDerValsN2
-// VanDerValsN2    A 0.10875 B 1.0965   CvId 2.5 NMol 28 Zero 0 HiT 0  Vkp=3.2895 Pkp=33.5e-4 Tkp=126.2 Tªà=(8/27*A/B)/R  Vªà=3B Pªà=A/(27*B*B) (R = 8.3e-3) Pkr(GPa) 33.5e-4 Tkr(K) 126.2 Rkr(g/cm3) 0.304
+// VanDerValsN2    A 0.10875 B 1.0965   CvId 2.5 NMol 28 Zero 0 HiT 0  Vkp=3.2895 Pkp=33.5e-4 Tkp=126.2 TÐºÑ€=(8/27*A/B)/R  VÐºÑ€=3B PÐºÑ€=A/(27*B*B) (R = 8.3e-3) Pkr(GPa) 33.5e-4 Tkr(K) 126.2 Rkr(g/cm3) 0.304
 
 
 

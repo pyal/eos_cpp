@@ -2,7 +2,7 @@
 #ifndef _RESOURCE_READER_H_
 #define _RESOURCE_READER_H_
 
-#include <windows.h>
+//#include <windows.h>
 #include <vector>
 #include "lib/std/util.h"
 

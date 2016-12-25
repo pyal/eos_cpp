@@ -21,7 +21,7 @@
 #include "lib/ref/stroka.h"
 
 #include "lib/ref/ref.h"
-#include "mat\matrics.h"
+#include "mat/matrics.h"
 
 #define MaxFunctions 60
 #define MaxFunctionPar 60

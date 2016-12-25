@@ -16,9 +16,12 @@ void   FAZerTM::Clc(double *par,double *Xval,double *Res)
 void FAZerTM::ParStp(double *par,double *stp)
  {
   for (int k=1;k<=NumPar;k++)
-    if (stp[k]!=0) if (fabs(par[k])<=MathZer) stp[k]=0.1;
+    if (stp[k]!=0) {
+        if (fabs(par[k])<=MathZer) stp[k]=0.1;
                    else stp[k]=par[k]*0.01;
+    }
  };
+double RealTime(double Wait) {return Wait;}
 
 int FATMRegister(fstream &in,FAIO *&Func,char *name)
   {

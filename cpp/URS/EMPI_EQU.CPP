@@ -26,7 +26,7 @@ double EmpiPcold(double x)
   };
 double EmpiGrun(double x)
   {
-//  ⮣�� ������    =-Sum(k*Ak*X^k) ?   =-Sum(k*Ak*X^(k-1))
+//  тогда грюнайзен    =-Sum(k*Ak*X^k) ?   =-Sum(k*Ak*X^(k-1))
    double l=-log(x*CP.TetaV*CP.Denc);
    double s=0;for(int k=0;k<CP.NTeta;k++) s-=k*CP.TetaPar[k+1]*pow(l,k-1);
    return s;
@@ -34,7 +34,7 @@ double EmpiGrun(double x)
 
 double EmpiTeta(double x)
   {
-//  ����� - �㬬� �鸞 = Sum(exp(Ak*X^k)) X=log(V/Va)
+//  Дебай - сумма ряда = Sum(exp(Ak*X^k)) X=log(V/Va)
    double l=-log(x*CP.TetaV*CP.Denc);
    double s=1;for(int k=0;k<CP.NTeta;k++) 
    {s*=exp(CP.TetaPar[k+1]*pow(l,k));

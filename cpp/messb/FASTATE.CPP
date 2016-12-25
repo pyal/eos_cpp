@@ -123,8 +123,10 @@ void   FAZerABu_H2cold::Clc(double *par,double *Xval,double *Res)
 void FAZerABu_H2cold::ParStp(double *par,double *stp)
  {
   for (int k=1;k<=NumPar;k++)
-    if (stp[k]!=0) if (fabs(par[k])<=MathZer) stp[k]=0.1;
-                   else stp[k]=par[k]*0.01;
+    if (stp[k]!=0) {
+        if (fabs(par[k]) <= MathZer) stp[k] = 0.1;
+        else stp[k] = par[k] * 0.01;
+    }
  };
 
 //  =======================================================
@@ -191,8 +193,10 @@ void   FAZerABu_EmpiCold::Clc(double *par,double *Xval,double *Res)
 void FAZerABu_EmpiCold::ParStp(double *par,double *stp)
  {
   for (int k=1;k<=NumPar;k++)
-    if (stp[k]!=0) if (fabs(par[k])<=MathZer) stp[k]=0.1;
-                   else stp[k]=par[k]*0.01;
+    if (stp[k]!=0) {
+        if (fabs(par[k]) <= MathZer) stp[k] = 0.1;
+        else stp[k] = par[k] * 0.01;
+    }
  };
 /*
 //  =======================================================
@@ -355,8 +359,10 @@ void   FAZerABu_EmpiMelt::Clc(double *par,double *Xval,double *Res)
 void FAZerABu_EmpiMelt::ParStp(double *par,double *stp)
  {
   for (int k=1;k<=NumPar;k++)
-    if (stp[k]!=0) if (fabs(par[k])<=MathZer) stp[k]=0.1;
-                   else stp[k]=par[k]*0.01;
+    if (stp[k]!=0) {
+        if (fabs(par[k]) <= MathZer) stp[k] = 0.1;
+        else stp[k] = par[k] * 0.01;
+    }
  };
 FAZerABu_EmpiMelt::~FAZerABu_EmpiMelt()
   {delete F1;delete F2;for (int k=0;k<4;k++) delete PTarr[k]; };
@@ -443,8 +449,10 @@ Res[k]=ExpMat.Temperature(DencRes,ERes);}
 void FAZerABu_EmpiABu::ParStp(double *par,double *stp)
  {
   for (int k=1;k<=NumPar;k++)
-    if (stp[k]!=0) if (fabs(par[k])<=MathZer) stp[k]=0.1;
-                   else stp[k]=par[k]*0.01;
+    if (stp[k]!=0) {
+        if (fabs(par[k]) <= MathZer) stp[k] = 0.1;
+        else stp[k] = par[k] * 0.01;
+    }
   if (stp[6]!=0) stp[6]*=0.1;
  };
 

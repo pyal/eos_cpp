@@ -48,7 +48,7 @@ void TetaAverageSolver::Solve(double *x, double *Res) {
     double Teta_H, Int_teta, H = Ham->H, SumInt = 0;
     if(OutPhi)
         cout << "   MeanTetaCos Int_Teta TetaCur\n";
-    int i = 0;
+//    int i = 0;
     TetaGen->ResetSerie();
     while(TetaGen->GetNextProb(Teta_H, Int_teta)) {
         SumInt += Int_teta;
@@ -92,11 +92,11 @@ MagnonFieldStd::MagnonFieldStd(
       QCoef1(qcoef1),
       QCoef0(qcoef0),
       Tpow(tpow) {
-    if(_isnan(QCoef1))
+    if(IsNan(QCoef1))
         QCoef1 = 0;
-    if(_isnan(QCoef0))
+    if(IsNan(QCoef0))
         QCoef0 = M_Eps;
-    if(_isnan(JS_const))
+    if(IsNan(JS_const))
         JS_const = 1 / M_Eps2;
     if(!In_Lim(JS_const, M_Eps2, 1. / M_MinDouble2))
         JS_const = 1 / M_Eps2;
@@ -113,7 +113,7 @@ MagnonFieldStd::MagnonFieldStd(
 double MagnonFieldStd::Clc(double x) {
     double ret = (MinEn > 0) ? Clc1_Cos2(x) : ClcTeta4(x);
     //if (ret<1e-10) return 0;
-    if((_isnan(ret)) || (!_finite(ret)) || (ret < 0))
+    if((IsNan(ret)) || (!Finite(ret)) || (ret < 0))
         ret = 0;
     //cout<<ret<<" ";
     return ret;

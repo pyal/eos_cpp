@@ -1,12 +1,12 @@
 #ifndef __MESSB_H
 #define __MESSB_H
-#include "mat\cmatrics.h"
-#include "mat\matrics.h"
-#include "mat\eigen_ma.h"
-#include "mat\uralgol.h"
-#include "mat\turnmat.h"
+#include "mat/cmatrics.h"
+#include "mat/matrics.h"
+#include "mat/eigen_ma.h"
+#include "mat/uralgol.h"
+#include "mat/turnmat.h"
 #include "lib/std/util.h"
-#include "mat\mtquad.h"
+#include "mat/mtquad.h"
 
 #include "lib/ref/class_sav.h"
 //
@@ -141,7 +141,7 @@ struct Solver_H_Z_poly:Solver
   Ref<HamData> Ham;
   Solver_H_Z_poly(Ref<HamData> ham):Ham(ham){};
   void Solve(double *x,double *Res);
-  virtual void SolveIntPos(CMatrCl &Hamilt,VecCl &Int,VecCl &Pos);
+  virtual void SolveIntPos(const CMatrCl &Hamilt,VecCl &Int,VecCl &Pos);
   virtual VecCl MakeAmpVec() {return MakeAmpVecPoly_4();}//{  VecCl ret(4);ret[1]=0.25;ret[2]=1./6;ret[3]=1./12;ret[4]=0; return ret; }
   virtual void IntPos(CMatrCl &EigenVect,VecCl &EigenVal,VecCl &Int,VecCl &Pos);
   virtual void Intencity(VecCl &Int,VecCl &Pos,double *x,double *res);
@@ -173,7 +173,7 @@ struct Solver_H_Free_poly:Solver_H_Free_poly_Base
   Solver_H_Free_poly():Ham(NULL){};
   Solver_H_Free_poly(const Ref<HamData> &ham):Ham(ham){};
   void Solve(double *x,double *Res);
-  virtual void SolveIntPos(CMatrCl &Hamilt,CVecCl &Int,CVecCl &Pos);
+  virtual void SolveIntPos(const CMatrCl &Hamilt,CVecCl &Int,CVecCl &Pos);
   virtual CMatrCl MakeAmpMatr(){return MakeAmpMatrPoly_8_3();}
   virtual CMatrCl MakeAmpMatrR(){return MakeAmpMatr();}
   virtual CMatrCl MakeAmpMatrL(){return MakeAmpMatr();}

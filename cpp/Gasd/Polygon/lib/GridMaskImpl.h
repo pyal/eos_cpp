@@ -13,6 +13,7 @@ namespace NPolygon {
         TGridMaskSimple(int beg, int end) : TGridMaskBase(), Beg(beg), End(end){};
         TGridMaskSimple &operator=(const TGridMaskSimple &right) {
             Set(right.Beg, right.End);
+            return *this;
         }
         void Set(int beg, int end) {
             Beg = beg;
@@ -28,7 +29,7 @@ namespace NPolygon {
         }
         //virtual int GetBoundaryPnt(vector<int> boundary, int coordinate, int dir) = 0;
         virtual Ref<TGridMaskBase> AddBoundary(int level) {
-            int size = End - Beg;
+//            int size = End - Beg;
             Set(0, End - Beg + level * 2);
             return new TGridMaskSimple(level, End - level);
         }

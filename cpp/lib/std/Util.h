@@ -125,7 +125,7 @@ int ChRead();
 int seek_eof(istream &i);
 int seek_eoln(istream &i);
 void line_feed(istream &i);
-int seek_str(istream &in, char *Str);
+int seek_str(istream &in, const char *Str);
 
 double sqr(double a);
 //#ifndef max

@@ -36,7 +36,7 @@ static ClassDesc FAWStand_ClassDesc(typeid(FAWStand),"Std_appr_clc",1,"FAWZer",D
 static ClassDesc FAWStand_ClassDesc(typeid(FAWStand),"Std_appr_clc",1,"FAWZer",create<FAWStand>);
 #endif
 
-FAWStand::FAWStand():FAWZer(),MinError(1e-6),NumT(1),NumIt(3)
+FAWStand::FAWStand():FAWZer(),NumIt(3),NumT(1),MinError(1e-6)
 {  name=strdup("Std_appr_clc");};
 
 
@@ -70,18 +70,18 @@ void FAWStand::FAWDo()
       else break;
                                                                         
      }
-   delete TmpPar;delete TmpStp;
+   delete []TmpPar;delete []TmpStp;
   }
 
 double FAWStand::Hi_Func(double *par)
   {
    double hi=0;
    CurPtr->Func->SetPar(par);
-   double *Res=new double[CurPtr->XArr[0]+1];
+   double *Res=new double[int(CurPtr->XArr[0])+1];
    CurPtr->Func->Clc(CurPtr->XArr,Res);
    if (CurPtr->HiArr==NULL) for (int k=1;k<=CurPtr->XArr[0];k++)  hi+=sqr(Res[k]-CurPtr->YArr[k]);//cout<<"????";}
    else             for (int k=1;k<=CurPtr->XArr[0];k++)  hi+=sqr(Res[k]-CurPtr->YArr[k])*CurPtr->HiArr[k];//cout<<"!NULL";}
-   delete Res;
+   delete []Res;
    CurPtr->NumFuncEval++;
    return hi;
   };
@@ -116,7 +116,7 @@ int FAWRegister(istream &in,FAWZer *&WDo)
 	ClassDesc* descr=ClassDesc::name_to_class_desc(name);
 	WDo=0;
   if ( (!descr) || (Stricmp(descr->category(),"FAWZer")!=0) )
-    {cout<<" Could not find approcsimation function with name:"<<name<<"\n";delete descr;return 0;}
+    {cout<<" Could not find approcsimation function with name:"<<name<<"\n";delete []descr;return 0;}
 //  else
 	WDo=dynamic_cast<FAWZer*>(descr->create());WDo->Input(in);return 1;
 }
@@ -164,7 +164,7 @@ void  FAWOptim::GetInPar(istream &input)
 
 void FAWOptim::FAWDo()
 { 
-  int Num=Func->GetNumPar(),Good=1;
+  int Num=Func->GetNumPar();//,Good=1;
   NumFuncEval=0;
   CurPtr=this;
   VecCl Par(Num),Stp(Num);
@@ -214,7 +214,7 @@ void FAWOptim::Cur_Theo_Sum(double *X,double *Y)
   if (SumFuncMinim) {for (int k=2;k<=X[0];k++) Y[k]+=Y[k-1];}
 }
 
-void FAWOptim::Cur_Theo(VecCl &par,VecCl &res)
+void FAWOptim::Cur_Theo(const VecCl &par,VecCl &res)
 {
   VecCl p;p=CurPtr->Code.DeCodeVec(par);
   res=CurPtr->XArr;
@@ -291,10 +291,10 @@ double FAWUncMin::FuncClc(double *x,int n)
 cout<<" Res "<<ret<<" Par "<<Par;
   return ret;
 };
-#include "mat\quad.h"
+#include "mat/quad.h"
 void FAWUncMin::FAWDo()
 { 
-  int Num=Func->GetNumPar(),Good=1;
+  int Num=Func->GetNumPar();//,Good=1;
   NumFuncEval=0;
   CurPtr=this;
   VecCl Par(Num),Stp(Num);

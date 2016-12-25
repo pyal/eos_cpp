@@ -2,11 +2,11 @@
 #define __KASHUBA_APPR_H
 
 
-#include "..\messb_in.h"
+#include "../messb_in.h"
 struct RndAngleGenerator_Base;
 struct RndAngleGenerator_Kashuba : RndAngleGenerator_Base {
     const double Phi0, MainHarm, FullTime, StrongShort;
-    const int N, FurieDiscr;
+    const int FurieDiscr, N;
     RndAngleGenerator_Kashuba(
         double phi0,
         int n,

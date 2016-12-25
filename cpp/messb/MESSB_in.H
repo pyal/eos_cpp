@@ -2,7 +2,7 @@
 #ifndef __MESSB_IN_H
 #define __MESSB_IN_H
 #include "messb.h"
-#include "mat\cmatrics.h"
+#include "mat/cmatrics.h"
 #include "messb_angle_gen.h"
 
 
@@ -65,8 +65,8 @@ struct ContiniousRelaxationStepSolver:Solver_Free2_4,ContiniousRelaxationStepSol
 
 struct ContiniousRelaxationStepMultiSolver:Solver
 {
-  Ref<TimeShiftGenerator> TimeShift;
   Ref<ContiniousRelaxationStepSolver_Base> Step;
+    Ref<TimeShiftGenerator> TimeShift;
   ContiniousRelaxationStepMultiSolver(TimeShiftGenerator *timeshift,
      ContiniousRelaxationStepSolver_Base *step):
                                       Step(step),TimeShift(timeshift){};
@@ -97,9 +97,9 @@ struct ContiniousRelaxationSolver:ContiniousRelaxationSolver_Base
 
 struct ContiniousRelaxationAverageSolver:Solver
 {
-  int NumToAverage;
   Ref<ContiniousRelaxationSolver> IterSolve;
   Ref<HamTimeAverageGenerator> HamAver;
+    int NumToAverage;
   ContiniousRelaxationAverageSolver(ContiniousRelaxationSolver *itersolve,
                                    HamTimeAverageGenerator *hamaver,int numtoaverage):
                                    IterSolve(itersolve),HamAver(hamaver),NumToAverage(numtoaverage)
@@ -124,8 +124,8 @@ struct ContiniousRelaxationAverageSolver:Solver
 #include "lib/std/ex_out.h"
 struct ContiniousRelaxationAverageSolver_DirectMatrMul:Solver
 {
-  Ref<HamTimeAverageGenerator> HamSer;
   int NumToAverage,NumSteps,OutAmp;
+    Ref<HamTimeAverageGenerator> HamSer;
   double Width;
   Time_struct ClcTime;
   ContiniousRelaxationAverageSolver_DirectMatrMul(HamTimeAverageGenerator *hamser,

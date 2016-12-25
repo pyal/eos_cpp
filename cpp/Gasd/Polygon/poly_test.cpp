@@ -14,9 +14,8 @@
 
 Stroka GenerateDetailedHelp() {
     Stroka ret =
-        Stroka("Program build timeStamp ") + __TIMESTAMP__ + " date? " + __DATE__ + "\n";
     //ret += Stroka(" Registered test objects:\n\n\n") + SavableClass::HelpForCategory("TestCase_TestTest_category");
-    ret += "\n\n\nNPolygon::Constructor_category: ~+\n" +
+           Stroka("\n\n\nNPolygon::Constructor_category: ~+\n") +
            SavableClass::HelpForCategory("NPolygon::Constructor_category");
     ret += "~-\n\nNPolygon::March_category :~+\n" +
            SavableClass::HelpForCategory("NPolygon::March_category");

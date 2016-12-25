@@ -636,5 +636,119 @@ set(ADI_DOU_SOURCE_FILES
         cpp/Urs/urs_forcelnk.h
 )
 
+#Broken resource functionality
+#set(TEST_URS_SOURCE_FILES
+#cpp/Urs/test/test_urs.cpp
+#cpp/Urs/test/test_urs.h
+#cpp/Urs/test/test_urs_resource.h
+#cpp/Urs/test/test_urs_resource.rc
+#cpp/perl/resource/gasd/script/extract.bat
+#cpp/perl/resource/gasd/script/extract_allresource_from_dir.sh
+#cpp/perl/resource/gasd/script/res_util.sh
+#cpp/perl/resource/gasd/script/ResourceReader.pm
+#cpp/perl/resource/gasd/script/test_urs_main.pl
+#cpp/perl/resource/gasd/script_data/ideal.test
+#cpp/perl/resource/gasd/script_data/ideal_e.test
+#cpp/perl/resource/gasd/script_data/Material.cfg
+#cpp/perl/resource/gasd/script_data/matters.test
+#)
 
 
+set(POLY_LIB_SOURCE_FILES
+        cpp/Gasd/Polygon/lib/GridVectorVarImpl.cpp
+        cpp/Gasd/Polygon/lib/PolyMarchBase.cpp
+        cpp/Gasd/Polygon/lib/PolyRegConstructor.cpp
+        cpp/Gasd/Polygon/lib/PolyRegion.cpp
+        cpp/Gasd/Polygon/lib/PolyTest.cpp
+        cpp/Gasd/Polygon/lib/RegBoundary.cpp
+        cpp/Gasd/Polygon/lib/GridData.h
+        cpp/Gasd/Polygon/lib/GridVectorVarImpl.h
+        cpp/Gasd/Polygon/lib/PolyMarchBase.h
+        cpp/Gasd/Polygon/lib/PolyRegConstructor.h
+        cpp/Gasd/Polygon/lib/PolyRegion.h
+        cpp/Gasd/Polygon/lib/PolyTest.h
+        cpp/Gasd/Polygon/lib/RegBoundary.h
+        cpp/Gasd/Polygon/lib/RegGrid.h
+        cpp/lib/precompiled/poly_lib.h
+        cpp/Gasd/Polygon/lib/polygon_forcelnk.cpp
+        cpp/Gasd/Polygon/lib/polygon_forcelnk.h
+        cpp/Gasd/Polygon/lib/GridMask.cpp
+        cpp/Gasd/Polygon/lib/GridMask.h
+        cpp/Gasd/Polygon/lib/GridMaskImpl.cpp
+        cpp/Gasd/Polygon/lib/GridMaskImpl.h
+        cpp/Gasd/Polygon/lib/GridVarImpl.cpp
+        cpp/Gasd/Polygon/lib/GridVarImpl.h
+        cpp/Gasd/Polygon/march/CenterFlux.cpp
+        cpp/Gasd/Polygon/march/CenterFlux.h
+        cpp/Gasd/Polygon/march/FluxPrepare.cpp
+        cpp/Gasd/Polygon/march/FluxPrepare.h
+        cpp/Gasd/Polygon/march/PolyMarchAdd.cpp
+        cpp/Gasd/Polygon/march/PolyMarchAdd.h
+        cpp/Gasd/Polygon/march/PolyMarchTest.cpp
+        cpp/Gasd/Polygon/march/PolyMarchTest.h
+        cpp/Gasd/Polygon/march/wilkins.cpp
+        cpp/Gasd/Polygon/march/wilkins.h
+)
+
+set(POLY_TEST_SOURCE_FILES
+        #cpp/Gasd/Polygon/poly_test.cpp
+        cpp/Gasd/Polygon/lib/polygon_forcelnk.cpp
+        cpp/Gasd/Polygon/lib/polygon_forcelnk.h
+        cpp/URS/urs_forcelnk.cpp
+        cpp/URS/urs_forcelnk.h
+)
+
+set(FAMESSB_SOURCE_FILES
+        cpp/Urs/curve_forcelnk.cpp
+#        cpp/messb/Famain.cpp
+        cpp/Urs/urs_forcelnk.cpp
+        cpp/URS/curve_forcelnk.h
+        cpp/messb/Famain.h
+        cpp/messb/messb_defs.h
+        cpp/messb/messb_forcelnk.h
+
+)
+
+set(MESSB_LIB_SOURCE_FILES
+        cpp/messb/Famessb.cpp
+        cpp/messb/FAMESSB_TEST_func.cpp
+        cpp/messb/famessb_test_internal.cpp
+        cpp/messb/Faobj.cpp
+        cpp/messb/Faregist.cpp
+        cpp/messb/Fastate.cpp
+        cpp/messb/Fastd.cpp
+        cpp/messb/Fawobj.cpp
+        cpp/messb/Messb.cpp
+        cpp/messb/messb_angle_gen.cpp
+        cpp/messb/MESSB_AV_up.CPP
+        cpp/messb/MESSB_in.CPP
+        cpp/messb/messb_mean_field.cpp
+        cpp/messb/Messb_rel_gen.cpp
+        cpp/messb/Famessb.h
+        cpp/messb/FAMESSB_TEST_func.h
+        cpp/messb/famessb_test_internal.h
+        cpp/messb/Faobj.h
+        cpp/messb/Faregist.h
+        cpp/messb/faset_new.h
+        cpp/messb/Fastate.h
+        cpp/messb/Fastd.h
+        cpp/messb/Fawobj.h
+        cpp/messb/Messb.h
+        cpp/messb/messb_angle_gen.h
+        cpp/messb/Messb_av.h
+        cpp/messb/messb_defs.h
+        cpp/messb/MESSB_in.H
+        cpp/messb/messb_mean_field.h
+        cpp/messb/MESSB_REL_GEN.h
+        cpp/messb/kashuba/kashub.cpp
+        cpp/messb/kashuba/kashub.h
+        cpp/messb/kashuba/kashuba_appr.cpp
+        cpp/messb/kashuba/kashuba_appr.h
+        cpp/messb/kashuba/kashuba_export.cpp
+        cpp/messb/kashuba/kashuba_export.h
+        cpp/messb/kashuba/kashuba_forcelnk.h
+        cpp/messb/Fatm.cpp
+        cpp/messb/Fatm.h
+        cpp/lib/Gasd_Min/gasd_min.cpp
+        cpp/lib/Gasd_Min/gasd_min.h
+)

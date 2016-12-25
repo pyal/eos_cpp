@@ -9,7 +9,7 @@
 
 
 
-#include "malloc.h"
+//#include "malloc.h"
 
 //double DebyFuncInt(double x) {if (x==0) return 0;return x*x*x/(exp(x)-1);};
 //double DebyFunc(double x) 
@@ -335,8 +335,8 @@ void   FAZerQsH_R_Hn::ClcBase(double *par,double *Xval,double *Res)
   {
 
    double 
-          H=par[3],Qs=par[4],IS=par[5],W=par[6],
-          Teta=par[7],Phi=par[8],Eta=par[9],NumH=par[10];
+          Qs=par[4],IS=par[5],W=par[6],
+          Teta=par[7],Phi=par[8],Eta=par[9],NumH=par[10]; //H=par[3],
    vector<Ref<HamData> > ham(NumH);
    VecCl t(NumH);
    double h,zx,xy;
@@ -405,13 +405,13 @@ FAZerQsHRelaxRandWalk::FAZerQsHRelaxRandWalk()
 void   FAZerQsHRelaxRandWalk::ClcBase(double *par,double *Xval,double *Res)
   {
 //   RelaxAverageStruct Aver;
-    double Ground=par[1],Intencity=par[2],H=par[3],QS=par[4],IS=par[5],W=par[6],
+    double H=par[3],QS=par[4],IS=par[5],W=par[6],
            Teta=par[7],Phi=par[8],Eta=par[9],OutPhi=par[10],Time=par[11],
            NumToAver=par[12],NTimeAver=par[13],EndTAver=par[14],TimeTeta=par[15],
            SigTimeTeta=par[16],AngTeta=par[17],SigAngTeta=par[18],AnisTeta=par[19],
            TimePhi=par[20],SigTimePhi=par[21],AngPhi=par[22],SigAngPhi=par[23],
            AnisPhi=par[24],NoPhi=par[25],HmulCos=par[26],AnisPower=par[27],
-           EigenMethod=par[28],OutAmp=par[29],HamDiscr=par[30];
+           EigenMethod=par[28],OutAmp=par[29],HamDiscr=par[30]; //Ground=par[1],Intencity=par[2],
 
    Ref<RndAngleGenerator> ang_t=
      new RndAngleGenerator(
@@ -530,12 +530,12 @@ void   FAZerQsHRelaxRandJump::ClcBase(double *par,double *Xval,double *Res)
    VecCl axPhi(N),axTeta(N),axProb(N);
    for (k=1;k<=N;k++) {axTeta[k]=par[26+(k-1)*3];axPhi[k]=par[27+(k-1)*3];axProb[k]=par[28+(k-1)*3];}
 
-    double Ground=par[1],Intencity=par[2],H=par[3],QS=par[4],IS=par[5],W=par[6],
+    double H=par[3],QS=par[4],IS=par[5],W=par[6],
            Teta=par[7],Phi=par[8],Eta=par[9],OutPhi=par[10],Time=par[11],
            NumToAver=par[12],NTimeAver=par[13],EndTAver=par[14],TimeTeta=par[15],
            SigTimeTeta=par[16],AnisTeta=par[17],
            TimePhi=par[18],SigTimePhi=par[19],
-           AnisPhi=par[20],NoPhi=par[21],HmulCos=par[22],AnisPower=par[23];
+           AnisPhi=par[20],NoPhi=par[21],HmulCos=par[22],AnisPower=par[23]; //Ground=par[1],Intencity=par[2],
     double timeDisp=par[25];
     double EigenMethod=par[50],OutAmp=par[51],HamDiscr=par[52];
 
@@ -644,12 +644,12 @@ void   FAZerQsHRelaxMeanField::ClcBase(double *par,double *Xval,double *Res)
 //  =======================================================
 //  ================    Magnon Mean Field  Std      =======
 //  =======================================================
-#ifndef WCPP_NET
-DescribedClass * Dummy_FAZerHQsMagnonMeanFieldStd(){return new FAZerHQsMagnonMeanFieldStd();}
-static ClassDesc FAZerHQsMagnonMeanFieldStd_ClassDesc(typeid(FAZerHQsMagnonMeanFieldStd),"hq_magnon_mean_field_std",1,"FAZer",FAZerHQsMagnonMeanFieldStd);
-#else
+//#ifndef WCPP_NET
+//DescribedClass * Dummy_FAZerHQsMagnonMeanFieldStd(){return new FAZerHQsMagnonMeanFieldStd();}
+//static ClassDesc FAZerHQsMagnonMeanFieldStd_ClassDesc(typeid(FAZerHQsMagnonMeanFieldStd),"hq_magnon_mean_field_std",1,"FAZer",FAZerHQsMagnonMeanFieldStd);
+//#else
 static ClassDesc FAZerHQsMagnonMeanFieldStd_ClassDesc(typeid(FAZerHQsMagnonMeanFieldStd),"hq_magnon_mean_field_std",1,"FAZer",create<FAZerHQsMagnonMeanFieldStd>);
-#endif
+//#endif
 FAZerHQsMagnonMeanFieldStd::FAZerHQsMagnonMeanFieldStd()
   {
    name=strdup("hq_magnon_mean_field_std");
@@ -702,12 +702,12 @@ void   FAZerHQsMagnonMeanFieldStd::ClcBase(double *par,double *Xval,double *Res)
 //  =======================================================
 //  ================ Magnon Mean Field  Optic       =======
 //  =======================================================
-#ifndef WCPP_NET
-DescribedClass * Dummy_FAZerHQsMagnonMeanFieldOptic(){return new FAZerHQsMagnonMeanFieldOptic();}
-static ClassDesc FAZerHQsMagnonMeanFieldOptic_ClassDesc(typeid(FAZerHQsMagnonMeanFieldOptic),"hq_magnon_mean_field_optic",1,"FAZer",FAZerHQsMagnonMeanFieldOptic);
-#else
+//#ifndef WCPP_NET
+//DescribedClass * Dummy_FAZerHQsMagnonMeanFieldOptic(){return new FAZerHQsMagnonMeanFieldOptic();}
+//static ClassDesc FAZerHQsMagnonMeanFieldOptic_ClassDesc(typeid(FAZerHQsMagnonMeanFieldOptic),"hq_magnon_mean_field_optic",1,"FAZer",FAZerHQsMagnonMeanFieldOptic);
+//#else
 static ClassDesc FAZerHQsMagnonMeanFieldOptic_ClassDesc(typeid(FAZerHQsMagnonMeanFieldOptic),"hq_magnon_mean_field_optic",1,"FAZer",create<FAZerHQsMagnonMeanFieldOptic>);
-#endif
+//#endif
 FAZerHQsMagnonMeanFieldOptic::FAZerHQsMagnonMeanFieldOptic()
   {
    name=strdup("hq_magnon_mean_field_optic");
@@ -760,12 +760,12 @@ void   FAZerHQsMagnonMeanFieldOptic::ClcBase(double *par,double *Xval,double *Re
 //  =======================================================
 //  ================    Magnon Mean Field    Accust     ===
 //  =======================================================
-#ifndef WCPP_NET
-DescribedClass * Dummy_FAZerHQsMagnonMeanFieldAccus(){return new FAZerHQsMagnonMeanFieldAccus();}
-static ClassDesc FAZerHQsMagnonMeanFieldAccus_ClassDesc(typeid(FAZerHQsMagnonMeanFieldAccus),"hq_magnon_mean_field_accus",1,"FAZer",FAZerHQsMagnonMeanFieldAccus);
-#else
+//#ifndef WCPP_NET
+//DescribedClass * Dummy_FAZerHQsMagnonMeanFieldAccus(){return new FAZerHQsMagnonMeanFieldAccus();}
+//static ClassDesc FAZerHQsMagnonMeanFieldAccus_ClassDesc(typeid(FAZerHQsMagnonMeanFieldAccus),"hq_magnon_mean_field_accus",1,"FAZer",FAZerHQsMagnonMeanFieldAccus);
+//#else
 static ClassDesc FAZerHQsMagnonMeanFieldAccus_ClassDesc(typeid(FAZerHQsMagnonMeanFieldAccus),"hq_magnon_mean_field_accus",1,"FAZer",create<FAZerHQsMagnonMeanFieldAccus>);
-#endif
+//#endif
 FAZerHQsMagnonMeanFieldAccus::FAZerHQsMagnonMeanFieldAccus()
   {
    name=strdup("hq_magnon_mean_field_accus");
@@ -842,12 +842,12 @@ void   FAZerHQsMagnonMeanFieldAccus::ClcBase(double *par,double *Xval,double *Re
 //  =======================================================
 //  ================    Magnon Mean Field    Paper     ===
 //  =======================================================
-#ifndef WCPP_NET
-DescribedClass * Dummy_FAZerHQsMagnonMeanFieldPaper(){return new FAZerHQsMagnonMeanFieldPaper();}
-static ClassDesc FAZerHQsMagnonMeanFieldPaper_ClassDesc(typeid(FAZerHQsMagnonMeanFieldPaper),"hq_magnon_mean_field_paper",1,"FAZer",FAZerHQsMagnonMeanFieldPaper);
-#else
+//#ifndef WCPP_NET
+//DescribedClass * Dummy_FAZerHQsMagnonMeanFieldPaper(){return new FAZerHQsMagnonMeanFieldPaper();}
+//static ClassDesc FAZerHQsMagnonMeanFieldPaper_ClassDesc(typeid(FAZerHQsMagnonMeanFieldPaper),"hq_magnon_mean_field_paper",1,"FAZer",FAZerHQsMagnonMeanFieldPaper);
+//#else
 static ClassDesc FAZerHQsMagnonMeanFieldPaper_ClassDesc(typeid(FAZerHQsMagnonMeanFieldPaper),"hq_magnon_mean_field_paper",1,"FAZer",create<FAZerHQsMagnonMeanFieldPaper>);
-#endif
+//#endif
 FAZerHQsMagnonMeanFieldPaper::FAZerHQsMagnonMeanFieldPaper()
   {
    name=strdup("hq_magnon_mean_field_paper");
@@ -901,8 +901,8 @@ void   FAZerHQsMagnonMeanFieldPaper::ClcBase(double *par,double *Xval,double *Re
           Eta=par[9],Phi=par[10],
           OutPhi=par[11],NumHTetaInt=par[12];
    //double IntOpticCoef=par[13];
-   double JS_const=par[13],Temp=par[14],Tpow=par[15],DisordCoef=par[16],Statistic=par[17],
-          QCoef0=par[18],QCoef1=par[19],ECoef0=par[20],ECoef1=par[21];
+   double JS_const=par[13],Temp=par[14],DisordCoef=par[16],Statistic=par[17],
+          QCoef0=par[18],QCoef1=par[19];//,ECoef0=par[20],ECoef1=par[21], Tpow=par[15],
    double Rconst=par[22],QMax=par[23],QMin=par[24],dCosMax=par[25];
    //double OJS_const=par[23],OTpow=par[24],OMinEn=par[25],OStatistic=par[26],
    //       OQCoef0=par[27],OQCoef1=par[28],OECoef0=par[29],OECoef1=par[30];
@@ -922,12 +922,12 @@ void   FAZerHQsMagnonMeanFieldPaper::ClcBase(double *par,double *Xval,double *Re
 //  =======================================================
 //  ================    Magnon Mean Field    PaperPlus  ===
 //  =======================================================
-#ifndef WCPP_NET
-DescribedClass * Dummy_FAZerHQsMagnonMeanFieldPaperPlus(){return new FAZerHQsMagnonMeanFieldPaperPlus();}
-static ClassDesc FAZerHQsMagnonMeanFieldPaperPlus_ClassDesc(typeid(FAZerHQsMagnonMeanFieldPaperPlus),"hq_magnon_mean_field_paper_plus",1,"FAZer",FAZerHQsMagnonMeanFieldPaperPlus);
-#else
+//#ifndef WCPP_NET
+//DescribedClass * Dummy_FAZerHQsMagnonMeanFieldPaperPlus(){return new FAZerHQsMagnonMeanFieldPaperPlus();}
+//static ClassDesc FAZerHQsMagnonMeanFieldPaperPlus_ClassDesc(typeid(FAZerHQsMagnonMeanFieldPaperPlus),"hq_magnon_mean_field_paper_plus",1,"FAZer",FAZerHQsMagnonMeanFieldPaperPlus);
+//#else
 static ClassDesc FAZerHQsMagnonMeanFieldPaperPlus_ClassDesc(typeid(FAZerHQsMagnonMeanFieldPaperPlus),"hq_magnon_mean_field_paper_plus",1,"FAZer",create<FAZerHQsMagnonMeanFieldPaperPlus>);
-#endif
+//#endif
 FAZerHQsMagnonMeanFieldPaperPlus::FAZerHQsMagnonMeanFieldPaperPlus()
   {
    name=strdup("hq_magnon_mean_field_paper_plus");
@@ -981,8 +981,8 @@ void   FAZerHQsMagnonMeanFieldPaperPlus::ClcBase(double *par,double *Xval,double
           Eta=par[9],Phi=par[10],
           OutPhi=par[11],NumHTetaInt=par[12];
    //double IntOpticCoef=par[13];
-   double JS_const=par[13],Temp=par[14],Tpow=par[15],DisordCoef=par[16],Statistic=par[17],
-          QCoef0=par[18],QCoef1=par[19],Alph=par[20],ECoef1=par[21];
+   double JS_const=par[13],Temp=par[14],DisordCoef=par[16],Statistic=par[17],
+          QCoef0=par[18],QCoef1=par[19],Alph=par[20];//,ECoef1=par[21],Tpow=par[15]
    double Rconst=par[22],QMax=par[23],QMin=par[24],dCosMax=par[25];
    //double OJS_const=par[23],OTpow=par[24],OMinEn=par[25],OStatistic=par[26],
    //       OQCoef0=par[27],OQCoef1=par[28],OECoef0=par[29],OECoef1=par[30];
@@ -1003,12 +1003,12 @@ void   FAZerHQsMagnonMeanFieldPaperPlus::ClcBase(double *par,double *Xval,double
 //  =======================================================
 //  ================    Magnon Mean Field    Paper9     ===
 //  =======================================================
-#ifndef WCPP_NET
-DescribedClass * Dummy_FAZerHQsMagnonMeanFieldPaper9(){return new FAZerHQsMagnonMeanFieldPaper9();}
-static ClassDesc FAZerHQsMagnonMeanFieldPaper9_ClassDesc(typeid(FAZerHQsMagnonMeanFieldPaper9),"hq_magnon_mean_field_paper9",1,"FAZer",FAZerHQsMagnonMeanFieldPaper9);
-#else
+//#ifndef WCPP_NET
+//DescribedClass * Dummy_FAZerHQsMagnonMeanFieldPaper9(){return new FAZerHQsMagnonMeanFieldPaper9();}
+//static ClassDesc FAZerHQsMagnonMeanFieldPaper9_ClassDesc(typeid(FAZerHQsMagnonMeanFieldPaper9),"hq_magnon_mean_field_paper9",1,"FAZer",FAZerHQsMagnonMeanFieldPaper9);
+//#else
 static ClassDesc FAZerHQsMagnonMeanFieldPaper9_ClassDesc(typeid(FAZerHQsMagnonMeanFieldPaper9),"hq_magnon_mean_field_paper9",1,"FAZer",create<FAZerHQsMagnonMeanFieldPaper9>);
-#endif
+//#endif
 FAZerHQsMagnonMeanFieldPaper9::FAZerHQsMagnonMeanFieldPaper9()
   {
    name=strdup("hq_magnon_mean_field_paper9");
@@ -1057,9 +1057,8 @@ void   FAZerHQsMagnonMeanFieldPaper9::ClcBase(double *par,double *Xval,double *R
           Eta=par[9],Phi=par[10],
           OutPhi=par[11],NumHTetaInt=par[12];
    //double IntOpticCoef=par[13];
-   double JS_const=par[13],Temp=par[14],Tpow=par[15],
-       
-       Statistic=par[16], QCoef0=par[17], QCoef1=par[18], QCoef2=par[19], QCoef2_R2=par[20],
+   double Temp=par[14];//JS_const=par[13],Tpow=par[15],
+   double Statistic=par[16], QCoef0=par[17], QCoef1=par[18], QCoef2=par[19], QCoef2_R2=par[20],
           DisordCoef=par[21];
    double Rconst=par[22],QMax=par[23],QMin=par[24],dCosMax=par[25];
    QCoef2 = QCoef2_R2*sqr(Rconst);
@@ -1120,8 +1119,10 @@ void   FAZerQs_T::Clc(double *par,double *Xval,double *Res)
 void FAZerQs_T::ParStp(double *par,double *stp)
  {
   for (int k=1;k<=NumPar;k++)
-    if (stp[k]!=0) if (fabs(par[k])<=MathZer) stp[k]=0.1;
-                   else stp[k]=par[k]*0.01;
+    if (stp[k]!=0) {
+        if (fabs(par[k]) <= MathZer) stp[k] = 0.1;
+        else stp[k] = par[k] * 0.01;
+    }
  };
 
 
@@ -1168,8 +1169,10 @@ Qags_IntSubInt(DebyFuncInt_Is,0,par[3]/Xval[k],StndErr,StndErr,1000,ResMis,Err))
 void FAZerInt_T::ParStp(double *par,double *stp)
  {
   for (int k=1;k<=NumPar;k++)
-    if (stp[k]!=0) if (fabs(par[k])<=MathZer) stp[k]=0.1;
-                   else stp[k]=par[k]*0.01;
+    if (stp[k]!=0) {
+        if (fabs(par[k]) <= MathZer) stp[k] = 0.1;
+        else stp[k] = par[k] * 0.01;
+    }
  };
 
 
@@ -1207,8 +1210,10 @@ void   FAZerIs_T::Clc(double *par,double *Xval,double *Res)
 void FAZerIs_T::ParStp(double *par,double *stp)
  {
   for (int k=1;k<=NumPar;k++)
-    if (stp[k]!=0) if (fabs(par[k])<=MathZer) stp[k]=0.1;
-                   else stp[k]=par[k]*0.01;
+    if (stp[k]!=0) {
+        if (fabs(par[k]) <= MathZer) stp[k] = 0.1;
+        else stp[k] = par[k] * 0.01;
+    }
  };
 
 
