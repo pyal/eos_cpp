@@ -3,9 +3,16 @@
 #include "data_manip.h"
 #include "class_sav.h"
 
+struct TVerify {
+    Stroka Wrd;
+    Stroka Message;
+    TVerify(const char *wrd, const char *message): Wrd(wrd), Message(message){};
+};
+#define Verify(str) TVerify(str, info_mark)
 
 FilterOut &operator<<(FilterOut &out, const Stroka &str);
 FilterIn &operator>>(FilterIn &in, Stroka &str);
+FilterIn &operator>>(FilterIn &in, const TVerify &wrd);
 
 
 //namespace RefManip {
@@ -54,9 +61,7 @@ FilterOut &operator<<(FilterOut &out, const std::vector<T> &vec) {
 }
 template <class T>
 FilterIn &operator>>(FilterIn &in, std::list<T> &lst) {
-    Stroka tmp;
-    //in>>tmp;
-    TestNextWord(in, "list_{", "Wrong list prefix!!!");
+    in >> Verify("list_{");
     lst.clear();
     T dat;
     while(!SavableClass::TestNextChar(in, '}')) {
@@ -67,9 +72,7 @@ FilterIn &operator>>(FilterIn &in, std::list<T> &lst) {
 }
 template <class T>
 FilterIn &operator>>(FilterIn &in, std::vector<T> &vec) {
-    Stroka tmp;
-    //in>>tmp;
-    TestNextWord(in, "vector_{", "Wrong list prefix!!!");
+    in >> Verify("vector_{");
     vec.clear();
     T dat;
     while(!SavableClass::TestNextChar(in, '}')) {
@@ -113,8 +116,11 @@ FilterIn &operator>>(FilterIn &in, std::list<Ref<T>> &lst) {
     //in>>tmp;
 
     lst.clear();
-    while(!SavableClass::TestNextChar(in, '}'))
-        lst.push_back(SavableClass::TestType<T>(in.getobject()));
+    while(!SavableClass::TestNextChar(in, '}')) {
+        SavableClass *o = in.getobject();
+        log_debug(string("Read: ") + ~SavableClass::object2string(o));
+        lst.push_back(SavableClass::TestType<T>(o));
+    }
     return in;
 }
 template <class T>

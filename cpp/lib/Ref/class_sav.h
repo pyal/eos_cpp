@@ -4,10 +4,6 @@
 
 #include "class.h"
 
-//#include <fstream>
-//#include <strstrea.h>
-//#include <iostream>
-//#include <stdiostr.h>
 #include <map>
 #include <vector>
 
@@ -15,20 +11,14 @@
 #include "allocator_intellect.h"
 #include "Stroka.h"
 
-//#include <strstream>
-//struct StateOut;
-//class TranslateDataIn;
-//class TranslateDataOut;
-// Base class for objects that can save/restore state.
 
 struct FilterIn;
 struct FilterOut;
-//struct SavableClass;
-//extern FilterIn& FilterIn::operator>>(char *buf);
 
+#include "lib/std/logger.h"
 
 struct KeyDesc {
-    char name[256];
+    char name[1256];
     KeyDesc(){};
     KeyDesc(const char *n) {
         Init(n);
@@ -36,7 +26,6 @@ struct KeyDesc {
     explicit KeyDesc(const Stroka &str) {
         Init(str.c_str());
     };
-    //  KeyDesc(const KeyDesc& key):name(NULL) { Init(key.name); };
     void Init(const char *n) {
         strcpy(&name[0], n);
     };
@@ -45,7 +34,6 @@ struct KeyDesc {
         Init(n);
         return *this;
     };
-    //  KeyDesc& operator=(KeyDesc& d0) {Init(d0.name);};
 };
 static KeyDesc StdKey;
 #include <ctype.h>
@@ -135,18 +123,7 @@ public:
         std::istrstream in(~str, str.length());
         return Read(in, Method);
     }
-    static SavableClass *name2object(const char *objname) {
-        SavableClass *sc;
-        ClassDesc *cd = ClassDesc::name_to_class_desc(objname);
-        if(cd)
-            sc = dynamic_cast<SavableClass *>(cd->create());
-        else
-            throw info_except(" Class %s unknown \n", objname);
-        if(!sc)
-            throw info_except(
-                " Class %s  CreateMethod is not registered add it.\n", objname);
-        return sc;
-    }
+    static SavableClass *name2object(const char *objname);
 
     static Stroka list_all_classes(const char *categ);
     static Stroka HelpForCategory(const char *categ, int Method = -1);
@@ -198,6 +175,7 @@ public:
             in.get(c);
         return c == ch;
     }
+    //TODO FIXIT !!!!  Depricated, use Verify !!!!!!!!!!!!!!
     // Throw exception if the next word int the sream ins not the given one
     static void ExeptionCheck(std::istream &in, const char *test, const char *mes = 0) {
         char tmp[256];
@@ -309,9 +287,6 @@ public:
     virtual int underflow() {
         return egptr() > gptr() ? *gptr() : EOF;
     }
-    //     virtual streambuf* setbuf(char *, int);
-    //     virtual streampos seekoff(streamoff, ios::seek_dir, int)
-    //     virtual int     sync(){};         // not in spec.
     virtual long xsputn(const char *buf, long s) {
         if(pptr() + s > epptr())
             realloc_s((long)(pptr() + s - epptr()));
@@ -329,7 +304,6 @@ public:
 
 private:
     AllocatorIntellect<char> allocator;
-    //    AllocatorIntelectProtect<char> allocator;
 };
 
 
@@ -341,11 +315,7 @@ struct DataSource : virtual DescribedClass {
     char dataname[1256];
     streambuf *databuf;
     char Category[1256];
-    //    struct CharLess //: public binary_function<T, T, bool> {
-    //    {bool operator()(const char *x, const char *y) const {return (strcmp(x,y)<0);}};
-    //    {bool operator()(const string &x, const string &y) const {return x<y;}};
     typedef Ref<DataSource> DataSourceRef;
-    //    typedef std::map<const char* , DataSourceRef,CharLess> MAPCLASS ;
     typedef std::map<string, DataSourceRef> MAPCLASS;
     static MAPCLASS *data_list;
 
@@ -360,59 +330,24 @@ struct DataSource : virtual DescribedClass {
     DataSource() : databuf(NULL){};
     ~DataSource();
 
-    //static streambuf* OpenSource(const char *name,OpenMode op_mode=OpenMode::In,
-    //                              DataType dat_type=DataType::Disk,char *category=NULL,const char *file_name=NULL);
     static streambuf *OpenSource(
         const char *name,
         OpenMode op_mode = DataSource::In,
         DataType dat_type = DataSource::Disk,
         char *category = NULL,
         const char *file_name = NULL);
-    //static char *GetStr(const char *name)
-    //  {
-    //   Ref<DataSource> fromref=(*data_list)[name];
-    //   if ((fromref!=NULL) && (fromref->datatype==Memory))
-    //     {
-    //      memstreambuf *frombuf=(memstreambuf *)fromref->databuf;
-    //      int N=frombuf->out_waiting();
-    //      char *ret=new char[N+1];memmove(ret,frombuf->str(),N);ret[N]=0;
-    //      return ret;
-    //     }
-    //   return NULL;
-    //  };
-    static string GetStr(const char *name) {
-        Ref<DataSource> fromref = (*data_list)[name];
-        if((fromref != NULL) && (fromref->datatype == Memory)) {
-            memstreambuf *frombuf = (memstreambuf *)fromref->databuf;
-            int N = frombuf->out_waiting();
 
-            string ret;
-            ret.insert(0, frombuf->str(), N);
-            ret += '\x0';
-            //          char *ret=new char[N+1];memmove(ret,frombuf->str(),N);ret[N]=0;
-            return ret;
-        }
-        //       return NULL;
-        return string("");
-    };
+    // GetContent of given type stream buf
+    static string GetStr(const char *name);
 
-    //   virtual streambuf* Data(char *name){return databuf;};
-    //   void CloseSource() { if (data_list) data_list->erase(dataname); };
-    virtual void print(ostream &out = ExEnv::out()) {
-        const char *type[] = {"Memory", "Disk", "Console"}, *mode[] = {"In", "Out"};
-        out << " DataSource_data name: \"" << dataname << "\" type: \"" << type[datatype]
-            << "\" Openmode: \"" << mode[openmode] << "\" Category: \"" << Category
-            << "\"\n";
-    }
+    virtual void print(ostream &out = ExEnv::out());
 };
 
 struct FilterIn : virtual istream {
     // Part added to restore objects (SavableClass) as new ones
     // with correct references between them.
 private:
-    //  std::vector<void*> refsaved;
     AllocatorIntellect<void *> refsaved;
-    //  AllocatorIntelectProtect<void*> refsaved;
     int refmask, numrefsaved;
     int AutomaticallyCloseBuf;
 
@@ -509,236 +444,42 @@ public:
         return Num;
     };
 
-    virtual int GetSCStored(int &numobj) {
-        get(StdKey);
-        get(numobj);
-        // Last was, did not work switched to get StdKey+
-        //        get(numobj);
-        if(!(*this))
-            throw info_except("Bad stream - could not read numobj!!!\n");
-
-        if(numobj <= numrefsaved)
-            return 1;
-        if(numrefsaved + 1 != numobj)
-            //      {ExEnv::err()<<"Error restoring RefBase - num objects saved "<<numrefsaved<<" number of object "<<numobj<<"\n";ExEnv::err().flush();abort();}
-            throw info_except(
-                "Error restoring RefBase - num objects saved %i  number of object %i \n%s",
-                numrefsaved,
-                numobj,
-                ReadingError(NULL).c_str());
-        numrefsaved++;
-        return 0;
-    };
+    virtual int GetSCStored(int &numobj);
 
 private:
-    void ConstructObject(SavableClass *&sc, const char *objname) {
-        ClassDesc *cd;
-        Stroka tmp_name(objname);
-        if(!objname) {
-            char name[256];
-            getword(&name[0]);
-            tmp_name = Stroka(name);
-            cd = ClassDesc::name_to_class_desc(name);
-        } else
-            cd = ClassDesc::name_to_class_desc(objname);
-        if(cd)
-            sc = dynamic_cast<SavableClass *>(cd->create());
-        else
-            throw info_except(" StateIn: class %s unknown \n", tmp_name.c_str());
-        if(!sc)
-            throw info_except(
-                " StateIn: class %s  CreateMethod is not registered add it.\n",
-                tmp_name.c_str());
-    }
-    void GetObjectBody(SavableClass *&sc) {
-        if((!sc->read_data_pref(*this)) || (!sc->read_data_state(*this)) ||
-           (!sc->read_data_post(*this)))
-            throw info_except(
-                "Error while reading by pref,state or post savable class functions.\n ");
-    }
-    Stroka CheckReadNullObj(SavableClass *&sc) {
-        Stroka ret = getword();
-        if(ret == "NULL_POINTER") {
-            sc = NULL;
-            return "";
-        }
-        return ret;
-    }
-    void getobjstrt() {
-        if(refmask != SavableClass::SimpleEdit)
-            get(StdKey);
-    }
-    int getobjfin(RefBase &buf, SavableClass *sc) {
-        if(refmask != SavableClass::SimpleEdit)
-            get(StdKey);
-        buf.GetSavableBase(sc);
-        return (!(!*this));
-    }
-    Stroka getword() {
-        char tmp[256];
-        getword(tmp);
-        return Stroka(tmp);
-    }
+    void ConstructObject(SavableClass *&sc, const char *objname) ;
+    void GetObjectBody(SavableClass *&sc);
+    Stroka CheckReadNullObj(SavableClass *&sc);
+    void getobjstrt();
+    int getobjfin(RefBase &buf, SavableClass *sc);
+    Stroka getword();
 
 
 public:
-    virtual int getobject(SavableClass *&sc) {
-        // if StorePtr          - store referenced pointer          :
-        //          ptr
-        // if SingleFileStorage - store head, ref_number, object    :
-        //          NULL_POINTER
-        //          Key(ObjectRefNumber) 1
-        //          Key(ObjectRefNumber) 3 ObjName Pref{ Obj Post} Key(})
-        // if UnlinkedObjects   - store  head, not store ref_number, store object :
-        //          NULL_POINTER
-        //          ObjName Pref{ Obj Post}
-        // if SimpleEdit       - store  head, not store ref_number, store object :
-        //          NULL_POINTER
-        //          ObjName Pref{ Obj Post}
-        //cout<<"getobject(*&sc):\n"<<SavableClass::ShowStreamPosition(this)<<"\n";
-        try {
-            if(!(*this))
-                throw info_except("Bad stream.\n");
-            if(refmask == SavableClass::StorePtr) {
-                void *tmp;
-                get(tmp);
-                sc = (SavableClass *)(tmp);
-                return (!(!*this));
-            };
-            Stroka str = CheckReadNullObj(sc);
-            if(str.length() == 0)
-                return 1;
-
-            if(refmask == SavableClass::SingleFileStorage) {
-                int numobj;
-                if(GetSCStored(numobj)) {
-                    sc = (SavableClass *)refsaved[numobj - 1];
-                    return 1;
-                }
-                str = getword();
-            }
-            cout << " Build object str " << str << "\n";
-            ConstructObject(sc, ~str);
-            if(refmask == SavableClass::SingleFileStorage)
-                refsaved[numrefsaved - 1] = (void *)sc;
-            GetObjectBody(sc);
-            return (sc != NULL);
-        } catch(exception &ex) {
-            throw info_except(
-                "Got an error %s.\n %s", ex.what(), ReadingError(sc).c_str());
-        }
-    };
-    virtual int getobject(SavableClass &sc) {
-        // if StorePtr          - store referenced pointer          :
-        //          Obj
-        // if SingleFileStorage - store head, ref_number, object    :
-        //          Key(ObjectRefNumber) 3 Obj
-        // if UnlinkedObjects   - store  head, not store ref_number, store object :
-        //          Obj
-        // if SimpleEdit       - store  head, not store ref_number, store object :
-        //          Obj
-        //cout<<"getobject &sc:\n"<<SavableClass::ShowStreamPosition(this)<<"\n";
-        try {
-            if(!(*this))
-                throw info_except("Bad stream\n");
-            if(refmask == SavableClass::SingleFileStorage) {
-                int numobj;
-                char tmp[256];
-                getword(tmp);
-                //get(StdKey);
-                //if (!GetSCStored(numobj))
-                if(GetSCStored(numobj))
-                    throw info_except(
-                        "Error, already stored. ups.Object Saved under Number %i Total num of stored objects %i\n",
-                        numobj,
-                        numrefsaved);
-                refsaved[numrefsaved - 1] = (void *)&sc;
-            }
-            if(!sc.read_data_state(*this))
-                throw info_except(" ERROR: StateIn: could not read_data_state\n ");
-            return 1;
-            //} catch(stdexception &ex){
-        } catch(exception &ex) {
-            throw info_except(
-                "Got an error %s.\n %s", ex.what(), ReadingError(&sc).c_str());
-        }
-    };
-    virtual SavableClass *getobject() {
-        //cout<<"getobject():\n"<<SavableClass::ShowStreamPosition(this)<<"\n";
-        SavableClass *sc = NULL;
-        getobject(sc);
-        return sc;
-    };
-
-
-    virtual int getobject(RefBase &buf) {
-        //cout<<"getobject(Ref&):\n"<<SavableClass::ShowStreamPosition(this)<<"\n";
-        // if StorePtr          - store referenced pointer          :
-        //          Key(ReferenceClass_{) ptr Key(})
-        // if SingleFileStorage - store head, ref_number, object    :
-        //          Key(ReferenceClass_{) NULL_POINTER Key(})
-        //          Key(ReferenceClass_{) ObjectRefNumber 1 Key(})
-        //          Key(ReferenceClass_{) ObjectRefNumber 3 ObjName Pref{ Obj Post} Key(})
-        // if UnlinkedObjects   - store  head, not store ref_number, store object :
-        //          Key(ReferenceClass_{) NULL_POINTER Key(})
-        //          Key(ReferenceClass_{) ObjName Pref{ Obj Post} Key(})
-        // if SimpleEdit       - store  head, not store ref_number, store object :
-        //          NULL_POINTER
-        //          ObjName Pref{ Obj Post}
-        try {
-            if(!(*this))
-                throw info_except("Bad stream\n");
-            SavableClass *sc = NULL;
-            getobjstrt();
-            if(refmask == SavableClass::StorePtr) {
-                void *ptr;
-                get(ptr);
-                return getobjfin(buf, (SavableClass *)ptr);
-            }
-            Stroka str = CheckReadNullObj(sc);
-            if(str.length() == 0)
-                return getobjfin(buf, NULL);
-
-            if(refmask == SavableClass::SingleFileStorage) {
-                int numobj;
-                if(GetSCStored(numobj))
-                    return getobjfin(buf, (SavableClass *)refsaved[numobj - 1]);
-                //str.read_token(*this);// pot error !!!!
-                str = getword();
-            }
-            ConstructObject(sc, str.c_str());
-            if(refmask == SavableClass::SingleFileStorage)
-                refsaved[numrefsaved - 1] = (void *)sc;
-            GetObjectBody(sc);
-            return getobjfin(buf, sc);
-        } catch(stdexception &ex) {
-            throw info_except(
-                "Got an error %s.\n %s",
-                ex.what(),
-                ReadingError(buf.GetSavableBase()).c_str());
-        }
-    };
-
-    //inline FilterIn& operator>>(char *buf);
-    //inline FilterIn& operator>>(double &buf);
-    //inline FilterIn& operator>>(int &buf);
-    //inline FilterIn& operator>>(char &buf);
-    //inline FilterIn& operator>>(long &buf);
-    //inline FilterIn& operator>>(KeyDesc &buf);
-    //inline FilterIn& operator>>(SavableClass *&buf);
-    //inline FilterIn& operator>>(SavableClass &buf);
-    //inline FilterIn& operator>>(void *&buf);
-
-    //inline FilterIn& operator>>(RefBase &buf);
-    //inline FilterIn& operator>>(void *buf);
-
-
-    //  inline FilterIn& operator>>(istream& (__cdecl * _f)(istream&));
-    //  inline FilterIn& operator>>(ios& (__cdecl * _f)(ios&));
-    // FilterIn& operator>>(RefBase &buf){
-    //getobject(buf);
-    //return (*this);
-    // }
+    // if StorePtr          - store referenced pointer          :
+    //          ptr
+    // if SingleFileStorage - store head, ref_number, object    :
+    //          NULL_POINTER
+    //          Key(ObjectRefNumber) 1
+    //          Key(ObjectRefNumber) 3 ObjName Pref{ Obj Post} Key(})
+    // if UnlinkedObjects   - store  head, not store ref_number, store object :
+    //          NULL_POINTER
+    //          ObjName Pref{ Obj Post}
+    // if SimpleEdit       - store  head, not store ref_number, store object :
+    //          NULL_POINTER
+    //          ObjName Pref{ Obj Post}
+    virtual int getobject(SavableClass *&sc);
+    // if StorePtr          - store referenced pointer          :
+    //          Obj
+    // if SingleFileStorage - store head, ref_number, object    :
+    //          Key(ObjectRefNumber) 3 Obj
+    // if UnlinkedObjects   - store  head, not store ref_number, store object :
+    //          Obj
+    // if SimpleEdit       - store  head, not store ref_number, store object :
+    //          Obj
+    virtual int getobject(SavableClass &sc);
+    virtual SavableClass *getobject();
+    virtual int getobject(RefBase &buf);
 private:
     virtual string ReadingError(SavableClass *s) {
         string ret("Could not read(save) class:");
@@ -747,31 +488,9 @@ private:
         else
             ret.append(typeid(*s).name());
         ret += string(~SavableClass::ShowStreamPosition(this));
-        //if (!(*this))
-        //    clear();
-        //char tmp[512];
-        //ret.append("\nError position: ").append(Itoa(tellg(),tmp,10)).append("\nChars after error\n");
-        //read(tmp,512);tmp[511]=0;
-        //ret = ret.append(tmp).append("\n\000");
         return ret;
     };
 };
-
-//inline FilterIn &FilterIn::operator>>(char *buf) {getword(buf);return (*this);}
-//inline FilterIn &FilterIn::operator>>(char &buf) {get(buf);return (*this);}
-//inline FilterIn &FilterIn::operator>>(double &buf) {get(buf);return (*this);}
-//inline FilterIn &FilterIn::operator>>(int &buf) {get(buf);return (*this);}
-//inline FilterIn &FilterIn::operator>>(long &buf) {get(buf);return (*this);}
-//inline FilterIn &FilterIn::operator>>(KeyDesc &buf) {get(buf);return (*this);}
-//inline FilterIn &FilterIn::operator>>(SavableClass *&buf) {getobject(buf);return (*this);}
-//inline FilterIn &FilterIn::operator>>(SavableClass &buf) {getobject(buf);return (*this);}
-//inline FilterIn &FilterIn::operator>>(void *&buf) {get(buf);return (*this);}
-//inline FilterIn &FilterIn::operator>>(void *buf) {get(buf);ExEnv::err()<<" oprator >> for void*, without changing of val\n";return (*this);}
-//inline FilterIn &FilterIn::operator>>(RefBase &buf) {getobject(buf);return (*this);}
-
-
-//inline FilterIn& FilterIn::operator>>(istream& (__cdecl * _f)(istream&)) { (*_f)(*this); return *this; }
-//inline FilterIn& FilterIn::operator>>(ios& (__cdecl * _f)(ios&)) { (*_f)(*this); return *this; }
 
 struct FilterTextIn : FilterIn {
 #define WORDLENGTH 256
@@ -902,9 +621,7 @@ struct FilterOut : virtual ostream {
     // Part added to restore objects (SavableClass) as new ones
     // with correct references between them.
 private:
-    //  std::vector<void*> refsaved;
     AllocatorIntellect<void *> refsaved;
-    //  AllocatorIntelectProtect<void*> refsaved;
     int refmask, numrefsaved;
     int AutomaticallyCloseBuf;
 
@@ -928,8 +645,6 @@ public:
         : ostream(NULL), refmask(SavableClass::GetRefOutMethod()), numrefsaved(0) {
         AutoCloseBuf(autoclosebuf);
     };
-    //FilterOut(char *name, DataSource::DataType dat_type=DataSource::Disk,char *category=NULL,int autoclosebuf = 1)
-    //  :ostream(NULL),refmask(SavableClass::StorePtr),numrefsaved(0)  {AutoCloseBuf(autoclosebuf);OpenBuf(name, 0,dat_type,category);}
     virtual ~FilterOut() {
         if(AutomaticallyCloseBuf)
             CloseBuf();
@@ -952,11 +667,6 @@ public:
     };
 
     void CloseBuf(int AlsoInit = 1) {
-        //    for (int k=0;k<numrefsaved;k++)
-        //     {
-        //      SavableClass *sc=dynamic_cast<SavableClass*>(refsaved[k]);
-        //      if (sc) sc->SetClassStored(0);
-        //     };
         ClearRef();
         DataSource::CloseSource(rdbuf());
         if(AlsoInit)
@@ -982,8 +692,6 @@ public:
     virtual void set(void *buf) = 0;
     virtual void set(const KeyDesc &buf) = 0;
     virtual void setword(const char *buf) = 0;
-
-    //  virtual void getstring(char *buf,char delim='\n');
 
     virtual void set_arr(char *buf, int Num) {
         set(Num);
@@ -1116,42 +824,8 @@ public:
         return setobjfin();
     };
 
-    //inline FilterOut& operator<<(const char *buf);
-    //inline FilterOut& operator<<(double buf);
-    //inline FilterOut& operator<<(int buf);
-    //inline FilterOut& operator<<(char buf);
-    //inline FilterOut& operator<<(long buf);
-    //inline FilterOut& operator<<(void *buf);
-    //inline FilterOut& operator<<(const KeyDesc &buf);
-    //inline FilterOut& operator<<(SavableClass *buf);
-    //inline FilterOut& operator<<(SavableClass& buf);
-    //inline FilterOut& operator<<(RefBase& buf);
-
-
-    //  inline  FilterOut& operator<<(ostream& (__cdecl * _f)(ostream&));
-    //  inline  FilterOut& operator<<(ios& (__cdecl * _f)(ios&));
 };
 
-////inline FilterOut &FilterOut::operator<<(const char *buf) {setword(buf);return (*this);}
-////inline FilterOut &FilterOut::operator<<(char buf)  {set(buf);return (*this);}
-////inline FilterOut &FilterOut::operator<<(double buf){set(buf);return (*this);}
-////inline FilterOut &FilterOut::operator<<(int buf)   {set(buf);return (*this);}
-////inline FilterOut &FilterOut::operator<<(long buf)  {set(buf);return (*this);}
-////inline FilterOut &FilterOut::operator<<(void *buf)
-//// {set(buf);
-////ExEnv::err()<<" operator<<(void *) are you sure\n";
-////  return (*this);}
-////inline FilterOut &FilterOut::operator<<(const KeyDesc &buf) {set(buf);return (*this);}
-////inline FilterOut &FilterOut::operator<<(SavableClass *buf) {setobject(buf);return (*this);}
-////// { SetLeakTest();setobject(buf);LeakTest(); return (*this);}
-////inline FilterOut &FilterOut::operator<<(SavableClass& buf) {setobject(buf);return (*this);}
-////// { SetLeakTest();setobject(buf);LeakTest(); return (*this);}
-////inline FilterOut &FilterOut::operator<<(RefBase& buf) {setobject(buf);return (*this);}
-////// { SetLeakTest();setobject(buf);LeakTest(); return (*this);}
-
-
-//inline FilterOut& FilterOut::operator<<(ostream& (__cdecl * _f)(ostream&)) { (*_f)(*this); return *this; }
-//inline FilterOut& FilterOut::operator<<(ios& (__cdecl * _f)(ios& )) { (*_f)(*this); return *this; }
 
 struct FilterTextOut : FilterOut {
     FilterTextOut(streambuf *s, int autoclosebuf = 1)
@@ -1346,163 +1020,7 @@ inline FilterOut &operator<<(FilterOut &so, RefBase &buf) {
     return so;
 }
 
-//inline FilterOut &operator<<(FilterOut &out, void *buf) {set(buf);ExEnv::err()<<" operator<<(void *) are you sure\n";return (*this);}
-
-
-/*
-struct FilterIO:virtual iostream
-{
-  int MaxStringLength;
-  FilterIO(streambuf*s,int MaxString=1024):iostream(s),MaxStringLength(MaxString){};
-
-//  virtual int get(char *buf,int MaxLength=0);
-//  virtual int get(int &buf);
-//  virtual int get(double &buf);
-//  virtual int get(int *buf,int Num);
-//  virtual int get(double *buf,int Num);
-
-//  virtual int set(char *buf);
-//  virtual int set(int buf);
-//  virtual int set(double buf);
-//  virtual int set(int *buf,int Num);
-//  virtual int set(double *buf,int Num);
-//  virtual int getobject(SavableClass *&sc);
-//  virtual int setobject(SavableClass *sc);
-
-//  friend StateOut& operator<<(FilterStream &so,SavableClass *&cs){ so.putobject(sc);return so;};
-//  friend StateIn&  operator>>(FilterStream &si,SavableClass *&cs){ cs=si.getobject();return si;};
-//  virtual int get(StoreClass &store,float buf);
-//  virtual int set(StoreClass &store,float buf);
-  virtual inline FilterIO& operator<<(char *buf);
-};
-
-inline FilterIO &FilterIO::operator<<(char *buf)
-  {write("FilterIO out ",13);write(buf,strlen(buf));return (*this);}
-//struct StateOut;
-*/
-
-//void WriteHelpOnCategory(FilterOut &out,char *name,int PrintIt);
 
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
-/*
-
-struct StoreClass:DescribedClass
-{
-  StoreClass(){};
-  virtual int get(char *buf,int MaxLength=MaxStringLength);
-  virtual int get(int buf);
-  virtual int get(double buf);
-//  virtual int get(StoreClass &store,float buf);
-  virtual int get(int *buf,int Num);
-  virtual int get(double *buf,int Num);
-
-  virtual int set(char *buf,int MaxLength=MaxStringLength);
-  virtual int set(int buf);
-  virtual int set(double buf);
-//  virtual int set(StoreClass &store,float buf);
-  virtual int set(int *buf,int Num);
-  virtual int set(double *buf,int Num);
-}  
-
-
-struct StateInOut
-{
-  istream
-  Ref<StoreClass> store;
-  Ref<FilterClass> filter;
-  StateIn():store(NULL),filter(NULL){};
-  virtual SavableClass* getobject()
-   {
-    char name[filter.MaxStringLength];*this>>name;//if (badname(name)) {return NULL;}
-    Ref<SavableClass> res= 
-      dynamic_cast<SavableClass*>(ClassDesc::name_to_class_desc(name)->create());
-    if (res==NULL) return res;
-    if (!res->read_data_state(*this)) return NULL;
-    return res;
-   };
-  friend StateIn&  operator>>(StateIn  &si,char *buf){ filter->get(store,buf)};
-//  friend StateIn&  operator>>(StateIn  &si,int *buf){ filter->get(store,buf)};
-//  friend StateIn&  operator>>(StateIn  &si,char *buf){ filter->get(store,buf)};
-//  friend StateIn&  operator>>(StateIn  &si,char *buf){ filter->get(store,buf)};
-};
-  
-
-class StateIn;
-class StateOut;
-//class TranslateDataIn;
-//class TranslateDataOut;
-
-// Base class for objects that can save/restore state.
-struct SavableClass : DescribedClass {
-  protected:
-	SavableClass(){};
-    SavableClass(const SavableClass&){};
-  public:
-	SavableClass& operator=(const SavableClass&){ return *this};
-	virtual ~SavableClass() {};
-
-// Save the state of the object as specified by the StateOut object. This routine 
-// saves the state of the object (which includes the nonvirtual bases),the virtual 
-// bases, and type information.  The default implementation should be adequate. 
-    void save_state(StateOut&so) { save_state(this,so);};
-
-// Like save_state(StateOut&), but will handle null pointers correctly.
-    static void save_state(SavableClass*sc, StateOut&so){ so.putobject(sc);};
-
-// This can be used for saving state when the exact type of the object is known for 
-// both the save and the restore.  To restore objects saved in this way the user must 
-// directly invoke the object's StateIn& constructor. 
-    void save_object_state(StateOut&so){ save_vbase_state(so);save_data_state(so);};
-// Save the virtual bases for the object. This must be done in the same order that the 
-// ctor initializes the virtual bases.  This does not include the DescribedClass and 
-// SavableState virtual base classes. This must be implemented by the user if the class 
-// has other virtual bases.  (These virtual bases must come after SavableState, if 
-// SavableState is virtual.) 
-    virtual void save_vbase_state(StateOut&so){ SavableState::save_data_state(so);};
-// Save the base classes (with save_data_state) and the members in the same order that 
-// the StateIn CTOR initializes them.  This must be implemented by the derived class if 
-// the class has data. 
-    virtual void save_data_state(StateOut&){ if (so.need_classdesc()) so.put(class_desc());};
-
-    // restore functions
-
-// Restores objects saved with save_state.  The exact type of the next object in si can 
-// be any type publically derived from the SavableState. Derived classes implement a 
-// similar static function that returns a pointer to the derived class.  If the objectname 
-// is given the directory will be consulted to find and restore that object. 
-    static SavableClass* restore_state(StateIn& si){ return dir_restore_state(si,0,0);};
-// Like restore_state, but keyword is used to override values while restoring. 
-    static SavableClass* key_restore_state(StateIn& si, const char *keyword)
-		{ return dir_restore_state(si,0,keyword);};
-
-    static SavableClass* dir_restore_state(StateIn& si, const char *objectname,
-                                                        const char *keyword = 0);
-
-  protected:
-
-// Each derived class StateIn CTOR handles the restore corresponding to calling 
-// save_object_state, save_vbase_state, and save_data_state listed above.  All derived 
-// class StateIn& constructors must invoke  the SavableState(StateIn&) constructor. 
-    SavableClass(StateIn&);
-  };
-
-struct KeyDesc
-{
-  static char *name;
-  KeyDesc(){name=NULL;};
-  KeyDesc(char *n){name=NULL;Init(n);};
-//  KeyDesc(const KeyDesc& key):name(NULL) { Init(key.name); };
-  void Init(char *n){delete name;
-  name=strcpy(new char[strlen(n)+1],n);
-   };
-  ~KeyDesc(){ delete name; name=NULL; }
-  KeyDesc& operator=(char *n){Init(n);return *this;};
-//  KeyDesc& operator=(KeyDesc& d0) {Init(d0.name);};  
-};
-
-*/

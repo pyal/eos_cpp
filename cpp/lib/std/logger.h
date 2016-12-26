@@ -23,32 +23,11 @@ namespace NLogger {
             int line,
             const char *func,
             ELevel level,
-            const string &msg) {
-            const char *f = strrchr(file, '/');
-            f = f ? f + 1 : file;
-            cout << LineFormat(
-                level, string(f) + ":" + Itoa(line) + "[" + func + "]" + msg + "\n");
-        }
-        static ostream &OutStream(ostream *out = NULL) {
-            if(!out)
-                GetLogger().Out = out;
-            return *GetLogger().Out;
-        }
+            const string &msg);
+        static ostream &OutStream(ostream *out = NULL);
 
 
-        static string LineFormat(ELevel level, const string &msg) {
-            struct timeval tmnow;
-            struct tm *timeinfo;
-            char buffer[80];
-
-            gettimeofday(&tmnow, NULL);
-            timeinfo = localtime(&tmnow.tv_sec);
-            strftime(buffer, 80, "%Y-%m-%d %I:%M:%S", timeinfo);
-            ostringstream out;
-            out << buffer << ' ' << int(tmnow.tv_usec / 1000) << ' '
-                << LevelNames[int(level)] << ' ' << msg;
-            return out.str();
-        }
+        static string LineFormat(ELevel level, const string &msg);
 
 
         ELevel LogLevel = info;

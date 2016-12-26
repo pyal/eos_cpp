@@ -2,6 +2,7 @@
 #define __stroka_h
 
 
+#include <cpp/lib/std/logger.h>
 #include "lib/std/util.h"
 #include "class.h"
 #include "assert.h"
@@ -103,10 +104,6 @@ protected:
     static base nullbase;
 
 public:
-    //struct Int {
-    //    int I;
-    //    Int(int i) : I(i) {}
-    //};
     static Stroka Int2Str(int i) {
         char buf[65];
         if(sprintf(buf, "%i", i))
@@ -181,8 +178,10 @@ public:
     Stroka(double f) {
         p = null;
         char buf[265];
-        if(sprintf(buf, "%g", f))
+        if(sprintf(buf, "%g", f)) {
+            resize(strlen(buf));
             assign(buf);
+        }
     }
     Stroka(double f, int prec) {
         p = null;
@@ -192,8 +191,10 @@ public:
         int l = strlen(format);
         format[l] = 'g';
         format[l + 1] = 0;
-        if(sprintf(buf, &format[0], f))
+        if(sprintf(buf, &format[0], f)) {
+            resize(strlen(buf));
             assign(buf);
+        }
     }
     Stroka(const Stroka &s, size_t pos, size_t n);
     /*explicit*/ Stroka(const char *pc);
@@ -276,6 +277,14 @@ public:
     }
     friend Stroka operator+(const Stroka &s1, char s2) {
         return Stroka(s1) += s2;
+    }
+
+    friend Stroka operator+(const Stroka &s1, double f) {
+        return Stroka(s1) += Stroka(f);
+    }
+
+    friend Stroka operator+(const Stroka &s1, int i) {
+        return Stroka(s1) += Stroka(i);
     }
 
     // ~~~ Prepending ~~~ : FAMILY0(Stroka&, prepend);

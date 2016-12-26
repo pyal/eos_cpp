@@ -9,8 +9,6 @@
 
 
 #include "gasd/Polygon/lib/polygon_forcelnk.h"
-#include "lib/test_fact/test_case.h"
-
 
 Stroka GenerateDetailedHelp() {
     Stroka ret =
@@ -35,22 +33,22 @@ Stroka GenerateDetailedHelp() {
     return ret;
 };
 
-
-//ForceLinkVoid<TestCase_Gasd_Static> Dummy_TestCase_Gasd_Static;
-
-
 void PrintHelp(map<Stroka, Stroka> par) {
     cout << GenerateDetailedHelp();
 }
 
 
 void TestFunc(map<Stroka, Stroka> par) {
-    //cout<<"OK\n";
+    int level = atoi(~par["LogLevel"]);
+    verify(level >= 0 && level < NLogger::max_level, "Max level is " + Itoa(NLogger::max_level) + " current level " + Itoa(level));
+    NLogger::TLogger::GetLogger().LogLevel = NLogger::ELevel(level);
     TestSuite::RunTest("TestCase_Gasd_Static");
+
 }
 
 
 void March(map<Stroka, Stroka> par) {
+    NLogger::TLogger::GetLogger().LogLevel = NLogger::ELevel(atoi(~par["LogLevel"]));
     vector<Ref<SavableClass>> objVector = File::ReadConf(~par["ConfFile"], 2, 1);
     Ref<NPolygon::TSimpleContructor> constr =
         SavableClass::TestType<NPolygon::TSimpleContructor>(
@@ -71,12 +69,12 @@ int main(int argc, const char *argv[]) {
             "Usage: poly_test [Params_Key_Spec] [/][-]key  \n without parameters - standart test\n");
         Cmd.MainHelp += GenerateDetailedHelp();
         Cmd.Add(PrintHelp, "help", "show help?", "");
-        Cmd.Add(TestFunc, "test", "test it", "");
+        Cmd.Add(TestFunc, "test", "test it", "LogLevel 3 Specify default debug level", 1);
         Cmd.Add(
             March,
             "march",
             "clc region",
-            "ConfFile par.cfg par.cfg file has the format: \"RegionConstructor NPolygon::TSimpleContructor RegionMarch  NPolygon::TPolyMarchBody\"");
+            "ConfFile par.cfg par.cfg file has the format: \"RegionConstructor NPolygon::TSimpleContructor RegionMarch  NPolygon::TPolyMarchBody\"\nLogLevel 3 Specify default debug level");
         Cmd.SimpleRun(argc, argv);
     }
     CATCHMAINEXCEPTION(" poly_test failed ");

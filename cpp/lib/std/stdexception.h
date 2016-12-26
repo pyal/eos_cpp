@@ -11,14 +11,14 @@
 #endif
 
 #define info_except stdexception_with_line_info(__FILE__, __LINE__, __FUNCTION__)
-#define info_mark info_except("MARK").what()
+#define info_mark stdexception_with_line_info::FilePosition(__FILE__, __LINE__, __FUNCTION__).c_str()
 
 #define verify(...) _GET_MACRO(__VA_ARGS__, verify_with_msg, verify_no_msg)(__VA_ARGS__)
 #define _GET_MACRO(_1, _2, NAME, ...) NAME
 #define verify_no_msg(cond) verify_with_msg((cond), "")
-#define verify_with_msg(cond, msg)                                                                                                             \
-    ((void)((cond) ? ((void)0) : log_always(string(#cond) + ": failed assertion: " + msg + "\n" + stdexception_with_line_info::Backtrace()))); \
-    ((void)((cond) ? ((void)0) : abort()))
+#define verify_with_msg(cond, msg) \
+    ((void)((cond) ?  ((void)0) :  throw info_except(string(#cond) + ": failed assertion: " + msg)))
+
 
 #define unused(x) ((void)(x))
 
@@ -37,17 +37,15 @@
 class stdexception_with_line_info : public exception {
 public:
     stdexception_with_line_info(const char *f, int l, const char *fn)
-        : file(f), func(fn), line(l) {}
+        : file(f), func(fn), back(""), line(l) {
+#ifdef MAC
+        back =  Backtrace();
+#endif
+    }
 
     virtual const char *what() const throw() {
         ostringstream out;
-        const char *f = strrchr(file.c_str(), LOCSLASH_C);
-        f = f ? f + 1 : file.c_str();
-        out << f << ":" << line << ":" << func << "\n";
-#ifdef MAC
-        out << Backtrace() << "\n";
-#endif
-        out << "Provided Description: [" << message << "]\n";
+        out << FilePosition(file.c_str(), line, func.c_str()) << "\nProvided Description: [" << message << "]\n" << back;
         formatted = out.str();
         return formatted.c_str();
     }
@@ -89,6 +87,11 @@ public:
             name.resize(p1 - p);
         name.append(std::string(25 - name.length(), ' '));
         return name;
+    }
+    static std::string FilePosition(const char *file, int line, const char *func) {
+        const char *f = strrchr(file, LOCSLASH_C);
+        f = f ? f + 1 : file;
+        return string(f) + ":" + Itoa(line) + " [" + func + "]";
     }
     static std::string Backtrace(int skip = 1) {
         void *callstack[128];
@@ -138,35 +141,26 @@ public:
 
 
 protected:
-    string file, func;
+    string file, func, back;
     int line;
     string message = "";
     mutable string formatted;
-    //    string formatted;
 };
 
 
-#define CATCHMAINEXCEPTION(NAME)                                                         \
-    catch(exception & e) \
-{                                                            \
-        cout << NAME << "\n"                                                             \
-             << "Exception caught:" << e.what() << "\n";                                 \
-        return 1;                                                                        \
-    }
-
+#define CATCHMAINEXCEPTION(NAME) CATCHEXCEPTION(NAME)
 #ifndef MAC
 #define CATCHEXCEPTION(NAME)                                                             \
     catch(exception & e) {                                                               \
-        cout << "In file:" << __FILE__ << "\non line:" << __LINE__                       \
-             << "\nin function:" << __FUNCDNAME__ << "\nexception caught name:" << NAME  \
+        cout << info_mark  << " exception description:" << NAME  \
              << "\nReason:" << e.what() << "\n";                                         \
     }
 #else
 #define CATCHEXCEPTION(NAME)                                                             \
     catch(exception & e) {                                                               \
-        cout << "In file:" << __FILE__ << "\non line:" << __LINE__                       \
-             << "\nin function:" << __FUNCTION__ << "\nexception caught name:" << NAME   \
+        cout << info_mark << " exception description: " << NAME   \
              << "\nReason:" << e.what() << "\n";                                         \
+        abort();\
     }
 #endif
 

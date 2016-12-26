@@ -198,7 +198,7 @@ target_link_libraries(adi_dou reflib stdlib urs_curve_lib quad_pack_lib mathlib
 add_dependencies(adi_dou version)
 
 
-add_executable(poly_test cpp/Gasd/Polygon/poly_test.cpp ${ADI_DOU_SOURCE_FILES})
+add_executable(poly_test cpp/Gasd/Polygon/poly_test.cpp ${POLY_TEST_SOURCE_FILES})
 target_link_libraries(poly_test reflib stdlib urs_curve_lib quad_pack_lib mathlib
         waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
         box_lib poly_lib

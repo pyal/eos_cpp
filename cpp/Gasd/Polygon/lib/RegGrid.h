@@ -11,11 +11,8 @@ namespace NPolygon {
 
     struct TRegGrid : SavableClass {
     public:
-        //enum PointType {Bound, Center, AllData};
     private:   //## implementation
         TGridData VarsOnGrid;
-
-        //int GridBoundarySize;
 
         struct RegionMaskStorage {
             //vector<Ref<TGridMaskBase> > Masks;
@@ -60,34 +57,15 @@ namespace NPolygon {
             };
             int read_data_state(FilterIn &si) {
                 Stroka tmp;
-                si >> tmp >> FullBody >> tmp >> BaseBody >> tmp >> MaxLevel;
+                si >> Verify("FullBody") >> FullBody >> Verify("BaseBody") >> BaseBody >> Verify("MaxLevel") >> MaxLevel;
                 return 1;
             };
         };
         RegionMaskStorage RegionMasks;
-        //vector<RegionMasks> TypedMasks;
     public:
         TRegGrid() : SavableClass() {
             RegionMasks.MakeMasks(new TGridMaskSimple, 0);
-            //TypedMasks[0].MakeMasks(new TGridMaskSimple, GridBoundarySize);
-            //TypedMasks[1].MakeMasks(new TGridMaskSimple, GridBoundarySize);
-        };
-        //TRegGrid(const TRegGrid &right);
-        //~TRegGrid();
-        //TRegGrid & operator=(const TRegGrid &right);
-        //int operator==(const TRegGrid &right) const;
-        //int operator!=(const TRegGrid &right) const;
-
-        //int RegSize(PointType pointType, int newSize = -1) {
-        //    if (newSize != -1) {
-        //        if (pointType == Center)
-        //            newSize++;
-        //        Base[Bound]->SetDim(newSize);
-        //        Base[Center]->SetDim(newSize - 1);
-        //    }
-        //    return Base[pointType]->size();
-        //}
-
+        }
         inline TGridVariablesBase *GetVar(const Stroka &name) {
             return VarsOnGrid.GetVar(name);
         }
@@ -103,22 +81,10 @@ namespace NPolygon {
         }
         inline TGridMaskBase *GetMask(const TRegionBounds &bnds) {
             return RegionMasks.GetMask(bnds);
-            //if (pntType == AllData)
-            //    return TypedMasks[Bound].FullBody;
-            //return TypedMasks[pntType].Masks[level + GridBoundarySize];
         }
         inline int GetBoundarySize() const {
             return RegionMasks.MaxLevel;
         }
-        //void GenerateTypedMasks(TGridMaskBase *baseBody_, int gridBoundarySize) {
-        //    Ref<TGridMaskBase> baseBody = baseBody_;
-        //    RegionMasks.MakeMasks(baseBody, gridBoundarySize);
-        //    //GridBoundarySize = gridBoundarySize;
-        //    //TypedMasks[0].MakeMasks(baseBody, GridBoundarySize);
-        //    //Ref<TGridMaskBase> centerBody = baseBody->Shift(-1);
-        //    //centerBody->Cut(baseBody);
-        //    //TypedMasks[1].MakeMasks(centerBody, GridBoundarySize);
-        //}
         //Data is copied...
         void SetGridBoundarySize(int gridBoundarySize) {
             Ref<TGridMaskBase> wasMask;
@@ -149,28 +115,18 @@ namespace NPolygon {
         inline int VarExists(const Stroka &name) const {
             return VarsOnGrid.VarExists(name);
         }
-        //inline TGridMaskedData GetVar (const Stroka &name, PointType varType, int level) {
-        //    return TGridMaskedData(VarsOnGrid.GetVar(name), GetMask(varType, level));
-        //}
         inline vector<Stroka> GetVarNames() {
             return VarsOnGrid.GetVarNames();
         }
 
         int save_data_state(FilterOut &so) {
-            //so<<" Bounds "<<Bounds<<SavableClass::EOLN();
             so << " RegionMasks ";
             RegionMasks.save_data_state(so);
-            //so<<" CenterMasks ";TypedMasks[1].save_data_state(so);
             return 1;
         };
         int read_data_state(FilterIn &si) {
-            Stroka tmp;
-            //si>>tmp>>Bounds;
-            si >> tmp;
+            si >> Verify("RegionMasks");
             RegionMasks.read_data_state(si);
-            //si>>tmp;TypedMasks[1].read_data_state(si);
-            //GridBoundarySize = (TypedMasks[0].Masks.size() - 1) / 2;
-            //GridBoundarySize = GridBoundarySize>0?GridBoundarySize:0;
             return 1;
         };
         Stroka MakeHelp() {

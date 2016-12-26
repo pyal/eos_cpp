@@ -105,9 +105,8 @@ namespace NPolygon {
             TPolyRegion *reg,
             const vector<Stroka> &outNames,
             const TRegionBounds &bnds) {
-            //outFile<<"EndIter\n";
+            log_debug(string("Time: ") + to_string(time));
             outFile << "CurTime " << time << "\n";
-            //outFile<<Str::JoinLine(outNames)<<"\n";
             PolyRegIO::SaveRegionData(outFile, reg, outNames, bnds);
         }
         void DoIt(TPolyRegion *reg) {
@@ -138,40 +137,5 @@ namespace NPolygon {
             outFile.close();
         }
     };
-
-    //struct TPolyMarchBodyPlusE : TPolyMarchBody {
-    //    int save_data_state( FilterOut&so) {
-    //        TPolyMarchBody::save_data_state(so);
-    //        //so<<" FromTime "<<FromTime<<" ToTime "<<ToTime<<" MaxTimeStep "<<MaxTimeStep<<SavableClass::EOLN();
-    //        //so<<" OutputBounds_{ ";OutputBounds.save_data_state(so);so<<" } "<<SavableClass::EOLN();
-    //        //so<<" OutputTime "<<OutputTime;
-    //        //so<<" ResultsFile "<<ResultsFile<<" OutputNames "<< OutputNames<<SavableClass::EOLN();
-    //        //so<<" MarchRegion "<<Marcher;
-    //        return 1;
-    //    };
-    //    int read_data_state(FilterIn&si) {
-    //        TPolyMarchBody::read_data_state(si);
-    //        //Stroka tmp;
-    //        //si>>tmp>>FromTime>>tmp>>ToTime>>tmp>>MaxTimeStep>>tmp;OutputBounds.read_data_state(si);SavableClass::ExeptionCheck(si, "}");
-    //        //si>>tmp>>OutputTime;
-    //        //si>>tmp>>ResultsFile>>tmp>>OutputNames;
-    //        //si>>tmp>>Marcher;
-    //        return 1;
-    //    }
-    //    Stroka MakeHelp() {
-    //        Stroka help = "Uses the march driver as TPolyMarchBody.\n";
-    //        help += " Adds external energy on each time step.\n";
-    //        return help;
-
-    //    }
-
-    //    virtual void MakeTimeStep(TPolyRegion *reg, double timeStp) {
-    //        TPolyMarchBody::MakeTimeStep(reg, timeStp);
-    //        //for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk(); it.Next()) {
-    //        //    Marcher->MakeTimeStep(it.CurRegion(), timeStp);
-    //        //}
-    //    };
-    //};
-
 
 };   // namespace NPolygon {

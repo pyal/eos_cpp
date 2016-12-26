@@ -4,28 +4,10 @@
 #include "lib/ref/class.h"
 #include "lib/ref/class_sav.h"
 #include "lib/std/stdexception.h"
-//#include "described.h"
 #include <list>
 
 //#pragma warning( disable : 4267 )
-//#define STDCATCHTEST(NAME) catch(TestExeption &e)\
-//{\
-//cout<<NAME<<e.ToString().c_str()<<"\n";\
-//}
-//struct TestExeption
-//{
-//	~TestExeption(){};
-//	TestExeption(){};
-//	TestExeption(const char *str)
-//	{result.append("TestExeption caught. Reason:");result.append(str);}
-//	string ToString(){return result;}
-//	string result;
-//};
-
-//#define CATCHEXCEPTION(NAME) catch(exception &e) { cout<<"In file:"<<__FILE__<<"\non line:"<<__LINE__<<"\nin function:"<<__FUNCDNAME__<<"\nexception caught name:"<<NAME<<"\nReason\:"<<e.what()<<"\n"; }
-//{ cout<<NAME<<": "<<e.what()<<"\n"; }
-//#define t_except stdexception_with_line_info_func(__FILE__, __LINE__,__FUNCDNAME__)
-
+#include "lib/std/logger.h"
 
 struct TestBase : SavableClass {
     //	char *TestName;
@@ -162,8 +144,10 @@ struct TestSuite_Std : TestSuite {
         list<ListStruct>::iterator it = lst.begin();
         string err;
         //ret:
+        log_debug(string("Starting test sequence: ") + test->class_name());
         for(; it != lst.end(); it++) {
             SetLeakTest();
+            log_debug(string("Testing: ") + it->Name);
             try {
                 test->Init();
                 it->Ptr(test);
@@ -176,12 +160,6 @@ struct TestSuite_Std : TestSuite {
             LeakTest(err);
             cout << "Function " << it->Name.c_str() << " memory: " << err.c_str() << "\n";
         }
-        //catch(t_except &e)
-        //{
-        //	cout<<"Error in class "<<class_name.c_str()<<" function "<<it->Name.c_str()<<"\n";
-        //	cout<<e.ToString().c_str()<<"\n";
-        //}
-        //		if (it!=lst.end()) {test->Finish();it++;goto ret;}
     }
     void AddTest(void (*ptr)(TestCase *), const char *name) {
         lst.push_back(ListStruct(ptr, name));
@@ -231,7 +209,6 @@ struct TestCase_Buffered : TestCase_Std {
         Finish();
         buf = strdup("\"test stream\"\n123456789\n1e23\n1e\1.e");
         in = new strstream(buf, strlen(buf), ios::in);
-        //		manip=new StreamManip_Base(*in);
     }
     void Finish() {
         delete in;
@@ -258,7 +235,6 @@ struct TestCase_Buffered : TestCase_Std {
                                       .append(Itoa(k, tmp, 10))
                                       .append(" found error ")
                                       .c_str()));
-        //		throw(t_except("OK"));
     }
     static void Test2(TestCase *ptr) {
         TestCase_Buffered *cur = Restore(ptr);
@@ -269,7 +245,6 @@ struct TestCase_Buffered : TestCase_Std {
                                       .append(Itoa(k, tmp, 10))
                                       .append(" found error ")
                                       .c_str()));
-        //		throw(t_except("OK"));
     }
 };
 

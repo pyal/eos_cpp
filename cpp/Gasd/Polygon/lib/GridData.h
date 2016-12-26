@@ -25,23 +25,14 @@ namespace NPolygon {
 
     public:
         TGridData() : SavableClass(), GridSize(0){};
-        //TGridData(const TGridData &right);
-        //~TGridData();
 
-        //TGridData & operator=(const TGridData &right);
-        //int operator==(const TGridData &right) const;
-        //int operator!=(const TGridData &right) const;
-
-        //void Rebuild (GridMask* wasFull, GridMask* wasBody, GridMask* nowFull, GridMask* nowBody);
         void AddVar(
             const Stroka &name,
             TGridVariablesBase *var,
             TGridMaskBase *curMask,
             TGridMaskBase *wasMask) {
             map<Stroka, Ref<TGridVariablesBase>>::iterator it = MapGridVars.find(name);
-            if(it != MapGridVars.end())
-                throw info_except(
-                    ~(Stroka("Adding var ") + name + " already is present!!!\n"));
+            verify(it == MapGridVars.end(), string("Adding existing name: [") + ~name + "]");
             var->Resize(GridSize, curMask, wasMask);
             MapGridVars[name] = var;
         }
@@ -50,8 +41,7 @@ namespace NPolygon {
         }
         inline TGridVariablesBase *GetVar(const Stroka &name) {
             map<Stroka, Ref<TGridVariablesBase>>::iterator it = MapGridVars.find(name);
-            if(it == MapGridVars.end())
-                throw info_except(~(Stroka("Reading var ") + name + " absent!!!\n"));
+            verify(it != MapGridVars.end(), string("Cannot get: [") + ~name + "]");
             return MapGridVars[name];
         }
         vector<Stroka> GetVarNames() {

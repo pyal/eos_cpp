@@ -266,6 +266,10 @@ namespace Str {
     Stroka Obj2Str(const T &val) {
         throw info_except("For type %s is not implemented", typeid(T).name());
     }
+    template <>
+    Stroka Obj2Str<Ref<SavableClass>>(const Ref<SavableClass> &val);
+    template <>
+    Stroka Obj2Str<Stroka>(const Stroka &val);
     template <class T>
     int Str2Obj(T &val, const Stroka &str, int start = 0) {
         throw info_except("For type %s is not implemented", typeid(T).name());
@@ -274,11 +278,13 @@ namespace Str {
     Stroka Obj2Str<int>(const int &val);
     template <>
     Stroka Obj2Str<double>(const double &val);
-    template <class T>
-    Stroka Obj2Str(const vector<T> &val) {
+    template <typename Container>
+    Stroka Container2Str(const Container &c) {
+        typename Container::const_iterator itr = c.begin();
+        typename Container::const_iterator end = c.end();
         vector<Stroka> v;
-        for(size_t i = 0; i < val.size(); i++)
-            v.push_back(Obj2Str(val[i]));
+        for (; itr != end; ++itr)
+            v.push_back(Obj2Str(*itr));
         return Stroka("[ ") + JoinLine(v, '\t') + " ]";
     }
 

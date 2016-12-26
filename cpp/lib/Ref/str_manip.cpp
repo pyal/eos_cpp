@@ -349,6 +349,14 @@ namespace Str {
     }
 
     template <>
+    Stroka Obj2Str<Ref<SavableClass>>(const Ref<SavableClass> &val) {
+        return SavableClass::object2string(val.pointer());
+    }
+    template <>
+    Stroka Obj2Str<Stroka>(const Stroka &val) {
+        return val;
+    }
+    template <>
     Stroka Obj2Str<int>(const int &val) {
         char tmp[256];
         sprintf(tmp, "%i", val);

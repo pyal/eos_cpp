@@ -30,7 +30,6 @@ namespace NPolygon {
         };
         int read_data_state(FilterIn &si) {
             Stroka tmp;
-            //RefManip::operator>>(si, lst)>>tmp;
             si >> lst >> tmp;
             ptr = SavableClass::TestType<TTest>(si.getobject());
             return 1;
@@ -49,12 +48,13 @@ namespace NPolygon {
         Ref<TTestSimple> stor;
         TTestSimple *ptr;
         int save_data_state(FilterOut &so) {
-            so << stor.pointer() << " " << ptr;
+            so << "SavingStoredClass" << stor.pointer() << "SavingParentLink" << ptr;
             return 1;
         };
         int read_data_state(FilterIn &si) {
-            //char  tmp[256]; si>>tmp;
+            si >> Verify("SavingStoredClass");
             stor = SavableClass::TestType<TTestSimple>(si.getobject());
+            si >> Verify("SavingParentLink");
             ptr = SavableClass::TestType<TTestSimple>(si.getobject());
             return 1;
         };
@@ -85,13 +85,21 @@ namespace NPolygon {
             Ref<TTestSimple> t1 = new TTestSimple(new TTestSimple), t2 = new TTestSimple,
                              t3 = new TTestSimple;
             Stroka objStr1 = SavableClass::object2string(t1);
+            log_debug(string("Saved T1:\n") + ~objStr1);
+            verify(objStr1 == SavableClass::object2string(t1.pointer()));
             t2 = SavableClass::TestType<TTestSimple>(
-                SavableClass::string2object(SavableClass::object2string(t1.pointer())));
+                SavableClass::string2object(~objStr1));
+            log_debug(string("Restored T1 saved as pointer:\n"));
             Stroka objStr2 = SavableClass::object2string(t2);
+            log_debug(string("Converted it to string:\n") + ~objStr2);
             t3->LoadClass(*t1);
+            log_debug(string("Loaded class to t3 from T1 :\n") + ~objStr2);
             Stroka objStr3 = SavableClass::object2string(t3);
+            log_debug(string("Converted it to string:\n") + ~objStr3);
             Ref<SavableClass> t4 = t3->Duplicate();
+            log_debug(string("Duplicated t3:\n"));
             Stroka objStr4 = SavableClass::object2string(t4);
+            log_debug(string("Converted it to string:\n") + ~objStr4);
             //cout<<" Fst class :\n"<<~objStr1<<" Sec class:\n"<<~objStr2<<" Third class:\n"<<~objStr3;
             if(objStr1 != objStr2 || objStr1 != objStr3 || objStr1 != objStr4)
                 throw info_except(
@@ -147,18 +155,12 @@ namespace NPolygon {
             reg2 = SavableClass::TestType<NPolygon::TPolyRegion>(
                 SavableClass::string2object(objStr1));
             Stroka objStr2 = SavableClass::object2string(reg2);
-            //cout<<" objStr2\n"<<objStr2<<"\n";
             Ref<NPolygon::TPolyRegion> reg3 = new NPolygon::TPolyRegion();
-            //reg3 << reg1->Duplicate();
-            //reg3->LoadClass(*reg1);
             reg3 << reg1;
             Stroka objStr3 = SavableClass::object2string(reg3);
-            //cout<<" objStr3\n"<<objStr3<<"\n";
             Ref<SavableClass> reg4;
             reg4 << reg3;
-            //reg4 << reg3->Duplicate();
             Stroka objStr4 = SavableClass::object2string(reg4);
-            //cout<<" Fst class :\n"<<~objStr1<<" Sec class:\n"<<~objStr2<<" Third class:\n"<<~objStr3;
             if(objStr1 != objStr2 || objStr1 != objStr3 || objStr1 != objStr4)
                 throw info_except(
                     "Objects are different.\nObj1:\n%s\nObj2:\n%2\nObj3:\n%s\nObj4:\n%s\n",
@@ -169,8 +171,9 @@ namespace NPolygon {
         }
 
         static void Test_Constructor(int methOut) {
+            const char *methodName[] = {"StorePtr", "SingleFileStorage", "UnlinkedObjects", "SimpleEdit"};
+            log_debug(string("Testing ") + methodName[methOut]);
             SavableClass::SetRefOutMethod(methOut);
-            cout << " OutMethod " << methOut << "\n";
             Ref<NPolygon::TSimpleContructor> constr1 = new NPolygon::TSimpleContructor;
             constr1->Childs.push_back(new TSimpleContructor::TRegData(
                 "EOSTest",
@@ -178,13 +181,12 @@ namespace NPolygon {
                 5,
                 TSimpleContructor::TRegData::TGridVar("Y", 1, 2)));
             Stroka objStr1 = SavableClass::object2string(constr1);
-            cout << " objStr1\n" << objStr1 << "\n";
+            log_debug(string("Build string from object:\n") + ~objStr1);
             Ref<NPolygon::TSimpleContructor> constr2 = new NPolygon::TSimpleContructor;
             constr2->LoadClass(*constr1);
             Stroka objStr2 = SavableClass::object2string(constr2);
             Ref<SavableClass> constr3 = constr2->Duplicate();
             Stroka objStr3 = SavableClass::object2string(constr2);
-            //cout<<" Fst class :\n"<<~objStr1<<" Sec class:\n"<<~objStr2<<" Third class:\n"<<~objStr3;
             if(objStr1 != objStr2 || objStr1 != objStr3)
                 throw info_except(
                     "OutMethod is %i\nObjects are different.\nObj1:\n%s\nObj2:\n%s\nObj3:\n%s\n",
@@ -195,10 +197,8 @@ namespace NPolygon {
         }
         static void Test_Constructor(TestCase *ptr) {
             //Test_Constructor(SavableClass::StorePtr);
-
-
             Test_Constructor(SavableClass::SingleFileStorage);
-            Test_Constructor(SavableClass::UnlinkedObjects);
+//            Test_Constructor(SavableClass::UnlinkedObjects);
             Test_Constructor(SavableClass::SimpleEdit);
         }
     };

@@ -1,32 +1,11 @@
 #include <lib/precompiled/Ref.h>
 
-//#include <stdlib.h>
-//#include <sys/time.h>
-//#include <unistd.h>
-
 #include "class_sav.h"
-#include "exenv.h"
-#include "class.h"
-
-//#include "stateio.h"
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-//std::map<char* , DataSource::DataSourceRef> *DataSource::data_list=NULL;
 DataSource::MAPCLASS *DataSource::data_list = NULL;
 
 static ClassDesc SavableClass_cd(typeid(SavableClass), "SavableClass");
-
-//char KeyDesc::name[256];
-//SavableClass::SavableClass(StateIn&si)
-//int SavableClass::save_state(SavableClass *sc, FilterOut&so){return 1;};// return so.setobject(sc);};
-// Restores objects saved with save_state.  The exact type of the next object in si can
-// be any type publically derived from the SavableState. Derived classes implement a
-// similar static function that returns a pointer to the derived class.
-//int SavableClass::restore_state(SavableClass *&sc,FilterIn& si){return 1;}// return si.getobject(sc);};
 
 void SavableClass::save_data_post(FilterOut &so) {
     DecIdent();
@@ -37,8 +16,6 @@ void SavableClass::save_data_pref(FilterOut &so) {
     IncIdent();
     so << KeyDesc(EOLN());
 };
-//void SavableClass::save_data_post(FilterOut&so){DecIdent();so<<(const char *)"}"<<KeyDesc(EOLN()); };
-//void SavableClass::save_data_pref(FilterOut&so){so.setword("{");IncIdent(); };
 int SavableClass::read_data_post(FilterIn &si) {
     ExeptionCheck(si, "}");
     return 1;
@@ -47,25 +24,6 @@ int SavableClass::read_data_pref(FilterIn &si) {
     ExeptionCheck(si, "{");
     return 1;
 }
-//return (Stricmp("{",tmp)==0);};
-
-//SavableClass& SavableClass::operator=( SavableClass &from){
-////    if (strcmp(from.class_name(),this->class_name())!=0)
-////       throw info_except("Classes have different names: <%s>!=<%s>\n",this->class_name(), from.class_name());
-////    Stroka Unic = DataSource::GenerateUnicName("CopySavable");
-////    FilterTextOut fo(Unic.c_str(),DataSource::Memory,"CopySavable_Cat",0);
-////    //FilterBinOut fo(Unic.c_str(),DataSource::Memory,"CopySavable_Cat",0);
-////    fo.SetRefMask(GetRefOutMethod());
-////    fo.setobject(from);
-////    FilterTextIn fi(Unic.c_str(),DataSource::Memory,"CopySavable_Cat");
-////    //FilterBinIn fi(Unic.c_str(),DataSource::Memory,"CopySavable_Cat");
-////    fi.SetRefMask(GetRefOutMethod());
-////    fi.getobject(*this);
-//////      fi.CloseBuf();
-////    fo.CloseBuf();
-//    LoadClass(from);
-//    return *this;
-//};
 void SavableClass::LoadClass(SavableClass &from, int method) {
     if(strcmp(from.class_name(), this->class_name()) != 0)
         throw info_except(
@@ -82,84 +40,11 @@ void SavableClass::LoadClass(SavableClass &from, int method) {
     fi.SetRefMask(method);
     fi.getobject(*this);
     fo.CloseBuf();
-
-
-    //    if (strcmp(from.class_name(),this->class_name())!=0)
-    //       throw info_except("Classes have different names: <%s>!=<%s>\n",this->class_name(), from.class_name());
-    //    Stroka Unic = DataSource::GenerateUnicName("CopySavable");
-    //    FilterTextOut fo(Unic.c_str(),DataSource::Memory,"CopySavable_Cat",0);
-    //    //FilterBinOut fo(Unic.c_str(),DataSource::Memory,"CopySavable_Cat",0);
-    //    fo.SetRefMask(GetRefOutMethod());
-    //    fo.setobject(from);
-    //    FilterTextIn fi(Unic.c_str(),DataSource::Memory,"CopySavable_Cat");
-    //    //FilterBinIn fi(Unic.c_str(),DataSource::Memory,"CopySavable_Cat");
-    //    fi.SetRefMask(GetRefOutMethod());
-    ////cout<<SavableClass::ShowStreamPosition(&fi);
-    //    fi.getobject(*this);
-    ////      fi.CloseBuf();
-    //    fo.CloseBuf();
 };
 SavableClass *SavableClass::Duplicate(int Method) {
-
     return SavableClass::string2object(SavableClass::object2string(this, Method), Method);
-
-    //Stroka Unic = DataSource::GenerateUnicName("DuplicateSavable");
-    //FilterTextOut fo(Unic.c_str(),DataSource::Memory,"DuplicateSavable_Cat",0, NULL);
-    //if (Method==-1)
-    //    Method = GetRefOutMethod();
-    //fo.SetRefMask(Method);
-    //fo.setobject(this);
-    //FilterTextIn fi(Unic.c_str(),DataSource::Memory,"DuplicateSavable_Cat");
-    //fi.SetRefMask(Method);
-    //SavableClass *ret = fi.getobject();
-    //fo.CloseBuf();
-    //return ret;
 }
 
-//
-//SavableClass* SavableClass::CreateCopyPtr(int DeepCopy)
-//  {
-//   int CopyMeth=(DeepCopy)?SavableClass::SingleFileStorage:SavableClass::StorePtr;
-//   const char *name=this->class_name();
-//   SavableClass *sc;
-//   ClassDesc* cd=ClassDesc::name_to_class_desc(name);
-//   if (cd)
-//       sc=dynamic_cast<SavableClass*>(cd->create());
-//   else
-//       throw info_except("ERROR: SavableClass::CreateNewPtr: class <%s> unknown\n",name);
-//   FilterBinOut fo("CopySavable",DataSource::Memory,"CreateCopySavable_Cat",0);
-//   fo.SetRefMask(CopyMeth);
-//   fo.setobject(*this);
-//   FilterBinIn fi("CopySavable",DataSource::Memory,"CreateCopySavable_Cat");
-//   fi.SetRefMask(CopyMeth);
-//   fi.getobject(sc);
-//   fo.CloseBuf();
-//   return sc;
-//  };
-
-// SavableClass *SavableClass::Read(istream &in){
-//    if (!in) throw info_except(" bad stream\n ");
-//	char name[256];in>>name;
-//	ClassDesc* descr=ClassDesc::name_to_class_desc(name);
-//	SavableClass *Func=0;
-//	if (!descr) throw info_except(" Could not register Class %s\n ",name);
-//	Func=dynamic_cast<SavableClass*>(descr->create());
-//	if (!Func) throw info_except(" Class %s is not of SavableClass type\n ",name);
-//	FilterTextIn input(in.rdbuf(),0);
-//	Func->read_data_state(input);
-//    if (!in) throw info_except(" Could not read class %s\n ", name);
-//	return Func;
-//}
-// int SavableClass::Save(ostream &out, SavableClass *Clas){
-//	if  (!out)
-//	    throw info_except(" bad stream\n ");
-//	if  (!Clas)
-//	    throw info_except(" bad class\n ");
-//	out<<Clas->class_name()<<"  ";
-//	FilterTextOut output(out.rdbuf(),0);
-//	Clas->save_data_state(output);
-//	return !(!out);
-//}
 Stroka SavableClass::ReadingError(istream &in, SavableClass *s) {
     Stroka ret("Could not read class:");
     if(!s)
@@ -218,6 +103,7 @@ void SavableClass::Read(istream &in, SavableClass &Clas, int Method) {
             "Got an error %s.\n %s", ex.what(), ReadingError(in, &Clas).c_str());
     }
 }
+
 int SavableClass::Save(ostream &out, SavableClass &Clas, int Method) {
     if(!out)
         throw info_except(" bad out stream\n ");
@@ -229,6 +115,19 @@ int SavableClass::Save(ostream &out, SavableClass &Clas, int Method) {
     return !(!out);
 }
 
+SavableClass *SavableClass::name2object(const char *objname) {
+    SavableClass *sc;
+    ClassDesc *cd = ClassDesc::name_to_class_desc(objname);
+    if(cd)
+        sc = dynamic_cast<SavableClass *>(cd->create());
+    else
+        throw info_except(" Class %s unknown \n", objname);
+    if(!sc)
+        throw info_except(
+                " Class %s  CreateMethod is not registered add it.\n", objname);
+    return sc;
+}
+
 char SavableClass::SingleIdent[10] = "   ";
 int SavableClass::CurLevel = 0, SavableClass::OutMethod = SavableClass::SimpleEdit;
 Stroka SavableClass::IdentStr = "";
@@ -236,25 +135,7 @@ Stroka SavableClass::IdentStr = "";
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
-/*
-void* AllocatorIntelect::Allocate(long size)
-  {
-//ut<<" Last "<<LastAllocationSize<<" size "<<size<<"\n"<<flush;
-   if (LastAllocationSize>=size) return LastAllocationPtr;
-   long new_s=LastAllocationSize;
-   while (new_s<=size) 
-     {double tmp=new_s*1.3;
-//cout<<" tmp Add "<<int(tmp)<<"\n"<<flush;
-      new_s=tmp+StartAllocationSize;
-     }
-   char *new_p=new char[new_s];
-   memmove(new_p,LastAllocationPtr,LastAllocationSize);
-   delete LastAllocationPtr;
-   LastAllocationPtr=new_p;LastAllocationSize=new_s;
-//cout<<" Last AA "<<LastAllocationSize<<" size "<<size<<"\n"<<flush;
-   return LastAllocationPtr;
-  }
-*/
+
 DataSource::~DataSource() {
     if(databuf == NULL)
         return;
@@ -368,6 +249,23 @@ streambuf *DataSource::OpenSource(
     return dref->databuf;
 };
 
+
+string DataSource::GetStr(const char *name) {
+    Ref<DataSource> fromref = (*data_list)[name];
+    if((fromref != NULL) && (fromref->datatype == Memory)) {
+        memstreambuf *frombuf = (memstreambuf *)fromref->databuf;
+        int N = frombuf->out_waiting();
+
+        string ret;
+        ret.insert(0, frombuf->str(), N);
+        ret += '\x0';
+        //          char *ret=new char[N+1];memmove(ret,frombuf->str(),N);ret[N]=0;
+        return ret;
+    }
+    //       return NULL;
+    return string("");
+};
+
 int DataSource::NumUnicObjects = 0;
 Stroka DataSource::GenerateUnicName(const char *basic) {
     Stroka Ret = basic ? basic : "";
@@ -414,51 +312,211 @@ void DataSource::CloseSource(streambuf *buf) {
         } else
             ind++;
     }
+}
+
+void DataSource::print(ostream &out) {
+    const char *type[] = {"Memory", "Disk", "Console"}, *mode[] = {"In", "Out"};
+    out << " DataSource_data name: \"" << dataname << "\" type: \"" << type[datatype]
+        << "\" Openmode: \"" << mode[openmode] << "\" Category: \"" << Category
+        << "\"\n";
 };
 
 
-//int FilterTextIn::getobject(SavableClass *&sc);
 
 
-//void ClassDesc::WriteHelpOnCategory(FilterOut &out,char *name,int PrintIt)
-// {
-//  out<<"=================================================================\n";
-//  out<<"Category "<<name<<"consists of objects \n";
-//  out<<"=================================================================\n";
-//  out.flush();
-//  Ref<SavableClass> obj;
-//  Ref<DescribedClass> dsc;
-////  int OldMask=out.SetRefMask();out.SetRefMask(SavableClass::SingleFileStorage);
-//  for (std::map<ClassKey,ClassDescP>::iterator ind=ClassDesc::all_->begin();
-//       ind!=ClassDesc::all_->end(); ind++) {
-//      ClassDesc* classdesc = ind->second;
-//      if (Stricmp(classdesc->category(),name)==0) {
-//		  dsc = classdesc->create();
-//          obj=dynamic_cast<SavableClass*> ((DescribedClass*)dsc);
-//          if (obj && PrintIt&PrintObj){
-//                 //obj->SetRefMask(SavableClass::SingleFileStorage);
-////                 obj->SetRefMask(SavableClass::UnlinkedObjects);
-////                 obj->SetRefMask(SavableClass::StorePtr);
-//                 //Ref<SavableClass> ref = obj;
-//                 //out<<ref<<"\n";
-//                 out<<obj<<"\n";
-//		  }
-//          if (dsc && PrintIt&Print)
-//                 dsc->print();
-//          if (dsc && PrintIt&PrintHelp)
-//                 out<<dsc->print_help().c_str()<<"\n";
-//
-//      }
-//    }
-//
-//  out<<"=================================================================\n";
-//  out<<"End of Category "<<name<<"objects \n";
-//  out<<"=================================================================\n";
-//  out.flush();
-//
-////  out.SetRefMask(OldMask);out.ClearRef();
-//
-// }
+int FilterIn::GetSCStored(int &numobj) {
+    get(numobj);
+    if(!(*this))
+        throw info_except("Bad stream - could not read numobj!!!\n");
+
+    if(numobj <= numrefsaved)
+        return 1;
+    if(numrefsaved + 1 != numobj)
+        throw info_except(
+                "Error restoring RefBase - num objects saved %i  number of object %i \n%s",
+                numrefsaved,
+                numobj,
+                ReadingError(NULL).c_str());
+    numrefsaved++;
+    return 0;
+};
+
+
+void FilterIn::ConstructObject(SavableClass *&sc, const char *objname) {
+    ClassDesc *cd;
+    Stroka tmp_name(objname);
+    if(!objname) {
+        char name[256];
+        getword(&name[0]);
+        tmp_name = Stroka(name);
+        cd = ClassDesc::name_to_class_desc(name);
+    } else
+        cd = ClassDesc::name_to_class_desc(objname);
+    if(cd)
+        sc = dynamic_cast<SavableClass *>(cd->create());
+    else
+        throw info_except(" StateIn: class %s unknown \n", tmp_name.c_str());
+    if(!sc)
+        throw info_except(
+                " StateIn: class %s  CreateMethod is not registered add it.\n",
+                tmp_name.c_str());
+}
+void FilterIn::GetObjectBody(SavableClass *&sc) {
+    if((!sc->read_data_pref(*this)) || (!sc->read_data_state(*this)) ||
+       (!sc->read_data_post(*this)))
+        throw info_except(
+                "Error while reading by pref,state or post savable class functions.\n ");
+}
+Stroka FilterIn::CheckReadNullObj(SavableClass *&sc) {
+    Stroka ret = getword();
+    log_debug(string("Read ") + ~ret);
+    if(ret == "NULL_POINTER") {
+        sc = NULL;
+        return "";
+    }
+    return ret;
+}
+void FilterIn::getobjstrt() {
+    if(refmask != SavableClass::SimpleEdit)
+        get(StdKey);
+}
+int FilterIn::getobjfin(RefBase &buf, SavableClass *sc) {
+    if(refmask != SavableClass::SimpleEdit)
+        get(StdKey);
+    buf.GetSavableBase(sc);
+    return (!(!*this));
+}
+Stroka FilterIn::getword() {
+    char tmp[256];
+    getword(tmp);
+    return Stroka(tmp);
+}
+
+
+
+
+int FilterIn::getobject(SavableClass *&sc) {
+    sc = NULL;
+    try {
+        if(!(*this))
+            throw info_except("Bad stream.\n");
+        if(refmask == SavableClass::StorePtr) {
+            void *tmp;
+            get(tmp);
+            sc = (SavableClass *)(tmp);
+            return (!(!*this));
+        };
+        Stroka str = CheckReadNullObj(sc);
+        if(str.length() == 0)
+            return 1;
+        bool packedReferenceClass = false;
+
+        if(refmask == SavableClass::SingleFileStorage) {
+            verify(str == "ObjectRefNumber" || str == "ReferenceClass_{", string("Got: ") + ~str);
+            if (str == "ReferenceClass_{") {
+                packedReferenceClass = true;
+                Stroka tmp = getword();
+                verify( tmp == "ObjectRefNumber", string("Got: ") + ~tmp);
+            }
+            int numobj;
+            if(GetSCStored(numobj)) {
+                sc = (SavableClass *)refsaved[numobj - 1];
+                return 1;
+            }
+            str = getword();
+        }
+        log_debug(string(" ConstructObject::str ") + ~str);
+        ConstructObject(sc, ~str);
+        if(refmask == SavableClass::SingleFileStorage)
+            refsaved[numrefsaved - 1] = (void *)sc;
+        GetObjectBody(sc);
+        if (packedReferenceClass) {
+            Stroka tmp = getword();
+            verify(tmp == "}", string("Got: ") + ~tmp);
+        }
+
+        return (sc != NULL);
+    } catch(exception &ex) {
+        throw info_except(
+                "Got an error %s.\n %s", ex.what(), ReadingError(sc).c_str());
+    }
+};
+
+int FilterIn::getobject(SavableClass &sc) {
+    try {
+        if(!(*this))
+            throw info_except("Bad stream\n");
+        if(refmask == SavableClass::SingleFileStorage) {
+            int numobj;
+//            get(StdKey);
+//            log_debug(string("Got mistery: ") + StdKey.name);
+//            log_debug(string("Got: ") + StdKey.name);
+            get(StdKey);
+            verify(string(StdKey.name) == "ObjectRefNumber", string("Got:") + StdKey.name);
+            if(GetSCStored(numobj))
+                throw info_except(
+                        "Error, already stored. ups.Object Saved under Number %i Total num of stored objects %i\n",
+                        numobj,
+                        numrefsaved);
+            refsaved[numrefsaved - 1] = (void *)&sc;
+        }
+        if(!sc.read_data_state(*this))
+            throw info_except(" ERROR: StateIn: could not read_data_state\n ");
+        return 1;
+    } catch(exception &ex) {
+        throw info_except(
+                "Got an error %s.\n %s", ex.what(), ReadingError(&sc).c_str());
+    }
+};
+
+SavableClass *FilterIn::getobject() {
+    SavableClass *sc = NULL;
+    getobject(sc);
+    return sc;
+};
+
+
+int FilterIn::getobject(RefBase &buf) {
+    try {
+        if(!(*this))
+            throw info_except("Bad stream\n");
+        SavableClass *sc = NULL;
+        getobjstrt();
+        if(refmask == SavableClass::StorePtr) {
+            void *ptr;
+            get(ptr);
+            return getobjfin(buf, (SavableClass *)ptr);
+        }
+        Stroka str = CheckReadNullObj(sc);
+        if(str.length() == 0)
+            return getobjfin(buf, NULL);
+
+        if(refmask == SavableClass::SingleFileStorage) {
+            int numobj;
+//            get(StdKey);
+            verify(Stroka("ReferenceClass_{") == StdKey.name, string("Got:") + StdKey.name);
+            if(GetSCStored(numobj))
+                return getobjfin(buf, (SavableClass *)refsaved[numobj - 1]);
+            //str.read_token(*this);// pot error !!!!
+            str = getword();
+        }
+        ConstructObject(sc, str.c_str());
+        if(refmask == SavableClass::SingleFileStorage)
+            refsaved[numrefsaved - 1] = (void *)sc;
+        GetObjectBody(sc);
+        return getobjfin(buf, sc);
+    } catch(stdexception &ex) {
+        throw info_except(
+                "Got an error %s.\n %s",
+                ex.what(),
+                ReadingError(buf.GetSavableBase()).c_str());
+    }
+};
+
+
+
+
+
 
 
 Stroka SavableClass::list_all_classes(const char *categ) {
@@ -504,3 +562,4 @@ Stroka SavableClass::HelpForCategory(const char *Categ, int Method) {
     HelpStr += "===============================================================\n";
     return HelpStr;
 }
+

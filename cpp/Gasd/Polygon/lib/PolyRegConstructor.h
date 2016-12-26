@@ -55,12 +55,9 @@ namespace NPolygon {
             void SetData(Ref<TPolyRegion> reg) {
                 list<Ref<SavableClass>>::iterator itVars = RegVars.begin();
                 list<Stroka>::iterator itNames = RegVarNames.begin();
-                if(RegVarNames.size() != RegVars.size())
-                    throw info_except(
-                        "RegVarNames.size<%i> != RegVars.size<%i>",
-                        RegVarNames.size(),
-                        RegVars.size());
+                verify(RegVarNames.size() == RegVars.size(), string("Sizes: ") + Itoa(RegVarNames.size()) + " " + Itoa(RegVars.size()));
                 for(; itVars != RegVars.end(); itVars++, itNames++) {
+                    log_debug(string("Setting Child var: ") + ~*itNames + "\n" + ~SavableClass::object2string(*itVars));
                     reg->MapSavableVar[*itNames] = *itVars;
                 }
                 list<double>::iterator itDoubs = RegDoubles.begin();
@@ -129,37 +126,11 @@ namespace NPolygon {
                 (*it)->SetData(child);
                 ret->AddChild(child);
             }
-            ////////ret->MakeChildBounds(Bound);
             ret->SetGridBoundarySize(RegionBoundarySize);
             return ret;
         }
-        //void GetRegionStruct(TPolyRegion *){};
-        //void SaveRegionData(ostream &out, TPolyRegion *region, Stroka &varNames) {
-        //    vector<Stroka> vecStr = Str::SplitLine(varNames, 0);
-        //    if (vecStr.size() == 0)
-        //        return;
-        //    vector<TGridMaskedData> vecDat(vecStr.size());
-        //    for (TPolyRegion::Iterator iter = region->StartRegion(); iter != region->EndRegion(); iter = region->NextRegion(iter)) {
-        //        out<<varNames<<"\n";
-        //        for(size_t i = 0; i < vecStr.size(); i++) {
-        //            vecDat[i] = (*iter.it)->Grid.GetMaskedData(TRegGrid::Bound, 0, vecStr[i]);
-        //        }
-        //        if (vecDat.size() == 0)
-        //            return;
-        //        TGridMaskBase::Iterator pntInd;
-        //        for(int curPnt = pntInd.Start(vecDat[0].Mask); curPnt != pntInd.End(); curPnt = pntInd.Next()) {
-        //            for(size_t i = 0; i < vecDat.size(); i++) {
-        //                out<<*((double*)vecDat[i].GetElementPtr(curPnt))<<" ";
-        //            }
-        //            out<<"\n";
-        //        }
-        //    }
-        //}
-
 
         int save_data_state(FilterOut &so) {
-            //so<<" GridNames "<<GridNames<<SavableClass::EOLN();
-            //so<<" Boundary "<<Bound<<SavableClass::EOLN();
             so << " BaseRegion " << BaseRegion << SavableClass::EOLN();
             so << " Childs " << Childs << SavableClass::EOLN();
             so << " DataFile " << DataFile << " RegionBoundarySize "
@@ -169,8 +140,6 @@ namespace NPolygon {
         int read_data_state(FilterIn &si) {
             Clear();
             char tmp[1000];
-            //si>>tmp>>GridNames;
-            //si>>tmp>>Bound;
             si >> tmp >> BaseRegion;
             si >> tmp >> Childs;
             si >> tmp >> DataFile >> tmp >> RegionBoundarySize;
