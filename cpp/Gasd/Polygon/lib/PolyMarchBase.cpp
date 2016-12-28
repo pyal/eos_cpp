@@ -1,3 +1,4 @@
+#include <cpp/Gasd/Polygon/march/wilkins.h>
 #include "lib/precompiled/poly_lib.h"
 
 
@@ -21,13 +22,13 @@ namespace NPolygon {
 
     TPolyMarchBody::TPolyMarchBody()
         : TPolyMarchRegionBase(),
-          Marcher(new TPolyMarchTestZero),
+          Marcher(new TMarchWilkins),
           FromTime(0),
-          ToTime(1000),
+          ToTime(10),
           MaxTimeStep(1),
-          OutputTime(0),
+          OutputTime(0.1),
           ResultsFile("output.dat"),
-          OutputNames("X:Y")
+          OutputNames("Pos:Vel:Pres:Denc:Ener:Sound")
     {}
 
 

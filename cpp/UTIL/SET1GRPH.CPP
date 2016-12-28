@@ -109,7 +109,7 @@ void FileArr::SetIterYval()
 double FileArr::IterYval(double x)
   {
    int k=CurPos[CurCol],k1;
-   while ((ar[0][k]<x-MathZer) && (k<=NumR)) k=RowPlus(k);
+   while ((k<=NumR) && (ar[0][k]<x-MathZer)) k=RowPlus(k);
    if (k<=NumR)
      if ( fabs(ar[0][k]-x)<MathZer ) {CurPos[CurCol]=k;return ar[CurCol][k];}
    k1=RowMinus(k);

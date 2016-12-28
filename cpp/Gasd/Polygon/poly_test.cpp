@@ -9,31 +9,24 @@
 
 
 #include "gasd/Polygon/lib/polygon_forcelnk.h"
-
 Stroka GenerateDetailedHelp() {
     Stroka ret =
-    //ret += Stroka(" Registered test objects:\n\n\n") + SavableClass::HelpForCategory("TestCase_TestTest_category");
            Stroka("\n\n\nNPolygon::Constructor_category: ~+\n") +
            SavableClass::HelpForCategory("NPolygon::Constructor_category");
-    ret += "~-\n\nNPolygon::March_category :~+\n" +
+    ret += "~-\n\n\nNPolygon::March_category :~+\n\n" +
            SavableClass::HelpForCategory("NPolygon::March_category");
-    ret +=
-        "~-\n\n\nSample for NPolygon::TSimpleContructor(NPolygon::Constructor_category) :~+\n";
-    Ref<NPolygon::TSimpleContructor> constr1 = new NPolygon::TSimpleContructor;
-    constr1->Childs.push_back(new NPolygon::TSimpleContructor::TRegData(
-        "EOSTest",
-        new NPolygon::TSimpleContructor::TRegData,
-        5,
-        NPolygon::TSimpleContructor::TRegData::TGridVar("Y", 1, 2)));
-    ret += SavableClass::object2string(constr1);
-    ret += "~-\n\n\nSample for NPolygon::TPolyMarchBody(NPolygon::March_category) :~+\n";
-    Ref<NPolygon::TPolyMarchBody> march = new NPolygon::TPolyMarchBody;
-    ret += SavableClass::object2string(march);
-    ret + "~-\n";
-    return ret;
+    return NRef::TFormatOutput("    ", 0, 110).Format(~ret);
 };
 
-void PrintHelp(map<Stroka, Stroka> par) {
+void MarchConfig(map<Stroka, Stroka> par) {
+    NLogger::TLogger::GetLogger().LogLevel = NLogger::ELevel(atoi(~par["LogLevel"]));
+    Stroka conf = par["ConfFile"];
+    fstream out(~conf, ios::out);
+    Ref<NPolygon::TSimpleContructor> constr1 = new NPolygon::TSimpleContructor;
+    Ref<NPolygon::TPolyMarchBody> march = new NPolygon::TPolyMarchBody;
+    out << "RegionConstructor\n" << SavableClass::object2string(constr1) << "\n\n";
+    out << "RegionMarch\n" << SavableClass::object2string(march) << "\n";
+    out.close();
     cout << GenerateDetailedHelp();
 }
 
@@ -49,6 +42,7 @@ void TestFunc(map<Stroka, Stroka> par) {
 
 void March(map<Stroka, Stroka> par) {
     NLogger::TLogger::GetLogger().LogLevel = NLogger::ELevel(atoi(~par["LogLevel"]));
+    log_always(~(Stroka("Log level is: ") + int(NLogger::TLogger::GetLogger().LogLevel)));
     vector<Ref<SavableClass>> objVector = File::ReadConf(~par["ConfFile"], 2, 1);
     Ref<NPolygon::TSimpleContructor> constr =
         SavableClass::TestType<NPolygon::TSimpleContructor>(
@@ -66,15 +60,16 @@ int main(int argc, const char *argv[]) {
     Time_struct Time;
     try {
         NRef::TCommandParse Cmd(
-            "Usage: poly_test [Params_Key_Spec] [/][-]key  \n without parameters - standart test\n");
+            "Usage: poly_test  - without parameters - help\n");
         Cmd.MainHelp += GenerateDetailedHelp();
-        Cmd.Add(PrintHelp, "help", "show help?", "");
+        Cmd.Add(MarchConfig, "march.config", "build sample config", "ConfFile poly_test.march.cfg Config file name\nLogLevel 3 ", 1);
         Cmd.Add(TestFunc, "test", "test it", "LogLevel 3 Specify default debug level", 1);
         Cmd.Add(
             March,
             "march",
             "clc region",
-            "ConfFile par.cfg par.cfg file has the format: \"RegionConstructor NPolygon::TSimpleContructor RegionMarch  NPolygon::TPolyMarchBody\"\nLogLevel 3 Specify default debug level");
+            "ConfFile poly_test.march.cfg par.cfg file has the format: \"RegionConstructor NPolygon::TSimpleContructor RegionMarch  NPolygon::TPolyMarchBody\"\nLogLevel 3 Specify default debug level",
+            1);
         Cmd.SimpleRun(argc, argv);
     }
     CATCHMAINEXCEPTION(" poly_test failed ");

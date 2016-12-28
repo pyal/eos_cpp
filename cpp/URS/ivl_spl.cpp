@@ -27,7 +27,7 @@ Stroka GenerateDetailedHelp() {
 };
 
 
-void PrintHelp(map<Stroka, Stroka> par) {
+void MarchConfig(map<Stroka, Stroka> par) {
     cout << GenerateDetailedHelp();
 }
 
@@ -91,7 +91,7 @@ int main(int argc, const char *argv[]) {
         NRef::TCommandParse Cmd(
             "Usage: ivl_cvt [Params_Key_Spec] [/][-]key  \n without parameters - help\n");
         Cmd.MainHelp += GenerateDetailedHelp();
-        Cmd.Add(PrintHelp, "help", "show help?", "");
+        Cmd.Add(MarchConfig, "help", "show help?", "");
         Cmd.Add(
             BlackBox,
             "blackbox",

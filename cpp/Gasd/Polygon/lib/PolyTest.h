@@ -176,10 +176,10 @@ namespace NPolygon {
             SavableClass::SetRefOutMethod(methOut);
             Ref<NPolygon::TSimpleContructor> constr1 = new NPolygon::TSimpleContructor;
             constr1->Childs.push_back(new TSimpleContructor::TRegData(
-                "EOSTest",
-                new TSimpleContructor::TRegData,
-                5,
-                TSimpleContructor::TRegData::TGridVar("Y", 1, 2)));
+                    {"EOSTest"},
+                    {new TSimpleContructor::TRegData},
+                     5,
+                    {TSimpleContructor::TRegData::TGridVar("Y", 1, 2)}));
             Stroka objStr1 = SavableClass::object2string(constr1);
             log_debug(string("Build string from object:\n") + ~objStr1);
             Ref<NPolygon::TSimpleContructor> constr2 = new NPolygon::TSimpleContructor;

@@ -104,9 +104,9 @@ protected:
     static base nullbase;
 
 public:
-    static Stroka Int2Str(int i) {
+    static Stroka Int2Str(long i) {
         char buf[65];
-        if(sprintf(buf, "%i", i))
+        if(sprintf(buf, "%ld", i))
             return Stroka(buf);
         return Stroka("");
     }
@@ -275,6 +275,9 @@ public:
     friend Stroka operator+(const Stroka &s1, const char *s2) {
         return Stroka(s1) += s2;
     }
+    friend Stroka operator+(const char *s1, const Stroka &s2) {
+        return Stroka(s1) += s2;
+    }
     friend Stroka operator+(const Stroka &s1, char s2) {
         return Stroka(s1) += s2;
     }
@@ -284,7 +287,19 @@ public:
     }
 
     friend Stroka operator+(const Stroka &s1, int i) {
-        return Stroka(s1) += Stroka(i);
+        return Stroka(s1) += Int2Str(i);
+    }
+
+    friend Stroka operator+(const Stroka &s1, long i) {
+        return Stroka(s1) += Int2Str(i);
+    }
+
+    operator string() const {
+        return std::string(p);
+    }
+
+    operator const char*() const {
+        return p;
     }
 
     // ~~~ Prepending ~~~ : FAMILY0(Stroka&, prepend);
@@ -545,11 +560,6 @@ public:
     // ~~ until EOS ~~
     std::istream &read_string(std::istream &is) {
         return read_to_delim(is, '\x00');
-    }
-
-    //~~~~Output~~~~
-    friend std::ostream &operator<<(std::ostream &os, const Stroka &s) {
-        return os << s.p;
     }
 
     // ~~~ Full copy ~~~

@@ -4,66 +4,55 @@
 #include "ex_out.h"
 
 int InputPar(fstream &in,double &from,double &min,double &max,
-                                                 double &stp,char *write)
-  {
-   int ret=0;
-   in>>write>>from>>write>>min>>write>>max>>write>>stp;in.getline(write,255);
-   in>>write>>ret>>write;
-   return ret;
-  };
+                                                 double &stp,char *write) {
+    int ret=0;
+    in>>write>>from>>write>>min>>write>>max>>write>>stp;
+    in.getline(write,255);
+    in>>write>>ret>>write;
+    return ret;
+}
 
 
 
+Stroka Time_struct::Print() {
+    Finish = millisec();
+    double elapsed_time = Finish - Start;
+    Start = Finish;
+    return Stroka((double)elapsed_time/1000) + " s";
+}
 
-/*
-double StndErr;
-extern unsigned _stklen=64000;
+std::ostream &operator<<(std::ostream &output, Time_struct &time) {
+    output<<time.Print();
+    return output;
+}
 
-void main(int argc,char *argv[])
-  {
-#ifdef WCPP
-   double elapsed_time;
-   clock_t start, finish;start=clock();
-#endif
+int PrintNumIterTime::PrintNow() {
+    if (CurNum % IterCircle == 0)
+        return 1;
+    return 0;
+}
 
-   fstream in(argv[1],ios::in);
-   char tmp[512];
-   double u2=0,r2,p2=0,e2=0,D=0,porous;
-   double u1,r1,p1,e1;
-   StndErr=1e-6;
-   if (!MatterRegister(in,Matter)) { cout<<"Could not register. Exit.\n";exit(0);}
-cout<<" Coreleft() "<<Coreleft()<<" Stack "<<StackAvail()<<"\n";
+int PrintNumIterTime::PrintNow(Stroka &str) {
+    str = "";
+    if (CurNum % IterCircle == 0) {
+        if (time.ElapsedTime() > 1) {
+            str = Descr + "iters " + Stroka::Int2Str(IterCircle) + " / " +
+                  Stroka::Int2Str(CurNum) + " [" + time.Print() + "]";
+        } else {
+            IterCircle += IncByNum;
+        }
+    }
+    CurNum++;
+    return str.size() > 0;
+}
 
-   in>>tmp>>u1>>tmp>>r1>>tmp>>p1>>tmp>>e1>>tmp>>porous>>tmp>>StndErr;r2=r1;
+std::ostream &operator<<(std::ostream &out, PrintNumIterTime &t) {
+    Stroka str;
+    if (t.PrintNow(str)) out << str;
+    return out;
+}
 
-#ifdef InternalPointsUrs  
-double IntPar=0;Matter->SetIntPar(&IntPar);Matter->ChangeIntPar(r1,e1,1);
-#endif
-
-   MatterAdiabat=Matter; p1=PressurePorous(r1,e1);
-
-#ifdef WCPP
-  finish=clock();elapsed_time=finish-start;start=finish;
-cout<<" RunTime "<<elapsed_time<<"\n";
-#endif
-cout<<"ShowHugPres     beg    Coreleft() "<<Coreleft()<<"\n";
-   ShowHugPres(in,u1,r1,p1,e1,u2,r2,p2,e2,D);
-#ifdef WCPP
-  finish=clock();elapsed_time=finish-start;start=finish;
-cout<<" RunTime "<<elapsed_time<<"\n";
-#endif
-cout<<"ShowHugDenc    beg    Coreleft() "<<Coreleft()<<"\n";
-   ShowHugDenc(in,u1,r1,p1,e1,u2,r2,p2,e2,D);
-
-#ifdef WCPP
-  finish=clock();elapsed_time=finish-start;start=finish;
-cout<<" RunTime "<<elapsed_time<<"\n";
-#endif
-
-  };
-
-*/
-
-
-
+long PrintNumIterTime::getIterCircle() const {
+    return IterCircle;
+}
 

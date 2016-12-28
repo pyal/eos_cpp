@@ -141,7 +141,6 @@ namespace NPolygon {
             TStp0_5 = 1;
             CurTime = 0;
             BoundaryMakerPres.SetBase(~Stroka(MinPres));
-            Timer.InitTimer();
         }
         void MakeVisc(TPolyRegion *reg, const Stroka &viscName) {
             TRegionBounds bndCent(0, -1);
@@ -316,7 +315,6 @@ namespace NPolygon {
         TRegBoundaryCircleX BoundaryMakerX;
         TRegBoundaryCircle_ZeroConst BoundaryMakerMass, BoundaryMakerPres,
             BoundaryMakerVel;
-        PrintNumIterTime Timer;
 
     public:
         TMarchWilkins()
@@ -404,13 +402,6 @@ namespace NPolygon {
         virtual void SetNewTimeStp(double curTime, double tStp) {
             TStp0_5 = tStp;
             CurTime = curTime;
-            Stroka str;
-            if(Timer.PrintNow(str))
-                cout << "CurTime " << curTime << "\tMakingTstp " << tStp << "\n"
-                     << str.c_str() << "\n";
-            //if (Timer.PrintNow())
-            //	cout << " CurTime " << CurTime << " TimeStep " << TStp0_5 << "\n";
-            //cout << Timer;
         };
 
         void MakeTimeStep(TPolyRegion *reg, double curTime, double tStp) {

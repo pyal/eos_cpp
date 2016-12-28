@@ -1,3 +1,4 @@
+#include <cpp/URS/MATT_FAC.H>
 #include "lib/precompiled/poly_lib.h"
 
 
@@ -19,16 +20,17 @@ namespace NPolygon {
         create<TSimpleContructor::TRegData>);
 
 
-    TSimpleContructor::TSimpleContructor() : SavableClass(), RegionBoundarySize(0) {
-        //list<Ref<RegData> > Childs;
-        //Ref<RegData> BaseRegion;
-        //list<Stroka> GridNames;
-        //Ref<TRegBoundaryBase> Bound;
+    TSimpleContructor::TSimpleContructor() : SavableClass(), RegionBoundarySize(1) {
         Childs.push_back(
-            new TRegData("EOS", new TRegData, 10, TRegData::TGridVar("X", 0, 1)));
-        BaseRegion = new TRegData("EOS", new TRegData, 10, TRegData::TGridVar("X", 0, 1));
-        //GridNames.push_back("X");
-        //Bound = new TRegBoundaryCircle();
+            new TRegData({"EOS"}, {new MatterABu}, 100, {
+                    TRegData::TGridVar("Pos", 0, 1),
+                    TRegData::TGridVar("Denc", 7.89, 7.89),
+                    TRegData::TGridVar("Pres", 0.0001, 0.0001),
+                    TRegData::TGridVar("Ener", 0, 0),
+                    TRegData::TGridVar("Vel", 5, 5),
+                    TRegData::TGridVar("Sound", 4, 4)
+            }));
+        BaseRegion = new TRegData();
         DataFile = "NULL";
     };
 

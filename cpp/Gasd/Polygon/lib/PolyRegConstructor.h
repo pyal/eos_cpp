@@ -27,8 +27,7 @@ namespace NPolygon {
                     return si;
                 }
                 friend FilterOut &operator<<(FilterOut &so, const TGridVar &dat) {
-                    so << " " << dat.Name << " " << dat.MinVal << " " << dat.MaxVal
-                       << " ";
+                    so << " " << dat.Name << " " << dat.MinVal << " " << dat.MaxVal << SavableClass::EOLN();
                     return so;
                 }
             };
@@ -46,11 +45,12 @@ namespace NPolygon {
                 RegDoubleNames.clear();
                 RegDoubles.clear();
             }
-            TRegData(const char *str, SavableClass *ptr, int dim, const TGridVar &var)
+            TRegData(const vector<Stroka> &names, const vector<SavableClass *> savable_vars, int dim, const vector<TGridVar> &double_vars)
                 : SavableClass(), RegionGridSize(dim) {
-                RegVarNames.push_back(str);
-                RegVars.push_back(ptr);
-                GridVars.push_back(var);
+                verify(names.size() == savable_vars.size());
+                for(auto &name:names) RegVarNames.push_back(name);
+                for(auto sv:savable_vars) RegVars.push_back(Ref<SavableClass>(sv));
+                for(auto dv:double_vars) GridVars.push_back(dv);
             }
             void SetData(Ref<TPolyRegion> reg) {
                 list<Ref<SavableClass>>::iterator itVars = RegVars.begin();

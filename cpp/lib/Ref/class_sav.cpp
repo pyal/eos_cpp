@@ -271,7 +271,7 @@ Stroka DataSource::GenerateUnicName(const char *basic) {
     Stroka Ret = basic ? basic : "";
     //Ret += Stroka::Int2Str((int)RandomClass::Rnd(1e8));
     Ret += "_" + Stroka::Int2Str(NumUnicObjects++);
-    cout << "Unic name rnd " << Ret << "\n";
+    log_debug("Generated unic name: " + Ret);
     return Ret;
 }
 

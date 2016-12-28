@@ -10,7 +10,6 @@ struct TVerify {
 };
 #define Verify(str) TVerify(str, info_mark)
 
-FilterOut &operator<<(FilterOut &out, const Stroka &str);
 FilterIn &operator>>(FilterIn &in, Stroka &str);
 FilterIn &operator>>(FilterIn &in, const TVerify &wrd);
 

@@ -39,3 +39,6 @@ namespace NLogger {
 
 #define log_always(msg) log_print(NLogger::always, (msg))
 #define log_debug(msg) log_print(NLogger::debug, (msg))
+#define log_info(msg) log_print(NLogger::info, (msg))
+#define log_error(msg) log_print(NLogger::error, (msg))
+#define log_warning(msg) log_print(NLogger::warning, (msg))

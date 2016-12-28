@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <cpp/lib/std/EX_OUT.H>
 #include "PolyRegConstructor.h"
 
 
@@ -14,7 +15,6 @@ namespace NPolygon {
         virtual void SetNewTimeStp(double curTime, double timeStp) = 0;
     };
     struct TPolyMarchTestZero : TPolyMarchRegionBase {
-        //TPolyMarchTestZero() : TPolyMarchRegionBase() {}
         virtual double GetMaxTimeStp(TPolyRegion *reg) {
             return 1;
         };
@@ -110,6 +110,9 @@ namespace NPolygon {
             PolyRegIO::SaveRegionData(outFile, reg, outNames, bnds);
         }
         void DoIt(TPolyRegion *reg) {
+            Stroka timeStr;
+            PrintNumIterTime Timer;
+            double lastTime = 0;
             double time = FromTime;
             double outTime = time + OutputTime;
             vector<Stroka> outNames = Str::SplitLine(OutputNames, 0, ':');
@@ -133,7 +136,14 @@ namespace NPolygon {
                     SaveIter(outFile, time, reg, outNames, OutputBounds);
                     outTime = time + OutputTime;
                 }
+
+                if(Timer.PrintNow(timeStr)) {
+                    log_info(Stroka("CurT ") + time + " tStp " + ((time - lastTime) / Timer.getIterCircle())
+                             + "\t" + timeStr);
+                    lastTime = time;
+                }
             }
+            log_info("Done " + Timer.PrintLast());
             outFile.close();
         }
     };

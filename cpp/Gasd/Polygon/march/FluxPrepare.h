@@ -54,7 +54,9 @@ namespace NPolygon {
             const Stroka &ener,
             const Stroka &eos,
             const Stroka &res,
-            int resIsPres) {
+            int resIsPres,
+            double minPressure = 1e-4,
+            double minSound = 0.003) {
             TGridMaskedData denc = reg->Grid.GetMaskedData(bndsClc, dens);
             TGridMaskedData energy = reg->Grid.GetMaskedData(bndsClc, ener);
             TGridMaskedData result = reg->Grid.GetMaskedData(bndsClc, res);
@@ -69,14 +71,14 @@ namespace NPolygon {
             if(sizeLft > 0) {
                 TPolyRegion *prev = FindNextRegion(reg, -1);
                 curPos = ClcEOSPressure(
-                    resPtr, enerPtr, dencPtr, prev, eos, 0, sizeLft, resIsPres);
+                    resPtr, enerPtr, dencPtr, prev, eos, 0, sizeLft, resIsPres, minPressure, minSound);
             }
             curPos = ClcEOSPressure(
-                resPtr, enerPtr, dencPtr, reg, eos, curPos, sizeBase, resIsPres);
+                resPtr, enerPtr, dencPtr, reg, eos, curPos, sizeBase, resIsPres, minPressure, minSound);
             if(sizeRgt > 0) {
                 TPolyRegion *next = FindNextRegion(reg, 1);
                 ClcEOSPressure(
-                    resPtr, enerPtr, dencPtr, next, eos, curPos, sizeRgt, resIsPres);
+                    resPtr, enerPtr, dencPtr, next, eos, curPos, sizeRgt, resIsPres, minPressure, minSound);
             }
         }
         static int ClcEOSPressure(
@@ -87,30 +89,33 @@ namespace NPolygon {
             const Stroka &eos,
             int begPos,
             int size,
-            int resIsPres) {
+            int resIsPres,
+            double minPressure,
+            double minSound) {
             int lastPos = size + begPos + 1;
+            double minVal = resIsPres ? minPressure : minSound;
             if(reg == NULL) {
-                double defVal = resIsPres ? 0 : 0.003;
                 for(int i = begPos; i < lastPos; i++)
-                    resPtr[i] = defVal;
+                    resPtr[i] = minVal;
                 return lastPos;
             }
             MatterIO *mat = SavableClass::TestType<MatterIO>(reg->MapSavableVar[eos]);
-            if(resIsPres)
+            if(resIsPres) {
                 mat->Pressure(
                     &resPtr[begPos - 1],
                     &dencPtr[begPos - 1],
                     &enerPtr[begPos - 1],
                     size);
+            }
             else {
                 mat->Sound(
                     &resPtr[begPos - 1],
                     &dencPtr[begPos - 1],
                     &enerPtr[begPos - 1],
                     size);
-                for(int i = begPos; i < lastPos; i++)
-                    resPtr[i] = max<double>(0.03, resPtr[i]);
             }
+            for (int i = begPos; i < lastPos; i++)
+                resPtr[i] = max<double>(minVal, resPtr[i]);
             return lastPos;
         }
         static TPolyRegion *FindNextRegion(TPolyRegion *reg, int direction) {
