@@ -57,19 +57,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories( cpp/ )
 
-#set(STD_SOURCE_FILES
-#        cpp/lib/std/CONST.H
-#        cpp/lib/std/DEFFUNC.H
-#        cpp/lib/std/EX_OUT.CPP
-#        cpp/lib/std/EX_OUT.H
-#        cpp/lib/std/F2C.H
-#        cpp/lib/std/MY_COMP.CPP
-#        cpp/lib/std/MY_COMP.H
-#        cpp/lib/std/Util.cpp
-#        cpp/lib/std/Util.h
-#        cpp/lib/std/stdexception.h
-#        cpp/F2C/libf2c/math.h
-#    )
 add_library(stdlib STATIC ${STDLIB_SOURCE_FILES})
 add_dependencies(stdlib version)
 if(RAPIDCHECK_LIB)

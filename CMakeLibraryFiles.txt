@@ -688,6 +688,8 @@ set(POLY_LIB_SOURCE_FILES
         cpp/Gasd/Polygon/march/PolyMarchTest.h
         cpp/Gasd/Polygon/march/wilkins.cpp
         cpp/Gasd/Polygon/march/wilkins.h
+        cpp/Gasd/Polygon/march/riemann_solver.cpp
+        cpp/Gasd/Polygon/march/riemann_solver.h
 )
 
 set(POLY_TEST_SOURCE_FILES
