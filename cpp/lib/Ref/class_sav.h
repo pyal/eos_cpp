@@ -177,7 +177,7 @@ public:
     }
     //TODO FIXIT !!!!  Depricated, use Verify !!!!!!!!!!!!!!
     // Throw exception if the next word int the sream ins not the given one
-    static void ExeptionCheck(std::istream &in, const char *test, const char *mes = 0) {
+    static void ExceptionCheck(std::istream &in, const char *test, const char *mes = 0) {
         char tmp[256];
         in >> tmp;
         if(Stricmp(tmp, test) != 0) {

@@ -17,11 +17,11 @@ void SavableClass::save_data_pref(FilterOut &so) {
     so << KeyDesc(EOLN());
 };
 int SavableClass::read_data_post(FilterIn &si) {
-    ExeptionCheck(si, "}");
+    ExceptionCheck(si, "}");
     return 1;
 }
 int SavableClass::read_data_pref(FilterIn &si) {
-    ExeptionCheck(si, "{");
+    ExceptionCheck(si, "{");
     return 1;
 }
 void SavableClass::LoadClass(SavableClass &from, int method) {
