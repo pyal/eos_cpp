@@ -107,6 +107,7 @@ namespace NRef {
         int givenDefaultsMode)
         : Mode(mode), Help(help), GivenDefaultsMode(givenDefaultsMode), Func(func) {
         vector<Stroka> vec = Str::SplitLine(params, 0, '\n');
+        if (givenDefaultsMode) vec.push_back("LogLevel 3 Default debug level");
         Par2Descr.clear();
         Params2Defaults.clear();
         ParamsSettings = "";
@@ -115,7 +116,9 @@ namespace NRef {
             vector<Stroka> par = Str::SplitLine(vec[i], 0);
             if(!par.size())
                 continue;
-            Par2Descr[par[0]] = Str::JoinLine(par, ' ', 2);
+            Stroka descr = Str::JoinLine(par, ' ', 2);
+            replace(descr.begin(), descr.end(), '~', '\n');
+            Par2Descr[par[0]] = descr;
             Stroka defaultValue = par.size() > 1 ? par[1] : " ";
             Params2Defaults[par[0]] = defaultValue;
             Stroka prefix = (ParamsSettings.size() != 0) ? "  " : "";
@@ -135,6 +138,11 @@ namespace NRef {
         return ret;
     }
 
+    void SetLogLevel(map<Stroka, Stroka> &par) {
+        int level = atoi(~par["LogLevel"]);
+        verify(level >= 0 && level < NLogger::max_level, "Max level is " + Itoa(NLogger::max_level) + " current level " + Itoa(level));
+        NLogger::TLogger::GetLogger().LogLevel = NLogger::ELevel(level);
+    }
     int TCommandParse::SimpleRun(int argc, const char *argv[]) {
         int formattedLength = 90;
         if(argc < 2) {
@@ -163,11 +171,11 @@ namespace NRef {
                       << "\n";
             exit(1);
         }
-        if(it->second.GivenDefaults())
-            it->second.Func(Str::ReadDefinedParams(
-                ~par, it->second.GetParams2Defaults(), "TOBEDEFINED"));
-        else
-            it->second.Func(Str::ReadParams(~par, ~it->second.GetParamsNames()));
+        map<Stroka, Stroka> params = it->second.GivenDefaults() ?
+                 Str::ReadDefinedParams(~par, it->second.GetParams2Defaults(), "TOBEDEFINED") :
+                 Str::ReadParams(~par, ~it->second.GetParamsNames());
+        SetLogLevel(params);
+        it->second.Func(params);
         return 1;
     }
     Stroka TCommandParse::MakeHelp() {
