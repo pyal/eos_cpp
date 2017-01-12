@@ -4,12 +4,12 @@
 
 #include "PolyMarchBase.h"
 
-static ClassDesc NPolygon_TPolyMarchTestZero_ClassDesc(
-    typeid(NPolygon::TPolyMarchTestZero),
-    "NPolygon::TPolyMarchTestZero",
-    1,
-    "NPolygon::RegionMarch_category",
-    create<NPolygon::TPolyMarchTestZero>);
+//static ClassDesc NPolygon_TPolyMarchTestZero_ClassDesc(
+//    typeid(NPolygon::TPolyMarchTestZero),
+//    "NPolygon::TPolyMarchTestZero",
+//    1,
+//    "NPolygon::RegionMarch_category",
+//    create<NPolygon::TPolyMarchTestZero>);
 
 static ClassDesc NPolygon_TPolyMarchBody_ClassDesc(
     typeid(NPolygon::TPolyMarchBody),

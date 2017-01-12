@@ -17,24 +17,27 @@ namespace NPolygon {
         TPolyMarchPlusBase();
         //	: Marcher(new NPolygon::TMarchWilkins) {
         //}
-        virtual double GetMaxTimeStp(TPolyRegion *reg) {
-            return Marcher->GetMaxTimeStp(reg);
+        virtual double GetMaxTimeStp(TPolyRegion *reg, double curTime) {
+            return Marcher->GetMaxTimeStp(reg, curTime);
         }
         virtual void MakeTimeStep(TPolyRegion *reg, double curTime, double timeStp) {
             Marcher->MakeTimeStep(reg, curTime, timeStp);
         }
-        void RebuildBounds(TPolyRegion *reg) {
-            Marcher->RebuildBounds(reg);
+        void RebuildBoundsBase(TPolyRegion *reg) {
+            Marcher->RebuildBoundsBase(reg);
         }
-        virtual void InitBeforeBounds(TPolyRegion *reg) {
-            Marcher->InitBeforeBounds(reg);
+        void InitBase(TPolyRegion *reg, double curTime) {
+            Marcher->InitBase(reg, curTime);
         }
-        virtual void InitAfterBounds(TPolyRegion *reg) {
-            Marcher->InitAfterBounds(reg);
-        }
-        virtual void SetNewTimeStp(double curTime, double timeStp) {
-            Marcher->SetNewTimeStp(curTime, timeStp);
-        }
+//        virtual void InitBeforeBounds(TPolyRegion *reg) {
+//            Marcher->InitBeforeBounds(reg);
+//        }
+//        virtual void InitAfterBounds(TPolyRegion *reg) {
+//            Marcher->InitAfterBounds(reg);
+//        }
+//        virtual void SetNewTimeStp(double curTime, double timeStp) {
+//            Marcher->SetNewTimeStp(curTime, timeStp);
+//        }
         int save_data_state(FilterOut &so) {
             so << " MarchRegion " << Marcher;
             return 1;
@@ -124,9 +127,12 @@ namespace NPolygon {
             //Marcher->MakeTimeStep(reg, curTime, timeStp);
             ClcAddition(reg, curTime, timeStp);
         }
-        //      void RebuildBounds(TPolyRegion *reg) {
-        //          Marcher->RebuildBounds(reg);
-        //      }
+//        void RebuildBoundsBase(TPolyRegion *reg) {
+//            Marcher->RebuildBoundsBase(reg);
+//        }
+//        void InitBase(TPolyRegion *reg, double curTime) {
+//            Marcher->InitBase(reg, curTime);
+//        }
         //virtual void InitBeforeBounds(TPolyRegion *reg){
         //	Marcher->InitBeforeBounds(reg);
         //}
@@ -408,7 +414,7 @@ namespace NPolygon {
             if(!src || !dst)
                 throw info_except("wrong region in TPolyMarchPlusGase!!!\n");
             CheckBounds(src, dst, DstRegion > SrcRegion);
-            Marcher->RebuildBounds(reg);
+            Marcher->RebuildBoundsBase(reg);
         }
 
         int save_data_state(FilterOut &so) {

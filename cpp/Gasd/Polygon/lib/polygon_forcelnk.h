@@ -14,6 +14,7 @@
 
 #include "gasd/polygon/march/Wilkins.h"
 #include "gasd/polygon/march/PolyMarchAdd.h"
+#include "cpp/Gasd/Polygon/march/riemann_solver.h"
 
 //#include "PolyMarchBase.h"
 //extern ForceLinkVoid<URS_Curve> Dummy_URS_Curve;
@@ -27,11 +28,8 @@ namespace NPolygon {
     extern ForceLinkVoid<TTestSimple> Dummy_TTestSimple;
     extern ForceLinkVoid<TestCase_Gasd_Static> Dummy_TestCase_Gasd_Static;
 
-    //extern ForceLinkVoid<TSimpleContructor> Dummy_TSimpleContructor;
-    //extern ForceLinkVoid<TSimpleContructor::TRegData> Dummy_TSimpleContructor_TRegData;
     extern ForceLinkVoid<TGridMaskSimple> Dummy_TGridMaskSimple;
     extern ForceLinkVoid<TGridVar<double>> Dummy_TGridVar_Double;
-    extern ForceLinkVoid<TPolyMarchTestZero> Dummy_TPolyMarchTestZero;
     extern ForceLinkVoid<TPolyMarchBody> Dummy_TPolyMarchBody;
 
     extern ForceLinkVoid<TPolyMarchTestU2> Dummy_TPolyMarchTestU2;
@@ -42,11 +40,8 @@ namespace NPolygon {
     extern ForceLinkVoid<TRegBoundaryCircle> Dummy_TRegBoundaryCircle;
     extern ForceLinkVoid<TRegBoundaryCircleX> Dummy_TRegBoundaryCircleX;
 
-    extern ForceLinkVoid<TPolyMarchDriverFluxGasdWilkins>
-        Dummy_TPolyMarchDriverFluxGasdWilkins;
     extern ForceLinkVoid<TMarchWilkins> Dummy_TMarchWilkins;
+    extern ForceLinkVoid<TMarchExactRieman> Dummy_TMarchExactRieman;
     extern ForceLinkVoid<TPolyMarchPlusE> Dummy_TPolyMarchPlusE;
     extern ForceLinkVoid<TPolyMarchPlusGase> Dummy_TPolyMarchPlusGase;
-    //extern ForceLinkVoid<> Dummy_;
-    //extern ForceLinkVoid<> Dummy_;
 };

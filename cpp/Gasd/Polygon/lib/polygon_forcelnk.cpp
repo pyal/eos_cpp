@@ -16,11 +16,8 @@ namespace NPolygon {
     ForceLinkVoid<TTestSimple> Dummy_TTestSimple;
     ForceLinkVoid<TestCase_Gasd_Static> Dummy_TestCase_Gasd_Static;
 
-    //ForceLinkVoid<TSimpleContructor> Dummy_TSimpleContructor;
-    //ForceLinkVoid<TSimpleContructor::TRegData> Dummy_TSimpleContructor_TRegData;
     ForceLinkVoid<TGridMaskSimple> Dummy_TGridMaskSimple;
     ForceLinkVoid<TGridVar<double>> Dummy_TGridVar_Double;
-    ForceLinkVoid<TPolyMarchTestZero> Dummy_TPolyMarchTestZero;
     ForceLinkVoid<TPolyMarchBody> Dummy_TPolyMarchBody;
     ForceLinkVoid<TPolyMarchTestU2> Dummy_TPolyMarchTestU2;
     ForceLinkVoid<TPolyMarchU2> Dummy_TPolyMarchU2;
@@ -32,8 +29,8 @@ namespace NPolygon {
     ForceLinkVoid<TRegBoundaryCircle> Dummy_TRegBoundaryCircle;
     ForceLinkVoid<TRegBoundaryCircleX> Dummy_TRegBoundaryCircleX;
 
-    ForceLinkVoid<TPolyMarchDriverFluxGasdWilkins> Dummy_TPolyMarchDriverFluxGasdWilkins;
     ForceLinkVoid<TMarchWilkins> Dummy_TMarchWilkins;
+    ForceLinkVoid<TMarchExactRieman> Dummy_TMarchExactRieman;
     ForceLinkVoid<TPolyMarchPlusE> Dummy_TPolyMarchPlusE;
     ForceLinkVoid<TPolyMarchPlusGase> Dummy_TPolyMarchPlusGase;
 };

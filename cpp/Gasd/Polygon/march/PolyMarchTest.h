@@ -12,18 +12,10 @@ namespace NPolygon {
         TRegBoundaryCircle Bnd;
         TRegBoundaryCircleX BndX;
         TPolyMarchTestU2();
-        virtual double GetMaxTimeStp(TPolyRegion *reg) {
+        virtual double GetMaxTimeStp(TPolyRegion *reg, double ) {
             return 1;
         };
         virtual void MakeTimeStep(TPolyRegion *reg, double curTime, double timeStp) {
-
-            //TGridMaskedData cur(this, curMask);
-            //TGridMaskedData::TIterator dencIter(cur), posIter(mdata);
-            //TGridVar *ptr = SavableClass::TestType<TGridVar>(mdata.Data);
-            //vector<T> &tmpStor = ptr->VectorT;
-            //for( ; curIter.IsOk() && rgtIter.IsOk(); curIter.Next(), rgtIter.Next())
-            //    VectorT[curIter.GetElementInd()] = tmpStor[rgtIter.GetElementInd()];
-
 
             MakeTimeStepTestTime(reg, timeStp);
             MakeTimeStepTestVector(reg, timeStp);
@@ -88,7 +80,7 @@ namespace NPolygon {
             }
             cout << "Done in " << Time << "\n";
         };
-        virtual void RebuildBounds(TPolyRegion *reg) {
+        virtual void RebuildBoundsBase(TPolyRegion *reg) {
             vector<Stroka> names = reg->ShallowStart().CurRegion()->Grid.GetVarNames();
             for(size_t i = 0; i < names.size(); i++) {
                 if(names[i] == "X")
@@ -97,9 +89,7 @@ namespace NPolygon {
                     reg->FillChildBounds(&Bnd, names[i]);
             }
         };
-        virtual void InitBeforeBounds(TPolyRegion *reg){};
-        virtual void InitAfterBounds(TPolyRegion *reg){};
-        virtual void SetNewTimeStp(double curTime, double timeStp){};
+        virtual void InitBase(TPolyRegion *baseNode, double startTime){};
     };
 
 };   //namespace NPolygon {

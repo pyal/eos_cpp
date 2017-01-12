@@ -7,22 +7,10 @@
 
 namespace NPolygon {
     struct TPolyMarchRegionBase : SavableClass {
-        virtual double GetMaxTimeStp(TPolyRegion *reg) = 0;
-        virtual void MakeTimeStep(TPolyRegion *reg, double curTime, double timeStp) = 0;
-        virtual void RebuildBounds(TPolyRegion *reg) = 0;
-        virtual void InitBeforeBounds(TPolyRegion *reg) = 0;
-        virtual void InitAfterBounds(TPolyRegion *reg) = 0;
-        virtual void SetNewTimeStp(double curTime, double timeStp) = 0;
-    };
-    struct TPolyMarchTestZero : TPolyMarchRegionBase {
-        virtual double GetMaxTimeStp(TPolyRegion *reg) {
-            return 1;
-        };
-        virtual void MakeTimeStep(TPolyRegion *reg, double curTime, double timeStp){};
-        virtual void RebuildBounds(TPolyRegion *reg){};
-        virtual void InitBeforeBounds(TPolyRegion *reg){};
-        virtual void InitAfterBounds(TPolyRegion *reg){};
-        virtual void SetNewTimeStp(double curTime, double timeStp){};
+        virtual double GetMaxTimeStp(TPolyRegion *child, double curTime) = 0;
+        virtual void MakeTimeStep(TPolyRegion *child, double curTime, double timeStp) = 0;
+        virtual void InitBase(TPolyRegion *baseNode, double startTime) = 0;
+        virtual void RebuildBoundsBase(TPolyRegion *baseNode) = 0;
     };
 
     struct TPolyMarchBody : TPolyMarchRegionBase {
@@ -31,6 +19,13 @@ namespace NPolygon {
         double OutputTime;
         Stroka ResultsFile, OutputNames;
         TPolyMarchBody();
+        TPolyMarchBody(TPolyMarchRegionBase *marcher, double fromTime, double toTime, double maxTimeStep, double outputTime,
+                       const Stroka &resultsFile, const Stroka &outputNames):
+                Marcher(marcher),
+                FromTime(fromTime), ToTime(toTime), MaxTimeStep(maxTimeStep), OutputTime(outputTime),
+                ResultsFile(resultsFile), OutputNames(outputNames)
+        {};
+
         //int OutPntType;
         TRegionBounds OutputBounds;
 
@@ -50,7 +45,7 @@ namespace NPolygon {
             Stroka tmp;
             si >> tmp >> FromTime >> tmp >> ToTime >> tmp >> MaxTimeStep >> tmp;
             OutputBounds.read_data_state(si);
-            SavableClass::ExeptionCheck(si, "}");
+            SavableClass::ExceptionCheck(si, "}");
             si >> tmp >> OutputTime;
             si >> tmp >> ResultsFile >> tmp >> OutputNames;
             si >> tmp >> Marcher;
@@ -66,37 +61,40 @@ namespace NPolygon {
             return help;
         }
 
-        virtual double GetMaxTimeStp(TPolyRegion *reg) {
+        virtual double GetMaxTimeStp(TPolyRegion *reg, double curTime) {
             double maxStp = 1e305;
             for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk();
                 it.Next()) {
-                maxStp = min(maxStp, Marcher->GetMaxTimeStp(it.CurRegion()));
+                maxStp = min(maxStp, Marcher->GetMaxTimeStp(it.CurRegion(), curTime));
             }
             return maxStp;
         };
         virtual void MakeTimeStep(TPolyRegion *reg, double curTime, double timeStp) {
-            Marcher->SetNewTimeStp(curTime, timeStp);
+//            Marcher->SetNewTimeStp(curTime, timeStp);
             for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk();
                 it.Next()) {
                 Marcher->MakeTimeStep(it.CurRegion(), curTime, timeStp);
             }
         };
-        virtual void InitAfterBounds(TPolyRegion *reg) {
-            for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk();
-                it.Next()) {
-                Marcher->InitAfterBounds(it.CurRegion());
-            }
-        };
-        virtual void RebuildBounds(TPolyRegion *reg) {
-            Marcher->RebuildBounds(reg);
+//        virtual void InitAfterBounds(TPolyRegion *reg) {
+//            for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk();
+//                it.Next()) {
+//                Marcher->InitAfterBounds(it.CurRegion());
+//            }
+//        };
+        virtual void RebuildBoundsBase(TPolyRegion *reg) {
+            Marcher->RebuildBoundsBase(reg);
         }
-        virtual void InitBeforeBounds(TPolyRegion *reg) {
-            for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk();
-                it.Next()) {
-                Marcher->InitBeforeBounds(it.CurRegion());
-            }
-        };
-        virtual void SetNewTimeStp(double curTime, double timeStp) {}
+        virtual void InitBase(TPolyRegion *reg, double startTime) {
+            Marcher->InitBase(reg, startTime);
+        }
+//        virtual void InitBeforeBounds(TPolyRegion *reg) {
+//            for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk();
+//                it.Next()) {
+//                Marcher->InitBeforeBounds(it.CurRegion());
+//            }
+//        };
+//        virtual void SetNewTimeStp(double curTime, double timeStp) {}
 
 
         void SaveIter(
@@ -118,20 +116,20 @@ namespace NPolygon {
             vector<Stroka> outNames = Str::SplitLine(OutputNames, 0, ':');
             fstream outFile(~ResultsFile, ios::out);
             outFile << "Writing Vars:\n" << Str::JoinLine(outNames) << "\n";
-            InitBeforeBounds(reg);
-            RebuildBounds(reg);
-            InitAfterBounds(reg);
-            GetMaxTimeStp(reg);
+//            InitBeforeBounds(reg);
+            InitBase(reg, time);
+//            InitAfterBounds(reg);
             SaveIter(outFile, time, reg, outNames, OutputBounds);
+//            GetMaxTimeStp(reg, time);
             while(time < ToTime) {
                 //cout << time << "I\n";
-                double regStp = GetMaxTimeStp(reg);
+                double regStp = GetMaxTimeStp(reg, time);
                 double tStp = min(MaxTimeStep, regStp);
                 tStp = min(tStp, ToTime * (1 + 1e-15) - time);
                 tStp = min(tStp, (outTime - time) * (1 + 1e-15));
                 MakeTimeStep(reg, time, tStp);
                 time += tStp;
-                RebuildBounds(reg);
+                RebuildBoundsBase(reg);
                 if(time >= outTime) {
                     SaveIter(outFile, time, reg, outNames, OutputBounds);
                     outTime = time + OutputTime;

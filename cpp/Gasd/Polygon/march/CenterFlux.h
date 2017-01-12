@@ -371,7 +371,6 @@ namespace NPolygon {
         FluxRI ClcRI;
         TRegionBounds BndCenteredU, BndBoundX, BndFluxU, BndTime;
         TRegBoundaryCircle BoundaryMakerY;
-        //TRegBoundaryCircleX BoundaryMakerY;
         TRegBoundaryCircleX BoundaryMakerX;
         TPolyMarchU2();   //: ClcU2(), ClcRI("FluxVar", &ClcU2), ClcLF("FluxVar"), ClcForce("FluxLF", "FluxRI") {}
 
@@ -396,11 +395,7 @@ namespace NPolygon {
 
                 BndFluxU.Set(-1, 1);
 
-                //BndCenteredU.Set(-1, -1);
-
                 BndBoundX.Set(0, 1);
-                //BndFluxU.Set(-2, 2);
-                //BndTime.Set(-2, 1);
 
                 TGridMaskedData dX(reg->Grid.GetMaskedData(BndTime, "dX"));
                 dX = reg->Grid.GetMaskedData(BndTime + 1, "X");
@@ -418,33 +413,25 @@ namespace NPolygon {
                 double X1 = *(double *)reg->Grid.GetMaskedData(TRegionBounds(), "X")
                                  .Last()
                                  .GetElementPtr();
-//                double Xm = 0.5 * (X1 - X0);
                 for(; itX.IsOk(); itX.Next(), itY.Next()) {
                     *(double *)itY.GetElementPtr() =
                         5 +
                         5 * sin(2 * M_PI / (X1 - X0) *
                                 (*(double *)itX.GetElementPtr() - X0));
-                    //*(double*)itY.GetElementPtr() = 5 + 5 / exp( 6 * sqr((*(double*)itX.GetElementPtr() - Xm)) / sqr(X1 - Xm) );
                 }
             }
-            //ClcU2.ClcFlux(reg, "Y", "FluxVar", "dX", TRegionBounds(-1,1), tStp);
-            //ClcLF.ClcFlux(reg, "Y", "FluxLF", "dX", TRegionBounds(-1,0), tStp);
-            //ClcRI.ClcFlux(reg, "Y", "FluxRI", "dX", TRegionBounds(-1,0), tStp);
-            //ClcForce.ClcFlux(reg, "Y", "FluxForce", "dX", TRegionBounds(-1,0), tStp);
         }
         // X(-1, 2)  Y(-1, 2)
-        void RebuildBounds(TPolyRegion *reg) {
+        void RebuildBoundsBase(TPolyRegion *reg) {
             reg->FillChildBounds(&BoundaryMakerX, "X");
             reg->FillChildBounds(&BoundaryMakerY, "Y");
         }
         // Use dX(-1,1) Y(-1,1)
-        double GetMaxTimeStp(TPolyRegion *reg) {
+        double GetMaxTimeStp(TPolyRegion *reg, double ) {
             Init(reg);
             TGridMaskedData dX(reg->Grid.GetMaskedData(BndTime, "dX"));
             ClcU2.ClcSound(reg, "Y", "C05", BndTime);
             TGridMaskedData c05(reg->Grid.GetMaskedData(BndTime, "C05"));
-            //c05 = reg->Grid.GetMaskedData(BndTime, "Y");
-            //c05 = c05 * 0 + 1;
             double maxTIStp = MathZer;
             for(TGridMaskedData::TIterator itC05(c05); itC05.IsOk(); itC05.Next()) {
                 maxTIStp = max<double>(
@@ -458,9 +445,6 @@ namespace NPolygon {
         }
 
         void MakeTimeStep(TPolyRegion *reg, double curTime, double tStp) {
-            //double courantNumber = tStp / MinPossibleTimeStp;
-            //cout<<" tStp "<<tStp<<" courant "<<courantNumber<<"\n";
-
             // Input Y(-1, 1)
             // Result - FluxVar(-1, 1)
 
@@ -497,8 +481,6 @@ namespace NPolygon {
         void SetDeltaFluxes(TPolyRegion *reg, const Stroka &fluxes) {
             vector<Stroka> vecF = Str::SplitLine(fluxes);
             for(size_t i = 0; i < vecF.size(); i++) {
-                //reg->Grid.GetMaskedData(BndCenteredU, vecF[i]) = reg->Grid.GetMaskedData(BndCenteredU, vecF[i]) -
-                //                                                 reg->Grid.GetMaskedData(BndCenteredU - 1, vecF[i]);
                 reg->Grid.GetMaskedData(BndCenteredU, vecF[i]) =
                     reg->Grid.GetMaskedData(BndCenteredU + 1, vecF[i]) -
                     reg->Grid.GetMaskedData(BndCenteredU, vecF[i]);
@@ -506,9 +488,7 @@ namespace NPolygon {
         }
         Stroka MarchFlux;
         double MarchCourant;
-        virtual void InitBeforeBounds(TPolyRegion *reg){};
-        virtual void InitAfterBounds(TPolyRegion *reg){};
-        virtual void SetNewTimeStp(double curTime, double timeStp){};
+        virtual void InitBase(TPolyRegion *baseNode, double startTime){};
         int save_data_state(FilterOut &so) {
             so << " MarchFlux(FluxVar:FluxLF:FluxRI:FluxForce:FluxFlic) " << MarchFlux
                << " MarchCourant " << MarchCourant;
@@ -528,7 +508,6 @@ namespace NPolygon {
 
     struct TPolyMarchDriverFluxBase : FluxCalculatorBase {
         TPolyMarchDriverFluxBase() : FluxCalculatorBase() {}
-        //virtual void ClcFlux(TPolyRegion *reg, const Stroka &uName, const Stroka &fName, const Stroka &dxName, const TRegionBounds &bnds, double dT)
         virtual void ClcSound(
             TPolyRegion *reg,
             const Stroka &uName,
@@ -658,8 +637,8 @@ namespace NPolygon {
               MarchFlux("FluxLF"),
               MarchCourant(0.5) {}
 
-        void Init(TPolyRegion *reg) {
-            if(!reg->Grid.VarExists("FluxVar")) {
+        virtual void InitBase(TPolyRegion *reg, double ) {
+//            if(!reg->Grid.VarExists("FluxVar")) {
                 ClcBaseFlux->InitRegion(reg);
                 TGridMaskedData src(reg->Grid.GetMaskedData(
                     TRegionBounds(-1, 1), ClcBaseFlux->GetVarName()));
@@ -689,24 +668,15 @@ namespace NPolygon {
                 BndFluxU.Set(-1, 1);
                 BndTime.Set(-1, 1);
                 ClcBaseFlux->ClcDX(reg, "dX", BndTime);
-            }
+//            }
         }
 
-        void RebuildBounds(TPolyRegion *reg) {
+        void RebuildBoundsBase(TPolyRegion *reg) {
             ClcBaseFlux->RebuildBounds(reg);
         }
-        virtual void InitBeforeBounds(TPolyRegion *reg){
-            //ClcBaseFlux->InitBeforeBounds(reg);
-        };
-        virtual void InitAfterBounds(TPolyRegion *reg){
-            //ClcBaseFlux->InitAfterBounds(reg);
-        };
-        virtual void SetNewTimeStp(double curTime, double timeStp){
-            //ClcBaseFlux->SetNewTimeStp(curTime, timeStp);
-        };
         // Use dX(-1,1) Y(-1,1)
-        double GetMaxTimeStp(TPolyRegion *reg) {
-            Init(reg);
+        double GetMaxTimeStp(TPolyRegion *reg, double curTime) {
+            InitBase(reg, curTime);
             TGridMaskedData dX(reg->Grid.GetMaskedData(BndTime, "dX"));
             ClcBaseFlux->ClcSound(reg, ClcBaseFlux->GetVarName(), "C05", BndTime);
             TGridMaskedData c05(reg->Grid.GetMaskedData(BndTime, "C05"));
@@ -744,16 +714,11 @@ namespace NPolygon {
                 tStp);
             SetDeltaFluxes(reg, "FluxVar FluxLF FluxRI FluxForce FluxFlic");
 
-            //TGridVar<double> *dX = SavableClass::TestType<TGridVar<double> >(reg->Grid.GetVar("dX"));
-            //TGridVectorVar<double> *yVar = SavableClass::TestType<TGridVectorVar<double> >(reg->Grid.GetVar(yName));
-
             reg->Grid.GetMaskedData(BndCenteredU, "TimedDeltaFlux") =
                 ((reg->Grid.GetMaskedData(BndCenteredU, MarchFlux) /
                   reg->Grid.GetMaskedData(BndCenteredU, "dX")) *
                  (-tStp));
             ClcBaseFlux->StepVars(reg, "TimedDeltaFlux", yName, BndCenteredU);
-            //reg->Grid.GetMaskedData(BndCenteredU, yName) -= ((reg->Grid.GetMaskedData(BndCenteredU, MarchFlux) /
-            //                                                 reg->Grid.GetMaskedData(BndCenteredU, "dX")) * tStp);
             ClcBaseFlux->RebuildTimeDone(reg, tStp);
         }
 

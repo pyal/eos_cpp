@@ -4,70 +4,8 @@
 
 namespace NPolygon {
 
-    //struct TPolyMarchDriverFluxBase : FluxCalculatorBase {
-    //    TPolyMarchDriverFluxBase() : FluxCalculatorBase() {}
-    //        //virtual void ClcFlux(TPolyRegion *reg, const Stroka &uName, const Stroka &fName, const Stroka &dxName, const TRegionBounds &bnds, double dT)
-    //    virtual void ClcSound(TPolyRegion *reg, const Stroka &uName, const Stroka &sName,const TRegionBounds &bnds) = 0;
-    //    virtual Stroka GetRvarName(TPolyRegion *reg, const Stroka &uName, const TRegionBounds &bnd) = 0;
-    //    virtual Stroka GetVarName() = 0;
-    //    virtual void ClcDX(TPolyRegion *reg, const Stroka dXname, const TRegionBounds &bnds) = 0;
-    //    virtual void RebuildBounds(TPolyRegion *reg) = 0;
-    //    virtual void RebuildTimeDone(TPolyRegion *reg, double tStp) {};
-    //    virtual void InitRegion(TPolyRegion *reg) {};
-    //    virtual void StepVars(TPolyRegion *reg, const Stroka deltaFlux, const Stroka marchVars, const TRegionBounds &bnds) {
-    //        reg->Grid.GetMaskedData(bnds, marchVars) += reg->Grid.GetMaskedData(bnds, deltaFlux);
-    //    }
-    //};
-
-
-    struct TPolyMarchDriverFluxGasdWilkins : TPolyMarchDriverFluxBase {
-        virtual void ClcSound(
-            TPolyRegion *reg,
-            const Stroka &uName,
-            const Stroka &sName,
-            const TRegionBounds &bnds){};
-        virtual Stroka GetRvarName(
-            TPolyRegion *reg,
-            const Stroka &uName,
-            const TRegionBounds &bnd) {
-            return "";
-        };
-        virtual Stroka GetVarName() {
-            return "";
-        };
-        virtual void ClcDX(
-            TPolyRegion *reg,
-            const Stroka dXname,
-            const TRegionBounds &bnds){};
-        virtual void RebuildBounds(TPolyRegion *reg){};
-
-        virtual void ClcFlux(
-            TPolyRegion *reg,
-            const Stroka &uName,
-            const Stroka &fName,
-            const Stroka &xName,
-            const TRegionBounds &bnds,
-            double dT){};
-    };
-
-
     struct TMarchWilkins : TPolyMarchRegionBase {
     private:
-        void InitFakeNum(TPolyRegion *reg) {
-            reg->Grid.AddVar("FakeNum", new TGridVar<double>());
-            int level = reg->Grid.GetBoundarySize();
-            TRegionBounds bndAll(-level, level);
-            TRegionBounds bnd(0, 0);
-            TRegionBounds bnd1(1, -1);
-            int len = reg->Grid.GetMaskedData(bndAll, "FakeNum").Start().Size();
-            double *fake = (double *)reg->Grid.GetMaskedData(bndAll, "FakeNum")
-                               .Start()
-                               .GetElementPtr();
-            for(int i = 0; i < 2 * level + 1; i++) {
-                fake[i] = i - level;
-                fake[len - 2 * level + 1 - i] = level - i;
-            }
-        }
         int IsVacuum(TPolyRegion *reg) {
             MatterIO *mat = SavableClass::TestType<MatterIO>(reg->MapSavableVar[EOSName]);
             return (dynamic_cast<MatterVacuum *>(mat) != NULL);
@@ -95,9 +33,6 @@ namespace NPolygon {
                     dencPtr[i] = denc0;
         }
         void InitRegion(TPolyRegion *reg) {
-            //if (reg->Grid.VarExists(ViscName))
-            //    return;
-            //InitFakeNum(reg);
             InitDenc(reg);
             reg->Grid.AddVar(VelPlusName, new TGridVar<double>());    //
             reg->Grid.AddVar(VolName, new TGridVar<double>());        //
@@ -144,9 +79,6 @@ namespace NPolygon {
         }
         void MakeVisc(TPolyRegion *reg, const Stroka &viscName) {
             TRegionBounds bndCent(0, -1);
-//            double *vel = (double *)reg->Grid.GetMaskedData(bndCent, VelName)
-//                              .Start()
-//                              .GetElementPtr();
             double *velPlus = (double *)reg->Grid.GetMaskedData(bndCent, VelPlusName)
                                   .Start()
                                   .GetElementPtr();
@@ -212,7 +144,6 @@ namespace NPolygon {
             TRegionBounds bndX(0, 0);
             double *pos =
                 (double *)reg->Grid.GetMaskedData(bndX, PosName).Start().GetElementPtr();
-            //double *num = (double *)reg->Grid.GetMaskedData(bndX, "FakeNum").Start().GetElementPtr();
             int sizeX = reg->Grid.GetMaskedData(bndX, PresName).Start().Size();
             if(pos[sizeX - 1] - pos[0] < MathZer)
                 pos[sizeX - 1] = (pos[0] = 0.5 * (pos[sizeX - 1] + pos[0]));
@@ -222,37 +153,6 @@ namespace NPolygon {
         }
 
 
-        void FillChildBoundsVacuumX(TPolyRegion *reg, const Stroka &varName) {
-            TPolyRegion::TShallowIterator prevIt;
-//            TPolyRegion *prevRegion = NULL;
-            for(TPolyRegion::TShallowIterator curIt = reg->ShallowStart(); curIt.IsOk();
-                prevIt = curIt, curIt.Next()) {
-                if(!IsVacuum(curIt.CurRegion()))
-                    continue;
-                TRegionBounds bndX(0, 0);
-                double *posPrev = (double *)prevIt.CurRegion()
-                                      ->Grid.GetMaskedData(bndX, varName)
-                                      .Start()
-                                      .GetElementPtr();
-                double *posCur = (double *)curIt.CurRegion()
-                                     ->Grid.GetMaskedData(bndX, varName)
-                                     .Start()
-                                     .GetElementPtr();
-                int sizePrev =
-                    prevIt.CurRegion()->Grid.GetMaskedData(bndX, varName).Start().Size();
-                int sizeCur =
-                    curIt.CurRegion()->Grid.GetMaskedData(bndX, varName).Start().Size();
-                curIt.Next();
-                double *posNext = (double *)curIt.CurRegion()
-                                      ->Grid.GetMaskedData(bndX, varName)
-                                      .Start()
-                                      .GetElementPtr();
-//                int sizeNext =
-//                    curIt.CurRegion()->Grid.GetMaskedData(bndX, varName).Start().Size();
-                posCur[0] = posPrev[sizePrev - 1];
-                posCur[sizeCur - 1] = posNext[0];
-            }
-        }
         void SetRegion(TPolyRegion::TShallowIterator &region) {
             TPolyRegion *prev = region.GetPrev(), *next = region.GetNext(),
                         *cur = region.CurRegion();
@@ -310,7 +210,11 @@ namespace NPolygon {
         Stroka VelPlusName, VolName, VolPlusName, PosPlusName, DencPlusName;
         Stroka MassName, /*MassBndName, */ VolDerivName;   //ViscPresName,
         Stroka ViscPlusName, ViscName;
-        double TStp0_5, CL, C0, MarchCourant, MinPres, EnergyPresCoef, MinPresCoef;
+        double TStp0_5;
+    public:
+        double CL, C0, MarchCourant;
+    private:
+        double MinPres, EnergyPresCoef, MinPresCoef;
         double CurTime;
         TRegBoundaryCircleX BoundaryMakerX;
         TRegBoundaryCircle_ZeroConst BoundaryMakerMass, BoundaryMakerPres,
@@ -332,8 +236,6 @@ namespace NPolygon {
               PosPlusName("PosPlus"),
               DencPlusName("DencPlus"),
               MassName("Mass"),
-              //, MassBndName("MassBnd")
-              //, ViscPresName("ViscPres")
               VolDerivName("VolDeriv"),
               ViscPlusName("ViscPlus"),
               ViscName("Visc"),
@@ -343,24 +245,26 @@ namespace NPolygon {
               MarchCourant(0.1),
               MinPres(1e-4),
               EnergyPresCoef(0),
-              MinPresCoef(1),
+              MinPresCoef(0),
               BoundaryMakerX(TRegionBounds(0, 0)),
               BoundaryMakerMass(TRegionBounds(0, -1), "0 "),
               BoundaryMakerPres(TRegionBounds(0, -1), "1e-4"),
               BoundaryMakerVel(TRegionBounds(0, -1), "0 1")
         {}
-        //virtual double GetCurTime() { return CurTime;}
-        virtual void InitBeforeBounds(TPolyRegion *reg) {
-            InitRegion(reg);
+        virtual void InitBase(TPolyRegion *head, double startTime) {
+            for(TPolyRegion::TShallowIterator region = head->ShallowStart(); region.IsOk();
+                region.Next()) {
+                InitRegion(region.CurRegion());
+            }
+            RebuildBoundsBase(head);
         }
-        virtual void InitAfterBounds(TPolyRegion *reg) {}
-        virtual void RebuildBounds(TPolyRegion *reg) {
-            for(TPolyRegion::TShallowIterator region = reg->ShallowStart(); region.IsOk();
+        virtual void RebuildBoundsBase(TPolyRegion *head) {
+            for(TPolyRegion::TShallowIterator region = head->ShallowStart(); region.IsOk();
                 region.Next()) {
                 SetRegion(region);
             }
         }
-        double GetMaxTimeStp(TPolyRegion *reg) {
+        double GetMaxTimeStp(TPolyRegion *reg, double ) {
             if(IsVacuum(reg))
                 return GetMaxTimeStp2Vacuum(reg);
             TRegionBounds bndCent(0, -1);
@@ -393,18 +297,14 @@ namespace NPolygon {
                     1.5 * vol[i] / (sqrt(sqr(fabs(sound[i]) + fabs(fake[i])) + sqr(b)));
                 tStpPlus3_2 = min(tStpPlus3_2, cStp);
             }
-            tStpPlus3_2 = min(1.1 * TStp0_5 / MarchCourant, tStpPlus3_2);
-            double tmp = max<double>(
-                min(TStp0_5 / MarchCourant, 10 * tStpPlus3_2), 0.1 * tStpPlus3_2);
-            double ret = 0.5 * (tStpPlus3_2 + tmp);
-            return max<double>(MathZer, ret * MarchCourant);
+            tStpPlus3_2 *= MarchCourant;
+            tStpPlus3_2 = min(1.1 * TStp0_5, tStpPlus3_2);
+            return max<double>(MathZer, tStpPlus3_2);
         }
-        virtual void SetNewTimeStp(double curTime, double tStp) {
-            TStp0_5 = tStp;
-            CurTime = curTime;
-        };
 
         void MakeTimeStep(TPolyRegion *reg, double curTime, double tStp) {
+            TStp0_5 = tStp;
+            CurTime = curTime;
             if(IsVacuum(reg))
                 return MakeTimeStep2Vacuum(reg, tStp);
             TRegionBounds bnd(0, 0);
