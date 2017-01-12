@@ -247,7 +247,7 @@ namespace NPolygon {
             VectorVar.clear();
             VectorSizes = 0;
             Stroka tmp;
-            SavableClass::ExeptionCheck(si, "{");
+            SavableClass::ExceptionCheck(si, "{");
             Ref<TGridVar<T>> ptr;
             while(!SavableClass::TestNextChar(si, '}')) {
                 si >> ptr;

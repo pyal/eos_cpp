@@ -44,7 +44,7 @@ namespace File {
     int ReadObjVector(FilterIn &si, vector<Ref<T>> &objects) {
         objects.clear();
         Ref<T> obj;
-        SavableClass::ExeptionCheck(si, "{");
+        SavableClass::ExceptionCheck(si, "{");
         while(!SavableClass::TestNextChar(si, '}')) {
             obj << si.getobject();
             if(!obj)

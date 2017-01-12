@@ -61,15 +61,15 @@ struct ExternalEnergyInput : OneVarFunction {
             SpaceInt >> tmp >> SpaceMin >> tmp >> SpaceMax;
         input >> tmp >> TimeMin >> tmp >> TimeMax;
         input >> tmp;
-        SavableClass::ExeptionCheck(
-            input, "{", "ExternalEnergyInput - expected begin of matter_coefs map...\n");
+        SavableClass::ExceptionCheck(
+                input, "{", "ExternalEnergyInput - expected begin of matter_coefs map...\n");
         RegNum2Coef.clear();
         while(!SavableClass::TestNextChar(input, '}') && input) {
             int n;
             double x;
             input >> n >> x;
             RegNum2Coef[n] = x;
-            SavableClass::ExeptionCheck(input, ";", "Expected matters delimiter ;\n");
+            SavableClass::ExceptionCheck(input, ";", "Expected matters delimiter ;\n");
         }
 
         CurveSpline::SplineFromData(

@@ -278,7 +278,7 @@ namespace NPolygon {
         };
         int read_data_state(FilterIn &si) {
             VectorT.clear();
-            SavableClass::ExeptionCheck(si, "{");
+            SavableClass::ExceptionCheck(si, "{");
             T data;
             while(!(!si) && !SavableClass::TestNextChar(si, '}')) {
                 si >> data;

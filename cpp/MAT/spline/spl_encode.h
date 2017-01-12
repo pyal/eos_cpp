@@ -74,7 +74,7 @@ struct TEncodedSplineCalculator : ISplineCalculator {
     virtual void ReadSplineData(FilterIn &in) {
         Stroka tmp;
         in >> tmp;
-        SavableClass::ExeptionCheck(in, "{", " FunctionConverter list test {");
+        SavableClass::ExceptionCheck(in, "{", " FunctionConverter list test {");
         Ref<IFunctionConverter> cvt;
         CvtVec.clear();
         while(!SavableClass::TestNextChar(in, '}', 1)) {
@@ -253,7 +253,7 @@ struct TEncodedSplineGenerator : ISplineGenerator {
     int read_data_state(FilterIn &in) {
         Stroka tmp;
         in >> tmp;
-        SavableClass::ExeptionCheck(in, "{", " FunctionConverter list test {");
+        SavableClass::ExceptionCheck(in, "{", " FunctionConverter list test {");
         Ref<IFunctionConverter> cvt;
         CvtVec.clear();
         while(!SavableClass::TestNextChar(in, '}', 1)) {

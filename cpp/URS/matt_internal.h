@@ -123,8 +123,8 @@ struct MatterSum : MatterIO {
         M2 << SavableClass::Read(input);
         if(!M1 || !M2)
             throw info_except(" Could not register matters...\n");
-        cout << " Read M1 " << SavableClass::object2string(M1.pointer()) << " \n M2 "
-             << SavableClass::object2string(M2.pointer()) << "\n";
+        log_debug(" Read M1 " +  SavableClass::object2string(M1.pointer()));
+        log_debug(" Read M2 " +  SavableClass::object2string(M2.pointer()));
         return 1;
     };
     void SetInternalNames() {

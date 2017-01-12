@@ -866,7 +866,7 @@ struct UrsCurve_FileReader : URS_Curve::ClcVar {
     virtual int read_data_state(FilterIn &si) {
         char tmp[256];
         si >> tmp >> FileName >> tmp;
-        SavableClass::ExeptionCheck(si, "{", "no begining...");
+        SavableClass::ExceptionCheck(si, "{", "no begining...");
         DataNames.Release();
         while(!SavableClass::TestNextChar(si, '}', 1)) {
             si >> tmp;

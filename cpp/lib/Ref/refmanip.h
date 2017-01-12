@@ -12,7 +12,7 @@ struct TVerify {
 
 FilterIn &operator>>(FilterIn &in, Stroka &str);
 FilterIn &operator>>(FilterIn &in, const TVerify &wrd);
-
+istream &operator>>(istream &in,   const TVerify &wrd);
 
 //namespace RefManip {
 

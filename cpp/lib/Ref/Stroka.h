@@ -131,6 +131,11 @@ public:
         return p;
     }
 
+    char *end() {
+        cow();
+        return p + length();
+    }
+
     size_t length() const   // size(), operator+()
     {
         return pdata()->nchars;
