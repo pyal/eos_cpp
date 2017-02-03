@@ -94,3 +94,10 @@ at/oat/at.log
 
 bin/*
 material.cfg
+bin/
+lib/
+
+
+moc_qtmenu.cpp
+qtshow_automoc.cpp
+cpp/UTIL/qt/qt_sample.cpp
