@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_PREFIX_PATH "/Users/pyal/Qt//5.7/clang_64/lib/cmake/Qt5Widgets;/Users/pyal/Qt/5.7/clang_64/lib/cmake/Qt5DataVisualization;/Users/pyal/Qt/5.7/clang_64/lib/cmake/Qt5Charts")
 project(eos_cpp)
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeLibraryFiles.txt)
 enable_testing()
@@ -23,7 +24,7 @@ else()
 endif()
 
 find_package(Git)
-file(WRITE ${CMAKE_BINARY_DIR}/version.h.in "\#define VERSION \"@VERSION@\"\n")
+file(WRITE ${CMAKE_BINARY_DIR}/version.h.in "\#pragma once\n\#define VERSION \"@VERSION@\"\ntemplate<class T>T BuildDate(){return T(__DATE__);}\ntemplate<class T>T BuildTime(){return T(__TIME__);}\n " )
 
 
 option(ASAN "Enable Address Sanitizer (http://clang.llvm.org/docs/AddressSanitizer.html)" OFF)
@@ -202,21 +203,26 @@ add_dependencies(famessb version)
 
 
 
+cmake_minimum_required(VERSION 2.8.11)
 
+#project(testproject)
 
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
 
+# Find the QtWidgets library
+find_package(Qt5Widgets)
+find_package(Qt5DataVisualization)
+find_package(Qt5Core)
+find_package(Qt5Charts)
+# Tell CMake to create the helloworld executable
+#add_executable(helloworld main.cpp)
 
-
-
-
-
-
-
-#add_executable(test_urs cpp/Urs/test/test_urs.cpp ${TEST_URS_SOURCE_FILES})
-#target_link_libraries(test_urs reflib stdlib urs_curve_lib quad_pack_lib mathlib
-#        waveletlib calclib lex_anal_lib regridlib datalib multiminlib libf2c eoslib math_func_lib
-#        box_lib
-#        )
-#add_dependencies(test_urs version)
-
+# Use the Widgets module from Qt 5.
+add_executable(qtshow cpp/UTIL/qt/qtshow.cpp ${QTSHOW_SOURCE_FILES})
+target_link_libraries(qtshow reflib stdlib Qt5::Widgets Qt5::Core Qt5::DataVisualization Qt5::Charts
+        )
+add_dependencies(qtshow version)
 

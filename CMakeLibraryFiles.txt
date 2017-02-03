@@ -754,3 +754,7 @@ set(MESSB_LIB_SOURCE_FILES
         cpp/lib/Gasd_Min/gasd_min.cpp
         cpp/lib/Gasd_Min/gasd_min.h
 )
+
+set(QTSHOW_SOURCE_FILES
+        cpp/UTIL/qt/qtmenu.cpp
+)
