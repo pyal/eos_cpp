@@ -35,7 +35,7 @@ namespace File {
     }
 
     int GetLine(FILE *file, Stroka &str) {
-#define MAXLINELEN 1000
+#define MAXLINELEN 5000
         char line[MAXLINELEN + 1];
         line[MAXLINELEN] = 0;
         char *buf;
@@ -85,6 +85,13 @@ namespace File {
         line = (delim == ' ') ? Str::SplitLine(str) : Str::SplitLine(str, 1, delim);
         return 1;
     }
+    int GetLine(FILE *file, std::vector<string> &line, char delim) {
+        vector<Stroka> tmp;
+        int ret = GetLine(file, tmp, delim);
+        for(auto &s: tmp) line.push_back(~s);
+        return ret;
+    }
+
     int GetLine(FILE *file, std::vector<Stroka> &line, char *Buf, int BufLen) {
         Stroka str;
         if(!GetLine(file, str, Buf, BufLen))

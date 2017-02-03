@@ -15,6 +15,7 @@ namespace File {
     int GetLine(FILE *file, Stroka &str, char *Buf, int BufLen);
 
     int GetLine(FILE *file, std::vector<Stroka> &line, char delim = ' ');
+    int GetLine(FILE *file, std::vector<string> &line, char delim = ' ');
     std::map<Stroka, Stroka> ReadFile2Map(
         const char *file,
         const char delim,
