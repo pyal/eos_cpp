@@ -37,9 +37,9 @@ namespace Str {
         int CreateZeroString = 0,
         char Delim = ' ');
     // Extract given params from the string, if no - throw exception
-    std::map<Stroka, Stroka> ReadParams(const Stroka &Params, const char *CheckParams);
+    std::map<Stroka, Stroka> ReadParams(const vector<Stroka> &Params, const char *CheckParams);
     std::map<Stroka, Stroka> ReadDefinedParams(
-        const Stroka &params,
+        const vector<Stroka> &params,
         const std::map<Stroka, Stroka> &definedParams,
         const char *nonDefaultMark,
         const char *errorDescr_ = NULL);

@@ -146,7 +146,8 @@ namespace NRef {
     int TCommandParse::SimpleRun(int argc, const char *argv[]) {
         int formattedLength = 90;
         if(argc < 2) {
-            Stroka descr = "Program build date: " + Stroka(__DATE__) + " " + Stroka(__TIME__) + "\n";
+//            Stroka descr = "Program build date: " + Stroka(__DATE__) + " " + Stroka(__TIME__) + "\n";
+            Stroka descr = Stroka("Program build date: ") + BuildDate<Stroka>() + " " + BuildTime<Stroka>() + "\n";
             descr += Stroka("Version ") + VERSION + "\n\n";
             descr += "General help for the program is:~+\n" + MainHelp + "~-\n";
             descr += "Parameters defined are: ";
@@ -158,12 +159,12 @@ namespace NRef {
             std::cout.flush();
             exit(1);
         }
-        Stroka par;
+        vector<Stroka> par;
         if(argc == 3)
-            par = argv[2];
+            par = Str::SplitLine(argv[2]);
         else
             for(int i = 2; i < argc; i++)
-                par += Stroka(argv[i]) + " ";
+                par.push_back(Stroka(argv[i]));
         map<Stroka, TKeyData>::iterator it = Params.find(argv[1]);
         if(it == Params.end()) {
             std::cout << "Mode <" << argv[1] << "> is not defined.\n"
@@ -172,8 +173,8 @@ namespace NRef {
             exit(1);
         }
         map<Stroka, Stroka> params = it->second.GivenDefaults() ?
-                 Str::ReadDefinedParams(~par, it->second.GetParams2Defaults(), "TOBEDEFINED") :
-                 Str::ReadParams(~par, ~it->second.GetParamsNames());
+                 Str::ReadDefinedParams(par, it->second.GetParams2Defaults(), "TOBEDEFINED") :
+                 Str::ReadParams(par, ~it->second.GetParamsNames());
         SetLogLevel(params);
         it->second.Func(params);
         return 1;

@@ -81,9 +81,9 @@ namespace Str {
         return ret;
     }
 
-    std::map<Stroka, Stroka> ReadParams(const Stroka &Params, const char *CheckParams) {
+    std::map<Stroka, Stroka> ReadParams(const vector<Stroka> &Params, const char *CheckParams) {
         std::map<Stroka, Stroka> Res;
-        std::vector<Stroka> wrds = SplitLine(Params);
+        std::vector<Stroka> wrds = Params;
         for(size_t i = 0; i + 1 < wrds.size(); i += 2)
             Res[wrds[i]] = wrds[i + 1];
         std::vector<Stroka> tst = SplitLine(Stroka(CheckParams));
@@ -93,22 +93,22 @@ namespace Str {
                     "Did not find parameter <%s>. Parameters to be defined are:\n%s\nInput string \n%s\n",
                     tst[i].c_str(),
                     CheckParams,
-                    Params.c_str());
+                    ~Str::JoinLine(Params));
         return Res;
     }
 
     map<Stroka, Stroka> ReadDefinedParams(
-        const Stroka &params,
+        const vector<Stroka> &params,
         const map<Stroka, Stroka> &definedParams,
         const char *nonDefaultMark,
         const char *errorDescr_) {
         map<Stroka, Stroka> res = definedParams;
         Stroka errorDescr = Stroka("Can set parameters:\n") +
                             JoinLine(DataManip::Map2Vector(definedParams), '|') +
-                            "\nInput string \n" + ~params + "\n";
+                            "\nInput string \n" + Str::JoinLine(params) + "\n";
         if(errorDescr_)
             errorDescr += Stroka("Description:<") + errorDescr_ + ">\n";
-        vector<Stroka> wrds = SplitLine(params);
+        vector<Stroka> wrds = params;
         if(wrds.size() % 2 != 0)
             throw info_except(
                 "Number of words have to even, and it is not.\n%s", ~errorDescr);
