@@ -17,37 +17,44 @@ namespace NPolygon {
             int size = reg->Grid.GetMaskedData(bnd, PosName).Start().Size();
             return (pos[size - 1] - pos[0] < MathZer);
         }
-        void InitDenc(TPolyRegion *reg) {
-            int level = reg->Grid.GetBoundarySize();
-            TRegionBounds bndAll(-level, level);
-            double *dencPtr = (double *)reg->Grid.GetMaskedData(bndAll, DencName)
-                                  .Start()
-                                  .GetElementPtr();
-            MatterIO *mat = SavableClass::TestType<MatterIO>(reg->MapSavableVar[EOSName]);
-            if(IsVacuum(reg))
-                return;
-            double denc0 = mat->DencityCold();
-            for(int i = 0; i < reg->Grid.GetMaskedData(bndAll, DencName).Start().Size();
-                i++)
-                if(dencPtr[i] == 0)
-                    dencPtr[i] = denc0;
-        }
         void InitRegion(TPolyRegion *reg) {
-            InitDenc(reg);
-            reg->Grid.AddVar(VelPlusName, new TGridVar<double>());    //
-            reg->Grid.AddVar(VolName, new TGridVar<double>());        //
-            reg->Grid.AddVar(VolPlusName, new TGridVar<double>());    //
-            reg->Grid.AddVar(PosPlusName, new TGridVar<double>());    //
-            reg->Grid.AddVar(DencPlusName, new TGridVar<double>());   //
+            reg->Grid.AddVar(VelPlusName, new TGridVar<double>());
+            reg->Grid.AddVar(VolName, new TGridVar<double>());
+            reg->Grid.AddVar(VolPlusName, new TGridVar<double>());
+            reg->Grid.AddVar(PosPlusName, new TGridVar<double>());
+            reg->Grid.AddVar(DencPlusName, new TGridVar<double>());
 
-            reg->Grid.AddVar(MassName, new TGridVar<double>());   //
-            //reg->Grid.AddVar(ViscPresName, new TGridVar<double>());
+            reg->Grid.AddVar(MassName, new TGridVar<double>());
             reg->Grid.AddVar(VolDerivName, new TGridVar<double>());
-            //reg->Grid.AddVar(MassBndName, new TGridVar<double>());
             reg->Grid.AddVar(ViscName, new TGridVar<double>());
             reg->Grid.AddVar(ViscPlusName, new TGridVar<double>());
 
-            reg->Grid.AddVar("Fake", new TGridVar<double>());   //
+            reg->Grid.AddVar("Fake", new TGridVar<double>());
+
+            reg->Grid.AddVar(PresPlusName, new TGridVar<double>());
+            reg->Grid.AddVar(EnerPlusName, new TGridVar<double>());
+            reg->Grid.AddVar(PI, new TGridVar<double>());
+            reg->Grid.AddVar(II, new TGridVar<double>());
+            reg->Grid.AddVar(EI, new TGridVar<double>());
+            reg->Grid.AddVar(PIx, new TGridVar<double>());
+            reg->Grid.AddVar(IIx, new TGridVar<double>());
+            reg->Grid.AddVar(EIx, new TGridVar<double>());
+
+            reg->Grid.AddVar(PIt, new TGridVar<double>());
+            reg->Grid.AddVar(IIt, new TGridVar<double>());
+            reg->Grid.AddVar(EIt, new TGridVar<double>());
+
+            reg->Grid.AddVar(PIc, new TGridVar<double>());
+            reg->Grid.AddVar(IIc, new TGridVar<double>());
+            reg->Grid.AddVar(EIc, new TGridVar<double>());
+
+            reg->Grid.AddVar(PIp, new TGridVar<double>());
+            reg->Grid.AddVar(IIp, new TGridVar<double>());
+            reg->Grid.AddVar(EIp, new TGridVar<double>());
+            reg->Grid.AddVar(PIxp, new TGridVar<double>());
+            reg->Grid.AddVar(IIxp, new TGridVar<double>());
+            reg->Grid.AddVar(EIxp, new TGridVar<double>());
+            reg->Grid.AddVar(Dx, new TGridVar<double>());
 
             TRegionBounds bndCent(0, -1);
 
@@ -79,25 +86,14 @@ namespace NPolygon {
         }
         void MakeVisc(TPolyRegion *reg, const Stroka &viscName) {
             TRegionBounds bndCent(0, -1);
-            double *velPlus = (double *)reg->Grid.GetMaskedData(bndCent, VelPlusName)
-                                  .Start()
-                                  .GetElementPtr();
-            double *denc = (double *)reg->Grid.GetMaskedData(bndCent, DencName)
-                               .Start()
-                               .GetElementPtr();
-            double *dencPlus = (double *)reg->Grid.GetMaskedData(bndCent, DencPlusName)
-                                   .Start()
-                                   .GetElementPtr();
-            double *pres = (double *)reg->Grid.GetMaskedData(bndCent, PresName)
-                               .Start()
-                               .GetElementPtr();
-            double *viscP = (double *)reg->Grid.GetMaskedData(bndCent, viscName)
-                                .Start()
-                                .GetElementPtr();
-            double *visc = (double *)reg->Grid.GetMaskedData(bndCent, ViscName)
-                               .Start()
-                               .GetElementPtr();
-            int size = reg->Grid.GetMaskedData(bndCent, PresName).Start().Size();
+            double *velPlus = reg->GetDataPtr(bndCent, VelPlusName);
+            double *denc = reg->GetDataPtr(bndCent, DencName);
+            double *dencPlus = reg->GetDataPtr(bndCent, DencPlusName);
+            double *pres = reg->GetDataPtr(bndCent, PresName);
+            double *viscP = reg->GetDataPtr(bndCent, viscName);
+            double *visc = reg->GetDataPtr(bndCent, ViscName);
+
+            int size = reg->GetDataSize(bndCent, PresName);
             double minPres = MinPres;
             double cL = CL, c0 = C0;
             for(int i = 0; i < size; i++) {
@@ -116,10 +112,8 @@ namespace NPolygon {
         }
         void SetMinPres(TPolyRegion *reg, const Stroka &presName, double minP) {
             TRegionBounds bndCent(0, -1);
-            double *pres = (double *)reg->Grid.GetMaskedData(bndCent, presName)
-                               .Start()
-                               .GetElementPtr();
-            int size = reg->Grid.GetMaskedData(bndCent, presName).Start().Size();
+            double *pres = reg->GetDataPtr(bndCent, presName);
+            int size = reg->GetDataSize(bndCent, presName);
             for(int i = 0; i < size; i++) {
                 if(pres[i] < minP)
                     pres[i] = minP + (pres[i] - minP) * MinPresCoef;
@@ -128,12 +122,10 @@ namespace NPolygon {
         double GetMaxTimeStp2Vacuum(TPolyRegion *reg) {
             //TRegionBounds bnd(0, -1);
             TRegionBounds bnd(0, 0);
-            double *vel =
-                (double *)reg->Grid.GetMaskedData(bnd, VelName).Start().GetElementPtr();
-            double *pos =
-                (double *)reg->Grid.GetMaskedData(bnd, PosName).Start().GetElementPtr();
+            double *vel = reg->GetDataPtr(bnd, VelName);
+            double *pos = reg->GetDataPtr(bnd, PosName);
 
-            int size = reg->Grid.GetMaskedData(bnd, VolName).Start().Size();
+            int size = reg->GetDataSize(bnd, VelName);
             double dV = vel[size - 1] - vel[0], dX = pos[size - 1] - pos[0];
             if(dX < MathZer)
                 return 1 / MathZer;
@@ -202,6 +194,7 @@ namespace NPolygon {
                 0.5;
             next->Grid.GetMaskedData(bndLft, VelName) =
                 cur->Grid.GetMaskedData(bndRgt, VelName);
+
         }
 
 
@@ -210,6 +203,13 @@ namespace NPolygon {
         Stroka VelPlusName, VolName, VolPlusName, PosPlusName, DencPlusName;
         Stroka MassName, /*MassBndName, */ VolDerivName;   //ViscPresName,
         Stroka ViscPlusName, ViscName;
+        Stroka PresPlusName, EnerPlusName;
+        Stroka PI, II, EI;
+        Stroka PIx, IIx, EIx, PIt, IIt, EIt;
+        Stroka PIc, IIc, EIc;
+        Stroka PIp, IIp, EIp;
+        Stroka PIxp, IIxp, EIxp;
+        Stroka Dx;
         double TStp0_5;
     public:
         double CL, C0, MarchCourant;
@@ -244,13 +244,23 @@ namespace NPolygon {
               C0(2),
               MarchCourant(0.1),
               MinPres(1e-4),
-              EnergyPresCoef(0),
+              EnergyPresCoef(1),
               MinPresCoef(0),
               BoundaryMakerX(TRegionBounds(0, 0)),
               BoundaryMakerMass(TRegionBounds(0, -1), "0 "),
               BoundaryMakerPres(TRegionBounds(0, -1), "1e-4"),
               BoundaryMakerVel(TRegionBounds(0, -1), "0 1")
-        {}
+        {
+            PresPlusName = "PresPlusName";
+            EnerPlusName = "EnerPlusName";
+            PI = "PI"; II = "II"; EI = "EI";
+            PIx = "PIx"; IIx = "IIx"; EIx = "EIx";
+            PIt = "PIt"; IIt = "IIt"; EIt = "EIt";
+            PIc = "PIc"; IIc = "IIc"; EIc = "EIc";
+            PIp = "PIp"; IIp = "IIp"; EIp = "EIp";
+            PIxp = "PIxp"; IIxp = "IIxp"; EIxp = "EIxp";
+            Dx = "Dx";
+        }
         virtual void InitBase(TPolyRegion *head, double startTime) {
             for(TPolyRegion::TShallowIterator region = head->ShallowStart(); region.IsOk();
                 region.Next()) {
@@ -272,23 +282,15 @@ namespace NPolygon {
             double cL = CL, c0 = C0;
             TFluxPrepare::MakeBoundedPresSound(
                 reg, bndCent, bndCent, DencName, EnerName, EOSName, SoundName, 0);
-            double *vol = (double *)reg->Grid.GetMaskedData(bndCent, VolName)
-                              .Start()
-                              .GetElementPtr();
-            double *sound = (double *)reg->Grid.GetMaskedData(bndCent, SoundName)
-                                .Start()
-                                .GetElementPtr();
-            double *vDer = (double *)reg->Grid.GetMaskedData(bndCent, VolDerivName)
-                               .Start()
-                               .GetElementPtr();
+            double *vol = reg->GetDataPtr(bndCent, VolName);
+            double *sound = reg->GetDataPtr(bndCent, SoundName);
+            double *vDer = reg->GetDataPtr(bndCent, VolDerivName);
             reg->Grid.GetMaskedData(bndCent, "Fake") =
                 reg->Grid.GetMaskedData(bndCent + 1, VelName) -
                 reg->Grid.GetMaskedData(bndCent, VelName);
-            double *fake = (double *)reg->Grid.GetMaskedData(bndCent, "Fake")
-                               .Start()
-                               .GetElementPtr();
+            double *fake = reg->GetDataPtr(bndCent, "Fake");
 
-            int size = reg->Grid.GetMaskedData(bndCent, VolName).Start().Size();
+            int size = reg->GetDataSize(bndCent, VolName);
             for(int i = 0; i < size; i++) {
                 double b = 0;
                 if(vDer[i] < 0)
@@ -331,23 +333,26 @@ namespace NPolygon {
 
             // Make iteration Pressure!!! for visc, E
             MakeVisc(reg, ViscPlusName);
-            reg->Grid.GetMaskedData(bndCent, EnerName) =
+            reg->Grid.GetMaskedData(bndCent, EnerPlusName) =
                 reg->Grid.GetMaskedData(bndCent, EnerName) -
                 (reg->Grid.GetMaskedData(bndCent, PresName) +
-                 (reg->Grid.GetMaskedData(bndCent, ViscPlusName) -
-                  reg->Grid.GetMaskedData(bndCent, ViscName)) *
+                        ((reg->Grid.GetMaskedData(bndCent, ViscPlusName) -
+                  reg->Grid.GetMaskedData(bndCent, ViscName))
+//Adding sound correction for the next time pressure
+//                        + reg->Grid.GetMaskedData(bndCent, SoundName) * 0.5 *
+//                        reg->Grid.GetMaskedData(bndCent, SoundName) *
+//                                (reg->Grid.GetMaskedData(bndCent, DencPlusName) - reg->Grid.GetMaskedData(bndCent, DencName))
+                        ) *
                      EnergyPresCoef) *
                     (reg->Grid.GetMaskedData(bndCent, VolPlusName) -
                      reg->Grid.GetMaskedData(bndCent, VolName)) /
                     reg->Grid.GetMaskedData(bndCent, MassName);
 
             TFluxPrepare::MakeBoundedPresSound(
-                reg, bndCent, bndCent, DencPlusName, EnerName, EOSName, PresName, 1);
-            reg->Grid.GetMaskedData(bndCent, PresName) +=
+                reg, bndCent, bndCent, DencPlusName, EnerPlusName, EOSName, PresPlusName, 1);
+            reg->Grid.GetMaskedData(bndCent, PresPlusName) +=
                 reg->Grid.GetMaskedData(bndCent, ViscPlusName);
-            SetMinPres(reg, PresName, MinPres);
-            reg->Grid.GetMaskedData(bndCent, ViscName) =
-                reg->Grid.GetMaskedData(bndCent, ViscPlusName);
+            SetMinPres(reg, PresPlusName, MinPres);
 
             // VolDerivName - done for time stp
             reg->Grid.GetMaskedData(bndCent, VolDerivName) =
@@ -360,6 +365,17 @@ namespace NPolygon {
                 (reg->Grid.GetMaskedData(bndCent + 1, PosPlusName) -
                  reg->Grid.GetMaskedData(bndCent, PosPlusName));
 
+            ClcIntegrals(reg, tStp);
+
+
+
+            reg->Grid.GetMaskedData(bndCent, ViscName) =
+                    reg->Grid.GetMaskedData(bndCent, ViscPlusName);
+            reg->Grid.GetMaskedData(bndCent, PresName) =
+                    reg->Grid.GetMaskedData(bndCent, PresPlusName);
+            reg->Grid.GetMaskedData(bndCent, EnerName) =
+                    reg->Grid.GetMaskedData(bndCent, EnerPlusName);
+
 
             reg->Grid.GetMaskedData(bnd, VelName) =
                 reg->Grid.GetMaskedData(bnd, VelPlusName);
@@ -371,7 +387,111 @@ namespace NPolygon {
                 reg->Grid.GetMaskedData(bnd, DencPlusName);
         }
 
+        void ClcIntegrals(TPolyRegion *reg, double tStp) {
+            if(IsVacuum(reg))
+                return;
+            TRegionBounds bnd(0, 0);
+            TRegionBounds bndCent(0, -1);
+            reg->Grid.GetMaskedData(bndCent, PIx) =
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosName) - reg->Grid.GetMaskedData(bndCent, PosName)) * reg->Grid.GetMaskedData(bndCent, DencName);
+            reg->Grid.GetMaskedData(bndCent, IIx) =
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosName) - reg->Grid.GetMaskedData(bndCent, PosName)) *
+                       reg->Grid.GetMaskedData(bndCent, DencName) * reg->Grid.GetMaskedData(bndCent, VelName);
+            reg->Grid.GetMaskedData(bndCent, EIx) =
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosName) - reg->Grid.GetMaskedData(bndCent, PosName)) *
+                            reg->Grid.GetMaskedData(bndCent, DencName) * (reg->Grid.GetMaskedData(bndCent, VelName) * 0.5 * reg->Grid.GetMaskedData(bndCent, VelName) +
+                                    reg->Grid.GetMaskedData(bndCent, EnerName));
+            BuildSum(reg, PIx, PI);
+            BuildSum(reg, IIx, II);
+            BuildSum(reg, EIx, EI);
+            reg->Grid.GetMaskedData(bndCent, PIxp) =
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosPlusName) - reg->Grid.GetMaskedData(bndCent, PosPlusName)) * reg->Grid.GetMaskedData(bndCent, DencPlusName);
+            reg->Grid.GetMaskedData(bndCent, IIxp) =
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosPlusName) - reg->Grid.GetMaskedData(bndCent, PosPlusName)) *
+                    reg->Grid.GetMaskedData(bndCent, DencPlusName) * reg->Grid.GetMaskedData(bndCent, VelPlusName);
+            reg->Grid.GetMaskedData(bndCent, EIxp) =
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosPlusName) - reg->Grid.GetMaskedData(bndCent, PosPlusName)) *
+                            reg->Grid.GetMaskedData(bndCent, DencPlusName) * (reg->Grid.GetMaskedData(bndCent, VelPlusName) * 0.5 * reg->Grid.GetMaskedData(bndCent, VelPlusName) +
+                            reg->Grid.GetMaskedData(bndCent, EnerPlusName));
+            BuildSum(reg, PIxp, PIp);
+            BuildSum(reg, IIxp, IIp);
+            BuildSum(reg, EIxp, EIp);
+            reg->Grid.GetMaskedData(bndCent, PIx) = reg->Grid.GetMaskedData(bndCent, PIx) /
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosName) - reg->Grid.GetMaskedData(bndCent, PosName));
+            reg->Grid.GetMaskedData(bndCent, IIx) = reg->Grid.GetMaskedData(bndCent, IIx) /
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosName) - reg->Grid.GetMaskedData(bndCent, PosName));
+            reg->Grid.GetMaskedData(bndCent, EIx) = reg->Grid.GetMaskedData(bndCent, EIx) /
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosName) - reg->Grid.GetMaskedData(bndCent, PosName));
 
+            reg->Grid.GetMaskedData(bndCent, Dx) =
+                    (reg->Grid.GetMaskedData(bndCent + 1, PosPlusName) + reg->Grid.GetMaskedData(bndCent, PosPlusName) -
+                    reg->Grid.GetMaskedData(bndCent + 1, PosName) - reg->Grid.GetMaskedData(bndCent, PosName)
+                    ) * 0.5;
+
+            reg->Grid.GetMaskedData(bndCent, PIt) =
+                    (reg->Grid.GetMaskedData(bndCent, PIp) - reg->Grid.GetMaskedData(bndCent, PI)
+                        - reg->Grid.GetMaskedData(bndCent, PIx) * reg->Grid.GetMaskedData(bndCent, Dx)
+                    ) * (1/tStp);
+            reg->Grid.GetMaskedData(bndCent, IIt) =
+                    (reg->Grid.GetMaskedData(bndCent, IIp) - reg->Grid.GetMaskedData(bndCent, II)
+                         - reg->Grid.GetMaskedData(bndCent, IIx) * reg->Grid.GetMaskedData(bndCent, Dx)
+                    ) * (1/tStp);
+            reg->Grid.GetMaskedData(bndCent, EIt) =
+                    (reg->Grid.GetMaskedData(bndCent, EIp) - reg->Grid.GetMaskedData(bndCent, EI)
+                         - reg->Grid.GetMaskedData(bndCent, EIx) * reg->Grid.GetMaskedData(bndCent, Dx)
+                    ) * (1/tStp);
+
+
+            reg->Grid.GetMaskedData(bndCent, PIc) =
+                    reg->Grid.GetMaskedData(bndCent, PIt) + reg->Grid.GetMaskedData(bndCent, IIx);
+            reg->Grid.GetMaskedData(bndCent, IIc) =
+                    reg->Grid.GetMaskedData(bndCent, IIt) + (reg->Grid.GetMaskedData(bndCent, IIx) *
+                    reg->Grid.GetMaskedData(bndCent, IIx) / reg->Grid.GetMaskedData(bndCent, PIx)) +
+                    reg->Grid.GetMaskedData(bndCent, PresName);
+            reg->Grid.GetMaskedData(bndCent, EIc) =
+                    reg->Grid.GetMaskedData(bndCent, EIt) + (reg->Grid.GetMaskedData(bndCent, EIx) + reg->Grid.GetMaskedData(bndCent, PresName)) *
+                    reg->Grid.GetMaskedData(bndCent, IIx) / reg->Grid.GetMaskedData(bndCent, PIx);
+            SetSumBnd(reg);
+        }
+        void BuildSum(TPolyRegion *reg, Stroka &deltaName, Stroka &sumName) {
+            TRegionBounds bnd(0, 0);
+            double* delta = reg->GetDataPtr(bnd, deltaName);
+            double* sum = reg->GetDataPtr(bnd, sumName);
+            int len = reg->GetDataSize(bnd, deltaName);
+            double s = sum[0];
+            for(int i = 0; i < len - 1; i++) {
+                sum[i] = s;
+                s += delta[i];
+            }
+            verify(len - 1 > 0, "Integrate zero length region");
+            sum[len - 1] = s;
+        }
+        void SetSumBnd(TPolyRegion *reg) {
+            TPolyRegion *head = reg->Parent;
+            TPolyRegion::TShallowIterator it = head->ShallowStart();
+            for(;it.IsOk(); it.Next()) {
+                if (it.CurRegion() == reg) break;
+            }
+            if (!it.IsOk()) return;
+            TPolyRegion *next = it.GetNext(), *cur = it.CurRegion();
+            if (cur != reg || next == NULL) return;
+
+            TRegionBounds bndRgt(TRegionBounds::BNDBAD, 0),
+                    bndRgtMin(TRegionBounds::BNDBAD, -1), bndLft(0, TRegionBounds::BNDBAD),
+                    bndLftMin(-1, TRegionBounds::BNDBAD), bnd(0,0);
+            next->Grid.GetMaskedData(bndLft, PI) =
+                cur->Grid.GetMaskedData(bndRgt, PI);
+            next->Grid.GetMaskedData(bndLft, II) =
+                cur->Grid.GetMaskedData(bndRgt, II);
+            next->Grid.GetMaskedData(bndLft, EI) =
+                cur->Grid.GetMaskedData(bndRgt, EI);
+            next->Grid.GetMaskedData(bndLft, PIp) =
+                cur->Grid.GetMaskedData(bndRgt, PIp);
+            next->Grid.GetMaskedData(bndLft, IIp) =
+                cur->Grid.GetMaskedData(bndRgt, IIp);
+            next->Grid.GetMaskedData(bndLft, EIp) =
+                cur->Grid.GetMaskedData(bndRgt, EIp);
+        }
         int save_data_state(FilterOut &so) {
             so << " MarchCourant " << MarchCourant << " CL " << CL << " C0 " << C0
                << " MinPres " << MinPres << SavableClass::EOLN();
