@@ -55,6 +55,12 @@ namespace NPolygon {
             GetRootRegion()->MapSavableVar[name] = val;
         }
 
+        double * GetDataPtr(const TRegionBounds &bnds, const Stroka &varName) {
+            return (double *)Grid.GetMaskedData(bnds, varName).Start().GetElementPtr();
+        };
+        int GetDataSize(const TRegionBounds &bnds, const Stroka &varName) {
+            return Grid.GetMaskedData(bnds, varName).Start().Size();
+        };
         //Vau!!! Very bad - regions can have arbitrary neighbours, have to store them, put info to the boundary...
         void FillChildBounds(TRegBoundaryBase *bnd, const Stroka &varName) {
             TShallowIterator prevRegion = ShallowEnd(), nextRegion = ShallowStart(),
@@ -68,17 +74,10 @@ namespace NPolygon {
                     regNext = nextRegion.CurRegion();
                 if(prevRegion.IsOk())
                     bnd->FillBoundMinus(varName, regPrev, regNext);
-                //bnd->FillBounds(varName, regPrev, regNext, regPrev);
                 if(nextRegion.IsOk())
                     bnd->FillBoundPlus(varName, regPrev, regNext);
-                //bnd->FillBounds(varName, regPrev, regNext, regNext);
             }
         }
-        //void AddChildGridVar (const Stroka &varName);
-        //void DelChildGridVar (const Stroka &varName);
-
-
-        //GridMask GetParentBlockMask ();
 
         int save_data_state(FilterOut &so) {
             so << " Grid ";
@@ -112,43 +111,19 @@ namespace NPolygon {
         Stroka MakeHelp() {
             return "Polygon...";
         }
-        //struct TDeepIterator {
-        //    list<Ref<TPolyRegion> >::iterator it;
-        //    TPolyRegion *reg, *main;
-        //    Iterator(TPolyRegion *main_, TPolyRegion *reg_, const list<Ref<TPolyRegion> >::iterator &it_)
-        //        : it(it_)
-        //        , reg(reg_)
-        //        , main(main_){}
-        //    inline bool operator==(const Iterator &iter) {
-        //        return (iter.it == it && iter.reg == reg && iter.main == main);
-        //    }
-        //    inline bool operator!=(const Iterator &iter) {
-        //        return !operator==(iter);
-        //    }
-        //};
-        //struct TDeepIterator {
-        //};
+
         struct TShallowIterator {
             friend struct TPolyRegion;
 
         private:
             Ref<TPolyRegion> Base;
             list<Ref<TPolyRegion>>::iterator Iter;
-            //iterator<bidirectional_iterator_tag, Ref<TPolyRegion> > Iter;
-            //iterator_traits<list<Ref<TPolyRegion> >::iterator>::iterator_category Iter;
-            //bidirectional_iterator_tag IterBi;
         protected:
             inline void Last(TPolyRegion *base) {
                 Base = base;
                 if(Base) {
                     Iter = Base->Childs.end();
                     Iter--;
-                    //Iter = (Base->Childs.rbegin()).base();
-                    //iterator<bidirectional_iterator_tag, Ref<TPolyRegion> > it = Base->Childs.rbegin();
-                    //Iter = it.base();
-                    //Iter = it.base();
-                    ////Iter = (Base->Childs.rbegin()--).base();
-                    //Iter = (Base->Childs.rbegin()++).base();
                 }
             }
 
@@ -180,7 +155,6 @@ namespace NPolygon {
                 if(!IsOk())
                     return 0;
                 Iter++;
-                //return 1;
                 return IsOk();
             }
             inline int Prev() {
@@ -232,64 +206,6 @@ namespace NPolygon {
             return it;
         }
 
-        //Iteratir StartRegion() {
-        //    TPolyRegion *p = this;
-        //    list<Ref<TPolyRegion> >::iterator it = p->Childs.begin();
-        //    while((*it)->Childs.size() != 0) {
-        //        p = *it;
-        //        it = (*it)->Childs.begin();
-        //    }
-        //    return Iterator(this, p, it);
-        //}
-        //inline TShallowIterator ShallowEnd() {
-        //    TShallowIterator it(this);
-        //    it.End();
-        //    return it;
-        //}
-
-        //Iterator StartRegion() {
-        //    TPolyRegion *p = this;
-        //    list<Ref<TPolyRegion> >::iterator it = p->Childs.begin();
-        //    while((*it)->Childs.size() != 0) {
-        //        p = *it;
-        //        it = (*it)->Childs.begin();
-        //    }
-        //    return Iterator(this, p, it);
-        //}
-        //Iterator EndRegion() {
-        //    TPolyRegion *p = this;
-        //    list<Ref<TPolyRegion> >::iterator it = p->Childs.end();
-        //    //while((*it)->Childs.size() != 0) {
-        //    //    p = *it;
-        //    //    it = (*it)->Childs.end();
-        //    //}
-        //    return Iterator(this, p, it);
-        //}
-        //static Iterator NextRegion(Iterator it) {
-        //    if (it.it == it.reg->Childs.end()) {
-        //        if (it.reg->Parent == it.main->Parent)
-        //            return it.reg->EndRegion();
-        //        throw info_except("Wau - not implemented yet\n");
-        //    }
-        //    if ((*it.it)->Childs.size() != 0 )
-        //        throw info_except("Wau there are childs\n");
-        //    if (++it.it == it.reg->Childs.end()) {
-        //        while(1) {
-        //            if (it.reg->Parent == it.main->Parent)
-        //                return it.reg->EndRegion();
-        //            throw info_except("Wau - not implemented yet\n");
-        //            //TPolyRegion *p = it.reg->Parent;
-        //            //list<Ref<TPolyRegion> >::iterator i = p->Childs.begin();
-        //            //while(*i != it.reg)
-        //            //    i++;
-        //            ////i++;
-        //            //if (++i != p->Childs.end())
-        //            //    return Iterator(it.main, p, i);
-        //        }
-        //    }
-        //    //throw info_except("Wau impossible position!!!\n");
-        //    return it;
-        //}
         TShallowIterator AddChild(Ref<TPolyRegion> reg) {
             reg->Parent = this;
             Childs.push_back(reg);
@@ -309,8 +225,6 @@ namespace NPolygon {
             Grid.SetGridBoundarySize(level);
         }
 
-        //    friend TShallowIterator;
-        //protected:
         list<Ref<TPolyRegion>> Childs;
         TPolyRegion *Parent;
     };
@@ -320,9 +234,3 @@ namespace NPolygon {
 
 #endif
 
-
-//TPolyRegion(const TPolyRegion &right);
-//~TPolyRegion();
-//TPolyRegion & operator=(const TPolyRegion &right);
-//int operator==(const TPolyRegion &right) const;
-//int operator!=(const TPolyRegion &right) const;
