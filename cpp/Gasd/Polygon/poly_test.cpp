@@ -103,7 +103,9 @@ void BuildConfig(map<Stroka, Stroka> par) {
     marcher->C0 = 2;//viscouse;
     marcher->CL = 1;//viscouse2;
     marcher->MarchCourant = timeStability;
+
     Ref<NPolygon::TSimpleContructor> constr = new NPolygon::TSimpleContructor();
+    constr->RegionBoundarySize = 2;
     constr->Childs.clear();
     char tmp[256];
     in >> tmp;
@@ -122,6 +124,7 @@ void BuildConfig(map<Stroka, Stroka> par) {
                        begTime, endTime, timeStp, timeWrite,
                        datFile, "Pos:Pres:Denc:Ener:Vel:Sound");
 
+    march->OutputBounds = NPolygon::TRegionBounds(0, 0);
     log_info("Generating config: " + config);
     fstream out(~config, ios::out);
     out << "RegionConstructor\n" << SavableClass::object2string(constr) << "\n\n";
