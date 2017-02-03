@@ -567,8 +567,17 @@ void TrimSpaces(char *&input) {
         input++;
     }
 }
-//int IsDouble(char *(&input),double &ans,int MayBeNeg)
-int IsDouble(const char *in, double &ans, int MayBeNeg) {
+int IsDouble(const char *in, double &ans, int /*MayBeNeg*/) {
+    try {
+        ans = Stricmp(in, "\"\"") == 0 ? NullNumber : stod(in);
+        return 1;
+    } catch (exception &) {
+        ans = NullNumber;
+        return 0;
+    }
+
+}
+int IsDouble_old(const char *in, double &ans, int MayBeNeg) {
     char *input = (char *)in;
     char *start, numstring[80];
     int decimal, len, numlen;
