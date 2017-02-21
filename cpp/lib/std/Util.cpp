@@ -569,7 +569,8 @@ void TrimSpaces(char *&input) {
 }
 int IsDouble(const char *in, double &ans, int /*MayBeNeg*/) {
     try {
-        ans = Stricmp(in, "\"\"") == 0 ? NullNumber : stod(in);
+        bool empty = Stricmp(in, "\"\"") == 0 || in[0] == 0;
+        ans = empty ? NullNumber : stod(in);
         return 1;
     } catch (exception &) {
         ans = NullNumber;

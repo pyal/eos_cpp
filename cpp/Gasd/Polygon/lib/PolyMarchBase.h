@@ -70,32 +70,17 @@ namespace NPolygon {
             return maxStp;
         };
         virtual void MakeTimeStep(TPolyRegion *reg, double curTime, double timeStp) {
-//            Marcher->SetNewTimeStp(curTime, timeStp);
             for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk();
                 it.Next()) {
                 Marcher->MakeTimeStep(it.CurRegion(), curTime, timeStp);
             }
         };
-//        virtual void InitAfterBounds(TPolyRegion *reg) {
-//            for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk();
-//                it.Next()) {
-//                Marcher->InitAfterBounds(it.CurRegion());
-//            }
-//        };
         virtual void RebuildBoundsBase(TPolyRegion *reg) {
             Marcher->RebuildBoundsBase(reg);
         }
         virtual void InitBase(TPolyRegion *reg, double startTime) {
             Marcher->InitBase(reg, startTime);
         }
-//        virtual void InitBeforeBounds(TPolyRegion *reg) {
-//            for(TPolyRegion::TShallowIterator it = reg->ShallowStart(); it.IsOk();
-//                it.Next()) {
-//                Marcher->InitBeforeBounds(it.CurRegion());
-//            }
-//        };
-//        virtual void SetNewTimeStp(double curTime, double timeStp) {}
-
 
         void SaveIter(
             fstream &outFile,
@@ -116,9 +101,7 @@ namespace NPolygon {
             vector<Stroka> outNames = Str::SplitLine(OutputNames, 0, ':');
             fstream outFile(~ResultsFile, ios::out);
             outFile << "Writing Vars:\n" << Str::JoinLine(outNames) << "\n";
-//            InitBeforeBounds(reg);
             InitBase(reg, time);
-//            InitAfterBounds(reg);
             SaveIter(outFile, time, reg, outNames, OutputBounds);
 //            GetMaxTimeStp(reg, time);
             while(time < ToTime) {
@@ -136,6 +119,7 @@ namespace NPolygon {
                 }
 
                 if(Timer.PrintNow(timeStr)) {
+                    SaveIter(outFile, time, reg, outNames, OutputBounds);
                     log_info(Stroka("CurT ") + time + " tStp " + ((time - lastTime) / Timer.getIterCircle())
                              + "\t" + timeStr);
                     lastTime = time;

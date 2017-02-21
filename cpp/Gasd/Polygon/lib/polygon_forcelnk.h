@@ -8,6 +8,7 @@
 //#include "urs\test\urs_curve.h"
 //#include "PolyRegion.h"
 //#include "PolyRegConstructor.h"
+#include <cpp/Gasd/Polygon/march/integral_march.h>
 #include "PolyTest.h"
 #include "gasd/polygon/march/PolyMarchTest.h"
 #include "gasd/polygon/march/CenterFlux.h"
@@ -41,6 +42,7 @@ namespace NPolygon {
     extern ForceLinkVoid<TRegBoundaryCircleX> Dummy_TRegBoundaryCircleX;
 
     extern ForceLinkVoid<TMarchWilkins> Dummy_TMarchWilkins;
+    extern ForceLinkVoid<TIntegralMarch> Dummy_TIntegralMarch;
     extern ForceLinkVoid<TMarchExactRieman> Dummy_TMarchExactRieman;
     extern ForceLinkVoid<TPolyMarchPlusE> Dummy_TPolyMarchPlusE;
     extern ForceLinkVoid<TPolyMarchPlusGase> Dummy_TPolyMarchPlusGase;

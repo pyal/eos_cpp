@@ -52,7 +52,17 @@ public:
         if(head.first.size() == 0) return false;
         if(head.second.size() > 0) points.push_back(head.second);
         vector<double> row;
-        while(!isEnd(row)) points.push_back(row);
+        int rowNum = 0;
+        while(!isEnd(row)) {
+            if (row.size() == head.first.size()) {
+                points.push_back(row);
+//                log_always(Stroka("Adding row num: ") + rowNum + " content: " + Str::Vec2Str(row));
+            }
+            else {
+                log_always(Stroka("Skipping row num: ") + rowNum + " content: " + Str::Vec2Str(row));
+            }
+            rowNum++;
+        }
         CurData.first = PlotName();
         CurData.second = QtData::BuildData(points, head.first);
         return true;
@@ -62,8 +72,11 @@ public:
 class SingleFile: public IFileData {
     string FileName;
     FILE *In;
+    char FieldDelim;
 public:
-    SingleFile(const string &file):FileName(file), In(File::open(file.c_str(), "r", "SingleFile")) {
+    SingleFile(const string &file, char fieldDelim):FileName(file),
+       In(File::open(file.c_str(), "r", "SingleFile")), FieldDelim(fieldDelim) {
+
     }
     ~SingleFile() {
         File::close(In);
@@ -74,7 +87,7 @@ public:
     virtual pair<vector<string>, vector<double>> ReadHead() {
         double d;
         pair<vector<string>, vector<double>> ret;
-        if (!File::GetLine(In, ret.first)) return ret;
+        if (!File::GetLine(In, ret.first, FieldDelim)) return ret;
         for(auto &str: ret.first) if(IsDouble(str.c_str(), d, 1)) ret.second.push_back(d);
         if(ret.second.size() == ret.first.size()) {
             for(int i = 0; i < ret.first.size(); i++)
@@ -85,11 +98,12 @@ public:
         return ret;
     };
     virtual bool isEnd(vector<double> &row_pnt) {
-        vector<string> tmp;
+        vector<Stroka> tmp;
         row_pnt.clear();
         double d;
         while(row_pnt.size() == 0) {
-            if (!File::GetLine(In, tmp)) return true;
+            if (!File::GetLine(In, tmp, FieldDelim)) return true;
+//            log_always("Read line " + Str::Vec2Str(tmp));
             for(auto &str: tmp) {
                 if (IsDouble(str.c_str(), d, 1)) row_pnt.push_back(d);
                 else {
@@ -110,9 +124,9 @@ class MultiFile: public QtData::IDataSource {
     vector<Ref<SingleFile>> FileReaders;
     pair<string, vector<QtData::Data>> CurData;
 public:
-    MultiFile(const string &files): FileName(Str::SplitLine(Stroka(files.c_str()))) {
+    MultiFile(const string &files, char fieldDelim): FileName(Str::SplitLine(Stroka(files.c_str()))) {
         for(auto &name: FileName)
-            FileReaders.push_back(new SingleFile(name));
+            FileReaders.push_back(new SingleFile(name, fieldDelim));
     }
     ~MultiFile(){}
     virtual pair<string, vector<QtData::Data>> &getData() {

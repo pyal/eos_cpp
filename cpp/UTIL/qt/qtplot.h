@@ -28,9 +28,9 @@ class QtEvents: public QChartView {
 
     QGraphicsSimpleTextItem *m_coordX;
     QGraphicsSimpleTextItem *m_coordY;
-    bool xLog, yLog;
     update_function UpdatePoints;
 public:
+    bool xLog, yLog;
     struct SRect {
         double MinX, MaxX, MinY, MaxY;
         string ToString() {
@@ -99,25 +99,37 @@ public:
         QGraphicsView::resizeEvent(event);
     }
     void resetAxis() {
-        xLog = !xLog;
-        yLog = !yLog;
-        setLogAxis(true);
-        setLogAxis(false);
+        setLogAxis(xLog?(QAbstractAxis *)new QLogValueAxis : (QAbstractAxis *)new QValueAxis, true);
+        setLogAxis(yLog?(QAbstractAxis *)new QLogValueAxis : (QAbstractAxis *)new QValueAxis, false);
     }
     void setLogAxis(bool x) {
-        if ((x && (xLog || PlotRect.MinX <= 0)) || (!x && (yLog || PlotRect.MinY <= 0))) setLogAxis(new QValueAxis, x);
-        else setLogAxis(new QLogValueAxis, x);
-        x?xLog = !xLog : yLog = !yLog;
+        bool logScale = false;
+        if ((x && (xLog || DrawRect.MaxX <= MathZer)) || (!x && (yLog || DrawRect.MaxY <= MathZer))) {
+            log_always("Setting linear axis x_axis: " + std::to_string(x));
+            setLogAxis(new QValueAxis, x);
+        }
+        else {
+            log_always("Setting log axis x_axis: " + std::to_string(x));
+            if(x && DrawRect.MinX <= MathZer)
+                DrawRect.MinX = DrawRect.MaxX / 100000;
+            if(!x && DrawRect.MinY <= MathZer)
+                DrawRect.MinY = DrawRect.MaxY / 100000;
+
+            setLogAxis(new QLogValueAxis, x);
+            logScale = true;
+        }
+        x?xLog = logScale : yLog = logScale;
     }
+
     void setLogAxis(QAbstractAxis *axis, bool x) {
         axis->setTitleText(x?"X":"Y");
+        if(x) axis->setRange(DrawRect.MinX, DrawRect.MaxX);
+        else axis->setRange(DrawRect.MinY, DrawRect.MaxY);
+
         x?chart()->setAxisX(axis):chart()->setAxisY(axis);
         for(auto serie:chart()->series()) {
             serie->attachAxis(axis);
         }
-        if(x) axis->setRange(DrawRect.MinX, DrawRect.MaxX);
-        else axis->setRange(DrawRect.MinY, DrawRect.MaxY);
-//        chart()->zoomReset();
     }
 
 };
@@ -163,8 +175,8 @@ public:
         UpdateData(nullptr);
         return true;
     }
-    pair<double, double> SetLimit(double low, double up) {
-        double scale = up - low;
+    pair<double, double> SetLimit(double low, double up, bool logScale) {
+        double scale = fabs(up - low);
         if(fabs(scale) < MathZer) return {low - 1, low + 1};
         double coef = 1;
         while(scale * coef < 20) if (scale * coef > 10) coef *= 2; else coef *= 10;
@@ -173,6 +185,10 @@ public:
         double step = 1./ coef;
         double rlow = int(low / step - 1 )*step;
         double rup =  int(up / step + 1 )*step;
+        if(logScale) {
+            if(rlow < MathZer) rlow = MathZer - rlow;
+            if(rup < MathZer) rup = MathZer - rup;
+        }
         return {rlow, rup};
         
     }
@@ -210,8 +226,8 @@ public:
         Chart->setTitle(points.first.c_str());
         verify(ChartEvents, "Have to set scale");
 
-        auto x = SetLimit(plotRect.MinX, plotRect.MaxX);
-        auto y = SetLimit(plotRect.MinY, plotRect.MaxY);
+        auto x = SetLimit(plotRect.MinX, plotRect.MaxX, ChartEvents->xLog);
+        auto y = SetLimit(plotRect.MinY, plotRect.MaxY, ChartEvents->yLog);
         QtEvents::SRect drawRect = {x.first, x.second, y.first, y.second};
         ChartEvents->SetScale(plotRect, drawRect);
 

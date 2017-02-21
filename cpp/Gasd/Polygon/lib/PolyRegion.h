@@ -224,6 +224,28 @@ namespace NPolygon {
                 it.CurRegion()->SetGridBoundarySize(level);
             Grid.SetGridBoundarySize(level);
         }
+        TPolyRegion *GetNextRegion() {
+            TPolyRegion *head = this->Parent;
+            verify(head, ~("There is no parent region: " + Str::Obj2Str(this)));
+            TPolyRegion::TShallowIterator it = head->ShallowStart();
+            for(;it.IsOk(); it.Next()) {
+                if (it.CurRegion() == this) break;
+            }
+            if (!it.IsOk()) return nullptr;
+            return it.GetNext();
+        }
+        TPolyRegion *GetPreviousRegion() {
+            TPolyRegion *head = this->Parent;
+            verify(head, ~("There is no parent region: " + Str::Obj2Str(this)));
+            TPolyRegion *prev = nullptr;
+            TPolyRegion::TShallowIterator it = head->ShallowStart();
+            for(;it.IsOk(); it.Next()) {
+                if (it.CurRegion() == this) break;
+                prev = it.CurRegion();
+            }
+            verify(it.IsOk(), ~("Region was not found in the list of parent childs.\nRegion: " + Str::Obj2Str(this)));
+            return it.GetNext();
+        }
 
         list<Ref<TPolyRegion>> Childs;
         TPolyRegion *Parent;

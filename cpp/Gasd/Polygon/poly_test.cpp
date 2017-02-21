@@ -99,13 +99,27 @@ void BuildConfig(map<Stroka, Stroka> par) {
             throw info_except("Could not read. Exit.\n");
         log_info("Read matter " + SavableClass::object2string(matters[i]));
     }
-    auto marcher = new NPolygon::TMarchWilkins;
-    marcher->C0 = 2;//viscouse;
-    marcher->CL = 1;//viscouse2;
-    marcher->MarchCourant = timeStability;
-
+    NPolygon::TPolyMarchRegionBase *marcher;
     Ref<NPolygon::TSimpleContructor> constr = new NPolygon::TSimpleContructor();
-    constr->RegionBoundarySize = 2;
+//    auto marcher = new NPolygon::TMarchWilkins;
+    if(par["Marcher"] == "Wilkins") {
+        auto wilkins = new NPolygon::TMarchWilkins;
+        wilkins->C0 = 2;//viscouse;
+        wilkins->CL = 1;//viscouse2;
+        wilkins->MarchCourant = timeStability;
+        wilkins->GasdTm.Density = "Denc";
+        marcher = wilkins;
+        constr->RegionBoundarySize = 1;
+    } else {
+        auto integral = new NPolygon::TIntegralMarch;
+        integral->C0 = 2;//viscouse;
+        integral->CL = 1;//viscouse2;
+        integral->MarchCourant = timeStability;
+        integral->GasdTm.Density = "Denc";
+        marcher = integral;
+        constr->RegionBoundarySize = 3;
+    }
+
     constr->Childs.clear();
     char tmp[256];
     in >> tmp;
@@ -151,22 +165,20 @@ Stroka BuildConfigSample() {
 int main(int argc, const char *argv[]) {
     SetLeakTest();
     Time_struct Time;
-    try {
-        NRef::TCommandParse Cmd(
-            "Usage: poly_test  - without parameters - help\n");
-        Cmd.MainHelp += GenerateDetailedHelp();
-        Cmd.Add(SampleConfig, "sample", "build sample config",
-                "Sample poly_test.march.cfg Sample config file name", 1);
-        Cmd.Add(TestFunc, "test", "test it", "", 1);
-        Cmd.Add(March, "march", "clc region",
-            "Config poly_test.march.cfg par.cfg file has the format: \"RegionConstructor NPolygon::TSimpleContructor RegionMarch  NPolygon::TPolyMarchBody\" ",
-            1);
-        Cmd.Add(BuildConfig, "config", "build config for given topoplogy",
-                "Topology poly_test.march.top input topology: Sample " + BuildConfigSample() +
-                        "\nConfig poly_test.march.cfg Result config file name", 1);
-        Cmd.SimpleRun(argc, argv);
-    }
-    CATCHMAINEXCEPTION(" poly_test failed ");
+
+    NRef::TCommandParse Cmd(
+        "Usage: poly_test  - without parameters - help\n");
+    Cmd.MainHelp += GenerateDetailedHelp();
+    Cmd.Add(SampleConfig, "sample", "build sample config",
+            "Sample poly_test.march.cfg Sample config file name", 1);
+    Cmd.Add(TestFunc, "test", "test it", "", 1);
+    Cmd.Add(March, "march", "clc region",
+        "Config poly_test.march.cfg par.cfg file has the format: \"RegionConstructor NPolygon::TSimpleContructor RegionMarch  NPolygon::TPolyMarchBody\" ",
+        1);
+    Cmd.Add(BuildConfig, "config", "build config for given topoplogy",
+            "Topology poly_test.march.top input topology: Sample " + BuildConfigSample() +
+                    "\nConfig poly_test.march.cfg Result config file name\nMarcher Wilkins marcher to use - can be Wilkins, Integral", 1);
+    Cmd.SimpleRun(argc, argv);
 
     LeakTest();
     cout << "Done in " << Time << "\n";

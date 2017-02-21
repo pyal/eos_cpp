@@ -245,11 +245,11 @@ namespace Str {
     };
     template <class T>
     Stroka Vec2Str(const vector<T> &v) {
-        strstream out;
+        stringstream out;
         for(size_t i = 0; i < v.size(); i++) {
             i == 0 ? out << v[i] : out << " " << v[i];
         }
-        return out.str();
+        return out.str().c_str();
     }
     template <class KEY, class VAL>
     vector<KEY> Map2Vec(const map<KEY, VAL> &m) {
@@ -268,6 +268,7 @@ namespace Str {
     }
     template <>
     Stroka Obj2Str<Ref<SavableClass>>(const Ref<SavableClass> &val);
+    Stroka Obj2Str(SavableClass* ptr);
     template <>
     Stroka Obj2Str<Stroka>(const Stroka &val);
     template <class T>

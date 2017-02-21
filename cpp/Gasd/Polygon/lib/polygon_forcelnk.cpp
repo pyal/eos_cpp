@@ -30,6 +30,7 @@ namespace NPolygon {
     ForceLinkVoid<TRegBoundaryCircleX> Dummy_TRegBoundaryCircleX;
 
     ForceLinkVoid<TMarchWilkins> Dummy_TMarchWilkins;
+    ForceLinkVoid<TIntegralMarch> Dummy_TIntegralMarch;
     ForceLinkVoid<TMarchExactRieman> Dummy_TMarchExactRieman;
     ForceLinkVoid<TPolyMarchPlusE> Dummy_TPolyMarchPlusE;
     ForceLinkVoid<TPolyMarchPlusGase> Dummy_TPolyMarchPlusGase;

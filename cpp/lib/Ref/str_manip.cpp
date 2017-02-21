@@ -352,6 +352,9 @@ namespace Str {
     Stroka Obj2Str<Ref<SavableClass>>(const Ref<SavableClass> &val) {
         return SavableClass::object2string(val.pointer());
     }
+    Stroka Obj2Str(SavableClass *ptr) {
+        return SavableClass::object2string(ptr);
+    }
     template <>
     Stroka Obj2Str<Stroka>(const Stroka &val) {
         return val;

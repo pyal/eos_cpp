@@ -197,5 +197,33 @@ namespace NPolygon {
                 }
             }
         }
+        static void SaveSingleRegionData(
+            ostream &out,
+            Ref<TPolyRegion> region,
+            const vector<Stroka> &vecStr,
+            const TRegionBounds &bnds) {
+            if(vecStr.size() == 0) return;
+            vector<TGridMaskedData::TIterator> vecDat(vecStr.size());
+            for(size_t i = 0; i < vecStr.size(); i++) {
+                TPolyRegion *reg = region;
+                TGridVariablesBase *var;
+                if((var = GetVectorElement(vecStr[i], reg)) != NULL)
+                    vecDat[i] = reg->Grid.GetMaskedData(bnds, var).Start();
+                else
+                    vecDat[i] = reg->Grid.GetMaskedData(bnds, vecStr[i]).Start();
+            }
+            if(vecDat.size() == 0)
+                return;
+            char buf[256];
+            while(vecDat[0].IsOk()) {
+                for(size_t i = 0; i < vecDat.size(); i++) {
+                    sprintf(buf, "%8.5g ", *((double *)vecDat[i].GetElementPtr()));
+                    out << buf;
+                    //out<<*((double*)vecDat[i].GetElementPtr())<<"\t";
+                    vecDat[i].Next();
+                }
+                out << "\n";
+            }
+        }
     };
 };   //namespace NPolygon {

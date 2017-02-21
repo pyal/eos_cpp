@@ -106,6 +106,7 @@ namespace NPolygon {
         }
         void SetBase(const char *zeroBndValCoefs) {
             vector<Stroka> str = Str::SplitLine(zeroBndValCoefs, 0);
+            ZeroBndValCoefs.clear();
             for(size_t i = 0; i < str.size(); i++)
                 ZeroBndValCoefs.push_back(atof(~str[i]));
         }
