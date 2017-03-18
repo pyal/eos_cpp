@@ -2,6 +2,7 @@
 #include <cpp/lib/std/stdexception.h>
 #include "lib/std/logger.h"
 #include "lib/std/unit_test.h"
+#include "lib/Ref/Stroka.h"
 
 struct TExceptionTester {
     void DoTest() throw() {
@@ -13,10 +14,7 @@ struct TExceptionTester {
         }
 
         log_always(info_mark);
-        //        verify(false);
-        //        verify(0==1);
         verify(0 == 0);
-        //        verify(false, "FALSE");
     }
 };
 

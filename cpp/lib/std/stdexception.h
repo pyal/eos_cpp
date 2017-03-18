@@ -17,7 +17,7 @@
 #define _GET_MACRO(_1, _2, NAME, ...) NAME
 #define verify_no_msg(cond) verify_with_msg((cond), "")
 #define verify_with_msg(cond, msg) \
-    ((void)((cond) ?  ((void)0) :  throw info_except(string(#cond) + ": failed assertion: " + msg)))
+    ((void)((cond) ?  ((void)0) :  throw info_except(~(Stroka(#cond) + ": failed assertion: " + msg))))
 
 
 #define unused(x) ((void)(x))
