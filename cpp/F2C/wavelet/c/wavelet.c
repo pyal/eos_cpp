@@ -585,7 +585,8 @@ integer factorial_(integer *n)
     double cos(doublereal);
     integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
 	    e_wsle();
-    double sqrt(doublereal), log(doublereal), exp(doublereal);
+//    double sqrt(doublereal);
+	double log(doublereal), exp(doublereal);
 
     /* Local variables */
     doublereal gammafac;

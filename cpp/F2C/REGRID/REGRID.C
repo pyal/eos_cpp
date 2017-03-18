@@ -491,7 +491,7 @@ L60:
     knry = knrx + *mx;
     kndx = knry + *my;
     kndy = kndx + *nxest;
-    fpregr_(iopt, &x[1], mx, &y[1], my, &z__[1], &mz, xb, xe, yb, ye, kx, ky, 
+    fpregr_(iopt, &x[1], mx, &y[1], my, &z__[1], &mz, xb, xe, yb, ye, kx, ky,
 	    s, nxest, nyest, &tol, &maxit, &nc, nx, &tx[1], ny, &ty[1], &c__[
 	    1], fp, &wrk[1], &wrk[2], &wrk[3], &wrk[4], &wrk[lfpx], &wrk[lfpy]
 	    , &iwrk[1], &iwrk[2], &iwrk[3], &iwrk[knrx], &iwrk[knry], &iwrk[

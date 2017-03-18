@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 #include "lib/std/f2c.h"
-
+#include <math.h>
 /* Table of constant values */
 
 static integer c__1 = 1;
@@ -30,7 +30,7 @@ int/* Main program */ MAIN__()
     integer i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
     integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
     /* Subroutine */ int s_stop(char *, ftnlen);
 

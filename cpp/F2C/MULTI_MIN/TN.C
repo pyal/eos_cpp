@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 #include "lib/std/f2c.h"
+#include <math.h>
 
 /* Common Block Declarations */
 
@@ -57,7 +58,7 @@ ENTS)\002,/,14x,\002I\002,11x,\002X(I)\002)";
     integer i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
     integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
@@ -212,7 +213,7 @@ ENTS)\002,/,14x,\002I\002,11x,\002X(I)\002)";
     integer i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
     integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
@@ -380,7 +381,7 @@ GTG\002,//)";
 
     /* Builtin functions */
     integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
 
     /* Local variables */
     doublereal fold, oldf;
@@ -765,7 +766,7 @@ SEARCH\002)";
 
     /* Builtin functions */
     integer s_wsfe(cilist *), e_wsfe();
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
     integer do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
@@ -2041,7 +2042,8 @@ doublereal mchpr1_()
 	doublereal *tiny, doublereal *accrcy)
 {
     /* Builtin functions */
-    double sqrt(doublereal), pow_dd(doublereal *, doublereal *);
+//    double sqrt(doublereal);
+    double pow_dd(doublereal *, doublereal *);
 
     /* Local variables */
     extern doublereal dnrm2_(integer *, doublereal *, integer *), mchpr1_();
@@ -2127,7 +2129,7 @@ doublereal mchpr1_()
     integer i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
 
     /* Local variables */
     doublereal dinv, f;
@@ -2512,7 +2514,7 @@ L110:
     integer i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
 
     /* Local variables */
     doublereal oldf, fmin, gmin;
@@ -2675,7 +2677,7 @@ L50:
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
 
     /* Local variables */
     doublereal half, abgw, absr, five, zero, p, q, r__, s, scale, denom, 

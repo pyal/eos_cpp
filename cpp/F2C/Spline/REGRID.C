@@ -381,7 +381,7 @@ extern "C" {
     --iwrk;
 
     /* Function Body */
-    maxit = 20;
+    maxit = 50;
     tol = (float).001;
 /*  before starting computations a data check is made. if the input data 
 */

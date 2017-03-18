@@ -6,6 +6,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include <math.h>
 #include "lib/std/f2c.h"
 
 /* Table of constant values */
@@ -19,7 +21,7 @@ doublereal fmin_(E_fp f, real *x, real *a, real *b, real *t)
     real ret_val, r__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
 
     /* Local variables */
     real cons, d__, e, m, p, q, r__, u, v, w, t2;

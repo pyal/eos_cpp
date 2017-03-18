@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 #include "f2c.h"
+#include <math.h>
 
 /* Subroutine */ int fpgivs_(real *piv, real *ww, real *cos__, real *sin__)
 {
@@ -14,7 +15,7 @@ extern "C" {
     real r__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
 
     /* Local variables */
     real store, dd, one;
