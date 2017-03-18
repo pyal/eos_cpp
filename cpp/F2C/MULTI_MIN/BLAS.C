@@ -3,7 +3,7 @@
 	-lf2c -lm   (in that order)
 */
 #include "lib/std/f2c.h"
-
+#include <math.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -202,7 +202,7 @@ doublereal dnrm2_(integer *n, doublereal *dx, integer *incx)
     doublereal ret_val, d__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+//    double sqrt(doublereal);
 
     /* Local variables */
     doublereal xmax;
