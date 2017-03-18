@@ -107,7 +107,7 @@ extern ForceLinkVoid<FreeESumMatter> Dummy_FreeESumMatter;
 
 
 #include "fre_dis.h"
-//extern ForceLinkVoid<FreeEDis> Dummy_FreeEDis;
+extern ForceLinkVoid<FreeEDis> Dummy_FreeEDis; //TEST ONLY DEPRICATED!!!
 //extern ForceLinkVoid<DisFindMinimE> Dummy_DisFindMinimE;
 ////extern ForceLinkVoid<PureDis_FindE> Dummy_PureDis_FindE;
 ////extern ForceLinkVoid<DisFindH2Minim> Dummy_DisFindH2Minim;

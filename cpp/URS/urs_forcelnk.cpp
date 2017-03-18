@@ -101,7 +101,7 @@ ForceLinkVoid<FreeESumMatter> Dummy_FreeESumMatter;
 //ForceLinkVoid<DissMultiV> Dummy_DissMultiV;
 //ForceLinkVoid<ChemMultiV> Dummy_ChemMultiV;
 
-//ForceLinkVoid<FreeEDis> Dummy_FreeEDis;
+ForceLinkVoid<FreeEDis> Dummy_FreeEDis;
 //ForceLinkVoid<DisFindMinimE> Dummy_DisFindMinimE;
 //ForceLinkVoid<PureDis_FindE> Dummy_PureDis_FindE;
 
