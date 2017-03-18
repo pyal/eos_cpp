@@ -340,6 +340,13 @@ namespace Str {
 
         File::close(out);
     }
+    int StrokaStorage::Str2Num(const char *str) {
+        if(strlen(str) == 0)
+            throw info_except("NULL str number?\n");
+        std::map<Stroka, int>::iterator it = StrMap.find(Stroka(str));
+        verify(it != StrMap.end(), "Str <" + str + "> is not found. Map " + Vec2Str(Map2Vec<Stroka, int>(StrMap)));
+        return it->second;
+    }
 
 
     void TestChar(const Stroka &str, int pos, char ch) {

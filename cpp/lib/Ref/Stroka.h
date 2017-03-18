@@ -280,6 +280,9 @@ public:
     friend Stroka operator+(const Stroka &s1, const char *s2) {
         return Stroka(s1) += s2;
     }
+    friend Stroka operator+(const Stroka &s1, const string &s2) {
+        return Stroka(s1) += s2.c_str();
+    }
     friend Stroka operator+(const char *s1, const Stroka &s2) {
         return Stroka(s1) += s2;
     }

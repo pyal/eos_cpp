@@ -20,19 +20,11 @@ istream &operator>>(istream &in,   const TVerify &wrd);
 template <class T>
 FilterIn &operator>>(FilterIn &in, Ref<T> &obj) {
     SavableClass *o;
-    if(!in)
-        throw info_except("Bad stream\n");
+    verify(in, "Reading object from Bad stream");
     in >> o;
-    if(!o)
-        throw info_except("Could not read object\n");
+    verify(o, "Could not read object");
     obj << o;
-    if(!(!o) && !obj)
-        throw info_except(
-            "Object of wrong type<%s> have to be <%s>\n",
-            typeid(*o).name(),
-            typeid(T).name());
-    //if (!in)
-    //    throw info_except("Bad result stream\n");
+    verify(o && obj, "Object of wrong type<" + typeid(*o).name() + "> have to be <" + typeid(T).name() + ">");
     return in;
 }
 

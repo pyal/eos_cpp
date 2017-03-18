@@ -175,15 +175,8 @@ namespace Str {
                 return AddIfNo ? Add(str) : -1;
             return it->second;
         }
-        int Str2Num(const char *str) {
-            if(strlen(str) == 0)
-                throw info_except("NULL str number?\n");
-            std::map<Stroka, int>::iterator it = StrMap.find(Stroka(str));
-            if(it == StrMap.end())
-                throw info_except(
-                    "Str <%s> is not found. Map size is %i\n", str, StrMap.size());
-            return it->second;
-        }
+        int Str2Num(const char *str);
+
         int Size() {
             return LastNum;
         }
