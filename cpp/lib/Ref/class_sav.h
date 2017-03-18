@@ -930,33 +930,33 @@ struct FilterBinOut : FilterOut {
 
 
 inline FilterIn &operator>>(FilterIn &si, char *buf) {
-    assert(!(!si));
+    verify(si, "failed reading char*");
     si.getword(buf);
-    assert(!(!si));
+    verify(si, "failed reading buf " + buf);
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, char &buf) {
-    assert(!(!si));
+    verify(si, "failed reading char");
     si.get(buf);
-    assert(!(!si));
+    verify(si, "failed reading char " + buf);
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, double &buf) {
-    assert(!(!si));
+    verify(si, "Failed reading double");
     si.get(buf);
-    assert(!(!si));
+    verify(si, "Failed reading double " + buf);
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, int &buf) {
-    assert(!(!si));
+    verify(si, "Failed reading int");
     si.get(buf);
-    assert(!(!si));
+    verify(si, "Failed reading int " + buf);
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, long &buf) {
-    assert(!(!si));
+    verify(si, "Failed reading long");
     si.get(buf);
-    assert(!(!si));
+    verify(si, "Failed reading long" + buf);
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, KeyDesc &buf) {
@@ -966,9 +966,9 @@ inline FilterIn &operator>>(FilterIn &si, KeyDesc &buf) {
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, SavableClass *&buf) {
-    assert(!(!si));
+    verify(si, "Failed reading object");
     si.getobject(buf);
-    assert(!(!si));
+    verify(si, "Failed after reading object" + SavableClass::object2string(buf));
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, SavableClass &buf) {
@@ -976,9 +976,9 @@ inline FilterIn &operator>>(FilterIn &si, SavableClass &buf) {
     return si;
 }
 inline FilterIn &operator>>(FilterIn &si, RefBase &buf) {
-    assert(!(!si));
+    verify(si, "Failed reading object");
     si.getobject(buf);
-    assert(!(!si));
+    verify(si, "Failed reading object" + typeid(buf).name());
     return si;
 }
 

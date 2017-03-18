@@ -140,7 +140,8 @@ namespace NRef {
 
     void SetLogLevel(map<Stroka, Stroka> &par) {
         int level = atoi(~par["LogLevel"]);
-        verify(level >= 0 && level < NLogger::max_level, "Max level is " + Itoa(NLogger::max_level) + " current level " + Itoa(level));
+        verify(level >= 0 && level < NLogger::max_level,
+               Stroka("Max level is ") + NLogger::max_level + " current level " + level);
         NLogger::TLogger::GetLogger().LogLevel = NLogger::ELevel(level);
     }
     int TCommandParse::SimpleRun(int argc, const char *argv[]) {
@@ -260,21 +261,16 @@ namespace NRef {
         return iter->second;
     };
     Stroka CommandLineExe::MakeHelp() {
-        //Stroka ret(Format->Format(MainHelp.c_str()));
-        Stroka ret = "Main help:~+\n" + MainHelp + "~-\n" + "Available keys are:~+\n";
-        //Format->SetLevel(Format->GetLevel()+1);
+        Stroka ret = Stroka("Program build date: ") + BuildDate<Stroka>() + " " + BuildTime<Stroka>() + "\n";
+        ret += Stroka("Version ") + VERSION + "\n\n";
+
+        ret += "Main help:~+\n" + MainHelp + "~-\n" + "Available keys are:~+\n";
         for(map<Stroka, KeyData>::iterator iter = Params.begin(); iter != Params.end();
             iter++) {
             ret += Stroka(CommandPrefix) + iter->second.Key + "~+\n" + iter->second.Help +
                    "~-\n";
-            //Stroka Add("option:");
-            //Add += CommandPrefix;
-            //Add += Stroka(iter->second.Key)+iter->second.Help;//+"\n";
-            //ret += Format->Format(Add.c_str());
         }
-        //Format->SetLevel(Format->GetLevel()-1);
         return TFormatOutput("    ", 0, 70).Format(~ret);
-        //return ret;
     }
     void CommandLineExe::Analize(int argc, const char *argv[]) {
         Arguments = GetCommandLine(argc, argv);
