@@ -976,6 +976,7 @@ struct UrsCurve_XY_Test : URS_Curve::ClcVar {
         return new Result(GetVar(NameY1), GetVar(NameY2), SubName != "None");
     }
     virtual void ClcEnd() {
+        log_always(Stroka("Got MaxError ") + MaxError + " MeanError " + (CurError / CurPnt) + " Test " + MaxMeanError);
         if(CheckMaxSingleError) {
             if(MaxError > MaxMeanError) {
                 throw info_except(
@@ -1155,7 +1156,7 @@ struct UrsCurve_SplConstr : URS_Curve::ClcVar {
                 dat.N);
 
         int ret = spl->Generate(0, dat);
-        if(ret != 0)
+        if(ret > 0)
             throw info_except("Could not generate spline!!!. Return code is %i \n", ret);
         FilterTextOut out(ResSplineName.c_str());
         out << "Raw_SplineDescription_Str" << SplineDescription << "\n";
