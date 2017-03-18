@@ -239,16 +239,25 @@ int RegridSpline::Generate(
         IWork,
         &NIWork,
         &Result);
-    //cout<<" Generate Good "<<Result<<" SX "<<SX<<" SY "<<SY<<" MisfR "<<SumSquareResiduals<<"\n";
-    //cout<<" NumXi "<<NumXi<<" NumYi "<<NumYi<<" DX "<<DX<<" DY "<<DY;
-    if(SumSquareResiduals == 0 || Misf < SumSquareResiduals * 0.5 ||
-       IsNan(SumSquareResiduals))
+    static map<int, string> resultDescription = {
+            {0, "Normal return abs(fp-s)/s <= tol "},
+            {-1, "Normal return fp = 0 "},
+            {-2, "Normal return the spline returned is the least-squares polynom. fp is upper bound for smoothing s"},
+            {1, "error. Too small storage provided "},
+            {2, "error. Impossible result"},
+            {3, "error. Maximum number of iterations reached"},
+            {10, "error. Bad input"}
+    };
+    log_always((Stroka("Genrated spline. Error: ") + Result + " Description " + resultDescription[Result].c_str()));
+    log_always((Stroka("NumX: ") + SX + " NumY " + SY));
+    log_always(~(Stroka("Sum residuals is: ") + SumSquareResiduals + " TargetMis " + Misf +
+            " GotMis " + (SumSquareResiduals * 0.5) ));
+    if(Result >0)
         throw info_except(
             "Could not make spline. Error %g have to be %g . Result is %i \n",
             SumSquareResiduals,
             Misf,
             Result);
-    //Result *= 100;
     Delta = Misf = SumSquareResiduals;
     NumX = SX;
     NumY = SY;
