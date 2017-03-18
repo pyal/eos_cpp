@@ -65,17 +65,16 @@ struct MatterFreeSpl : FreeEIO {
     virtual int read_data_state(FilterIn &input) {
         input >> spl_name;
         FilterTextIn in(spl_name.c_str());
-        char tmp[256];
+        verify(in, "Could not read spline file " + spl_name);
+        char tmp[5256];
         in >> tmp;
-        while(Stricmp(tmp, "GeneratedSpline") != 0 && in)
+        while(Stricmp(tmp, "GeneratedSpline") != 0 && !(!in))
             in >> tmp;
-        if(!in)
-            throw info_except("Wrong spline format. Spline file: %s\n", spl_name.c_str());
+        verify(in, "Wrong spline format. Spline file: " + spl_name);
         in.SetRefMask(SavableClass::SimpleEdit);
         //in.SetRefMask(SavableClass::UnlinkedObjects);
         in >> F_rt;
-        if(!in || !F_rt)
-            throw info_except("Could not read spline???\n");
+        verify(in && F_rt, "Could not read spline???");
         return 1;
     }
     virtual int save_data_state(FilterOut &output) {

@@ -273,7 +273,7 @@ double FreeEFormula::FreeE(double Denc,double T){
     CalculatorProgam::GetCurPtr(&prg);
     *(double*)DataSimpleStorage::GetData( prg.GetVar("Denc")->dat ) = Denc;
     *(double*)DataSimpleStorage::GetData( prg.GetVar("Temp")->dat ) = T;
-    prg.Execute();    
+    prg.Execute();
     double ret = *(double*)DataSimpleStorage::GetData( prg.GetVar("FreeE")->dat );
     CalculatorProgam::RestorePtr();
     return  ret;
@@ -295,8 +295,8 @@ double FreeEIdeal::FreeE(double Denc,double T){
      if ((T<MathZer) || (Denc<MathZer)) 
         { cout<<"FreeE Bad. Denc "<<Denc<<" T "<<T<<"\n";return 0;}
      double kt=M_Rconst/MolVeight*T;
-	 double Xrot=Trot/T,Erot=0,Evib=0;
-	 if (Trot>StndErr) Erot=log(Xrot);//-Xrot/3-sqr(Xrot)/90;
+	 double Erot=0,Evib=0;
+	 if (Trot>StndErr) Erot=log(Trot/T);//-Xrot/3-sqr(Xrot)/90;
 	 if (Tvib>StndErr) {
          if (T > 20 * Tvib)
              Evib = log(Tvib / T);
@@ -311,8 +311,7 @@ double FreeEIdeal::ClcAddHiT(double molveight, double cvid){
    //double kb=4.811975e-15,d;
    //d=log(2*M_PI*kb/molveight);
    //return d*3/2-1-log(molveight/M_Na);
-     double Trans = M_ProtonMass_K*molveight/(2*M_PI*sqr(M_PlankCros_K));
-     Trans = Trans / sqr(M_C);
+     double Trans = M_ProtonMass_K*molveight/(2*M_PI*sqr(M_PlankCros_K*M_C));
      double ret = - cvid*log(Trans);//cvid=3/2
      ret = ret-(1+log(molveight/M_Na));
      return ret;

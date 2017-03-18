@@ -126,14 +126,8 @@ struct FreeEIOFind:FreeEIO {
 	virtual int read_data_state(FilterIn &input){
 		input>>Finder;
 		istream *in = dynamic_cast<istream*>(Finder.GetReadStream());
-        try {
-		    ReadSubstancePar(*in);
-        } catch(stdexception &ex) {
-            throw info_except("Got an error %s.\n %s",ex.what(), ReadingError(in).c_str());
-        }
-		if ( !(*in) )
-			throw info_except(ReadingError(in).c_str());
-
+        ReadSubstancePar(*in);
+		verify(*in, ReadingError(in));
 		return 1;
 	}
 	virtual int save_data_state( FilterOut &output){
