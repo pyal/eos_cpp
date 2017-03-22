@@ -165,10 +165,9 @@ struct TDataF : TData<T> {
 
 template <class T, class T1>
 void SetDifTData(TData<T> &Res, TData<T1> &dat) {
-    char name[256];
-    strcpy(name, Res.InterfaceIOName());
+    string name(Res.InterfaceIOName());
     TData<T1> *d;
-    DataRegister(name, d);
+    DataRegister(name.c_str(), d);
     *d = dat;
     //cout<<" SETdifdata core "<<coreleft()<<"\n";
     Res.SetDim(d->N, d->I);

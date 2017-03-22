@@ -56,7 +56,7 @@ namespace NPolygon {
             const Stroka &res,
             int resIsPres,
             double minPressure = 1e-4,
-            double minSound = 0.003) {
+            double minSound = 1) {
             TGridMaskedData denc = reg->Grid.GetMaskedData(bndsClc, dens);
             TGridMaskedData energy = reg->Grid.GetMaskedData(bndsClc, ener);
             TGridMaskedData result = reg->Grid.GetMaskedData(bndsClc, res);

@@ -48,7 +48,7 @@ cout<<" NumMatter "<<NumMatter<<"\n";
            input>>tmp;
            if (names.find(tmp) == names.end()) {
                Stroka descr = Stroka("This matter have internal names to be settled.") +
-                 "Read bad internal name for the matter: " + tmp + " have to be one of the: " + Str::Vec2Str(Str::Map2Vec(names));
+                 "Read bad internal name for the matter: " + tmp + " have to be one of the: " + Str::Vec2Str(Str::MapKey2Vec(names));
                throw info_except(~descr);
            }
            IntParNames[k][i] = tmp;

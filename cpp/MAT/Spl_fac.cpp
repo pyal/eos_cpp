@@ -375,6 +375,7 @@ int CurveSpline::Generate(
     int Wcol) {
 
     //cout<<" CurveSpline::Generate \n";
+    log_debug("CurveSpline::Generate");
     real *Weight;
     int DelWeight = 0;
     if(((Xcol == -1) && (dat.N != 3)) || (Wcol == -1)) {
@@ -452,60 +453,27 @@ int CurveSpline::Generate(
         cout << " problems in CurveSpline::Generate; Result: " << Result << "\n";
     }
 
-    //   Bspl=Bspl;
     delete[] RWork;
     delete[] IWork;
     if(DelWeight)
         delete[] Weight;
-    //   Misf=Mis_ret;
 
 
     return Result;
 };
 
-int CurveSpline::Generate(
-    int &NumX,
-    double &Misf,
-    int Cont,
-    double *x,
-    double *y,
-    int n,
-    double *weight) {
+int CurveSpline::Generate(int &NumX, double &Misf, int Cont,
+        double *x, double *y, int n, double *weight) {
     TDataF<double> tmp;
-    tmp.Delete();
     TDataF<real> work;
     tmp.AddColumn(x, n);
     tmp.AddColumn(y, n);
     if(weight != NULL)
         tmp.AddColumn(weight, n);
     SetDifTData(work, tmp);
-    //DataStore(cout,&work);
     work.SortData();
-    //DataStore(cout,&work);
-
-    //DataStore(cout,&work);
-    //DataStore(cout,&tmp);
     return (Generate(NumX, Misf, Cont, work) != 10);
 };
-
-
-//int CurveSpline::Evaluate (double *x,double *y,int nx)
-//  {
-//   vector<real> X(nx), Y(nx);
-//   for(size_t i = 0;i<X.size();i++){
-//       X[i] = x[i];
-//       Y[i] = y[i];
-//   }
-//
-//   integer polynom_degree=SplineOrder,Num=nx,SX=BSpl.I[0],ier;
-//   splev_(BSpl.D[0],&SX,BSpl.D[1],&polynom_degree,&X[0],&Y[0],&Num,&ier);
-//   if (ier!=0) {
-//       cout<<" Bad Evaluate Spl "<<ier<<"\n";
-//   }
-//   for(size_t i = 0;i<X.size();i++)
-//       y[i] = Y[i];
-//   return ier;
-//  };
 
 double CurveSpline::Evaluate(double x) {
     real y, x1 = x;

@@ -70,6 +70,13 @@ struct CalculatorProgam : RefCount {
         AddStdVars();
     };
 
+    Stroka ToString() {
+        Stroka ret = "Data: " + Progr.data->ToString();
+        ret += "Error: " + Progr.Error +"\n";
+        ret += "Program" + Progr.progr->ToString();
+        return ret;
+
+    }
     CalculatorProgam &Execute() {
         GetCurPtr(this);
         Progr.Execute();
@@ -78,8 +85,9 @@ struct CalculatorProgam : RefCount {
     }
     CalculatorProgam &Read() {
         GetCurPtr(this);
-        while(lex->IsGood())
+        while(lex->IsGood()) {
             zubr_calculator_zubr_parse();
+        }
         //		code(STOP);
         //    lex->ResetStream(NULL);
         // We are generating - ConstrStorage, have to copy its data

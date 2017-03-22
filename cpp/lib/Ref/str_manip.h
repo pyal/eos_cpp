@@ -245,10 +245,18 @@ namespace Str {
         return out.str().c_str();
     }
     template <class KEY, class VAL>
-    vector<KEY> Map2Vec(const map<KEY, VAL> &m) {
+    vector<KEY> MapKey2Vec(const map<KEY, VAL> &m) {
         vector<KEY> keys;
         for(typename map<KEY, VAL>::const_iterator it = m.begin(); it != m.end(); it++)
             keys.push_back(it->first);
+        return keys;
+    };
+
+    template <class KEY, class VAL, class LAMBDA>
+    vector<KEY> Map2Vec(const map<KEY, VAL> &m, LAMBDA &&cvt) {
+        vector<KEY> keys;
+        for(typename map<KEY, VAL>::const_iterator it = m.begin(); it != m.end(); it++)
+            keys.push_back(cvt(it->first, it->second));
         return keys;
     };
 

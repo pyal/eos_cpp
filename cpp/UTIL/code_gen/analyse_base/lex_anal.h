@@ -3,10 +3,9 @@
 
 #include "lib/std/util.h"
 #include <string>
-//#include <list>
-//#include <stack>
+#include <cpp/lib/std/logger.h>
+#include <cpp/lib/Ref/Stroka.h>
 //#pragma warning( disable : 4267 )
-//#include "lib/ref/Stroka.h"
 
 #include "stream_buf.h"
 struct Lex_Result {
@@ -66,6 +65,7 @@ private:
 // Continue - continue the check, Break - to stop the check and return
 // Start - to return to the start check point, End - to make the last check
 enum StateResults { Continue, Break, Start, End };   //UpLevel, DownLevel
+static const vector<Stroka> StateResultsNames {"Continue", "Break", "Start", "End", "Size" };
 // Is used by StateBrowser -all states have to be childrens of this class
 template <class state_data>
 struct StateInterface {
@@ -84,8 +84,12 @@ struct StateBrowser : StateInterface<state_data> {
     //StateResults StateBrowser::CheckState(state_data &data)
     StateResults CheckState(state_data &data) {
         typename list<StateInterface<state_data> *>::iterator it = sub_states.begin();
+        log_debug("CheckState");
         while(it != sub_states.end()) {
+            log_debug("data: " + data.ToString());
             StateResults res = (*it)->CheckState(data);
+            log_debug("GOT data: " + data.ToString());
+            log_debug("GOT res: " + StateResultsNames[int(res)]);
             switch(res) {
             case Continue:
                 it++;
@@ -136,6 +140,10 @@ struct LexStateData {
     }
     StreamManip manip;
     Lex_Result res;
+    Stroka ToString() {
+        Stroka ret = Stroka("LexState Buf: ") + manip.ToString() + "\nRes: " + res.ToString();
+        return ret;
+    }
 };
 
 
@@ -238,8 +246,11 @@ struct StateToken : StateBrowser<LexStateData> {
 
 struct Lex_Analyser : RefCount {
     virtual Lex_Result *Analyse() {
-        if(browse.CheckState(dat) == StateResults::Break)
+        if(browse.CheckState(dat) == StateResults::Break) {
+            log_debug("BREAK");
             return 0;
+        }
+        log_debug(Stroka("Result: ") + dat.res.ToString());
         return &dat.res;
     }
     //Lex_Analyser(istream &in,int writeresults=1)

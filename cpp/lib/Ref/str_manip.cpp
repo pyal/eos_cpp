@@ -344,7 +344,7 @@ namespace Str {
         if(strlen(str) == 0)
             throw info_except("NULL str number?\n");
         std::map<Stroka, int>::iterator it = StrMap.find(Stroka(str));
-        verify(it != StrMap.end(), "Str <" + str + "> is not found. Map " + Vec2Str(Map2Vec<Stroka, int>(StrMap)));
+        verify(it != StrMap.end(), "Str <" + str + "> is not found. Map " + Vec2Str(MapKey2Vec<Stroka, int>(StrMap)));
         return it->second;
     }
 

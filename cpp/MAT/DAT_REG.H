@@ -7,6 +7,7 @@
 #define  Data_Register
 
 #include "dat_fac.h"
+#include "lib/std/logger.h"
 
 #ifdef Data_Register
 template <class T> const char * const TTable <T>::name="TTable";
@@ -25,6 +26,7 @@ template <class T> int DataRegister(char *name,TData<T> *&Func);
 
 template <class T> int DataRegister(const char *name,TData<T> *&Func)
   {
+      log_debug(string("Register: ") + name);
 //#ifdef Data_Register
    if (Stricmp(name,"TTable")==0) Func=(TData<T>*)(new TTable<T>);
    else

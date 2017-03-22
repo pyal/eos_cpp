@@ -10,8 +10,9 @@ void Show(map<Stroka, Stroka> par) {
     vector<string> names;
     char fieldDelim(' ');
     if (par["FieldDelim"] != "SPACE") fieldDelim = par["FieldDelim"][0];
-    bool oneLineToMany = par["OneLineToMany"] != "1";
-    log_always(Stroka("FieldDelim is [") + fieldDelim + "]");
+    bool oneLineToMany = (par["OneLineToMany"] == "1");
+    log_debug(Stroka("Running args ") +
+      Str::Vec2Str(Str::Map2Vec(par, [](const Stroka &key, const Stroka &val)->Stroka {return key + Stroka(":") + val;})));
     QtData::IDataSource *dataSource = (atoi(~par["gasd"]) == 0) ?
       (QtData::IDataSource *)new MultiFile(par["file"], fieldDelim, oneLineToMany) :
       (QtData::IDataSource *)new GasdData(par["file"], "CurTime", par["CurTimeFirst"] != "0");

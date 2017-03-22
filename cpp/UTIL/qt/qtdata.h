@@ -41,13 +41,14 @@ class IFileData: public QtData::IDataSource {
     pair<string, vector<QtData::Data>> CurData;
     string NewDataName;
 public:
-    bool OneLineToMany = false;
+    IFileData():OneLineToMany(false) {}
+    bool OneLineToMany;
     virtual pair<vector<string>, vector<double>> ReadHead() = 0;
     virtual bool isEnd(vector<double> &row_pnt) = 0;
     virtual string PlotName() = 0;
     virtual pair<string, vector<QtData::Data>> &getData() { return CurData;};
     virtual bool getNext() {
-        log_debug("Reading next data");
+        log_debug(Stroka("Reading next data OneLineToMany ") + OneLineToMany);
         auto head = ReadHead();
         vector<vector<vector<double>>> points_arr(1);
         if(head.first.size() == 0) return false;
@@ -68,6 +69,7 @@ public:
             }
             rowNum++;
         }
+        CurData.second.clear();
         CurData.first = PlotName();
         int ar_num = 0;
         for(auto &points: points_arr) {
@@ -91,6 +93,7 @@ public:
     SingleFile(const string &file, char fieldDelim, bool oneLineToMany):FileName(file),
        In(File::open(file.c_str(), "r", "SingleFile")), FieldDelim(fieldDelim) {
             OneLineToMany = oneLineToMany;
+        log_debug(Stroka("OneLineToMany ") + OneLineToMany);
     }
     ~SingleFile() {
         File::close(In);

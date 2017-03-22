@@ -33,7 +33,7 @@ namespace NPolygon {
             TGridMaskBase *wasMask) {
             map<Stroka, Ref<TGridVariablesBase>>::iterator it = MapGridVars.find(name);
 
-            verify(it == MapGridVars.end(), string("Adding existing name: [") + ~name + "] names: " + ~Str::Vec2Str(Str::Map2Vec(MapGridVars)));
+            verify(it == MapGridVars.end(), string("Adding existing name: [") + ~name + "] names: " + ~Str::Vec2Str(Str::MapKey2Vec(MapGridVars)));
             var->Resize(GridSize, curMask, wasMask);
             MapGridVars[name] = var;
         }
@@ -42,7 +42,7 @@ namespace NPolygon {
         }
         inline TGridVariablesBase *GetVar(const Stroka &name) {
             map<Stroka, Ref<TGridVariablesBase>>::iterator it = MapGridVars.find(name);
-            verify(it != MapGridVars.end(), string("Cannot get: [") + ~name + "] names: " + ~Str::Vec2Str(Str::Map2Vec(MapGridVars)));
+            verify(it != MapGridVars.end(), string("Cannot get: [") + ~name + "] names: " + ~Str::Vec2Str(Str::MapKey2Vec(MapGridVars)));
             return MapGridVars[name];
         }
         vector<Stroka> GetVarNames() {

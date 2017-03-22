@@ -273,14 +273,17 @@ double FreeEFormula::FreeE(double Denc,double T){
     CalculatorProgam::GetCurPtr(&prg);
     *(double*)DataSimpleStorage::GetData( prg.GetVar("Denc")->dat ) = Denc;
     *(double*)DataSimpleStorage::GetData( prg.GetVar("Temp")->dat ) = T;
+    log_debug_mare("Prg Start:" + prg.ToString());
     prg.Execute();
+    log_debug_mare("Prg End:" + prg.ToString());
     double ret = *(double*)DataSimpleStorage::GetData( prg.GetVar("FreeE")->dat );
     CalculatorProgam::RestorePtr();
     return  ret;
 };
 void FreeEFormula::InitProgram(){
-    strstream ins((char*)PrgStr.c_str(),(streamsize)PrgStr.length(),ios::in);
-    prg.ResetProgram(new Lex_Calcul_Analyser(&ins));
+    istrstream input(PrgStr.c_str());
+    log_debug("Parsing program: " + PrgStr);
+    prg.ResetProgram(new Lex_Calcul_Analyser(&input));
     CalculatorProgam::GetCurPtr(&prg);
     prg.GenerateDouble(0,"FreeE");prg.GenerateDouble(0,"Denc");prg.GenerateDouble(0,"Temp");
     prg.Read();

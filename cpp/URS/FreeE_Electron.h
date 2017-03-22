@@ -17,6 +17,9 @@ public:
         in >> tmp >> NumElPerAtom >> tmp >> MolVeight >> tmp >> Gfactor >> tmp >>
             ElMass_ElseNuclear >> tmp >> OutBoltzman >> tmp >> ColdCurve >> tmp >>
             ColdCurveTempCor;
+        ostringstream out;
+        SaveSubstancePar(out);
+        log_debug(Stroka("Substance par:\n") + out.str());
     }
     void SaveSubstancePar(ostream &out) {
         out << " NumElPerAtom " << NumElPerAtom << " MolVeight " << MolVeight
@@ -105,10 +108,6 @@ private:
                      << " Fzero_status " << stat << "\n";
             }
         }
-        //if (Guess>1000){
-        //    cout<<" Guess "<<Guess<<" FermiInt "<<SpecFunc::FermiDiracInt(SpecFunc::Ip0_5, Guess)<<" Misfit "<<SpecFunc::FermiDiracInt(SpecFunc::Ip0_5, Guess)-2./3*pow(Guess,3./2)<<"\n";
-        //}
-        //return (Guess);
         return exp(Guess) - Current_FermiInt_AddVal;
     }
     double Current_FermiInt1_2_Val, Current_FermiInt_AddVal;
@@ -166,7 +165,7 @@ private:
             Coef * M_Na * NumElPerAtom / MolVeight * pow(M_Na * ClcNe(Denc), 2. / 3);
         return ret;
     }
-    double ColdCurveTempCorr(double Denc, double T) {
+    double ColdCurveTempCorrOld(double Denc, double T) {
         double Coef = M_Rconst * M_Mass_Electron_eV * M_eV_K /
                       (sqr(M_PlankCros_K * M_C) * pow(3 * M_Na, 2. / 3)) *
                       pow(M_PI, 2. / 3) / 4;
@@ -176,6 +175,17 @@ private:
 
         return ret;
     }
+    double ColdCurveTempCorr(double Denc, double T) {
+        double beta = pow(M_PI / 3, 2. / 3) * M_Mass_Electron_eV * M_eV_K / sqr(M_PlankCros_K * M_C);
+        // in Landau formulas  g=2 is already included
+        double ne = 2 * Denc / MolVeight * NumElPerAtom / Gfactor * M_Na;
+        double freeE = - beta / 2 * M_Rconst / MolVeight * sqr(T) * pow(ne, -2. / 3);
+//        log_debug(Stroka("ColdCurveTempCorr: ") + freeE + " old " + ColdCurveTempCorrOld(Denc, T) + " = " + freeE / 2);
+// Old result is 2 times smaller
+        return freeE;
+    }
+
+
     double ClcNe(double Denc) {
         return 2 * Denc / MolVeight * NumElPerAtom / Gfactor;
     }

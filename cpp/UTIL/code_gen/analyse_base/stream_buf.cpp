@@ -71,33 +71,6 @@ ITER StreamMemStorage::GetCurrentPos() {
     }
     return ret;
 }
-ostream &operator<<(ostream &out, StreamMemStorage &mem) {
-    out << " buf<";
-    list<int>::iterator i;
-    for(i = mem.buf.begin(); i != mem.buf.end(); i++)
-        out << *i;
-    out << ">\n";
-    out << "Input level is " << (int)mem.pos.size() << "\n";
-    if(mem.ReadingStorage) {
-        out << "Storage is reading, Reading pos ";
-        int k = 1;
-        i = mem.buf.begin();
-        while(1) {
-            if(i == mem.ReadingPos)
-                break;
-            i++;
-            k++;
-        }
-        if(mem.ReadingPos == mem.buf.end())
-            out << " is at the end of buffer \n";
-        else
-            out << k << " char<" << (unsigned char)*i << ">"
-                << " char_num " << (int)(*i) << "\n";
-    } else
-        out << "Not reading it\n";
-
-    return out;
-}
 //==================================================================
 //===============  StreamMemStorage ================================
 //==================================================================
@@ -155,6 +128,7 @@ void StreamManip_Base::ReadStream() {
     if(!in_ptr)
         throw info_except("Trying to read from NULL stream\n");
     LastGetChar = in_ptr->get();
+    log_debug(Stroka("Got: ") + LastGetChar + ":" + char(LastGetChar));
     mem.Write(LastGetChar);
 }
 
@@ -173,8 +147,10 @@ beg:
             c = get();
             goto beg;
         }   //after ++ will be 0
-    if(c == EOF)
+    if(c == EOF) {
+        log_debug("Got EOF");
         return 0;
+    }
     unget();
     return 1;
 }

@@ -277,6 +277,12 @@ public:
     friend Stroka operator+(const Stroka &s1, const Stroka &s2) {
         return Stroka(s1) += s2;
     }
+    friend Stroka operator+(const Stroka &s1, bool cond) {
+        return cond? s1 + "True" : s1 + "False";
+    }
+    friend Stroka operator+(bool cond, const Stroka &s1) {
+        return cond? "True" + s1: "False" + s1;
+    }
     friend Stroka operator+(const Stroka &s1, const char *s2) {
         return Stroka(s1) += s2;
     }

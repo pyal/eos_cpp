@@ -4,6 +4,6 @@
 
 
 ostream &operator<<(ostream &out, const DataConstr &dat) {
-    out << " Data: { Name <" << dat.Name.c_str() << "> Type <" << *dat.Type << "> ";
+    out << dat.Name.c_str() << ": Type " << dat.Type->TypeName << " Val " << *(double *)DataSimpleStorage::GetData(dat.dat);
     return out;
 }

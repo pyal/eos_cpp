@@ -472,6 +472,7 @@ struct FreeELiqSol_Bnd : TwoVarFunction {
         double *T,
         int Num,
         double Err) {
+        log_debug(Stroka("FreeELiqSol_Bnd::Generate ") + Num);
         FreeELiqSol_Bnd *res = new FreeELiqSol_Bnd;
         int NumRes = Num;
         if(!res->Rhgh_T.Generate(

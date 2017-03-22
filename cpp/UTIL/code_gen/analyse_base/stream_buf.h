@@ -10,6 +10,7 @@
 #include <list>
 #include <stack>
 //#pragma warning( disable : 4267 )
+#include "lib/Ref/Stroka.h"
 
 struct StreamUngetStorage {
     int ToPut;
@@ -84,7 +85,31 @@ struct StreamMemStorage {
     void Write(int ch);
     // Returns current reading buffer position
     ITER GetCurrentPos();
-    friend ostream &operator<<(ostream &out, StreamMemStorage &mem);
+    Stroka ToString() {
+        Stroka ret("StreamMemStorage { buf<");
+        list<int>::iterator i;
+        for(i = buf.begin(); i != buf.end(); i++) ret += *i;
+        ret += Stroka("> Input level is ") + (int)pos.size() + " ";
+        if(ReadingStorage) {
+            ret += "Storage is reading, Reading pos ";
+            int k = 1;
+            i = buf.begin();
+            while(1) {
+                if(i == ReadingPos)
+                    break;
+                i++;
+                k++;
+            }
+            if(ReadingPos == buf.end())
+                ret += " is at the end of buffer ";
+            else
+                ret += Stroka("") + k + " char<" + (unsigned char)*i + ">" + " char_num " + (int)(*i);
+        } else
+            ret += "Not reading it";
+
+        ret +=  " } ";
+        return ret;
+    }
 
 private:
     list<int> buf;
@@ -135,6 +160,7 @@ struct StreamManip_Base : RefCount {
             ReadStream();
             IncrementCurPos();
         }
+        log_debug(Stroka("LastChar: ") + LastGetChar + " IsEOF? " + (LastGetChar == EOF));
         return LastGetChar;
     };
     //Reading from buf will return to stacked mark
@@ -165,9 +191,10 @@ struct StreamManip_Base : RefCount {
             return 0;
         return !(!(*in_ptr));
     }
-    friend ostream &operator<<(ostream &out, StreamManip_Base &manip) {
-        out << manip.mem;
-        return out;
+    Stroka ToString() {
+        Stroka ret("StreamBufOK: ");
+        ret = ret + IsGood() + " MemBufData " + mem.ToString();
+        return ret;
     }
 
     //	char Look(int pos){ return;} //looks several pos back in frozen bufer

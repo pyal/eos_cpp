@@ -264,6 +264,7 @@ struct UrsCurve_PT_Bnd_Binary : URS_Curve::ClcVar {
         return new Result(GetVar(NameTemp), GetVar(NameHghD), GetVar(NameLowD));
     }
     virtual void ClcEnd() {
+        log_debug("Saving file");
         if(H.SetNumEl() <= 1)
             return;
         Ref<FreeELiqSol_Bnd> bnd = FreeELiqSol_Bnd::Generate(
@@ -383,7 +384,7 @@ struct UrsCurve_PT_UnstBnd_Clc : URS_Curve::ClcVar {
         Stroka res = URS_Curve::ClcVar::MakeHelp();
         res +=
             Stroka(
-                "Calculates unstable boundary - to use it for generation of unstable boundary binary file byUrsCurve_PT_UnstBnd_Binary . \nGenerated Boundary vars:") +
+                "Calculates unstable boundary (lig-gas unstability boundary) - to use it for generation of unstable boundary binary file byUrsCurve_PT_UnstBnd_Binary . \nGenerated Boundary vars:") +
             GetVars() + " \n";
         return res;
     }
@@ -467,7 +468,7 @@ struct UrsCurve_PT_UnstBnd_Binary : URS_Curve::ClcVar {
         Stroka res = URS_Curve::ClcVar::MakeHelp();
         res +=
             Stroka(
-                "Generates unstable boundary file for the given boundary data - to use it in MatterStable EOS. \nUses Boundary vars:") +
+                "Generates unstable boundary binary file for the given boundary data - to use it in MatterStable EOS (Move it to UrsCurve_PT_UnstBnd_Clc). \nUses Boundary vars:") +
             GetVars() + " \nPrints - nothing...\n";
         return res;
     }

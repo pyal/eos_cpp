@@ -18,7 +18,6 @@ struct DataConstrStorage;
 struct DataSimpleStorage : RefCount {
     ResizeVector<char> stor;
     ResizeVector<DataSimple *> ptrs;
-    //	map<Stroka, DataSimple*> N2D;
     friend struct DataConstrStorage;
 
     DataSimpleStorage() {
@@ -35,19 +34,11 @@ struct DataSimpleStorage : RefCount {
     }
 
 protected:
-    //DataSimple* GenerateVar(int size){
-    //    int l = stor.SetNumEl();
-    //    stor.SetNumEl(l+size);
-    //    return &stor[l];
-    //};
     DataSimpleStorage::Pos GenerateVar(int size) {
         int l = stor.SetNumEl();
         stor.SetNumEl(l + size);
         return DataSimpleStorage::Pos(this, l);
     };
-    //DataSimple* GetVar(const DataSimpleStorage::Pos &pos){
-    //    return &stor[pos];
-    //};
 };
 struct TypeDef;
 struct DataConstr : RefCount {
@@ -188,10 +179,6 @@ private:
 
 struct TypeDefStorage : TypeDef {
     TypeDefStorage() : TypeDef("", 0){};
-    //~TypeDefStorage(){
-    //    defs.Delete();
-    //    defs_vars.Delete();
-    //}
     Ref<DataConstr> GetTypeVar(const Stroka &Name) {
         map<Stroka, int>::iterator it = N2Def.find(Name);
         if(it == N2Def.end())
@@ -224,16 +211,6 @@ struct DataConstrStorage : RefCount {
         types = new TypeDefStorage;
         data = new DataSimpleStorage;
     };
-    //~DataConstrStorage(){
-    //    data = NULL;
-    //    for (int k=0;k<Tmp.SetNumEl();k++) {
-    //        cout<<"del:"<<Tmp[k]->nreference()<<" "<<(*Tmp[k])<<" \n";
-    //        //Tmp[k]=NULL;
-    //    }
-    //    Tmp.Delete();
-    //    N2D.clear();
-    //    types = NULL;
-    //}
     void DeleteVar(const char *name) {
         if(strlen(name) == 0)
             return;
@@ -255,12 +232,6 @@ struct DataConstrStorage : RefCount {
             N2D[Stroka(name)] = ret;
         } else {
             Tmp.push(ret);
-            //cout<<"Added new tmp var :\n";
-            //for (int k=0;k<Tmp.SetNumEl();k++)
-            //cout<<"var["<<k<<"]:"<<Tmp[k]->nreference()<<" "<<Tmp[k]->dat.pos<<" "
-            //<<(*( (Ref<Stroka>*)DataSimpleStorage::GetData(Tmp[k]->dat) ))->c_str()
-            //<<" "<<(*Tmp[k])<<" \n";
-            //cout<<"\n";
         }
         return ret;
     }
@@ -292,10 +263,18 @@ struct DataConstrStorage : RefCount {
     TypeDefStorage *GetTypeDef() {
         return types;
     }
+    Stroka ToString() {
+        Stroka ret("Vars: {");
+        for(auto &n2d: N2D) {
+            ostringstream str;
+            str << (*n2d.second);
+            ret += Stroka("    ") + str.str() + "\n";
+        }
+        return ret + "}";
+    }
 
 private:
     Ref<DataSimpleStorage> data;
-    //	ResizeVector<Ref<DataConstr> > Tmp;
     ResizeVector<Ref<DataConstr>, CopyStructRef<Ref<DataConstr>>> Tmp;
     map<Stroka, Ref<DataConstr>> N2D;
     Ref<TypeDefStorage> types;
@@ -314,12 +293,12 @@ struct InstrSimple : RefCount {
         it++;
     }
     InstrSimple() : Func(NULL), dat(NULL){};
-    //InstrSimple(Ref<TypeDef::FuncDef> DefF, Stroka &oper):Oper(oper){
-    //    Func = DefF->Func;
-    //    dat = new FuncArgs(DefF->Arg);
-    //}
     InstrSimple(Ref<FuncArgs> dat_, FuncStruct *Func_, const Stroka &oper)
         : Func(Func_), Oper(oper), dat(dat_){};
+    Stroka ToString() {
+        Stroka ret("SimpleOper: " + Oper);
+        return ret;
+    }
 
 private:
     FuncStruct *Func;
@@ -335,14 +314,19 @@ struct InstrSimpleProgr : InstrSimple {
     list<Ref<InstrSimple>> ProgrSimpleInstr;
     // To be compatible
     void Execute(list<Ref<InstrSimple>>::iterator &it) {
-        //for(list<Ref<InstrSimple> >::iterator iter = ProgrSimpleInstr.begin();iter!=ProgrSimpleInstr.end();)
-        //	(*iter)->Execute(iter);
         for(list<Ref<InstrSimple>>::iterator iter = it; iter != ProgrSimpleInstr.end();)
             (*iter)->Execute(iter);
     }
     void Execute() {
         list<Ref<InstrSimple>>::iterator it = ProgrSimpleInstr.begin();
         Execute(it);
+    }
+    Stroka ToString() {
+        Stroka ret("InstrSimpleProgr: {");
+        for(auto &instr: ProgrSimpleInstr) {
+            ret += "    " + instr->ToString() + "\n";
+        }
+        return ret + "}\n";
     }
 };
 
@@ -369,10 +353,6 @@ struct ConstructProgram : RefCount {
         return AddFunc(lst, Oper, res);
     }
     int AddFunc(const list<DataConstr *> &dat, Stroka Oper, Ref<DataConstr> &res) {
-        //      Ref<DataConstr> dat1 = dat.front();
-        //if (!dat1)
-        //	return 0;
-        //TypeDef::FuncDef* func = dat1->Type->CheckOperArgs(new TypeDef::ArgDef(NULL,dat), Oper);
         TypeDef::FuncDef *func =
             data->GetTypeDef()->CheckOperArgs(new TypeDef::ArgDef(NULL, dat), Oper);
         if(!func) {
@@ -404,6 +384,4 @@ struct ConstructProgram : RefCount {
     }
     Stroka Error;
 
-
-private:
 };
